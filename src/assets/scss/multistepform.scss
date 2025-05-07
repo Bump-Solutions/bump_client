@@ -1,0 +1,155 @@
+@import "variables";
+@import "mixins";
+
+.multi-step-form {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+    padding: 0.5rem 0;
+
+    .form__header {
+        @include flex(row, flex-start, center);
+        gap: 1.5rem;
+
+        .form__divider {
+            position: relative;
+            width: 4rem;
+            height: 1px;
+            background-color: color(gray, 400);
+
+            &::before {
+                content: "";
+                position: absolute;
+                left: 0;
+                bottom: 0;
+                width: 100%;
+                height: 100%;
+                background-color: color(gray, 900);
+                transform-origin: left;
+                transform: scaleX(0);
+                transition: transform 0.2s $animation-cubic;
+            }
+        }
+
+        .form__step {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            cursor: pointer;
+            transition: all 0.2s $animation-cubic;
+
+            &.active {
+                h3 {
+                    border: 1px solid $clr-font-headline;
+                    color: $clr-font-headline;
+                }
+
+                h4 {
+                    color: $clr-font-headline;
+                }
+            }
+
+            &.valid {
+                h3 {
+                    border: 1px solid color(gray, 900);
+                    color: color(green, 600);
+                }
+
+                h4 {
+                    color: $clr-font-headline;
+                }
+
+                +.form__divider {
+                    &::before {
+                        transform: scaleX(1);
+                    }
+                }
+
+                &:hover {
+                    h3 {
+                        color: color(green, 300);
+                    }
+                }
+            }
+
+            h3 {
+                font-size: 1.25rem;
+                font-weight: 400;
+                color: color(gray, 600);
+                width: 3rem;
+                height: 3rem;
+                aspect-ratio: 1/1;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                transition: all 0.2s $animation-cubic;
+                border: 1px solid color(gray, 400);
+                border-radius: $border-radius-1;
+
+                svg {
+                    height: $fs-20;
+                    width: $fs-20;
+                }
+            }
+
+            h4 {
+                font-size: $fs-18;
+                font-weight: 400;
+                color: color(gray, 600);
+                transition: all 0.2s $animation-cubic;
+                position: relative;
+
+                &::before {
+                    content: "";
+                    position: absolute;
+                    left: 0;
+                    bottom: 0;
+                    width: 100%;
+                    height: 1px;
+                    background-color: color(primary, 100);
+                    transform-origin: right;
+                    transform: scaleX(0);
+                    transition: transform 0.2s $animation-cubic;
+                }
+            }
+
+            &:hover {
+                h3 {
+                    border: 1px solid color(gray, 600);
+                    color: color(gray, 700);
+                }
+
+                h4 {
+                    color: color(gray, 700);
+                }
+            }
+        }
+    }
+
+    .form__body {
+        .form__inputs {
+            @include flex(column, center, normal);
+
+            width: 100%;
+
+            .field-wrapper {
+                display: flex;
+                flex-direction: row;
+                column-gap: 1rem;
+
+                .input {
+                    width: 100%;
+                }
+            }
+        }
+
+        .form__buttons {
+            @include flex(row, flex-end, center);
+            gap: 1.5rem;
+        }
+    }
+}

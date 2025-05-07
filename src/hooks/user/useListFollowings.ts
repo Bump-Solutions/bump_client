@@ -1,0 +1,36 @@
+import { QUERY_KEY } from "../../utils/queryKeys";
+import { User } from "../../types/user";
+import { ApiError } from "../../types/api";
+
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { useAxiosPrivate } from "../auth/useAxiosPrivate";
+
+import { listFollowings } from "../../services/userService";
+
+const MAX_FOLLOWINGS_PER_PAGE = 10;
+
+export const useListFollowings = (
+  dependencies: any[] = [],
+  params: {
+    uid: User["id"] | null;
+    searchKey?: string;
+  }
+) => {
+  const axiosPrivate = useAxiosPrivate();
+
+  return useInfiniteQuery<any, ApiError>({
+    queryKey: [QUERY_KEY.listFollowings, ...dependencies],
+    queryFn: ({ signal, pageParam }) =>
+      listFollowings(
+        signal,
+        axiosPrivate,
+        params.uid,
+        MAX_FOLLOWINGS_PER_PAGE,
+        pageParam as number,
+        params.searchKey
+      ),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage) => lastPage.next ?? undefined,
+    enabled: !!params.uid,
+  });
+};

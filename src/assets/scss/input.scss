@@ -1,0 +1,813 @@
+@import "variables";
+@import "mixins";
+
+.input {
+  margin: 0.5rem 0;
+
+  .input__desc {
+    margin-bottom: 0.5rem;
+    line-height: 1.6;
+  }
+
+  label {
+    font-size: $fs-18;
+    color: color(gray, 700);
+    transition: all 0.2s $animation-cubic;
+
+    .required {
+      color: color(red, 200);
+      transition: color 0.2s $animation-cubic;
+    }
+
+    &.focused {
+      color: $clr-font;
+
+      .required {
+        color: color(red, 500);
+      }
+    }
+
+    &.filled {
+      color: $clr-font-headline;
+
+      .required {
+        color: color(red, 500);
+      }
+    }
+
+    &.error {
+      color: color(red, 500);
+
+      .required {
+        color: color(red, 500);
+      }
+    }
+  }
+
+  .otp__wrapper {
+    position: relative;
+    @include flex(row, center, center);
+    width: 100%;
+    gap: 1rem;
+    margin: 0.2rem 0;
+
+    &.lg {
+      & ~ .error-msg {
+        font-size: 1.25rem;
+      }
+
+      .input__field {
+        font-size: 2rem;
+        height: 5rem;
+      }
+    }
+
+    & ~ .error-msg {
+      margin-top: 1rem;
+      text-align: center;
+    }
+
+    .input__field {
+      // width: 4rem;
+      height: $input-height;
+      aspect-ratio: 1/1;
+      padding: 1rem;
+      outline: none;
+      font-size: 1.25rem;
+      background-color: color(gray, 50);
+      border: 1px solid color(gray, 400);
+      border-radius: $border-radius-1;
+      text-align: center;
+
+      &:-webkit-autofill,
+      &:-webkit-autofill:hover,
+      &:-webkit-autofill:focus {
+        -webkit-text-fill-color: $clr-font-headline;
+        -webkit-box-shadow: 0 0 0px 1000px $clr-white inset;
+      }
+
+      &:disabled {
+        background-color: color(gray, 100);
+        pointer-events: none;
+      }
+
+      &:focus {
+        border: 1px solid color(gray, 700);
+        background-color: $clr-white;
+      }
+
+      &:invalid,
+      &:not(:placeholder-shown) {
+        border: 1px solid color(gray, 900);
+        background-color: $clr-white;
+
+        &:focus {
+          outline: 2px solid color(gray, 300);
+        }
+      }
+
+      &.error {
+        border: 2px solid color(red, 500);
+        background-color: color(red, 50);
+
+        &:focus {
+          outline: 2px solid color(red, 100);
+        }
+      }
+    }
+  }
+
+  .stepper__wrapper {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    width: fit-content;
+    height: $input-height;
+    border-radius: $border-radius-1;
+    background-color: color(gray, 50);
+    border: 1px solid color(gray, 400);
+
+    .stepper__btn {
+      all: unset;
+      position: relative;
+      box-sizing: border-box;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      aspect-ratio: 1/1;
+      color: color(gray, 700);
+      transition: all 0.2s $animation-cubic;
+
+      svg {
+        width: $fs-18;
+        height: $fs-18;
+      }
+    }
+
+    input {
+      all: unset;
+      box-sizing: border-box;
+      position: relative;
+      height: $input-height;
+      aspect-ratio: 1/1;
+      -moz-appearance: textfield;
+      appearance: textfield;
+      text-align: center;
+      font-size: $fs-16;
+      background-color: transparent;
+    }
+
+    &.focused {
+      border: 1px solid color(gray, 900);
+      background-color: $clr-white;
+
+      .stepper__btn {
+        color: color(gray, 900);
+      }
+    }
+  }
+
+  .currency__wrapper {
+    position: relative;
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+
+    .suffix {
+      position: absolute;
+      top: 50%;
+      right: 1.5rem;
+      transform: translateY(-50%);
+      font-size: $fs-16;
+      color: color(gray, 700);
+    }
+
+    .input__field {
+      height: $input-height;
+      padding: 0 4rem 0 1.25rem;
+      outline: none;
+      font-size: $fs-16;
+      background-color: color(gray, 50);
+      border: 1px solid color(gray, 400);
+      border-radius: $border-radius-1;
+
+      &.textarea {
+        font-family: $font-primary;
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+        height: auto;
+        scrollbar-width: thin;
+        overflow: hidden;
+        overscroll-behavior: contain;
+
+        &::placeholder {
+          font-family: $font-primary;
+        }
+      }
+
+      &:disabled {
+        background-color: color(gray, 200);
+        cursor: not-allowed;
+      }
+
+      &:focus {
+        border: 1px solid color(gray, 600);
+        background-color: $clr-white;
+
+        & ~ .input__svg {
+          color: color(gray, 700);
+        }
+      }
+
+      &::placeholder {
+        color: color(gray, 700);
+      }
+
+      &:invalid,
+      &:not(:placeholder-shown) {
+        border: 1px solid color(gray, 900);
+        background-color: $clr-white;
+
+        & ~ .input__svg {
+          color: $clr-font-headline;
+        }
+
+        &:focus {
+          outline: 2px solid color(gray, 300);
+        }
+      }
+
+      &.error {
+        border: 2px solid color(red, 500);
+        background-color: color(red, 50) !important;
+
+        &:focus {
+          outline: 2px solid color(red, 100);
+        }
+      }
+
+      &:-webkit-autofill,
+      &:-webkit-autofill:hover,
+      &:-webkit-autofill:focus {
+        -webkit-text-fill-color: $clr-font-headline;
+        -webkit-box-shadow: 0 0 0px 1000px $clr-white inset;
+
+        &.error {
+          -webkit-box-shadow: 0 0 0px 1000px color(red, 50) inset;
+        }
+      }
+    }
+  }
+
+  .input__wrapper {
+    position: relative;
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+
+    .toggle {
+      @include flex(row, space-between, center);
+      padding: 1rem;
+      padding-left: 1.25rem;
+      background-color: color(gray, 50);
+      border: 1px solid color(gray, 400);
+      border-radius: $border-radius-1;
+      cursor: pointer;
+      height: $input-height;
+      overflow: hidden;
+
+      label {
+        position: relative;
+        flex: 1;
+        top: 0;
+        left: 0;
+        color: color(gray, 700);
+        pointer-events: none;
+        min-width: fit-content;
+        @include transform(none);
+        @include user-select(none);
+      }
+
+      &:hover {
+        border: 1px solid color(gray, 600);
+
+        label {
+          color: $clr-font;
+        }
+      }
+
+      &.toggled {
+        background-color: $clr-white;
+        border: 1px solid color(gray, 900);
+
+        label {
+          color: $clr-font-headline;
+        }
+
+        .required {
+          color: color(red, 500);
+        }
+
+        .toggle-indicator {
+          background-color: color(green, 500);
+          border: none;
+
+          svg {
+            color: color(green, 500);
+          }
+
+          &.blue {
+            background-color: color(blue, 500);
+
+            svg {
+              color: color(blue, 500);
+            }
+          }
+
+          &.black {
+            background-color: color(gray, 900);
+
+            svg {
+              color: color(gray, 900);
+            }
+          }
+
+          .toggle-indicator--inner {
+            left: 1.5rem;
+          }
+        }
+      }
+
+      &.error {
+        border: 2px solid color(red, 500);
+        background-color: color(red, 50);
+
+        label {
+          color: color(red, 500);
+        }
+      }
+
+      .toggle-indicator {
+        position: relative;
+        min-width: 3rem;
+        height: 1.75rem;
+        border-radius: $border-radius-2;
+        border: 1px solid color(gray, 400);
+        background-color: color(gray, 300);
+        transition: all 0.2s $animation-cubic;
+
+        .toggle-indicator--inner {
+          position: absolute;
+          top: 50%;
+          left: 0.25rem;
+          @include flex(row, center, center);
+          transform: translateY(-50%);
+          width: 1.25rem;
+          height: 1.25rem;
+          border-radius: $border-radius-50;
+          background-color: $clr-white;
+          transition: all 0.2s $animation-cubic;
+        }
+      }
+    }
+
+    .input__svg {
+      position: absolute;
+      top: 50%;
+      right: 1.5rem;
+      transform: translateY(-50%);
+      width: $fs-18;
+      height: $fs-18;
+      cursor: pointer;
+      overflow: hidden;
+      z-index: 1;
+      background-color: transparent;
+      color: color(gray, 700);
+
+      &.success {
+        color: color(green, 500) !important;
+      }
+    }
+
+    .input__field {
+      height: $input-height;
+      padding: 0 3rem 0 1.25rem;
+      outline: none;
+      font-size: $fs-16;
+      background-color: color(gray, 50);
+      border: 1px solid color(gray, 400);
+      border-radius: $border-radius-1;
+
+      &.textarea {
+        font-family: $font-primary;
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+        height: auto;
+        scrollbar-width: thin;
+        overflow: hidden;
+        overscroll-behavior: contain;
+
+        &::placeholder {
+          font-family: $font-primary;
+        }
+      }
+
+      &:disabled {
+        background-color: color(gray, 200);
+        cursor: not-allowed;
+      }
+
+      &:focus {
+        border: 1px solid color(gray, 600);
+        background-color: $clr-white;
+
+        & ~ .input__svg {
+          color: color(gray, 700);
+        }
+      }
+
+      &::placeholder {
+        color: color(gray, 700);
+      }
+
+      &:invalid,
+      &:not(:placeholder-shown) {
+        border: 1px solid color(gray, 900);
+        background-color: $clr-white;
+
+        & ~ .input__svg {
+          color: $clr-font-headline;
+        }
+
+        &:focus {
+          outline: 2px solid color(gray, 300);
+        }
+      }
+
+      &.error {
+        border: 2px solid color(red, 500);
+        background-color: color(red, 50) !important;
+
+        &:focus {
+          outline: 2px solid color(red, 100);
+        }
+      }
+
+      &:-webkit-autofill,
+      &:-webkit-autofill:hover,
+      &:-webkit-autofill:focus {
+        -webkit-text-fill-color: $clr-font-headline;
+        -webkit-box-shadow: 0 0 0px 1000px $clr-white inset;
+
+        &.error {
+          -webkit-box-shadow: 0 0 0px 1000px color(red, 50) inset;
+        }
+      }
+    }
+  }
+
+  .error-msg {
+    color: color(red, 500) !important;
+    font-size: $fs-16;
+  }
+}
+
+.dropdown {
+  margin: 0.5rem 0;
+  width: 100%;
+
+  label {
+    font-size: $fs-18;
+    color: color(gray, 700);
+    transition: all 0.2s $animation-cubic;
+    padding: 0 0.125rem;
+
+    .required {
+      color: color(red, 200);
+      transition: color 0.2s $animation-cubic;
+    }
+
+    &.focused {
+      color: $clr-font;
+
+      .required {
+        color: color(red, 500);
+      }
+    }
+
+    &.filled {
+      color: $clr-font-headline;
+
+      .required {
+        color: color(red, 500);
+      }
+    }
+
+    &.error {
+      color: color(red, 500);
+
+      .required {
+        color: color(red, 500);
+      }
+    }
+  }
+
+  .dropdown__container {
+    position: relative;
+    cursor: pointer;
+    min-height: $input-height;
+    height: auto;
+
+    .error-msg {
+      color: color(red, 500) !important;
+      font-size: $fs-16;
+    }
+
+    .dropdown__input {
+      border-radius: $border-radius-1;
+      background-color: color(gray, 50);
+      border: 1px solid color(gray, 400);
+      padding: 0.75rem 1.325rem 0.75rem 1.25rem;
+      @include flex(row, space-between, center);
+      min-height: $input-height;
+      height: auto;
+      transition: border 0.2s $animation-cubic;
+
+      &.focused {
+        border: 1px solid color(gray, 600);
+        background-color: $clr-white;
+      }
+
+      &.filled {
+        border: 1px solid color(gray, 900);
+        background-color: $clr-white;
+        padding-block: 0.5rem;
+
+        &.focused {
+          outline: 2px solid color(gray, 300);
+        }
+      }
+
+      &.error {
+        border: 2px solid color(red, 500);
+        background-color: color(red, 50);
+      }
+
+      .dropdown__tool {
+        display: flex;
+        align-items: center;
+
+        svg {
+          color: color(gray, 700);
+          height: $fs-18;
+          width: $fs-18;
+        }
+      }
+
+      .dropdown__selected-value {
+        &.placeholder {
+          color: color(gray, 600);
+        }
+
+        .dropdown__tags {
+          display: flex;
+          gap: 0.5rem;
+          flex-wrap: wrap;
+
+          .dropdown__tag__item {
+            display: flex;
+            align-items: center;
+            padding: 0.25rem 0.5rem 0.25rem 0.75rem;
+            border-radius: 12px;
+            background-color: color(gray, 100);
+            color: color(gray, 700);
+            font-size: $fs-16;
+            transition: all 0.2s $animation-cubic;
+            gap: 0.5rem;
+
+            &:hover {
+              background-color: color(gray, 200);
+              color: color(gray, 900);
+            }
+
+            .dropdown__tag__close {
+              cursor: pointer;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              padding: 0.25rem;
+
+              svg {
+                font-size: $fs-18;
+                color: color(gray, 600);
+              }
+
+              &:hover {
+                svg {
+                  color: color(gray, 700);
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// floating-ui@react
+.dropdown__menu {
+  background-color: $clr-white;
+  border: 1px solid color(gray, 400);
+  border-radius: $border-radius-1;
+  overflow: hidden;
+  max-height: 20rem;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: color(gray, 600);
+  scrollbar-gutter: stable;
+  // overscroll-behavior: contain;
+
+  .search-box {
+    position: sticky;
+    top: 0;
+    background-color: $clr-white;
+    padding: 0.5rem 0.4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+
+    svg {
+      position: absolute;
+      left: 1.25rem;
+      height: $fs-20;
+      width: $fs-20;
+      color: color(gray, 600);
+    }
+
+    input {
+      all: unset;
+      width: 100%;
+      padding: 0.5rem 1rem;
+      padding-left: 2.5rem;
+      border-radius: 12px;
+      background-color: color(gray, 100);
+      font-size: $fs-16;
+      transition: border 0.2s $animation-cubic;
+    }
+  }
+
+  .dropdown__item {
+    padding: 0.5rem 1.25rem;
+    margin: 0.25rem;
+    border-radius: 12px; // parent border-radius - margin
+    font-size: $fs-16;
+    color: color(gray, 700);
+    transition: all 0.2s $animation-cubic;
+
+    &:hover {
+      background-color: color(gray, 100);
+      color: $clr-font;
+    }
+
+    &.selected {
+      background-color: color(gray, 50);
+      color: $clr-font;
+
+      &:hover {
+        background-color: color(gray, 100);
+      }
+    }
+  }
+
+  &.multi {
+    .dropdown__item {
+      &.selected {
+        background-color: color(gray, 50);
+        color: $clr-font;
+      }
+
+      &.selected:hover {
+        background-color: color(gray, 100);
+        color: $clr-font;
+      }
+    }
+  }
+}
+
+.dropzone {
+  border: 1px dashed color(gray, 600);
+  border-radius: $border-radius-1;
+  padding: 4rem 2rem;
+  margin: 0.5rem 0;
+  text-align: center;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  transition: border 0.2s $animation-cubic;
+
+  &.active,
+  &:hover {
+    border: 1px solid color(blue, 500);
+
+    svg,
+    p {
+      color: color(blue, 500);
+    }
+  }
+
+  &.error {
+    border: 2px solid color(red, 500);
+    background-color: color(red, 50);
+
+    &:hover {
+      outline: 2px solid color(red, 100);
+
+      svg {
+        color: color(gray, 500);
+      }
+    }
+  }
+
+  svg {
+    width: 4rem;
+    height: 4rem;
+    color: color(gray, 500);
+    transition: color 0.2s $animation-cubic;
+  }
+
+  p {
+    color: color(gray, 600);
+    font-size: $fs-16;
+    font-weight: 400;
+
+    &.error-msg {
+      color: color(red, 500) !important;
+    }
+  }
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+.chip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  border-radius: $border-radius-2;
+  background-color: color(gray, 200);
+  color: color(gray, 700);
+  line-height: 1.25;
+  cursor: pointer;
+  border: 1px transparent solid;
+  user-select: none;
+  transition: color 0.2s $animation-cubic,
+    background-color 0.2s $animation-cubic, border 0.2s $animation-cubic;
+
+  span {
+    max-width: 10rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    vertical-align: middle;
+  }
+
+  &.svg-only {
+    height: 2.25rem;
+    width: 2.25rem;
+    padding: 0;
+    aspect-ratio: 1;
+
+    svg {
+      width: $fs-16;
+      height: $fs-16;
+    }
+  }
+
+  &:hover {
+    color: color(gray, 900);
+    border: 1px color(gray, 600) solid;
+  }
+
+  &.selected {
+    color: color(gray, 900);
+    border: 1px color(gray, 600) solid;
+  }
+}

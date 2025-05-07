@@ -1,0 +1,60 @@
+import { User } from "../types/user";
+import { IProduct } from "../types/product";
+import { ReportType } from "../types/form";
+
+export const ROUTES = {
+  HOME: "/",
+  SEARCH: "/search",
+  RELEASES: "/releases",
+
+  PROFILE: (username: User["username"]) => ({
+    ROOT: `/profile/${username}`,
+    PRODUCTS: `/profile/${username}`,
+    SAVED: `/profile/${username}/saved`,
+    FOLLOWERS: `/profile/${username}/followers`,
+    FOLLOWINGS: `/profile/${username}/followings`,
+  }),
+
+  PRODUCT: (pid: IProduct["id"]) => ({
+    ROOT: `/product/${pid}`,
+    GALLERY: `/product/${pid}/gallery`,
+    DISCOUNT: `/product/${pid}/discount`,
+  }),
+
+  REPORT: (type: ReportType, id: string | number) => `/report/${type}/${id}`,
+
+  INBOX: {
+    ROOT: "/messages",
+    CHAT: (chat: string) => `/messages/${chat}`,
+  },
+
+  NOTIFICATIONS: "/notifications",
+  SELL: "/sell",
+
+  DISCOVER: "/discover",
+  AUCTION: "/auction",
+  NEWS: "/news",
+
+  ABOUT: "/about",
+  CONTACT: "/contact",
+
+  SETTINGS: {
+    ROOT: "/settings",
+    PROFILE: "/settings/profile",
+    UPLOAD: "/settings/upload",
+    ADDRESSES: "/settings/addresses",
+    PREFERENCES: "/settings/preferences",
+    CHANGEPASSWORD: "/settings/change-password",
+    MANAGE: "/settings/manage",
+    INBOX: "/settings/inbox",
+    NEWSLETTER: "/settings/newsletter",
+  },
+
+  MORE: "/more",
+
+  LOGIN: "/auth",
+  SIGNUP: "/auth/signup",
+
+  UNAUTHORIZED: "/unauthorized",
+  NOTFOUND: "/not-found",
+};

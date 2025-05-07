@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "module": "esnext", // Use ESNext for modern module syntax
+    "target": "esnext", // Set the target to ESNext for modern JavaScript
+    "jsx": "react-jsx", // Enable React JSX support
+    "strict": false, // Enable strict type checking
+    "moduleResolution": "node", // Use Node.js module resolution
+    "types": ["vite/client"], // Include Vite-specific types
+    "esModuleInterop": true, // Interoperability for ES Modules and CommonJS
+    "skipLibCheck": true, // Skip checking type declaration files
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": ["src"], // Include source files
+  "exclude": ["node_modules"]
+}

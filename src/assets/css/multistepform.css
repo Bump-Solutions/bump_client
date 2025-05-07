@@ -1,0 +1,275 @@
+@keyframes bg-animation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+@keyframes loading {
+  50% {
+    width: 100%;
+  }
+  100% {
+    width: 0;
+    right: 0;
+    left: unset;
+  }
+}
+@keyframes toast {
+  0% {
+    width: 100%;
+  }
+  100% {
+    width: 0;
+  }
+}
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+@keyframes sliding-down {
+  0% {
+    transform: translateY(-3%);
+    opacity: 0;
+  }
+  10% {
+    transform: translateY(-2.1%);
+    opacity: 1;
+  }
+  90% {
+    transform: translateY(2.1%);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(3%);
+    opacity: 0;
+  }
+}
+@keyframes sliding-up {
+  0% {
+    transform: translateY(3%);
+    opacity: 0;
+  }
+  15% {
+    transform: translateY(2.1%);
+    opacity: 1;
+  }
+  85% {
+    transform: translateY(-2.1%);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-3%);
+    opacity: 0;
+  }
+}
+@keyframes bg-animation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+@keyframes loading {
+  50% {
+    width: 100%;
+  }
+  100% {
+    width: 0;
+    right: 0;
+    left: unset;
+  }
+}
+@keyframes toast {
+  0% {
+    width: 100%;
+  }
+  100% {
+    width: 0;
+  }
+}
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+@keyframes sliding-down {
+  0% {
+    transform: translateY(-3%);
+    opacity: 0;
+  }
+  10% {
+    transform: translateY(-2.1%);
+    opacity: 1;
+  }
+  90% {
+    transform: translateY(2.1%);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(3%);
+    opacity: 0;
+  }
+}
+@keyframes sliding-up {
+  0% {
+    transform: translateY(3%);
+    opacity: 0;
+  }
+  15% {
+    transform: translateY(2.1%);
+    opacity: 1;
+  }
+  85% {
+    transform: translateY(-2.1%);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-3%);
+    opacity: 0;
+  }
+}
+.multi-step-form {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+  padding: 0.5rem 0;
+}
+.multi-step-form .form__header {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 1.5rem;
+}
+.multi-step-form .form__header .form__divider {
+  position: relative;
+  width: 4rem;
+  height: 1px;
+  background-color: #ced4da;
+}
+.multi-step-form .form__header .form__divider::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #212529;
+  transform-origin: left;
+  transform: scaleX(0);
+  transition: transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.multi-step-form .form__header .form__step {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.multi-step-form .form__header .form__step.active h3 {
+  border: 1px solid #212529;
+  color: #212529;
+}
+.multi-step-form .form__header .form__step.active h4 {
+  color: #212529;
+}
+.multi-step-form .form__header .form__step.valid h3 {
+  border: 1px solid #212529;
+  color: #00a33b;
+}
+.multi-step-form .form__header .form__step.valid h4 {
+  color: #212529;
+}
+.multi-step-form .form__header .form__step.valid + .form__divider::before {
+  transform: scaleX(1);
+}
+.multi-step-form .form__header .form__step.valid:hover h3 {
+  color: #54cc80;
+}
+.multi-step-form .form__header .form__step h3 {
+  font-size: 1.25rem;
+  font-weight: 400;
+  color: #868e96;
+  width: 3rem;
+  height: 3rem;
+  aspect-ratio: 1/1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  border: 1px solid #ced4da;
+  border-radius: 1rem;
+}
+.multi-step-form .form__header .form__step h3 svg {
+  height: 1.25rem;
+  width: 1.25rem;
+}
+.multi-step-form .form__header .form__step h4 {
+  font-size: 1.125rem;
+  font-weight: 400;
+  color: #868e96;
+  transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  position: relative;
+}
+.multi-step-form .form__header .form__step h4::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 1px;
+  background-color: #f7b0ba;
+  transform-origin: right;
+  transform: scaleX(0);
+  transition: transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.multi-step-form .form__header .form__step:hover h3 {
+  border: 1px solid #868e96;
+  color: #495057;
+}
+.multi-step-form .form__header .form__step:hover h4 {
+  color: #495057;
+}
+.multi-step-form .form__body .form__inputs {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: normal;
+  width: 100%;
+}
+.multi-step-form .form__body .form__inputs .field-wrapper {
+  display: flex;
+  flex-direction: row;
+  -moz-column-gap: 1rem;
+       column-gap: 1rem;
+}
+.multi-step-form .form__body .form__inputs .field-wrapper .input {
+  width: 100%;
+}
+.multi-step-form .form__body .form__buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 1.5rem;
+}/*# sourceMappingURL=multistepform.css.map */

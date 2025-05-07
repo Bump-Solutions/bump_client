@@ -1,0 +1,109 @@
+import { API } from "../utils/api";
+import { ApiResponse } from "../types/api";
+import { User } from "../types/user";
+import { AxiosInstance } from "axios";
+
+export const listUsers = async (
+  signal: AbortSignal,
+  axiosPrivate: AxiosInstance
+): Promise<ApiResponse> => {
+  const response: ApiResponse = await axiosPrivate.get(API.USER.LIST_USERS, {
+    signal,
+  });
+  return response.data.message;
+};
+
+export const getUser = async (
+  signal: AbortSignal,
+  axiosPrivate: AxiosInstance,
+  uname: User["username"]
+): Promise<User> => {
+  const response: ApiResponse = await axiosPrivate.get(
+    API.USER.GET_USER(uname),
+    {
+      signal,
+    }
+  );
+  return response.data.message;
+};
+
+export const listFollowers = async (
+  signal: AbortSignal,
+  axiosPrivate: AxiosInstance,
+  uid: User["id"],
+  size: number,
+  page: number,
+  searchKey: string
+): Promise<ApiResponse> => {
+  const response: ApiResponse = await axiosPrivate.get(
+    API.USER.LIST_FOLLOWERS(uid, size, page, searchKey),
+    { signal }
+  );
+
+  const data = response.data.message;
+
+  if (data.next) {
+    data.next = page + 1;
+  }
+
+  return data;
+};
+
+export const listFollowings = async (
+  signal: AbortSignal,
+  axiosPrivate: AxiosInstance,
+  uid: User["id"],
+  size: number,
+  page: number,
+  searchKey: string
+): Promise<any> => {
+  const response: ApiResponse = await axiosPrivate.get(
+    API.USER.LIST_FOLLOWING(uid, size, page, searchKey),
+    { signal }
+  );
+
+  const data = response.data.message;
+
+  if (data.next) {
+    data.next = page + 1;
+  }
+
+  return data;
+};
+
+export const follow = async (
+  axiosPrivate: AxiosInstance,
+  uid: User["id"]
+): Promise<ApiResponse> => {
+  if (!uid) return;
+
+  return await axiosPrivate.post(API.USER.FOLLOW, {
+    following_user_id: uid,
+  });
+};
+
+export const unfollow = async (
+  axiosPrivate: AxiosInstance,
+  uid: User["id"]
+): Promise<ApiResponse> => {
+  if (!uid) return;
+
+  return await axiosPrivate.delete(API.USER.UNFOLLOW, {
+    data: {
+      following_user_id: uid,
+    },
+  });
+};
+
+export const deleteFollower = async (
+  axiosPrivate: AxiosInstance,
+  uid: User["id"]
+): Promise<ApiResponse> => {
+  if (!uid) return;
+
+  return await axiosPrivate.delete(API.USER.DELETE_FOLLOWER, {
+    data: {
+      user_id: uid,
+    },
+  });
+};
