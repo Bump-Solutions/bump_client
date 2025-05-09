@@ -12,6 +12,7 @@ export const useUploadProduct = (
   onError?: (error: ApiError, variables: SellFormData) => void
 ) => {
   const { auth } = useAuth();
+
   const queryClient = useQueryClient();
   const axiosPrivate = useAxiosPrivate();
   const { addToast } = useToast();
@@ -21,6 +22,7 @@ export const useUploadProduct = (
     onSuccess: (resp, variables) => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEY.listProducts, auth.user.id],
+        refetchType: "all",
       });
       if (onSuccess) {
         onSuccess(resp, variables);

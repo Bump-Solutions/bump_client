@@ -20,7 +20,7 @@
     }
 
     &.focused {
-      color: $clr-font;
+      color: color(blue, 500);
 
       .required {
         color: color(red, 500);
@@ -29,6 +29,14 @@
 
     &.filled {
       color: $clr-font-headline;
+
+      &.focused {
+        color: color(blue, 500);
+      }
+
+      &.error {
+        color: color(red, 500);
+      }
 
       .required {
         color: color(red, 500);
@@ -92,17 +100,18 @@
       }
 
       &:focus {
-        border: 1px solid color(gray, 700);
+        border: 2px solid color(blue, 500);
         background-color: $clr-white;
       }
 
       &:invalid,
       &:not(:placeholder-shown) {
-        border: 1px solid color(gray, 900);
+        border: 1px solid color(gray, 700);
         background-color: $clr-white;
 
         &:focus {
-          outline: 2px solid color(gray, 300);
+          border: 2px solid color(blue, 500);
+          outline: 2px solid color(blue, 50);
         }
       }
 
@@ -111,6 +120,7 @@
         background-color: color(red, 50);
 
         &:focus {
+          border: 2px solid color(red, 500);
           outline: 2px solid color(red, 100);
         }
       }
@@ -126,6 +136,11 @@
     border-radius: $border-radius-1;
     background-color: color(gray, 50);
     border: 1px solid color(gray, 400);
+
+    &:hover {
+      border: 1px solid color(blue, 500);
+      outline: 1px solid color(blue, 500);
+    }
 
     .stepper__btn {
       all: unset;
@@ -163,6 +178,11 @@
       border: 1px solid color(gray, 900);
       background-color: $clr-white;
 
+      &:hover {
+        border: 1px solid color(blue, 500);
+        outline: 1px solid color(blue, 500);
+      }
+
       .stepper__btn {
         color: color(gray, 900);
       }
@@ -193,27 +213,13 @@
       border: 1px solid color(gray, 400);
       border-radius: $border-radius-1;
 
-      &.textarea {
-        font-family: $font-primary;
-        padding-top: 1rem;
-        padding-bottom: 1rem;
-        height: auto;
-        scrollbar-width: thin;
-        overflow: hidden;
-        overscroll-behavior: contain;
-
-        &::placeholder {
-          font-family: $font-primary;
-        }
-      }
-
       &:disabled {
         background-color: color(gray, 200);
         cursor: not-allowed;
       }
 
       &:focus {
-        border: 1px solid color(gray, 600);
+        border: 2px solid color(blue, 500);
         background-color: $clr-white;
 
         & ~ .input__svg {
@@ -235,7 +241,8 @@
         }
 
         &:focus {
-          outline: 2px solid color(gray, 300);
+          border: 2px solid color(blue, 500);
+          outline: 2px solid color(blue, 50);
         }
       }
 
@@ -244,6 +251,7 @@
         background-color: color(red, 50) !important;
 
         &:focus {
+          border: 2px solid color(red, 500);
           outline: 2px solid color(red, 100);
         }
       }
@@ -291,7 +299,8 @@
       }
 
       &:hover {
-        border: 1px solid color(gray, 600);
+        border: 1px solid color(blue, 500);
+        outline: 1px solid color(blue, 500);
 
         label {
           color: $clr-font;
@@ -301,6 +310,11 @@
       &.toggled {
         background-color: $clr-white;
         border: 1px solid color(gray, 900);
+
+        &:hover {
+          border: 1px solid color(blue, 500);
+          outline: 1px solid color(blue, 500);
+        }
 
         label {
           color: $clr-font-headline;
@@ -420,7 +434,7 @@
       }
 
       &:focus {
-        border: 1px solid color(gray, 600);
+        border: 2px solid color(blue, 500);
         background-color: $clr-white;
 
         & ~ .input__svg {
@@ -442,7 +456,8 @@
         }
 
         &:focus {
-          outline: 2px solid color(gray, 300);
+          border: 2px solid color(blue, 500);
+          outline: 2px solid color(blue, 50);
         }
       }
 
@@ -451,6 +466,7 @@
         background-color: color(red, 50) !important;
 
         &:focus {
+          border: 2px solid color(red, 500);
           outline: 2px solid color(red, 100);
         }
       }
@@ -490,7 +506,7 @@
     }
 
     &.focused {
-      color: $clr-font;
+      color: color(blue, 500);
 
       .required {
         color: color(red, 500);
@@ -499,6 +515,14 @@
 
     &.filled {
       color: $clr-font-headline;
+
+      &.focused {
+        color: color(blue, 500);
+      }
+
+      &.error {
+        color: color(red, 500);
+      }
 
       .required {
         color: color(red, 500);
@@ -533,10 +557,9 @@
       @include flex(row, space-between, center);
       min-height: $input-height;
       height: auto;
-      transition: border 0.2s $animation-cubic;
 
       &.focused {
-        border: 1px solid color(gray, 600);
+        border: 2px solid color(blue, 500);
         background-color: $clr-white;
       }
 
@@ -546,13 +569,19 @@
         padding-block: 0.5rem;
 
         &.focused {
-          outline: 2px solid color(gray, 300);
+          border: 2px solid color(blue, 500);
+          outline: 2px solid color(blue, 50);
         }
       }
 
       &.error {
         border: 2px solid color(red, 500);
         background-color: color(red, 50);
+
+        &.focused {
+          border: 2px solid color(red, 500);
+          outline: 2px solid color(red, 100);
+        }
       }
 
       .dropdown__tool {
@@ -710,11 +739,11 @@
   align-items: center;
   justify-content: center;
   gap: 1rem;
-  transition: border 0.2s $animation-cubic;
 
   &.active,
   &:hover {
     border: 1px solid color(blue, 500);
+    outline: 1px solid color(blue, 500);
 
     svg,
     p {

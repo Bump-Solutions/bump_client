@@ -91,7 +91,7 @@ const Stepper = ({
       <div className={`stepper__wrapper ${isFocused ? "focused" : ""}`}>
         <button
           type='button'
-          title='Decrement'
+          title='Csökkentés'
           className='stepper__btn'
           onClick={decrement}
           disabled={disabled || value === min}>
@@ -115,7 +115,7 @@ const Stepper = ({
         />
         <button
           type='button'
-          title='Increment'
+          title='Növelés'
           className='stepper__btn'
           onClick={increment}
           disabled={disabled || value === max}>

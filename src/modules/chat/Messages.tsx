@@ -5,6 +5,7 @@ import useWebSocket from "react-use-websocket";
 
 import MessagesHeader from "./MessagesHeader";
 import MessagesContent from "./MessagesContent";
+import MessagesFooter from "./MessagesFooter";
 
 interface OutletContextType {
   chat: string;
@@ -25,8 +26,10 @@ const Messages = () => {
     <div className='messages__panel'>
       <MessagesHeader />
       <div className='messages__content'>
+        {readyState}
         <MessagesContent chat={chat} />
       </div>
+      <MessagesFooter />
     </div>
   );
 };

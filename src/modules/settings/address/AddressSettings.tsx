@@ -12,9 +12,9 @@ import Modal from "../../../components/Modal";
 import Add from "./Add";
 import Modify from "./Modify";
 import Delete from "./Delete";
+import Back from "../../../components/Back";
 
 import { Check, Pencil, Trash, CirclePlus } from "lucide-react";
-import Back from "../../../components/Back";
 
 enum ACTIONS {
   OPEN = "open",

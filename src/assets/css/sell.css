@@ -188,14 +188,15 @@
   border-radius: 1rem;
   border: 1px solid #ced4da;
   overflow: hidden;
-  transition: border 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 .modal__wrapper .modal.sell .modal__content form.step-1 .options__wrapper .option:hover {
   cursor: pointer;
-  border: 1px solid #212529;
+  border: 1px solid #0070e8;
+  outline: 1px solid #0070e8;
 }
 .modal__wrapper .modal.sell .modal__content form.step-1 .options__wrapper .option.selected {
-  border: 1px solid #212529;
+  border: 1px solid #0070e8;
+  outline: 1px solid #0070e8;
 }
 .modal__wrapper .modal.sell .modal__content form.step-1 .options__wrapper .option.selected .option__col--radio div::after {
   opacity: 1;
@@ -493,10 +494,12 @@
 }
 .drawer__wrapper .drawer.sell .drawer__content .modal__content form.step-1 .options__wrapper .option:hover {
   cursor: pointer;
-  border: 1px solid #212529;
+  border: 1px solid #0070e8;
+  outline: 1px solid #0070e8;
 }
 .drawer__wrapper .drawer.sell .drawer__content .modal__content form.step-1 .options__wrapper .option.selected {
-  border: 1px solid #212529;
+  border: 1px solid #0070e8;
+  outline: 1px solid #0070e8;
 }
 .drawer__wrapper .drawer.sell .drawer__content .modal__content form.step-1 .options__wrapper .option.selected .option__col--radio div::after {
   opacity: 1;

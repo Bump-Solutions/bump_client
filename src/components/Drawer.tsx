@@ -72,7 +72,7 @@ const Drawer = ({
           <div className='drawer__dragger'>
             <button
               type='button'
-              title='Drag to close'
+              title='Húzd lefelé a bezáráshoz'
               onPointerDown={(e: PointerEvent<HTMLButtonElement>) =>
                 controls.start(e)
               }></button>

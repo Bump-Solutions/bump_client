@@ -251,6 +251,14 @@
   background-color: #343a40;
   border: 1px solid #343a40;
 }
+.button.primary:disabled {
+  background-color: #adb5bd;
+  border: 1px solid #212529;
+  pointer-events: none;
+}
+.button.primary:disabled .spinner {
+  color: #495057;
+}
 .button.primary.loading {
   background-color: #495057;
   border: 1px solid #495057;

@@ -1,4 +1,10 @@
-import { TextareaHTMLAttributes, useState } from "react";
+import {
+  TextareaHTMLAttributes,
+  useCallback,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 
 import { Check } from "lucide-react";
 
@@ -12,6 +18,7 @@ interface TextAreaProps
   value: string;
   name: string;
   onChange: (value: string) => void;
+  autoAdjustHeight?: boolean;
   maxLength?: number;
 }
 
@@ -26,13 +33,27 @@ const TextArea = ({
   value,
   name,
   onChange,
+  autoAdjustHeight = false,
   maxLength,
   className,
   autoFocus,
   rows,
   ...props
 }: TextAreaProps) => {
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [isFocused, setIsFocused] = useState(false);
+
+  const adjustHeight = useCallback(() => {
+    if (!autoAdjustHeight) return;
+    const ta = textareaRef.current;
+    if (!ta) return;
+    ta.style.height = "auto";
+    ta.style.height = `${ta.scrollHeight}px`;
+  }, [autoAdjustHeight]);
+
+  useLayoutEffect(() => {
+    adjustHeight();
+  }, [value, adjustHeight]);
 
   const handleOnChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     if (maxLength && event.target.value.length > maxLength) return;
@@ -55,6 +76,7 @@ const TextArea = ({
       </label>
       <div className='input__wrapper'>
         <textarea
+          ref={textareaRef}
           value={value}
           onChange={handleOnChange}
           id={name}
