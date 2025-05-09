@@ -137,6 +137,7 @@ const Login = () => {
               }}
               error={errors.email}
               success={email && !errors.email}
+              tabIndex={0}
             />
             <Input
               type='password'
@@ -149,6 +150,7 @@ const Login = () => {
                 setPassword(value);
               }}
               error={errors.password}
+              tabIndex={1}
             />
 
             <p onClick={() => setShowForgotPassword(true)} className='link'>
@@ -158,7 +160,8 @@ const Login = () => {
             <StateButton
               text='Bejelentkezés'
               className='primary'
-              onClick={handleLogin}>
+              onClick={handleLogin}
+              tabIndex={2}>
               <LogIn />
             </StateButton>
           </form>

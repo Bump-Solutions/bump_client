@@ -161,13 +161,19 @@
   transition: color 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 .input label.focused {
-  color: #343a40;
+  color: #0070e8;
 }
 .input label.focused .required {
   color: #cc0000;
 }
 .input label.filled {
   color: #212529;
+}
+.input label.filled.focused {
+  color: #0070e8;
+}
+.input label.filled.error {
+  color: #cc0000;
 }
 .input label.filled .required {
   color: #cc0000;
@@ -219,28 +225,31 @@
   pointer-events: none;
 }
 .input .otp__wrapper .input__field:focus {
-  border: 1px solid #495057;
+  border: 2px solid #0070e8;
   background-color: #fff;
 }
 .input .otp__wrapper .input__field:not(:-moz-placeholder-shown) {
-  border: 1px solid #212529;
+  border: 1px solid #495057;
   background-color: #fff;
 }
 .input .otp__wrapper .input__field:invalid, .input .otp__wrapper .input__field:not(:placeholder-shown) {
-  border: 1px solid #212529;
+  border: 1px solid #495057;
   background-color: #fff;
 }
 .input .otp__wrapper .input__field:not(:-moz-placeholder-shown):focus {
-  outline: 2px solid #dee2e6;
+  border: 2px solid #0070e8;
+  outline: 2px solid #e6f1fd;
 }
 .input .otp__wrapper .input__field:invalid:focus, .input .otp__wrapper .input__field:not(:placeholder-shown):focus {
-  outline: 2px solid #dee2e6;
+  border: 2px solid #0070e8;
+  outline: 2px solid #e6f1fd;
 }
 .input .otp__wrapper .input__field.error {
   border: 2px solid #cc0000;
   background-color: #fae6e6;
 }
 .input .otp__wrapper .input__field.error:focus {
+  border: 2px solid #cc0000;
   outline: 2px solid #efb0b0;
 }
 .input .stepper__wrapper {
@@ -253,6 +262,10 @@
   border-radius: 1rem;
   background-color: #f8f9fa;
   border: 1px solid #ced4da;
+}
+.input .stepper__wrapper:hover {
+  border: 1px solid #0070e8;
+  outline: 1px solid #0070e8;
 }
 .input .stepper__wrapper .stepper__btn {
   all: unset;
@@ -288,6 +301,10 @@
   border: 1px solid #212529;
   background-color: #fff;
 }
+.input .stepper__wrapper.focused:hover {
+  border: 1px solid #0070e8;
+  outline: 1px solid #0070e8;
+}
 .input .stepper__wrapper.focused .stepper__btn {
   color: #212529;
 }
@@ -314,27 +331,12 @@
   border: 1px solid #ced4da;
   border-radius: 1rem;
 }
-.input .currency__wrapper .input__field.textarea {
-  font-family: "Nunito Sans", sans-serif;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-  height: auto;
-  scrollbar-width: thin;
-  overflow: hidden;
-  overscroll-behavior: contain;
-}
-.input .currency__wrapper .input__field.textarea::-moz-placeholder {
-  font-family: "Nunito Sans", sans-serif;
-}
-.input .currency__wrapper .input__field.textarea::placeholder {
-  font-family: "Nunito Sans", sans-serif;
-}
 .input .currency__wrapper .input__field:disabled {
   background-color: #e9ecef;
   cursor: not-allowed;
 }
 .input .currency__wrapper .input__field:focus {
-  border: 1px solid #868e96;
+  border: 2px solid #0070e8;
   background-color: #fff;
 }
 .input .currency__wrapper .input__field:focus ~ .input__svg {
@@ -361,16 +363,19 @@
   color: #212529;
 }
 .input .currency__wrapper .input__field:not(:-moz-placeholder-shown):focus {
-  outline: 2px solid #dee2e6;
+  border: 2px solid #0070e8;
+  outline: 2px solid #e6f1fd;
 }
 .input .currency__wrapper .input__field:invalid:focus, .input .currency__wrapper .input__field:not(:placeholder-shown):focus {
-  outline: 2px solid #dee2e6;
+  border: 2px solid #0070e8;
+  outline: 2px solid #e6f1fd;
 }
 .input .currency__wrapper .input__field.error {
   border: 2px solid #cc0000;
   background-color: #fae6e6 !important;
 }
 .input .currency__wrapper .input__field.error:focus {
+  border: 2px solid #cc0000;
   outline: 2px solid #efb0b0;
 }
 .input .currency__wrapper .input__field:-webkit-autofill, .input .currency__wrapper .input__field:-webkit-autofill:hover, .input .currency__wrapper .input__field:-webkit-autofill:focus {
@@ -416,7 +421,8 @@
   user-select: none;
 }
 .input .input__wrapper .toggle:hover {
-  border: 1px solid #868e96;
+  border: 1px solid #0070e8;
+  outline: 1px solid #0070e8;
 }
 .input .input__wrapper .toggle:hover label {
   color: #343a40;
@@ -424,6 +430,10 @@
 .input .input__wrapper .toggle.toggled {
   background-color: #fff;
   border: 1px solid #212529;
+}
+.input .input__wrapper .toggle.toggled:hover {
+  border: 1px solid #0070e8;
+  outline: 1px solid #0070e8;
 }
 .input .input__wrapper .toggle.toggled label {
   color: #212529;
@@ -529,7 +539,7 @@
   cursor: not-allowed;
 }
 .input .input__wrapper .input__field:focus {
-  border: 1px solid #868e96;
+  border: 2px solid #0070e8;
   background-color: #fff;
 }
 .input .input__wrapper .input__field:focus ~ .input__svg {
@@ -556,16 +566,19 @@
   color: #212529;
 }
 .input .input__wrapper .input__field:not(:-moz-placeholder-shown):focus {
-  outline: 2px solid #dee2e6;
+  border: 2px solid #0070e8;
+  outline: 2px solid #e6f1fd;
 }
 .input .input__wrapper .input__field:invalid:focus, .input .input__wrapper .input__field:not(:placeholder-shown):focus {
-  outline: 2px solid #dee2e6;
+  border: 2px solid #0070e8;
+  outline: 2px solid #e6f1fd;
 }
 .input .input__wrapper .input__field.error {
   border: 2px solid #cc0000;
   background-color: #fae6e6 !important;
 }
 .input .input__wrapper .input__field.error:focus {
+  border: 2px solid #cc0000;
   outline: 2px solid #efb0b0;
 }
 .input .input__wrapper .input__field:-webkit-autofill, .input .input__wrapper .input__field:-webkit-autofill:hover, .input .input__wrapper .input__field:-webkit-autofill:focus {
@@ -595,13 +608,19 @@
   transition: color 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 .dropdown label.focused {
-  color: #343a40;
+  color: #0070e8;
 }
 .dropdown label.focused .required {
   color: #cc0000;
 }
 .dropdown label.filled {
   color: #212529;
+}
+.dropdown label.filled.focused {
+  color: #0070e8;
+}
+.dropdown label.filled.error {
+  color: #cc0000;
 }
 .dropdown label.filled .required {
   color: #cc0000;
@@ -633,10 +652,9 @@
   align-items: center;
   min-height: 3.25rem;
   height: auto;
-  transition: border 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 .dropdown .dropdown__container .dropdown__input.focused {
-  border: 1px solid #868e96;
+  border: 2px solid #0070e8;
   background-color: #fff;
 }
 .dropdown .dropdown__container .dropdown__input.filled {
@@ -645,11 +663,16 @@
   padding-block: 0.5rem;
 }
 .dropdown .dropdown__container .dropdown__input.filled.focused {
-  outline: 2px solid #dee2e6;
+  border: 2px solid #0070e8;
+  outline: 2px solid #e6f1fd;
 }
 .dropdown .dropdown__container .dropdown__input.error {
   border: 2px solid #cc0000;
   background-color: #fae6e6;
+}
+.dropdown .dropdown__container .dropdown__input.error.focused {
+  border: 2px solid #cc0000;
+  outline: 2px solid #efb0b0;
 }
 .dropdown .dropdown__container .dropdown__input .dropdown__tool {
   display: flex;
@@ -776,10 +799,10 @@
   align-items: center;
   justify-content: center;
   gap: 1rem;
-  transition: border 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 .dropzone.active, .dropzone:hover {
   border: 1px solid #0070e8;
+  outline: 1px solid #0070e8;
 }
 .dropzone.active svg,
 .dropzone.active p, .dropzone:hover svg,

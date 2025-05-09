@@ -22,3 +22,9 @@ export interface Message {
   is_read: boolean;
   own_message: boolean;
 }
+
+export interface ImageWithId {
+  id: string;
+  file: File;
+  preview: string;
+}

@@ -21,7 +21,7 @@ const UploadDropzone = () => {
     }));
 
     if (acceptedFiles.length + data.images.length > 10) {
-      addToast("error", "Maximum 10 kép tölthető fel.");
+      addToast("error", `Maximum ${MAX_FILES} fájl tölthető fel.`);
       return;
     }
 
@@ -62,7 +62,10 @@ const UploadDropzone = () => {
   const onDropRejected = (filesRejections: any[]) => {
     switch (filesRejections[0].errors[0].code) {
       case "file-too-large":
-        addToast("error", "A fájl mérete túl nagy. A megengedet méret 1MB.");
+        addToast(
+          "error",
+          `A fájl mérete nem haladhatja meg a ${MAX_SIZE / 1024 / 1024} MB-ot.`
+        );
         break;
       case "file-invalid-type":
         addToast("error", "Hibás fájl formátum.");

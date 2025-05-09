@@ -1,5 +1,7 @@
+import { ReportType } from "../../types/report";
+import { Option, Errors } from "../../types/form";
 import { FormEvent, useState } from "react";
-import { Errors, Option, ReportType } from "../../utils/types";
+import { useReport } from "../../hooks/report/useReport";
 import { useToast } from "../../hooks/useToast";
 import { useNavigate } from "react-router";
 import { useDebounce } from "../../hooks/useDebounce";
@@ -11,7 +13,6 @@ import Button from "../../components/Button";
 import StateButton from "../../components/StateButton";
 
 import { Flag } from "lucide-react";
-import { useReport } from "../../hooks/report/useReport";
 
 interface ReportFormProps {
   type: ReportType;

@@ -13,6 +13,7 @@ import { FcGoogle } from "react-icons/fc";
 import Button from "../../components/Button";
 import { useLoginWithGoogle } from "../../hooks/auth/useLoginWithGoogle";
 interface JwtPayload {
+  user_id: string;
   username: string;
   email: string;
   roles: Role[];
@@ -28,12 +29,13 @@ const SocialSignup = () => {
     const access_token = resp;
 
     const decodedToken = jwtDecode<JwtPayload>(access_token);
-    const { roles, username, email } = decodedToken;
+    const { roles, user_id, username, email } = decodedToken;
 
     setAuth({
       accessToken: access_token,
       roles,
       user: {
+        id: Number(user_id),
         username,
         email,
       },

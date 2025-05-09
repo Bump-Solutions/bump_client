@@ -76,7 +76,7 @@ const Results = ({ searchKey, setSearchKey }: ResultsProps) => {
 
   if (isError) {
     return (
-      <h4 className='fc-red-300 ta-center py-3'>
+      <h4 className='fc-red-300 ta-center pt-1_75 pb-3'>
         Hiba történt a keresés közben.
       </h4>
     );
