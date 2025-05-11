@@ -51,17 +51,16 @@
                 border-radius: $border-radius-1;
                 border: 1px solid color(gray, 400);
                 overflow: hidden;
-                // transition: border 0.2s $animation-cubic;
+                transition: border 0.2s $animation-cubic;
 
                 &:hover {
                   cursor: pointer;
-                  border: 1px solid color(blue, 500);
-                  outline: 1px solid color(blue, 500);
+                  border: 1px solid color(gray, 900);
                 }
 
                 &.selected {
-                  border: 1px solid color(blue, 500);
-                  outline: 1px solid color(blue, 500);
+                  border: 1px solid color(gray, 900);
+                  outline: 1px solid color(gray, 900);
 
                   .option__col--radio {
                     div::after {
@@ -434,13 +433,12 @@
 
                   &:hover {
                     cursor: pointer;
-                    border: 1px solid color(blue, 500);
-                    outline: 1px solid color(blue, 500);
+                    border: 1px solid color(gray, 900);
                   }
 
                   &.selected {
-                    border: 1px solid color(blue, 500);
-                    outline: 1px solid color(blue, 500);
+                    border: 1px solid color(gray, 900);
+                    outline: 1px solid color(gray, 900);
 
                     .option__col--radio {
                       div::after {

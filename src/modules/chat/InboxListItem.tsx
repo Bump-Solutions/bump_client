@@ -3,7 +3,12 @@ import { ROUTES } from "../../routes/routes";
 import { Message } from "../../types/chat";
 import { User } from "../../types/user";
 import { NavLink } from "react-router";
-import { formatTimestamp } from "../../utils/functions";
+import {
+  formatTimestamp,
+  isThisYear,
+  isToday,
+  now,
+} from "../../utils/functions";
 
 import Image from "../../components/Image";
 
@@ -22,26 +27,20 @@ const InboxListItem = ({ message }: InboxListItemProps) => {
     message?.last_message?.created_at || message.created_at
   );
 
-  const now = new Date();
-
-  const isToday =
-    now.getFullYear() === referenceDate.getFullYear() &&
-    now.getMonth() === referenceDate.getMonth() &&
-    now.getDate() === referenceDate.getDate();
-
-  const isThisYear = now.getFullYear() === referenceDate.getFullYear();
-
-  const formattedTimestamp = isToday
+  const formattedTimestamp = isToday(referenceDate)
     ? formatTimestamp(referenceDate, "hh:mm")
-    : isThisYear
+    : isThisYear(referenceDate, now())
     ? formatTimestamp(referenceDate, "MM.DD")
     : formatTimestamp(referenceDate, "YYYY.MM.DD");
+
+  const showUnread =
+    !message?.last_message?.is_read && !message?.last_message?.own_message;
 
   return (
     <li className='inbox__item'>
       <NavLink
         to={ROUTES.INBOX.CHAT(message.name)}
-        state={{ partner: message.user }}>
+        state={{ partner: message.user, createdAt: message.created_at }}>
         <Image
           src={API.BASE_URL + message.user.profile_picture}
           alt={message.user.username.slice(0, 2)}
@@ -50,9 +49,7 @@ const InboxListItem = ({ message }: InboxListItemProps) => {
 
         <div
           className={`inbox__item__details ${
-            message.last_message && !message.last_message.is_read
-              ? "unread"
-              : ""
+            message.last_message && showUnread ? "unread" : ""
           }`}>
           <div>
             <span className='truncate'>{message.user.username}</span>
@@ -61,9 +58,7 @@ const InboxListItem = ({ message }: InboxListItemProps) => {
 
           {message?.last_message && (
             <div>
-              {!message.last_message.is_read && (
-                <span className='new-indicator' />
-              )}
+              {showUnread && <span className='new-indicator' />}
               <span className='truncate'>
                 {message.last_message.own_message && "Te: "}
                 {message.last_message.body}

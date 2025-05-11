@@ -1,14 +1,23 @@
+import { MessagesPage } from "../../types/chat";
 import { useEffect, useState } from "react";
 import { useListMessages } from "../../hooks/chat/useListMessages";
+import { useLocation } from "react-router";
 
 import Spinner from "../../components/Spinner";
+import MessagesList from "./MessagesList";
+import MessageDateDivider from "./MessageDateDivider";
 
 interface MessagesContentProps {
   chat: string;
 }
 
 const MessagesContent = ({ chat }: MessagesContentProps) => {
-  const [pages, setPages] = useState<any[] | null>(null);
+  const location = useLocation();
+  const createdAt = location.state?.createdAt
+    ? new Date(location.state.createdAt)
+    : new Date();
+
+  const [pages, setPages] = useState<MessagesPage[] | null>(null);
 
   const { isLoading, isFetchingNextPage, isError, fetchNextPage, data } =
     useListMessages([chat], {
@@ -20,8 +29,6 @@ const MessagesContent = ({ chat }: MessagesContentProps) => {
       setPages(data.pages);
     }
   }, [data]);
-
-  console.log("pages", pages);
 
   if (isError) {
     return (
@@ -37,7 +44,26 @@ const MessagesContent = ({ chat }: MessagesContentProps) => {
     return <Spinner />;
   }
 
-  return pages && pages[0].messages.length > 0 ? <h1>asd</h1> : <h1>todo</h1>;
+  return (
+    pages && (
+      <>
+        {pages[0].messages.length > 0 ? (
+          <MessagesList
+            pages={pages}
+            fetchNextPage={fetchNextPage}
+            isFetchingNextPage={isFetchingNextPage}
+          />
+        ) : (
+          <div className='messages__list'>
+            <MessageDateDivider
+              date={createdAt}
+              detail='Beszélgetés létrehozva'
+            />
+          </div>
+        )}
+      </>
+    )
+  );
 };
 
 export default MessagesContent;
