@@ -18,13 +18,28 @@ export interface Message {
   name: string;
   author_username: User["username"];
   body: string;
-  created_at: string;
-  is_read: boolean;
-  own_message: boolean;
+  created_at?: string;
+  is_read?: boolean;
+  own_message?: boolean;
 }
 
 export interface ImageWithId {
   id: string;
   file: File;
   preview: string;
+}
+
+export interface MessagesPage {
+  messages: Message[];
+  count: number;
+  next?: number;
+}
+
+export interface MessageGroup {
+  author: string;
+  partner: Partial<User>;
+  isOwn: boolean;
+  timestamp: string;
+  messages: Message[];
+  lastAt: Date;
 }

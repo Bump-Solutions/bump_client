@@ -180,6 +180,10 @@
                   gap: 0.5rem; // 8px
                 }
 
+                &:last-child {
+                  max-width: 10rem;
+                }
+
                 .new-indicator {
                   display: inline-block;
                   margin-right: 0.25rem;
@@ -280,7 +284,190 @@
     .messages__content {
       flex: 1 1 auto;
       position: relative;
-      padding: 0 var(--container-x-padding) 0 2rem;
+      overflow: hidden;
+
+      .messages__list {
+        display: flex;
+        padding: 0 var(--container-x-padding) 0 2rem;
+        height: auto;
+        max-height: 100%;
+        flex-direction: column-reverse !important;
+        overflow-y: auto;
+        overflow-x: hidden;
+        scroll-behavior: smooth;
+
+        .date-divider {
+          h3 {
+            text-align: center;
+            font-size: $fs-14;
+            font-weight: 700;
+            line-height: 1rem;
+            margin: 1rem 0;
+            padding: 0rem 1.5rem;
+          }
+
+          p {
+            text-align: center;
+            font-size: $fs-14;
+            color: color(gray, 600);
+            line-height: 1rem;
+            margin-bottom: 1rem;
+          }
+        }
+
+        .message__group {
+          position: relative;
+          display: flex;
+          flex-direction: row;
+          gap: 0.5rem;
+          margin: 0.25rem 0.125rem 1rem;
+          width: 100%;
+
+          .group__avatar {
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            flex: 1;
+            color: $clr-font-light;
+
+            .image {
+              width: 2.25rem;
+              height: 2.25rem;
+              line-height: 2.125rem;
+              font-size: $fs-12;
+              border-radius: $border-radius-50;
+
+              img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+              }
+            }
+          }
+
+          .group__wrapper {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+
+            .group__header {
+              display: flex;
+              flex-direction: row-reverse;
+              justify-content: flex-start;
+              align-items: center;
+              flex-flow: row wrap;
+              margin: 0 0 0.25rem 1rem;
+
+              span {
+                font-size: $fs-12;
+                color: color(gray, 600);
+                line-height: 1;
+              }
+            }
+
+            .group__messages {
+              display: flex;
+              flex-direction: column;
+              gap: 0.125rem;
+
+              .message {
+                height: auto;
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+
+                .message__body {
+                  display: flex;
+                  flex-direction: column;
+                  justify-content: center;
+                  align-items: flex-start;
+                  padding: 0.75rem 1rem;
+                  width: fit-content;
+                  max-width: 60%;
+                  background-color: color(gray, 200);
+                  border-radius: $border-radius-1; // default: minden sarok 1rem
+                  font-size: $fs-16;
+                  line-height: 1.25rem;
+
+                  div {
+                    white-space: pre-wrap;
+                    word-break: break-word;
+                    overflow-wrap: break-word;
+                  }
+                }
+              }
+            }
+          }
+
+          &.own {
+            .group__header {
+              justify-content: flex-end;
+
+              span {
+                margin: 0 1rem 0 0.25rem;
+              }
+            }
+
+            .group__messages {
+              .message:only-child .message__body {
+                border-radius: $border-radius-1 !important;
+              }
+
+              // egyetlen elem: marad az 1rem minden sarok
+              // első elem: jobb alsó sarok 0.25rem
+              .message:first-of-type .message__body {
+                border-radius: $border-radius-1 $border-radius-1 0.25rem
+                  $border-radius-1;
+              }
+              // utolsó elem: jobb felső sarok 0.25rem
+              .message:last-of-type .message__body {
+                border-radius: $border-radius-1 0.25rem $border-radius-1
+                  $border-radius-1;
+              }
+              // köztes (ha 3+ elem): jobb oldali sarok kicsi
+              .message:not(:first-of-type):not(:last-of-type) .message__body {
+                border-radius: $border-radius-1 0.25rem 0.25rem $border-radius-1 !important;
+              }
+
+              .message {
+                .message__body {
+                  background-color: color(gray, 900);
+                  color: $clr-font-light;
+                  margin-left: auto;
+                  align-items: flex-end;
+
+                  div {
+                    color: $clr-font-light;
+                  }
+                }
+              }
+            }
+          }
+
+          &:not(.own) {
+            .message:only-child .message__body {
+              border-radius: $border-radius-1 !important;
+            }
+
+            // 2+ üzenet, az első: bal alsó kicsi
+            .message:first-of-type:not(:only-child) .message__body {
+              border-radius: $border-radius-1 $border-radius-1 $border-radius-1
+                0.25rem;
+            }
+
+            // 2+ üzenet, az utolsó: bal felső kicsi
+            .message:last-of-type:not(:only-child) .message__body {
+              border-radius: 0.25rem $border-radius-1 $border-radius-1
+                $border-radius-1;
+            }
+
+            // 3+ üzenet, köztesek: mindkét bal sarok kicsi
+            .message:not(:first-of-type):not(:last-of-type) .message__body {
+              border-radius: 0.25rem $border-radius-1 $border-radius-1 0.25rem !important;
+            }
+          }
+        }
+      }
     }
 
     .messages__footer {
@@ -437,7 +624,7 @@
               border: none;
 
               &:hover {
-                background-color: color(gray, 100);
+                background-color: color(gray, 300);
               }
             }
           }

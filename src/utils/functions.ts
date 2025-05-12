@@ -169,6 +169,50 @@ export const getRandomSubset = <T>(arr: T[], size: number): T[] => {
   return shuffled.slice(0, size);
 };
 
+export const now = (): Date => {
+  return new Date();
+};
+
+export const yesterday = (): Date => {
+  const date = new Date();
+  date.setDate(date.getDate() - 1);
+  return date;
+};
+
+export const startOfDay = (date: Date): Date => {
+  const start = new Date(date);
+
+  start.setHours(0, 0, 0, 0);
+  return start;
+};
+
+export const isSameDay = (d1: Date, d2: Date): boolean => {
+  return (
+    d1.getFullYear() === d2.getFullYear() &&
+    d1.getMonth() === d2.getMonth() &&
+    d1.getDate() === d2.getDate()
+  );
+};
+
+export const isToday = (date: Date): boolean => {
+  const today = new Date();
+
+  return (
+    today.getFullYear() === date.getFullYear() &&
+    today.getMonth() === date.getMonth() &&
+    today.getDate() === date.getDate()
+  );
+};
+
+export const isThisYear = (d1: Date, d2: Date): boolean => {
+  return d1.getFullYear() === d2.getFullYear();
+};
+
+export const differenceInMinutes = (d1: Date, d2: Date): number => {
+  const diff = d2.getTime() - d1.getTime();
+  return Math.abs(Math.floor(diff / (1000 * 60)));
+};
+
 // Formats a timestamp string into a specified format
 export const formatTimestamp = (timestamp: Date, format: string): string => {
   const date = new Date(timestamp);

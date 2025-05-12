@@ -5,6 +5,7 @@ import { FormEvent, useState } from "react";
 import { useToast } from "../../../hooks/useToast";
 import { useDebounce } from "../../../hooks/useDebounce";
 import { useModifyAddress } from "../../../hooks/address/useModifyAddress";
+import { useMounted } from "../../../hooks/useMounted";
 
 import Button from "../../../components/Button";
 import StateButton from "../../../components/StateButton";
@@ -21,6 +22,7 @@ interface ModifyProps {
 
 const Modify = ({ address, addresses, close }: ModifyProps) => {
   const { addToast } = useToast();
+  const isMounted = useMounted();
 
   const [newAddress, setNewAddress] = useState<Address>({ ...address });
 
@@ -103,7 +105,9 @@ const Modify = ({ address, addresses, close }: ModifyProps) => {
   const modifyAddressMutation = useModifyAddress(
     () => {
       setTimeout(() => {
-        close();
+        if (isMounted) {
+          close();
+        }
       }, 500);
     },
     (error) => {

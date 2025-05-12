@@ -31,8 +31,15 @@ const UserInteractions = () => {
   });
 
   const createChatGroupMutation = useCreateChatGroup((response) => {
-    // TODO: navigate
-    navigate(ROUTES.INBOX.ROOT);
+    navigate(ROUTES.INBOX.CHAT(response.data.message), {
+      state: {
+        partner: {
+          id: user.id,
+          username: user.username,
+          profile_picture: user.profile_picture,
+        },
+      },
+    });
   });
 
   const handleFollow = (e: FormEvent) => {

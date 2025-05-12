@@ -7,6 +7,7 @@ import { useNavigate } from "react-router";
 
 import { useState, useEffect, FormEvent } from "react";
 import { useMounted } from "../../../hooks/useMounted";
+import { useLogout } from "../../../hooks/auth/useLogout";
 import { useAuth } from "../../../hooks/auth/useAuth";
 import { useToast } from "../../../hooks/useToast";
 import { useDebounce } from "../../../hooks/useDebounce";
@@ -17,9 +18,9 @@ import Input from "../../../components/Input";
 import Phone from "../../../components/Phone";
 import TextArea from "../../../components/TextArea";
 import StateButton from "../../../components/StateButton";
+import Back from "../../../components/Back";
 
 import { Download } from "lucide-react";
-import Back from "../../../components/Back";
 
 interface PersonalInfoSchema {
   username: string;
@@ -59,7 +60,8 @@ const ProfileInfoSettings = () => {
   const [errors, setErrors] = useState<PersonalInfoFormErrors>({});
 
   const isMounted = useMounted();
-  const { setAuth } = useAuth();
+  const logout = useLogout();
+  const { auth } = useAuth();
   const { addToast } = useToast();
 
   useEffect(() => {
@@ -168,17 +170,16 @@ const ProfileInfoSettings = () => {
       address: newData.address,
     });
 
-    setAuth((prev) => ({
-      ...prev,
-      user: {
-        ...prev.user,
-        username: newData.username,
-      },
-    }));
+    // logout user if username changed
 
     setTimeout(() => {
       if (isMounted) {
-        navigate(ROUTES.SETTINGS.ROOT);
+        if (newData.username !== auth.user.username) {
+          addToast("info", "Kijelentkezés: a felhasználónév megváltozott.");
+          logout();
+        } else {
+          navigate(ROUTES.SETTINGS.ROOT);
+        }
       }
     }, 500);
   });
@@ -234,6 +235,11 @@ const ProfileInfoSettings = () => {
         <div className='form-box'>
           <Back to={ROUTES.SETTINGS.ROOT} />
           <h1 className='page__title'>Adatok frissítése</h1>
+          <p className='page__desc mb-2'>
+            <b>Figyelem!</b> A <i>felhasználónév</i> megváltoztatása esetén a
+            rendszer automatikusan kijelentkeztet minden eszközről, ahol be vagy
+            jelentkezve.
+          </p>
 
           <form>
             <Input

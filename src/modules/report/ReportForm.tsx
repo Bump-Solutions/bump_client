@@ -5,6 +5,7 @@ import { useReport } from "../../hooks/report/useReport";
 import { useToast } from "../../hooks/useToast";
 import { useNavigate } from "react-router";
 import { useDebounce } from "../../hooks/useDebounce";
+import { useMounted } from "../../hooks/useMounted";
 
 import Input from "../../components/Input";
 import Select from "../../components/Select";
@@ -90,6 +91,7 @@ const ReportForm = ({ type, id }: ReportFormProps) => {
   const [formData, setFormData] = useState<Record<string, any>>({});
 
   const [errors, setErrors] = useState<Errors>({});
+  const isMounted = useMounted();
   const { addToast } = useToast();
 
   fields.forEach((field) => {
@@ -107,7 +109,9 @@ const ReportForm = ({ type, id }: ReportFormProps) => {
 
   const reportMutation = useReport((resp, variables) => {
     setTimeout(() => {
-      navigate(-1);
+      if (isMounted) {
+        navigate(-1);
+      }
     }, 1000);
   });
 

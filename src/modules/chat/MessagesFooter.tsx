@@ -5,6 +5,7 @@ import {
   useLayoutEffect,
   useRef,
   useState,
+  KeyboardEvent,
 } from "react";
 import { useToggle } from "../../hooks/useToggle";
 import { useClickOutside } from "../../hooks/useClickOutside";
@@ -15,9 +16,13 @@ import MessagesFooterImages from "./MessagesFooterImages";
 
 import { ArrowUp, CircleAlert } from "lucide-react";
 
+interface MessagesFooterProps {
+  onSend: (data: any) => void;
+}
+
 const MAX_MSG_LENGTH = 4000; // Define the maximum length for the message
 
-const MessagesFooter = () => {
+const MessagesFooter = ({ onSend }: MessagesFooterProps) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -30,6 +35,32 @@ const MessagesFooter = () => {
     callback: () => toggleFocus(false),
   });
 
+  useEffect(() => {
+    if (isFocused) {
+      textareaRef.current?.focus();
+    }
+  }, [isFocused]);
+
+  const handleSend = () => {
+    const text = message.trim();
+    if (!text) return;
+
+    onSend({ message: text });
+
+    setMessage("");
+
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "auto"; // Reset the height to auto
+    }
+  };
+
+  const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSend();
+    }
+  };
+
   const adjustHeight = useCallback(() => {
     const ta = textareaRef.current;
     if (!ta) return;
@@ -38,12 +69,6 @@ const MessagesFooter = () => {
   }, []);
 
   useLayoutEffect(adjustHeight, [adjustHeight]);
-
-  useEffect(() => {
-    if (isFocused) {
-      textareaRef.current?.focus();
-    }
-  }, [isFocused]);
 
   const remainingChars = MAX_MSG_LENGTH - message.length;
   const showCounter = remainingChars <= 50;
@@ -68,6 +93,7 @@ const MessagesFooter = () => {
             onInput={adjustHeight}
             value={message}
             onChange={(e) => setMessage(e.target.value)}
+            onKeyDown={handleKeyDown}
             rows={1}
             tabIndex={0}
           />
@@ -97,7 +123,10 @@ const MessagesFooter = () => {
           <ImageUpload setImages={setImages} />
 
           <div className='btn__send'>
-            <Button className='primary' disabled={disabled}>
+            <Button
+              className='primary'
+              onClick={handleSend}
+              disabled={disabled}>
               <ArrowUp />
             </Button>
           </div>
