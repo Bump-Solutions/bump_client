@@ -2,6 +2,7 @@ import { useRef, MouseEvent } from "react";
 import { useMultiStepForm } from "../../hooks/useMultiStepForm";
 import { Link, useNavigate } from "react-router";
 import { useSell } from "../../hooks/product/useSell";
+import { useMounted } from "../../hooks/useMounted";
 import { useUploadProduct } from "../../hooks/product/useUploadProduct";
 
 import Button from "../../components/Button";
@@ -15,6 +16,7 @@ import { ArrowUpRight, MoveRight, Tag } from "lucide-react";
 
 const SellForm = () => {
   const navigate = useNavigate();
+  const isMounted = useMounted();
 
   const selectRef = useRef<{ isValid: () => boolean }>(null);
   const detailsRef = useRef<{ isValid: () => boolean }>(null);
@@ -104,7 +106,9 @@ const SellForm = () => {
 
   const uploadProductMutation = useUploadProduct((resp, variables) => {
     setTimeout(() => {
-      navigate(-1);
+      if (isMounted) {
+        navigate(-1);
+      }
     }, 1000);
   });
 

@@ -49,7 +49,10 @@ const renderGroup = (group: MessageGroup, index: number) => {
 
         <div className='group__messages'>
           {group.messages.map((msg, idx) => (
-            <MessageListItem key={`msg-${msg.id}`} message={msg} />
+            <MessageListItem
+              key={`msg-${msg.id}-${msg.created_at}`}
+              message={msg}
+            />
           ))}
         </div>
       </div>

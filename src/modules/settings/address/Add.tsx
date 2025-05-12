@@ -5,15 +5,16 @@ import { Errors } from "../../../types/form";
 import { useToast } from "../../../hooks/useToast";
 import { useDebounce } from "../../../hooks/useDebounce";
 import { useAddAddress } from "../../../hooks/address/useAddAddress";
+import { useGetCurrentLocation } from "../../../hooks/address/useGetCurrentLocation";
+import { useMounted } from "../../../hooks/useMounted";
 
 import Button from "../../../components/Button";
 import StateButton from "../../../components/StateButton";
 import Input from "../../../components/Input";
 import ToggleButton from "../../../components/ToggleButton";
+import Spinner from "../../../components/Spinner";
 
 import { CirclePlus } from "lucide-react";
-import Spinner from "../../../components/Spinner";
-import { useGetCurrentLocation } from "../../../hooks/address/useGetCurrentLocation";
 
 interface FormState extends Omit<Address, "id"> {}
 
@@ -34,6 +35,7 @@ const Add = ({ addresses, close }: AddProps) => {
 
   const [errors, setErrors] = useState<Errors>({});
   const { addToast } = useToast();
+  const isMounted = useMounted();
 
   const { loading } = useGetCurrentLocation((resp) => {
     setNewAddress((prev) => ({
@@ -111,7 +113,9 @@ const Add = ({ addresses, close }: AddProps) => {
   const addAddressMutation = useAddAddress(
     () => {
       setTimeout(() => {
-        close();
+        if (isMounted) {
+          close();
+        }
       }, 500);
     },
     (error) => {

@@ -1,6 +1,7 @@
 import { Address } from "../../../types/address";
 import { FormEvent } from "react";
 import { useDeleteAddress } from "../../../hooks/address/useDeleteAddress";
+import { useMounted } from "../../../hooks/useMounted";
 
 import Button from "../../../components/Button";
 import StateButton from "../../../components/StateButton";
@@ -13,9 +14,13 @@ interface DeleteProps {
 }
 
 const Delete = ({ address, close }: DeleteProps) => {
+  const isMounted = useMounted();
+
   const deleteAddressMutation = useDeleteAddress(() => {
     setTimeout(() => {
-      close();
+      if (isMounted) {
+        close();
+      }
     }, 500);
   });
 

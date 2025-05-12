@@ -18,6 +18,7 @@ import App from "./App";
 import ToastContainer from "./components/ToastContainer";
 
 import AuthProvider from "./context/AuthProvider";
+import TradeProvider from "./context/TradeProvider";
 import ToastProvider from "./context/ToastProvider";
 import NavbarThemeProvider from "./context/NavbarThemeProvider";
 
@@ -36,14 +37,16 @@ createRoot(document.getElementById("root")).render(
       <Router>
         <QueryParamProvider adapter={ReactRouter6Adapter}>
           <AuthProvider>
-            <NavbarThemeProvider>
-              <ToastProvider>
-                <ToastContainer />
-                <Routes>
-                  <Route path='/*' element={<App />} />
-                </Routes>
-              </ToastProvider>
-            </NavbarThemeProvider>
+            <TradeProvider>
+              <NavbarThemeProvider>
+                <ToastProvider>
+                  <ToastContainer />
+                  <Routes>
+                    <Route path='/*' element={<App />} />
+                  </Routes>
+                </ToastProvider>
+              </NavbarThemeProvider>
+            </TradeProvider>
           </AuthProvider>
         </QueryParamProvider>
       </Router>
