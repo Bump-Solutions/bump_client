@@ -1,4 +1,6 @@
-import { MessageGroup, MessagesPage } from "../../types/chat";
+import { API } from "../../utils/api";
+import { User } from "../../types/user";
+import { Message, MessageGroup, MessagesPage } from "../../types/chat";
 import {
   differenceInMinutes,
   formatTimestamp,
@@ -14,7 +16,6 @@ import Spinner from "../../components/Spinner";
 import MessageDateDivider from "./MessageDateDivider";
 import MessageListItem from "./MessageListItem";
 import Image from "../../components/Image";
-import { API } from "../../utils/api";
 
 interface MessagesListProps {
   pages: MessagesPage[];
@@ -23,6 +24,78 @@ interface MessagesListProps {
 }
 
 const GROUP_TIMEOUT = 10; // 10 perc
+
+const groupMessages = (
+  messages: Message[],
+  me: string,
+  partner: Partial<User>
+): JSX.Element[] => {
+  const elements: JSX.Element[] = [];
+  let lastDay: Date | null = null;
+  let currentGroup: MessageGroup | null = null;
+
+  const reversedMessages = [...messages].reverse(); // Feldolgozás: legrégebbitől a legfrissebbig
+
+  for (let i = 0; i < reversedMessages.length; i++) {
+    const message = reversedMessages[i];
+    const createdAt = new Date(message.created_at);
+    const msgDay = startOfDay(createdAt);
+    const isOwn = message.author_username === me;
+    const timestamp = formatTimestamp(createdAt, "hh:mm");
+
+    // Ha új nap következik, akkor:
+    // 1. lezárjuk az aktuális üzenetcsoportot (ha van)
+    // 2. beszúrunk egy dátumelválasztót
+    if (!lastDay || !isSameDay(msgDay, lastDay)) {
+      if (currentGroup) {
+        elements.push(renderGroup(currentGroup, i));
+        currentGroup = null;
+      }
+
+      const detail = i === 0 ? "Beszélgetés létrehozva" : null;
+      elements.push(
+        <MessageDateDivider
+          key={`divider-${i}`}
+          date={createdAt}
+          detail={detail}
+        />
+      );
+
+      lastDay = msgDay;
+    }
+
+    // Eldöntjük, kell-e új batch/csoport
+    const mustBreak =
+      !currentGroup || // nincs csoport
+      currentGroup.isOwn !== isOwn || // más a szerzője
+      differenceInMinutes(currentGroup.lastAt, createdAt) > GROUP_TIMEOUT; // több mint x perc telt el
+
+    if (mustBreak) {
+      if (currentGroup) {
+        elements.push(renderGroup(currentGroup, i));
+      }
+
+      currentGroup = {
+        author: message.author_username,
+        partner: isOwn ? null : partner,
+        isOwn,
+        timestamp,
+        messages: [message],
+        lastAt: createdAt,
+      };
+    } else {
+      currentGroup.messages.push(message);
+      currentGroup.lastAt = createdAt;
+    }
+  }
+
+  // Utolsó üzenetcsoport lezárása, ha maradt feldolgozatlan
+  if (currentGroup) {
+    elements.push(renderGroup(currentGroup, reversedMessages.length));
+  }
+
+  return elements.reverse();
+};
 
 const renderGroup = (group: MessageGroup, index: number) => {
   return (
@@ -80,81 +153,12 @@ const MessagesList = ({
     }
   }, [fetchNextPage, inView]);
 
-  // 1) lapozott oldalakból egységes tömb
   const allMessages = pages.flatMap((page) => page.messages);
+  const groupedElements = groupMessages(allMessages, me, partner);
 
-  // 2) készítünk egy 'elements' listát, amiben vagy
-  //    <MessageDateDivider/> vagy <div className="batch"> lesz
-  const elements: JSX.Element[] = [];
-  let lastDay: Date | null = null;
-  let currentGroup: MessageGroup | null = null;
-
-  [...allMessages].reverse().forEach((message, idx) => {
-    const createdAt = new Date(message.created_at);
-    const msgDay = startOfDay(createdAt);
-    const isOwn = message.author_username === me;
-    const timestamp = formatTimestamp(createdAt, "hh:mm");
-
-    let detail = null;
-    if (!lastDay || !isSameDay(msgDay, lastDay)) {
-      if (idx === 0) {
-        detail = "Beszélgetés létrehozva";
-      }
-      elements.unshift(
-        <MessageDateDivider
-          key={`divider-${idx}`}
-          date={createdAt}
-          detail={detail}
-        />
-      );
-      lastDay = msgDay;
-      currentGroup = null;
-    }
-
-    // --- 2) batch-break logika ---
-    // uj batch akkor kezdődik, ha:
-    // - nincs currentGroup
-    // - szerzője más, mint az előző batch-nek
-    // - a batch utolsó üzenete óta eltelt idő > BATCH_TIMEOUT
-
-    let mustBreak = false;
-    if (!currentGroup) {
-      mustBreak = true;
-    } else if (currentGroup.isOwn !== isOwn) {
-      mustBreak = true;
-    } else if (
-      differenceInMinutes(currentGroup.lastAt, createdAt) > GROUP_TIMEOUT
-    ) {
-      mustBreak = true;
-    }
-
-    if (mustBreak) {
-      if (currentGroup) {
-        elements.unshift(renderGroup(currentGroup, idx));
-      }
-
-      currentGroup = {
-        author: message.author_username,
-        partner: isOwn ? null : partner,
-        isOwn,
-        timestamp,
-        messages: [message],
-        lastAt: createdAt,
-      } as MessageGroup;
-    } else {
-      currentGroup.messages.push(message);
-      currentGroup.lastAt = createdAt;
-    }
-  });
-
-  if (currentGroup) {
-    elements.unshift(renderGroup(currentGroup, allMessages.length));
-  }
-
-  // flex-direction: column-reverse miatt a legutolsó elem a legelső
   return (
     <div className='messages__list'>
-      {elements}
+      {groupedElements}
       <div ref={ref}>
         {isFetchingNextPage && (
           <div className='relative py-3'>
