@@ -662,4 +662,57 @@
 }
 
 @media only screen and (max-width: $media-query-md) {
+  .chat {
+    .inbox__panel {
+      flex: 1 1 0% !important;
+
+      .inbox__header {
+        padding: 1rem var(--container-x-padding);
+      }
+
+      .inbox__content {
+        padding: 0 var(--container-x-padding);
+      }
+    }
+
+    .messages__panel {
+      .messages__header {
+        padding: 0 var(--container-x-padding);
+
+        .messages__header__details {
+          .messages__header__details__back {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: $border-radius-50;
+            background-color: color(gray, 200);
+            transition: background-color 0.2s $animation-cubic;
+
+            svg {
+              width: $fs-20;
+              height: $fs-20;
+              transform: none;
+              opacity: 1;
+            }
+
+            &:hover {
+              background-color: color(gray, 300);
+            }
+          }
+        }
+      }
+
+      .messages__content {
+        .messages__list {
+          padding: 0 var(--container-x-padding);
+        }
+      }
+
+      .messages__footer {
+        padding: 0 var(--container-x-padding) var(--container-x-padding);
+      }
+    }
+  }
 }

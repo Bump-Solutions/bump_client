@@ -559,9 +559,44 @@
 
       .image-grid {
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        grid-template-rows: repeat(2, 1fr);
         gap: 0.5rem;
+
+        &.grid-3 {
+          aspect-ratio: 2 / 1;
+          grid-template-areas:
+            "left top   "
+            "left bottom";
+          grid-template-columns: 64% 36%;
+          grid-template-rows: minmax(0, 550px) minmax(0, 550px);
+
+          a {
+            &:first-child {
+              grid-area: left;
+            }
+
+            &:nth-child(2) {
+              grid-area: top;
+            }
+
+            &:nth-child(3) {
+              grid-area: bottom;
+            }
+          }
+        }
+
+        &.grid-5 {
+          grid-template-columns: repeat(4, 1fr);
+          grid-template-rows: repeat(2, 1fr);
+
+          a {
+            aspect-ratio: 1 / 1;
+
+            &:first-child {
+              grid-column: span 2 / span 2;
+              grid-row: span 2 / span 2;
+            }
+          }
+        }
 
         a {
           position: relative;
@@ -570,7 +605,6 @@
           justify-content: center;
           background-color: color(gray, 200);
           cursor: pointer;
-          aspect-ratio: 1/1;
 
           &::before {
             content: "";
@@ -603,20 +637,6 @@
               object-fit: cover;
             }
           }
-
-          &:first-child {
-            grid-column: span 2 / span 2;
-            grid-row: span 2 / span 2;
-          }
-
-          &:nth-child(2) {
-            grid-column-start: 3;
-          }
-
-          &:nth-child(3) {
-            grid-column-start: 3;
-            grid-row-start: 2;
-          }
         }
       }
     }
@@ -627,16 +647,18 @@
       justify-content: flex-start;
       flex-wrap: wrap;
       width: 100%;
-      padding-block: 2rem;
       border-bottom: 1px solid color(gray, 300);
+      padding-block: 2rem;
 
       .product__details {
         position: relative;
         width: 58.3333% !important;
       }
 
-      .product__price-card {
-        position: relative;
+      .product__items-card {
+        position: sticky;
+        top: calc(2rem + $navbar-height);
+        height: fit-content;
         width: 33.3333% !important;
         margin-left: 8.3333% !important;
       }

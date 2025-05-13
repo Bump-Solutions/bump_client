@@ -1,17 +1,30 @@
 import { API } from "../../utils/api";
-import { useLocation } from "react-router";
+import { ROUTES } from "../../routes/routes";
+import { Link, useLocation } from "react-router";
+import { useMediaQuery } from "react-responsive";
 
 import Image from "../../components/Image";
 
-import { MoveRight } from "lucide-react";
+import { ArrowLeft, MoveRight } from "lucide-react";
 
 const MessagesHeader = () => {
   const location = useLocation();
   const partner = location.state?.partner;
 
+  const isMobile = useMediaQuery({
+    query: "(max-width: 768px)",
+  });
+
   return (
     <header className='messages__header'>
       <div className='messages__header__details'>
+        {isMobile && (
+          <Link
+            to={ROUTES.INBOX.ROOT}
+            className='messages__header__details__back'>
+            <ArrowLeft />
+          </Link>
+        )}
         <Image
           src={API.BASE_URL + partner.profile_picture}
           alt={partner.username.slice(0, 2)}
@@ -22,7 +35,7 @@ const MessagesHeader = () => {
           {false && <div className='fc-light fs-14'>valami</div>}
         </div>
 
-        <MoveRight className='svg-18' />
+        <MoveRight />
       </div>
     </header>
   );

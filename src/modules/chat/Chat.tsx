@@ -6,11 +6,24 @@ import { Outlet, useParams } from "react-router";
 import Inbox from "./Inbox";
 
 import { MessageSquareDashed } from "lucide-react";
+import { useMediaQuery } from "react-responsive";
 
 const Chat = () => {
   useTitle(`Üzenetek - ${ENUM.BRAND.NAME}`);
 
   const { chat } = useParams();
+
+  const isMobile = useMediaQuery({
+    query: "(max-width: 768px)",
+  });
+
+  if (isMobile) {
+    return (
+      <section className='chat'>
+        {chat ? <Outlet context={{ chat }} /> : <Inbox />}
+      </section>
+    );
+  }
 
   return (
     <>
