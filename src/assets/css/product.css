@@ -593,9 +593,33 @@
 }
 .product .product__wrapper .product__images .image-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(2, 1fr);
   gap: 0.5rem;
+}
+.product .product__wrapper .product__images .image-grid.grid-3 {
+  aspect-ratio: 2/1;
+  grid-template-areas: "left top   " "left bottom";
+  grid-template-columns: 64% 36%;
+  grid-template-rows: minmax(0, 550px) minmax(0, 550px);
+}
+.product .product__wrapper .product__images .image-grid.grid-3 a:first-child {
+  grid-area: left;
+}
+.product .product__wrapper .product__images .image-grid.grid-3 a:nth-child(2) {
+  grid-area: top;
+}
+.product .product__wrapper .product__images .image-grid.grid-3 a:nth-child(3) {
+  grid-area: bottom;
+}
+.product .product__wrapper .product__images .image-grid.grid-5 {
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+}
+.product .product__wrapper .product__images .image-grid.grid-5 a {
+  aspect-ratio: 1/1;
+}
+.product .product__wrapper .product__images .image-grid.grid-5 a:first-child {
+  grid-column: span 2/span 2;
+  grid-row: span 2/span 2;
 }
 .product .product__wrapper .product__images .image-grid a {
   position: relative;
@@ -604,7 +628,6 @@
   justify-content: center;
   background-color: #e9ecef;
   cursor: pointer;
-  aspect-ratio: 1/1;
 }
 .product .product__wrapper .product__images .image-grid a::before {
   content: "";
@@ -633,32 +656,24 @@
   -o-object-fit: cover;
      object-fit: cover;
 }
-.product .product__wrapper .product__images .image-grid a:first-child {
-  grid-column: span 2/span 2;
-  grid-row: span 2/span 2;
-}
-.product .product__wrapper .product__images .image-grid a:nth-child(2) {
-  grid-column-start: 3;
-}
-.product .product__wrapper .product__images .image-grid a:nth-child(3) {
-  grid-column-start: 3;
-  grid-row-start: 2;
-}
 .product .product__wrapper .product__content {
   display: flex;
   align-items: stretch;
   justify-content: flex-start;
   flex-wrap: wrap;
   width: 100%;
-  padding-block: 2rem;
   border-bottom: 1px solid #dee2e6;
+  padding-block: 2rem;
 }
 .product .product__wrapper .product__content .product__details {
   position: relative;
   width: 58.3333% !important;
 }
-.product .product__wrapper .product__content .product__price-card {
-  position: relative;
+.product .product__wrapper .product__content .product__items-card {
+  position: sticky;
+  top: 6.5rem;
+  height: -moz-fit-content;
+  height: fit-content;
   width: 33.3333% !important;
   margin-left: 8.3333% !important;
 }
