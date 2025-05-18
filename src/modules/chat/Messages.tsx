@@ -3,7 +3,7 @@ import { QUERY_KEY } from "../../utils/queryKeys";
 import { ChatGroup, IInbox, Message, MessagesPage } from "../../types/chat";
 import { useOutletContext } from "react-router";
 import { useAuth } from "../../hooks/auth/useAuth";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import useWebSocket from "react-use-websocket";
 
@@ -21,7 +21,7 @@ const Messages = () => {
 
   const queryClient = useQueryClient();
 
-  const URL = `${API.WS_BASE_URL}/chat/${chat}/`;
+  const URL = useMemo(() => `${API.WS_BASE_URL}/chat/${chat}/`, [chat]);
   const { sendJsonMessage, lastJsonMessage } = useWebSocket(URL, {
     queryParams: {
       token: auth?.accessToken,
@@ -29,7 +29,47 @@ const Messages = () => {
     shouldReconnect: (closeEvent) => {
       return true;
     },
+    share: false,
   });
+
+  // Mark message as read when opening chat
+  useEffect(() => {
+    queryClient.setQueriesData(
+      {
+        queryKey: [QUERY_KEY.listChatGroups],
+        exact: false,
+      },
+      (prev: any) => {
+        if (!prev) return prev;
+
+        return {
+          ...prev,
+          pages: prev.pages.map((page: IInbox) => {
+            return {
+              ...page,
+              messages: page.messages.map((chatGroup: ChatGroup) => {
+                if (chatGroup.name === chat) {
+                  // Ha mar olvasott, vagy own, akkor return
+                  if (
+                    chatGroup.last_message?.is_read ||
+                    chatGroup.last_message?.own_message
+                  ) {
+                    return chatGroup;
+                  }
+                  // Ha nem, akkor frissítjük az üzenetet
+                  chatGroup.last_message = {
+                    ...chatGroup.last_message,
+                    is_read: true,
+                  };
+                }
+                return chatGroup;
+              }),
+            };
+          }),
+        };
+      }
+    );
+  }, [chat]);
 
   // Handle real-time update on new messages
   useEffect(() => {

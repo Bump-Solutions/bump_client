@@ -99,6 +99,8 @@ export const API = {
     CREATE_CHAT_GROUP: "/api/v1/chat/create_chat_group",
     LIST_MESSAGES: (chat: string, size: number, page: number) =>
       `/api/v1/chat/list_messages/${chat}?page_size=${size}&page=${page}`,
+    MARK_MESSAGE_AS_UNREAD: (chat: string) =>
+      `/api/v1/chat/mark_message_unread/${chat}`,
     UPLOAD_CHAT_IMAGES: (chat: string) =>
       `/api/v1/chat/upload_chat_images/${chat}`,
   },

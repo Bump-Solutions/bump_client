@@ -31,7 +31,7 @@ const Chat = () => {
       <section className='chat'>
         <Inbox />
         {chat ? (
-          <Outlet context={{ chat }} />
+          <Outlet key={chat} context={{ chat }} />
         ) : (
           <div className='messages__panel no-selection'>
             <MessageSquareDashed className='svg-40' />

@@ -1,9 +1,10 @@
 import { API } from "../../utils/api";
 import { ROUTES } from "../../routes/routes";
-import { Message } from "../../types/chat";
-import { User } from "../../types/user";
+import { AnimatePresence } from "framer-motion";
+import { ChatGroup } from "../../types/chat";
 import { useEffect } from "react";
 import { NavLink } from "react-router";
+import { useLongPress } from "react-use";
 import {
   formatTimestamp,
   isThisYear,
@@ -13,19 +14,15 @@ import {
 import { useToggle } from "../../hooks/useToggle";
 
 import Image from "../../components/Image";
+import InboxContextMenu from "./InboxContextMenu";
 
 import { Ellipsis } from "lucide-react";
+
 interface InboxListItemProps {
-  message: {
-    id: number;
-    name: string;
-    user: Partial<User>;
-    last_message?: Message;
-    created_at: string;
-  };
+  group: ChatGroup;
 }
 
-const InboxListItem = ({ message }: InboxListItemProps) => {
+const InboxListItem = ({ group }: InboxListItemProps) => {
   const [isContextMenuOpen, toggleContextMenu] = useToggle(false);
 
   useEffect(() => {
@@ -38,8 +35,17 @@ const InboxListItem = ({ message }: InboxListItemProps) => {
     };
   }, [isContextMenuOpen]);
 
+  const onLongPress = () => {
+    toggleContextMenu(true);
+  };
+
+  const longPressEvent = useLongPress(onLongPress, {
+    isPreventDefault: true,
+    delay: 500,
+  });
+
   const referenceDate = new Date(
-    message?.last_message?.created_at || message.created_at
+    group?.last_message?.created_at || group.created_at
   );
 
   const formattedTimestamp = isToday(referenceDate)
@@ -49,34 +55,44 @@ const InboxListItem = ({ message }: InboxListItemProps) => {
     : formatTimestamp(referenceDate, "YYYY.MM.DD");
 
   const showUnread =
-    !message?.last_message?.is_read && !message?.last_message?.own_message;
+    !group?.last_message?.is_read && !group?.last_message?.own_message;
 
   return (
     <li className='inbox__item'>
+      <AnimatePresence mode='wait'>
+        {isContextMenuOpen && (
+          <InboxContextMenu
+            group={group}
+            toggleContextMenu={toggleContextMenu}
+          />
+        )}
+      </AnimatePresence>
+
       <NavLink
-        to={ROUTES.INBOX.CHAT(message.name)}
-        state={{ partner: message.user, createdAt: message.created_at }}>
+        to={ROUTES.INBOX.CHAT(group.name)}
+        state={{ partner: group.user, createdAt: group.created_at }}
+        {...longPressEvent}>
         <Image
-          src={API.BASE_URL + message.user.profile_picture}
-          alt={message.user.username.slice(0, 2)}
+          src={API.BASE_URL + group.user.profile_picture}
+          alt={group.user.username.slice(0, 2)}
           placeholderColor='#212529'
         />
 
         <div
           className={`inbox__item__details ${
-            message.last_message && showUnread ? "unread" : ""
+            group.last_message && showUnread ? "unread" : ""
           }`}>
           <div>
-            <span className='truncate'>{message.user.username}</span>
+            <span className='truncate'>{group.user.username}</span>
             <span className='fs-12'>{formattedTimestamp}</span>
           </div>
 
-          {message?.last_message && (
+          {group?.last_message && (
             <div>
               {showUnread && <span className='new-indicator' />}
               <span className='truncate'>
-                {message.last_message.own_message && "Te: "}
-                {message.last_message.body}
+                {group.last_message.own_message && "Te: "}
+                {group.last_message.body}
               </span>
             </div>
           )}

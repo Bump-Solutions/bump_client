@@ -7,32 +7,6 @@ import { motion } from "framer-motion";
 
 import { ArrowUpRight, Percent } from "lucide-react";
 
-const ACTIONS = {
-  share: {
-    label: "Megosztás",
-    icon: <ArrowUpRight />,
-    className: "blue icon-end",
-  },
-  discount: {
-    label: "Kedvezmény",
-    icon: <Percent />,
-  },
-  edit: {
-    label: "Szerkesztés",
-  },
-  archive: {
-    label: "Archiválás",
-  },
-  delete: {
-    label: "Törlés",
-    className: "red",
-  },
-  report: {
-    label: "Jelentés",
-    className: "red",
-  },
-};
-
 interface ProductContextMenuProps {
   product: IProduct;
   toggleContextMenu: (value?: boolean) => void;
@@ -57,7 +31,7 @@ const ProductContextMenu = ({
   return (
     <motion.div
       ref={ref}
-      className='product-menu__actions'
+      className='product__menu-actions'
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -66,10 +40,10 @@ const ProductContextMenu = ({
         ease: [0.25, 0.46, 0.45, 0.94],
       }}>
       <ul className='action-list'>
-        <li className={`action-list-item ${ACTIONS.share.className}`}>
+        <li className='action-list-item blue icon-end'>
           <div>
-            {ACTIONS.share.icon}
-            <span>{ACTIONS.share.label}</span>
+            <ArrowUpRight />
+            <span>Megosztás</span>
           </div>
         </li>
       </ul>
