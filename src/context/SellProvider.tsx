@@ -5,7 +5,8 @@ import {
   SetStateAction,
   useState,
 } from "react";
-import { CatalogProduct, Item, UploadedImage } from "../types/product";
+import { CatalogProduct, Item } from "../types/product";
+import { UploadedFile } from "../types/form";
 import { Errors } from "../types/form";
 
 export interface SellFormData {
@@ -14,7 +15,7 @@ export interface SellFormData {
   description: string;
   product: Partial<CatalogProduct>;
   items: Item[];
-  images: UploadedImage[];
+  images: UploadedFile[];
 }
 
 interface SellContextType {

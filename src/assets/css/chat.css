@@ -252,6 +252,20 @@
 .chat .inbox__panel .inbox__content .inbox__list .inbox__item {
   position: relative;
 }
+.chat .inbox__panel .inbox__content .inbox__list .inbox__item .inbox__item-actions {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  display: none;
+  padding: 0.5rem;
+  background-color: transparent;
+  border-radius: 50%;
+  z-index: 10;
+  transition: background-color 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.chat .inbox__panel .inbox__content .inbox__list .inbox__item .inbox__item-actions:hover {
+  background-color: #fff;
+}
 .chat .inbox__panel .inbox__content .inbox__list .inbox__item a {
   display: flex;
   gap: 1rem;
@@ -264,6 +278,9 @@
 }
 .chat .inbox__panel .inbox__content .inbox__list .inbox__item a:hover, .chat .inbox__panel .inbox__content .inbox__list .inbox__item a.active {
   background-color: #f1f3f5;
+}
+.chat .inbox__panel .inbox__content .inbox__list .inbox__item a:hover .inbox__item-actions, .chat .inbox__panel .inbox__content .inbox__list .inbox__item a.active .inbox__item-actions {
+  display: flex;
 }
 .chat .inbox__panel .inbox__content .inbox__list .inbox__item a .image {
   width: 4rem;

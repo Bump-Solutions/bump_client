@@ -1,6 +1,6 @@
 import { User } from "../types/user";
 import { IProduct } from "../types/product";
-import { ReportType } from "../types/form";
+import { ReportType } from "../types/report";
 
 export const ROUTES = {
   HOME: "/",
@@ -30,6 +30,8 @@ export const ROUTES = {
 
   NOTIFICATIONS: "/notifications",
   SELL: "/sell",
+
+  CART: "/cart",
 
   DISCOVER: "/discover",
   AUCTION: "/auction",

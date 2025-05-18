@@ -1,7 +1,10 @@
 export const API = {
-  BASE_URL: "http://localhost:8100",
-  WS_BASE_URL: "ws://localhost:8100/ws",
-  // BASE_URL: "https://bumpmarket.hu",
+  // BASE_URL: "http://localhost:8100",
+  // WS_BASE_URL: "ws://localhost:8100/ws",
+  // BASE_URL: "http://185.221.21.17:8100",
+  // WS_BASE_URL: "ws://185.221.21.17:8100/ws",
+  BASE_URL: "https://bumpmarket.hu",
+  WS_BASE_URL: "wss://bumpmarket.hu/ws",
 
   AUTH: {
     REFRESH: "/api/v1/auth/token/refresh",
@@ -96,6 +99,8 @@ export const API = {
     CREATE_CHAT_GROUP: "/api/v1/chat/create_chat_group",
     LIST_MESSAGES: (chat: string, size: number, page: number) =>
       `/api/v1/chat/list_messages/${chat}?page_size=${size}&page=${page}`,
+    UPLOAD_CHAT_IMAGES: (chat: string) =>
+      `/api/v1/chat/upload_chat_images/${chat}`,
   },
 
   REPORT: {

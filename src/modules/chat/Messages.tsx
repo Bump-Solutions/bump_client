@@ -97,7 +97,7 @@ const Messages = () => {
       <div className='messages__content'>
         <MessagesContent chat={chat} />
       </div>
-      <MessagesFooter onSend={sendJsonMessage} />
+      <MessagesFooter chat={chat} onSend={sendJsonMessage} />
     </div>
   );
 };

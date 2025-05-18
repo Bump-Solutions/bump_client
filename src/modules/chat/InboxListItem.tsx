@@ -2,6 +2,7 @@ import { API } from "../../utils/api";
 import { ROUTES } from "../../routes/routes";
 import { Message } from "../../types/chat";
 import { User } from "../../types/user";
+import { useEffect } from "react";
 import { NavLink } from "react-router";
 import {
   formatTimestamp,
@@ -9,9 +10,11 @@ import {
   isToday,
   now,
 } from "../../utils/functions";
+import { useToggle } from "../../hooks/useToggle";
 
 import Image from "../../components/Image";
 
+import { Ellipsis } from "lucide-react";
 interface InboxListItemProps {
   message: {
     id: number;
@@ -23,6 +26,18 @@ interface InboxListItemProps {
 }
 
 const InboxListItem = ({ message }: InboxListItemProps) => {
+  const [isContextMenuOpen, toggleContextMenu] = useToggle(false);
+
+  useEffect(() => {
+    document.body.style.overflow = isContextMenuOpen ? "hidden" : "auto";
+    document.body.style.pointerEvents = isContextMenuOpen ? "none" : "auto";
+
+    return () => {
+      document.body.style.overflow = "auto";
+      document.body.style.pointerEvents = "auto";
+    };
+  }, [isContextMenuOpen]);
+
   const referenceDate = new Date(
     message?.last_message?.created_at || message.created_at
   );
@@ -66,6 +81,16 @@ const InboxListItem = ({ message }: InboxListItemProps) => {
             </div>
           )}
         </div>
+
+        <span
+          className='inbox__item-actions'
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            toggleContextMenu(true);
+          }}>
+          <Ellipsis strokeWidth={3} />
+        </span>
       </NavLink>
     </li>
   );

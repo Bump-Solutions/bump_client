@@ -8,6 +8,7 @@ import { jwtDecode } from "jwt-decode";
 import { useAuth } from "./useAuth";
 
 interface JwtPayload {
+  user_id: string;
   username: User["username"];
   email: User["email"];
   roles: Role[];
@@ -28,6 +29,7 @@ export const useRefreshToken = (): (() => Promise<string>) => {
       accessToken: response.data.access_token,
       roles: decodedToken.roles,
       user: {
+        id: Number(decodedToken.user_id),
         username: decodedToken.username,
         email: decodedToken.email,
       },

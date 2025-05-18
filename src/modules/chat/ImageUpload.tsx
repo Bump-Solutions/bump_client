@@ -1,5 +1,5 @@
-import cuid from "cuid";
-import { ImageWithId } from "../../types/chat";
+import { UploadedFile } from "../../types/form";
+import { useToast } from "../../hooks/useToast";
 import { Dispatch, SetStateAction, useRef } from "react";
 
 import Uploader, { UploaderHandle } from "../../components/Uploader";
@@ -9,22 +9,35 @@ import Button from "../../components/Button";
 import { ImageUp } from "lucide-react";
 
 interface ImageUploadProps {
-  setImages: Dispatch<SetStateAction<ImageWithId[]>>;
+  setImages: Dispatch<SetStateAction<UploadedFile[]>>;
 }
 
-const MAX_FILES = 20;
+const MAX_FILES = 5;
 const MAX_SIZE = 5 * 1024 * 1024; // 5MB
 
 const ImageUpload = ({ setImages }: ImageUploadProps) => {
   const uploaderRef = useRef<UploaderHandle>(null);
 
-  const handleFiles = (files: File[]) => {
-    const newFiles = files.map((file) => ({
-      id: cuid(),
-      file,
-      preview: URL.createObjectURL(file),
-    }));
-    setImages((prev) => [...prev, ...newFiles]);
+  const { addToast } = useToast();
+
+  const handleFiles = (files: UploadedFile[]) => {
+    setImages((prev) => {
+      const newFiles = files.filter((file) => {
+        return !prev.some((prevFile) => prevFile.id === file.id);
+      });
+
+      if (prev.length + newFiles.length > MAX_FILES) {
+        addToast(
+          "error",
+          `Maximum ${MAX_FILES} fájl tölthető fel. (Aktuális: ${
+            prev.length + newFiles.length
+          })`
+        );
+        return [...prev, ...newFiles.slice(0, MAX_FILES - prev.length)];
+      }
+
+      return [...prev, ...newFiles];
+    });
   };
 
   return (

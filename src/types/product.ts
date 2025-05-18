@@ -47,15 +47,6 @@ export interface ProductImage {
   src: string;
 }
 
-export interface UploadedImage {
-  id: string;
-  file: File;
-  dataUrl: string | null;
-  name: string;
-  size: number;
-  type: string;
-}
-
 export interface Badge {
   text: string;
   type: string;
