@@ -1,12 +1,14 @@
+import { UploadedFile } from "../types/form";
 import { ChangeEvent, forwardRef, useImperativeHandle, useRef } from "react";
 import { useToast } from "../hooks/useToast";
+import cuid from "cuid";
 
 export interface UploaderHandle {
   open: () => void;
 }
 
 interface UploaderProps {
-  onInputChange?: (files: File[]) => void;
+  onInputChange?: (files: UploadedFile[]) => void;
   accept?: string;
   multiple?: boolean;
   maxFiles?: number;
@@ -49,9 +51,37 @@ const Uploader = forwardRef<UploaderHandle, UploaderProps>(
         }
       }
 
-      if (files.length > 0) {
-        onInputChange?.(files);
+      if (files.length === 0) {
+        event.target.value = "";
+        return;
       }
+
+      const fileReadPromises: Promise<UploadedFile>[] = files.map((file) => {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+
+          reader.onload = (e) => {
+            resolve({
+              id: cuid(),
+              file: file,
+              dataUrl: e.target?.result as string,
+              name: file.name,
+              size: file.size,
+              type: file.type,
+            });
+          };
+
+          reader.onerror = (e) => {
+            reject(e);
+          };
+
+          reader.readAsDataURL(file);
+        });
+      });
+
+      Promise.all(fileReadPromises).then((newFiles) => {
+        onInputChange?.(newFiles);
+      });
 
       event.target.value = ""; // Reset the input value
     };

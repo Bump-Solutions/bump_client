@@ -1,7 +1,9 @@
 import { ROUTES } from "../../../routes/routes";
+import { UploadedFile } from "../../../types/form";
 import cuid from "cuid";
 import { FormEvent, useState } from "react";
 import { usePersonalSettings } from "../../../hooks/settings/usePersonalSettings";
+import { useUploadProfilePicture } from "../../../hooks/profile/useUploadProfilePicture";
 import { useNavigate, Link } from "react-router";
 import { useMounted } from "../../../hooks/useMounted";
 import { useAuth } from "../../../hooks/auth/useAuth";
@@ -11,28 +13,18 @@ import {
   getImageDominantColorAndPalette,
 } from "../../../utils/functions";
 
+import Back from "../../../components/Back";
 import Dropzone from "../../../components/Dropzone";
 import ToggleButton from "../../../components/ToggleButton";
 import StateButton from "../../../components/StateButton";
 
 import { Upload } from "lucide-react";
-import { useUploadProfilePicture } from "../../../hooks/profile/useUploadProfilePicture";
-import Back from "../../../components/Back";
-
-interface UploadedImage {
-  id: string;
-  file: File;
-  dataUrl: string;
-  name: string;
-  size: number;
-  type: string;
-}
 
 const ProfilePictureSettings = () => {
   const navigate = useNavigate();
   const { setFormData } = usePersonalSettings();
 
-  const [images, setImages] = useState<UploadedImage[]>([]);
+  const [images, setImages] = useState<UploadedFile[]>([]);
   const [colorPreview, setColorPreview] = useState<string | null>(null);
   const [changeBackground, setChangeBackground] = useState<boolean>(false);
 

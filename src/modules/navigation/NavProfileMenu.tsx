@@ -2,16 +2,18 @@ import { API } from "../../utils/api";
 import { ROUTES } from "../../routes/routes";
 
 import { useEffect, use } from "react";
-import { Link, NavLink } from "react-router";
+import { Link, NavLink, useNavigate } from "react-router";
 import { useAuth } from "../../hooks/auth/useAuth";
 import { useGetProfilePicture } from "../../hooks/profile/useGetProfilePicture";
 import { useToast } from "../../hooks/useToast";
+import { useCart } from "../../hooks/trade/useCart";
 
 import { NotificationsContext } from "./Navbar";
 
-import { ArrowUpRight, Bell } from "lucide-react";
 import Tooltip from "../../components/Tooltip";
 import Image from "../../components/Image";
+
+import { ArrowUpRight, Bell, ShoppingBag } from "lucide-react";
 
 interface NavProfileMenuProps {
   toggleNotificationMenu: (bool: boolean) => void;
@@ -22,7 +24,10 @@ const NavProfileMenu = ({
   toggleNotificationMenu,
   toggleProfileMenu,
 }: NavProfileMenuProps) => {
+  const navigate = useNavigate();
+
   const { notifications } = use(NotificationsContext);
+  const { cart } = useCart();
 
   const { auth } = useAuth();
 
@@ -32,6 +37,11 @@ const NavProfileMenu = ({
     // TODO: notification
     return notifications.filter((notification: any) => !notification.read)
       .length;
+  };
+
+  const cartPackageCount = () => {
+    // Return the number of packages in the cart
+    return Object.keys(cart).length;
   };
 
   const {
@@ -78,6 +88,20 @@ const NavProfileMenu = ({
                 </span>
               )}
               <Bell />
+            </div>
+          </div>
+        </Tooltip>
+
+        <Tooltip content='Kosár' showDelay={750} placement='bottom'>
+          <div className='profile-menu__item no-hide'>
+            <div onClick={() => navigate(ROUTES.CART)}>
+              {cartPackageCount() > 0 && (
+                <span className='badge fw-600'>
+                  {cartPackageCount() > 99 ? "99+" : cartPackageCount()}
+                </span>
+              )}
+
+              <ShoppingBag />
             </div>
           </div>
         </Tooltip>

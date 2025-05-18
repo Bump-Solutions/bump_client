@@ -13,6 +13,14 @@ export interface ChatGroup {
   created_at: string;
 }
 
+export type MessageType = 0 | 1 | 2; // text, images, text + images
+
+export interface MessageTypeOptions {
+  hasText: boolean;
+  hasImages: boolean;
+  // bővíthető pl. videó, fájl stb.
+}
+
 export interface Message {
   id: number;
   name: string;
@@ -21,12 +29,6 @@ export interface Message {
   created_at?: string;
   is_read?: boolean;
   own_message?: boolean;
-}
-
-export interface ImageWithId {
-  id: string;
-  file: File;
-  preview: string;
 }
 
 export interface MessagesPage {

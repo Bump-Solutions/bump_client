@@ -3,6 +3,7 @@ import { ApiResponse } from "../types/api";
 import { ChatGroup } from "../types/chat";
 import { User } from "../types/user";
 import { AxiosInstance } from "axios";
+import { UploadedFile } from "../types/form";
 
 export const listChatGroups = async (
   signal: AbortSignal,
@@ -53,4 +54,22 @@ export const listMessages = async (
   }
 
   return data;
+};
+
+export const uploadChatImages = async (
+  axiosPrivate: AxiosInstance,
+  chat: ChatGroup["name"],
+  images: UploadedFile[]
+): Promise<ApiResponse> => {
+  const formData = new FormData();
+
+  images.forEach((image) => {
+    formData.append("images", image.file);
+  });
+
+  return await axiosPrivate.post(API.CHAT.UPLOAD_CHAT_IMAGES(chat), formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
 };

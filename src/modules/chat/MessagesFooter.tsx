@@ -1,4 +1,4 @@
-import { ImageWithId } from "../../types/chat";
+import { MessageType, MessageTypeOptions } from "../../types/chat";
 import {
   useCallback,
   useEffect,
@@ -8,7 +8,10 @@ import {
   KeyboardEvent,
 } from "react";
 import { useToggle } from "../../hooks/useToggle";
+import { useToast } from "../../hooks/useToast";
 import { useClickOutside } from "../../hooks/useClickOutside";
+import { useUploadChatImages } from "../../hooks/chat/useUploadChatImages";
+import { UploadedFile } from "../../types/form";
 
 import Button from "../../components/Button";
 import ImageUpload from "./ImageUpload";
@@ -17,18 +20,35 @@ import MessagesFooterImages from "./MessagesFooterImages";
 import { ArrowUp, CircleAlert } from "lucide-react";
 
 interface MessagesFooterProps {
+  chat: string;
   onSend: (data: any) => void;
 }
 
 const MAX_MSG_LENGTH = 4000; // Define the maximum length for the message
 
-const MessagesFooter = ({ onSend }: MessagesFooterProps) => {
+const getMessageType = ({
+  hasText,
+  hasImages,
+}: MessageTypeOptions): MessageType => {
+  if (hasText && hasImages) {
+    return 2; // text + images
+  } else if (hasImages) {
+    return 1; // images
+  } else if (hasText) {
+    return 0; // text
+  }
+  return 0;
+};
+
+const MessagesFooter = ({ chat, onSend }: MessagesFooterProps) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const [message, setMessage] = useState<string>("");
-  const [images, setImages] = useState<ImageWithId[]>([]);
+  const [images, setImages] = useState<UploadedFile[]>([]);
   const [isFocused, toggleFocus] = useToggle(false);
+
+  const { addToast } = useToast();
 
   useClickOutside({
     ref: wrapperRef,
@@ -41,13 +61,46 @@ const MessagesFooter = ({ onSend }: MessagesFooterProps) => {
     }
   }, [isFocused]);
 
-  const handleSend = () => {
+  const uploadChatImagesMutation = useUploadChatImages();
+
+  const handleSend = async () => {
     const text = message.trim();
-    if (!text) return;
+    const hasText = text.length > 0;
+    const hasImages = images.length > 0;
 
-    onSend({ message: text });
+    if (!hasText && !hasImages) return;
 
+    let imageUrls: string = "";
+
+    try {
+      if (hasImages) {
+        const { data } = await uploadChatImagesMutation.mutateAsync({
+          chat: chat,
+          images: images,
+        });
+        console.log("Uploaded images:", data);
+        imageUrls = data.images
+          .map((img: { id: number; image_url: string }) => img.image_url)
+          .join(";;");
+      }
+    } catch (error) {
+      addToast("error", "Hiba történt a képek feltöltése során.");
+      return;
+    }
+
+    const type = getMessageType({ hasText, hasImages });
+
+    const payload = {
+      message: text,
+      attachments: imageUrls,
+      type,
+    };
+
+    console.log("Sending message:", payload);
+
+    onSend(payload);
     setMessage("");
+    setImages([]);
 
     if (textareaRef.current) {
       textareaRef.current.style.height = "auto"; // Reset the height to auto

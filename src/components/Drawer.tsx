@@ -73,9 +73,10 @@ const Drawer = ({
             <button
               type='button'
               title='Húzd lefelé a bezáráshoz'
-              onPointerDown={(e: PointerEvent<HTMLButtonElement>) =>
-                controls.start(e)
-              }></button>
+              onPointerDown={(e: PointerEvent<HTMLButtonElement>) => {
+                e.stopPropagation();
+                controls.start(e);
+              }}></button>
           </div>
         )}
 

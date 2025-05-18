@@ -1,4 +1,4 @@
-import { ImageWithId } from "../../types/chat";
+import { UploadedFile } from "../../types/form";
 import { Dispatch, SetStateAction } from "react";
 
 import Image from "../../components/Image";
@@ -6,8 +6,8 @@ import Image from "../../components/Image";
 import { X } from "lucide-react";
 
 interface MessagesFooterImagesProps {
-  images: ImageWithId[];
-  setImages: Dispatch<SetStateAction<ImageWithId[]>>;
+  images: UploadedFile[];
+  setImages: Dispatch<SetStateAction<UploadedFile[]>>;
 }
 
 const MessagesFooterImages = ({
@@ -18,7 +18,7 @@ const MessagesFooterImages = ({
     setImages((prev) => {
       const removed = prev.find((img) => img.id === id);
       if (removed) {
-        URL.revokeObjectURL(removed.preview); // Clean up the object URL
+        URL.revokeObjectURL(removed.dataUrl);
       }
 
       return prev.filter((img) => img.id !== id);
@@ -30,8 +30,8 @@ const MessagesFooterImages = ({
       {images.map((image, index) => (
         <div key={index} className='image-preview'>
           <Image
-            src={image.preview}
-            alt={`${image.file.name} előnézete`}
+            src={image.dataUrl}
+            alt={`${image.name} előnézete`}
             placeholderColor='#212529'
           />
           <button

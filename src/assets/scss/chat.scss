@@ -120,6 +120,22 @@
         .inbox__item {
           position: relative;
 
+          .inbox__item-actions {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            display: none;
+            padding: 0.5rem;
+            background-color: transparent;
+            border-radius: $border-radius-50;
+            z-index: 10;
+            transition: background-color 0.2s $animation-cubic;
+
+            &:hover {
+              background-color: $clr-white;
+            }
+          }
+
           a {
             display: flex;
             gap: 1rem;
@@ -137,6 +153,10 @@
 
               // background-color: color(blue, 50);
               // border: 1px solid color(blue, 100);
+
+              .inbox__item-actions {
+                display: flex;
+              }
             }
 
             .image {
