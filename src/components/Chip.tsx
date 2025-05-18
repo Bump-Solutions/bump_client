@@ -31,10 +31,7 @@ const Chip = ({
       {label && <span>{label}</span>}
       {svg && svg}
       {onDelete && (
-        <span
-          title='Remove Icon'
-          className='delete'
-          onClick={(e) => handleDelete(e)}>
+        <span title='Remove Icon' className='delete' onClick={handleDelete}>
           <X />
         </span>
       )}

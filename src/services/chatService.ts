@@ -35,6 +35,13 @@ export const createChatGroup = async (
   });
 };
 
+export const markMessageAsUnread = async (
+  axiosPrivate: AxiosInstance,
+  chat: ChatGroup["name"]
+): Promise<ApiResponse> => {
+  return await axiosPrivate.put(API.CHAT.MARK_MESSAGE_AS_UNREAD(chat));
+};
+
 export const listMessages = async (
   signal: AbortSignal,
   axiosPrivate: AxiosInstance,

@@ -29,8 +29,8 @@ const InboxList = ({
       <ul className='inbox__list'>
         {pages.map((page, index) => (
           <Fragment key={index}>
-            {page.messages.map((message, idx) => (
-              <InboxListItem key={idx} message={message} />
+            {page.messages.map((group, idx) => (
+              <InboxListItem key={idx} group={group} />
             ))}
           </Fragment>
         ))}

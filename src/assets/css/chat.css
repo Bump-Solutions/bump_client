@@ -252,19 +252,111 @@
 .chat .inbox__panel .inbox__content .inbox__list .inbox__item {
   position: relative;
 }
+.chat .inbox__panel .inbox__content .inbox__list .inbox__item .inbox__menu-actions {
+  position: absolute;
+  top: 2rem;
+  right: 0.5rem;
+  max-width: 15rem;
+  max-height: 50vh;
+  overflow-y: auto;
+  background-color: #fff;
+  border-radius: 1rem;
+  box-shadow: 0 1px 3px rgba(25, 25, 25, 0.1);
+  z-index: 110;
+  pointer-events: all !important;
+}
+.chat .inbox__panel .inbox__content .inbox__list .inbox__item .inbox__menu-actions .action-list {
+  padding: 0.5rem;
+  display: flex;
+  align-items: stretch;
+  flex-direction: column;
+  border-bottom: 1px solid #dee2e6;
+}
+.chat .inbox__panel .inbox__content .inbox__list .inbox__item .inbox__menu-actions .action-list .action-list-item {
+  padding: 0.5rem 0.5rem;
+  font-size: 0.875rem;
+  color: #212529;
+  cursor: pointer;
+  height: 2rem;
+  border-radius: 12px;
+  transition: background-color 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94), color 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  display: flex;
+  align-items: center;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+}
+.chat .inbox__panel .inbox__content .inbox__list .inbox__item .inbox__menu-actions .action-list .action-list-item.show-sm-only {
+  display: none;
+}
+.chat .inbox__panel .inbox__content .inbox__list .inbox__item .inbox__menu-actions .action-list .action-list-item a,
+.chat .inbox__panel .inbox__content .inbox__list .inbox__item .inbox__menu-actions .action-list .action-list-item div {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.chat .inbox__panel .inbox__content .inbox__list .inbox__item .inbox__menu-actions .action-list .action-list-item a svg,
+.chat .inbox__panel .inbox__content .inbox__list .inbox__item .inbox__menu-actions .action-list .action-list-item div svg {
+  height: 1rem;
+  width: 1rem;
+}
+.chat .inbox__panel .inbox__content .inbox__list .inbox__item .inbox__menu-actions .action-list .action-list-item:hover {
+  background-color: #f1f3f5;
+}
+.chat .inbox__panel .inbox__content .inbox__list .inbox__item .inbox__menu-actions .action-list .action-list-item.red:hover {
+  background-color: #fae6e6;
+}
+.chat .inbox__panel .inbox__content .inbox__list .inbox__item .inbox__menu-actions .action-list .action-list-item.red:hover a,
+.chat .inbox__panel .inbox__content .inbox__list .inbox__item .inbox__menu-actions .action-list .action-list-item.red:hover div {
+  color: #cc0000;
+}
+.chat .inbox__panel .inbox__content .inbox__list .inbox__item .inbox__menu-actions .action-list .action-list-item.blue:hover {
+  background-color: #e6f1fd;
+}
+.chat .inbox__panel .inbox__content .inbox__list .inbox__item .inbox__menu-actions .action-list .action-list-item.blue:hover a,
+.chat .inbox__panel .inbox__content .inbox__list .inbox__item .inbox__menu-actions .action-list .action-list-item.blue:hover div {
+  color: #0070e8;
+}
+.chat .inbox__panel .inbox__content .inbox__list .inbox__item .inbox__menu-actions .action-list .action-list-item.icon-end a,
+.chat .inbox__panel .inbox__content .inbox__list .inbox__item .inbox__menu-actions .action-list .action-list-item.icon-end div {
+  flex-direction: row-reverse;
+  justify-content: space-between;
+}
+.chat .inbox__panel .inbox__content .inbox__list .inbox__item .inbox__menu-actions .action-list .action-list-item.btn {
+  background-color: #212529;
+}
+.chat .inbox__panel .inbox__content .inbox__list .inbox__item .inbox__menu-actions .action-list .action-list-item.btn a {
+  color: #f1f3f5;
+  font-size: 0.9375rem;
+  justify-content: center;
+}
+.chat .inbox__panel .inbox__content .inbox__list .inbox__item .inbox__menu-actions .action-list .action-list-item.btn a svg {
+  height: 1rem;
+  width: 1rem;
+}
+.chat .inbox__panel .inbox__content .inbox__list .inbox__item .inbox__menu-actions .action-list .action-list-item.btn:hover {
+  background-color: #343a40;
+}
 .chat .inbox__panel .inbox__content .inbox__list .inbox__item .inbox__item-actions {
   position: absolute;
   top: 0.5rem;
   right: 0.5rem;
   display: none;
-  padding: 0.5rem;
+  padding: 0.375rem;
   background-color: transparent;
   border-radius: 50%;
+  border: 1px solid transparent;
   z-index: 10;
-  transition: background-color 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  cursor: pointer;
 }
 .chat .inbox__panel .inbox__content .inbox__list .inbox__item .inbox__item-actions:hover {
   background-color: #fff;
+  border: 1px solid #dee2e6;
+}
+.chat .inbox__panel .inbox__content .inbox__list .inbox__item .inbox__item-actions svg {
+  width: 0.875rem;
+  height: 0.875rem;
 }
 .chat .inbox__panel .inbox__content .inbox__list .inbox__item a {
   display: flex;
@@ -279,8 +371,11 @@
 .chat .inbox__panel .inbox__content .inbox__list .inbox__item a:hover, .chat .inbox__panel .inbox__content .inbox__list .inbox__item a.active {
   background-color: #f1f3f5;
 }
-.chat .inbox__panel .inbox__content .inbox__list .inbox__item a:hover .inbox__item-actions, .chat .inbox__panel .inbox__content .inbox__list .inbox__item a.active .inbox__item-actions {
+.chat .inbox__panel .inbox__content .inbox__list .inbox__item a:hover .inbox__item-actions {
   display: flex;
+}
+.chat .inbox__panel .inbox__content .inbox__list .inbox__item a:hover .inbox__item__details div:first-child span:last-of-type {
+  opacity: 0;
 }
 .chat .inbox__panel .inbox__content .inbox__list .inbox__item a .image {
   width: 4rem;

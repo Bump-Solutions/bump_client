@@ -155,7 +155,7 @@
   position: relative;
   cursor: pointer;
 }
-.user-products__wrapper .products__list .product__item .product-menu__actions {
+.user-products__wrapper .products__list .product__item .product__menu-actions {
   position: absolute;
   top: 3rem;
   right: 0.5rem;
@@ -168,14 +168,14 @@
   z-index: 110;
   pointer-events: all !important;
 }
-.user-products__wrapper .products__list .product__item .product-menu__actions .action-list {
+.user-products__wrapper .products__list .product__item .product__menu-actions .action-list {
   padding: 0.5rem;
   display: flex;
   align-items: stretch;
   flex-direction: column;
   border-bottom: 1px solid #dee2e6;
 }
-.user-products__wrapper .products__list .product__item .product-menu__actions .action-list .action-list-item {
+.user-products__wrapper .products__list .product__item .product__menu-actions .action-list .action-list-item {
   padding: 0.5rem 0.5rem;
   font-size: 0.875rem;
   color: #212529;
@@ -185,57 +185,60 @@
   transition: background-color 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94), color 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   display: flex;
   align-items: center;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
 }
-.user-products__wrapper .products__list .product__item .product-menu__actions .action-list .action-list-item.show-sm-only {
+.user-products__wrapper .products__list .product__item .product__menu-actions .action-list .action-list-item.show-sm-only {
   display: none;
 }
-.user-products__wrapper .products__list .product__item .product-menu__actions .action-list .action-list-item a,
-.user-products__wrapper .products__list .product__item .product-menu__actions .action-list .action-list-item div {
+.user-products__wrapper .products__list .product__item .product__menu-actions .action-list .action-list-item a,
+.user-products__wrapper .products__list .product__item .product__menu-actions .action-list .action-list-item div {
   flex: 1;
   display: flex;
   align-items: center;
   gap: 0.5rem;
 }
-.user-products__wrapper .products__list .product__item .product-menu__actions .action-list .action-list-item a svg,
-.user-products__wrapper .products__list .product__item .product-menu__actions .action-list .action-list-item div svg {
+.user-products__wrapper .products__list .product__item .product__menu-actions .action-list .action-list-item a svg,
+.user-products__wrapper .products__list .product__item .product__menu-actions .action-list .action-list-item div svg {
   height: 1rem;
   width: 1rem;
 }
-.user-products__wrapper .products__list .product__item .product-menu__actions .action-list .action-list-item:hover {
+.user-products__wrapper .products__list .product__item .product__menu-actions .action-list .action-list-item:hover {
   background-color: #f1f3f5;
 }
-.user-products__wrapper .products__list .product__item .product-menu__actions .action-list .action-list-item.red:hover {
+.user-products__wrapper .products__list .product__item .product__menu-actions .action-list .action-list-item.red:hover {
   background-color: #fae6e6;
 }
-.user-products__wrapper .products__list .product__item .product-menu__actions .action-list .action-list-item.red:hover a,
-.user-products__wrapper .products__list .product__item .product-menu__actions .action-list .action-list-item.red:hover div {
+.user-products__wrapper .products__list .product__item .product__menu-actions .action-list .action-list-item.red:hover a,
+.user-products__wrapper .products__list .product__item .product__menu-actions .action-list .action-list-item.red:hover div {
   color: #cc0000;
 }
-.user-products__wrapper .products__list .product__item .product-menu__actions .action-list .action-list-item.blue:hover {
+.user-products__wrapper .products__list .product__item .product__menu-actions .action-list .action-list-item.blue:hover {
   background-color: #e6f1fd;
 }
-.user-products__wrapper .products__list .product__item .product-menu__actions .action-list .action-list-item.blue:hover a,
-.user-products__wrapper .products__list .product__item .product-menu__actions .action-list .action-list-item.blue:hover div {
+.user-products__wrapper .products__list .product__item .product__menu-actions .action-list .action-list-item.blue:hover a,
+.user-products__wrapper .products__list .product__item .product__menu-actions .action-list .action-list-item.blue:hover div {
   color: #0070e8;
 }
-.user-products__wrapper .products__list .product__item .product-menu__actions .action-list .action-list-item.icon-end a,
-.user-products__wrapper .products__list .product__item .product-menu__actions .action-list .action-list-item.icon-end div {
+.user-products__wrapper .products__list .product__item .product__menu-actions .action-list .action-list-item.icon-end a,
+.user-products__wrapper .products__list .product__item .product__menu-actions .action-list .action-list-item.icon-end div {
   flex-direction: row-reverse;
   justify-content: space-between;
 }
-.user-products__wrapper .products__list .product__item .product-menu__actions .action-list .action-list-item.btn {
+.user-products__wrapper .products__list .product__item .product__menu-actions .action-list .action-list-item.btn {
   background-color: #212529;
 }
-.user-products__wrapper .products__list .product__item .product-menu__actions .action-list .action-list-item.btn a {
+.user-products__wrapper .products__list .product__item .product__menu-actions .action-list .action-list-item.btn a {
   color: #f1f3f5;
   font-size: 0.9375rem;
   justify-content: center;
 }
-.user-products__wrapper .products__list .product__item .product-menu__actions .action-list .action-list-item.btn a svg {
+.user-products__wrapper .products__list .product__item .product__menu-actions .action-list .action-list-item.btn a svg {
   height: 1rem;
   width: 1rem;
 }
-.user-products__wrapper .products__list .product__item .product-menu__actions .action-list .action-list-item.btn:hover {
+.user-products__wrapper .products__list .product__item .product__menu-actions .action-list .action-list-item.btn:hover {
   background-color: #343a40;
 }
 .user-products__wrapper .products__list .product__item .product__item-header {

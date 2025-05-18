@@ -10,6 +10,7 @@ import { useUnlikeProduct } from "../../hooks/product/useUnlikeProduct";
 import { useSaveProduct } from "../../hooks/product/useSaveProduct";
 import { useUnsaveProduct } from "../../hooks/product/useUnsaveProduct";
 import { useToggle } from "../../hooks/useToggle";
+import { useLongPress } from "react-use";
 
 import { MouseEvent, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
@@ -50,6 +51,15 @@ const ProductListItem = ({ product }: ProductListItemProps) => {
       document.body.style.pointerEvents = "auto";
     };
   }, [isContextMenuOpen]);
+
+  const onLongPress = () => {
+    toggleContextMenu(true);
+  };
+
+  const longPressEvent = useLongPress(onLongPress, {
+    isPreventDefault: true,
+    delay: 500,
+  });
 
   const likeMutation = useLikeProduct((response, productId) => {
     queryClient.setQueriesData(
@@ -247,7 +257,7 @@ const ProductListItem = ({ product }: ProductListItemProps) => {
           )}
         </AnimatePresence>
 
-        <Link to={ROUTES.PRODUCT(product.id).ROOT}>
+        <Link to={ROUTES.PRODUCT(product.id).ROOT} {...longPressEvent}>
           <div className='product__item-header'>
             <span
               className='product__item-actions'
