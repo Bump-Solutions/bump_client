@@ -49,6 +49,8 @@ const SocialSignup = () => {
       googleLoginMutation.mutateAsync(code);
     },
     flow: "auth-code",
+    ux_mode: "popup", // TODO: redirect
+    // redirect_uri: `localhost:3000`,
     onError: (error) => {
       // console.log(error);
       addToast("error", "Hiba történt a Google-lal való bejelentkezés során.");

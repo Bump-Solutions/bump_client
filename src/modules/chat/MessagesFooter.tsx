@@ -78,7 +78,6 @@ const MessagesFooter = ({ chat, onSend }: MessagesFooterProps) => {
           chat: chat,
           images: images,
         });
-        console.log("Uploaded images:", data);
         imageUrls = data.images
           .map((img: { id: number; image_url: string }) => img.image_url)
           .join(";;");
@@ -92,11 +91,9 @@ const MessagesFooter = ({ chat, onSend }: MessagesFooterProps) => {
 
     const payload = {
       message: text,
-      attachments: imageUrls,
+      attachment: imageUrls,
       type,
     };
-
-    console.log("Sending message:", payload);
 
     onSend(payload);
     setMessage("");

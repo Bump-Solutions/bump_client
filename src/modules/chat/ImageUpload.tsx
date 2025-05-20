@@ -12,7 +12,7 @@ interface ImageUploadProps {
   setImages: Dispatch<SetStateAction<UploadedFile[]>>;
 }
 
-const MAX_FILES = 5;
+const MAX_FILES = 10;
 const MAX_SIZE = 5 * 1024 * 1024; // 5MB
 
 const ImageUpload = ({ setImages }: ImageUploadProps) => {

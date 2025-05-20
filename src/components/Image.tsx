@@ -18,7 +18,9 @@ const Image = ({
   const [isLoaded, setIsLoaded] = useState(false);
 
   return (
-    <div className='image' style={{ backgroundColor: placeholderColor }}>
+    <div
+      className='image'
+      style={{ backgroundColor: isLoaded ? "transparent" : placeholderColor }}>
       {!isLoaded && <div className='image__placeholder' />}
       <img
         src={src}
