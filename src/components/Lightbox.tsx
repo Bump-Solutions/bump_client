@@ -59,8 +59,6 @@ const Lightbox = ({
     return null;
   }
 
-  console.log("Lightbox", attachments[currentIndex], currentIndex);
-
   return createPortal(
     <section
       className='lightbox__wrapper'

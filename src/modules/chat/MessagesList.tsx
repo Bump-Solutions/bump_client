@@ -11,7 +11,7 @@ import {
 import { useLocation } from "react-router";
 import { useInView } from "react-intersection-observer";
 import { useAuth } from "../../hooks/auth/useAuth";
-import { cloneElement, JSX, useEffect, useMemo, useState } from "react";
+import { JSX, useEffect, useMemo, useState } from "react";
 
 import Spinner from "../../components/Spinner";
 import MessageDateDivider from "./MessageDateDivider";
@@ -30,7 +30,8 @@ const GROUP_TIMEOUT = 10; // 10 perc
 const groupMessages = (
   messages: Message[],
   me: string,
-  partner: Partial<User>
+  partner: Partial<User>,
+  openLightbox: (src: string, messageId: number) => void
 ): JSX.Element[] => {
   const elements: JSX.Element[] = [];
   let lastDay: Date | null = null;
@@ -50,7 +51,7 @@ const groupMessages = (
     // 2. beszúrunk egy dátumelválasztót
     if (!lastDay || !isSameDay(msgDay, lastDay)) {
       if (currentGroup) {
-        elements.push(renderGroup(currentGroup, i));
+        elements.push(renderGroup(currentGroup, i, openLightbox));
         currentGroup = null;
       }
 
@@ -83,7 +84,7 @@ const groupMessages = (
       case attachmentsCount > 1:
         // flush előző csoport
         if (currentGroup) {
-          elements.push(renderGroup(currentGroup, i));
+          elements.push(renderGroup(currentGroup, i, openLightbox));
           currentGroup = null;
         }
 
@@ -104,7 +105,8 @@ const groupMessages = (
               lastAt: createdAt,
               attachmentsCount,
             },
-            i
+            i,
+            openLightbox
           )
         );
         continue;
@@ -131,7 +133,7 @@ const groupMessages = (
 
     if (mustBreak) {
       if (currentGroup) {
-        elements.push(renderGroup(currentGroup, i));
+        elements.push(renderGroup(currentGroup, i, openLightbox));
       }
 
       currentGroup = {
@@ -150,13 +152,17 @@ const groupMessages = (
 
   // Utolsó üzenetcsoport lezárása, ha maradt feldolgozatlan
   if (currentGroup) {
-    elements.push(renderGroup(currentGroup, reversed.length));
+    elements.push(renderGroup(currentGroup, reversed.length, openLightbox));
   }
 
   return elements.reverse();
 };
 
-const renderGroup = (group: MessageGroup, index: number) => {
+const renderGroup = (
+  group: MessageGroup,
+  index: number,
+  openLightbox: (src: string, messageId: number) => void
+) => {
   return (
     <div
       key={`group-${group.lastAt}-${index}`}
@@ -192,6 +198,7 @@ const renderGroup = (group: MessageGroup, index: number) => {
             <MessageListItem
               key={`msg-${msg.id}-${msg.created_at}-${idx}`}
               message={msg}
+              onImageClick={openLightbox}
             />
           ))}
         </div>
@@ -213,6 +220,7 @@ const MessagesList = ({
 
   // Lightbox state
   const [lightboxOpen, toggleLightbox] = useToggle(false);
+  const [lightboxAttachments, setLightboxAttachments] = useState<string[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
 
   // Infinite scroll
@@ -227,9 +235,33 @@ const MessagesList = ({
   // Flatten messages
   const allMessages = pages.flatMap((page) => page.messages);
 
+  // Get all attachments
+  const allAttachments: string[] = [];
+  const attachmentIndexes: Record<string, number> = {};
+
+  useMemo(() => {
+    allMessages.forEach((msg) => {
+      if (msg.attachment) {
+        const parts = msg.attachment.split(";;").filter(Boolean);
+        parts.forEach((src) => {
+          attachmentIndexes[`${msg.id}-${src}`] = allAttachments.length;
+          allAttachments.push(API.BASE_URL + src);
+        });
+      }
+    });
+  }, [allMessages]);
+
+  const openLightbox = (src: string, messageId: number) => {
+    const key = `${messageId}-${src}`;
+    const index = attachmentIndexes[key] ?? 0;
+    setLightboxAttachments(allAttachments);
+    setCurrentIndex(index);
+    toggleLightbox(true);
+  };
+
   const groupedElements = useMemo(
-    () => groupMessages(allMessages, me, partner),
-    [allMessages, me, partner]
+    () => groupMessages(allMessages, me, partner, openLightbox),
+    [allMessages, me, partner, openLightbox]
   );
 
   return (
@@ -246,7 +278,7 @@ const MessagesList = ({
 
       {lightboxOpen && (
         <Lightbox
-          attachments={[]}
+          attachments={lightboxAttachments}
           initialIndex={currentIndex}
           onClose={() => toggleLightbox(false)}
         />

@@ -6,6 +6,7 @@ import Image from "../../components/Image";
 
 interface MessageListItemProps {
   message: Message;
+  onImageClick?: (src: string, messageId: number) => void;
 }
 
 const MAX_IMAGE_VISIBLE = 5;
@@ -15,7 +16,7 @@ const MAX_IMAGE_VISIBLE = 5;
  * - ha text-only, egyszerű szöveg
  * - kép esetén maximum MAX_IMAGE_VISIBLE thumbnail + "+N" overlay
  */
-const MessageListItem = ({ message }: MessageListItemProps) => {
+const MessageListItem = ({ message, onImageClick }: MessageListItemProps) => {
   let content: JSX.Element;
   let className = "message__body";
 
@@ -33,7 +34,7 @@ const MessageListItem = ({ message }: MessageListItemProps) => {
         <>
           {/* Thumbnail képek */}
           {visible.map((src, idx) => (
-            <div key={idx}>
+            <div key={idx} onClick={() => onImageClick?.(src, message.id)}>
               <Image
                 src={API.BASE_URL + src}
                 alt={`${idx + 1}. kép`}
@@ -43,7 +44,15 @@ const MessageListItem = ({ message }: MessageListItemProps) => {
           ))}
 
           {/* +N overlay, ha több kép van */}
-          {remaining > 0 && <div className='image more'>+{remaining}</div>}
+          {remaining > 0 && (
+            <div
+              className='image more'
+              onClick={() =>
+                onImageClick(atts.slice(MAX_IMAGE_VISIBLE)[0], message.id)
+              }>
+              +{remaining}
+            </div>
+          )}
         </>
       );
       break;
