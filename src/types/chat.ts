@@ -25,6 +25,8 @@ export interface Message {
   id: number;
   author_username: User["username"];
   body: string;
+  attachment: string;
+  type: MessageType;
   created_at?: string;
   is_read?: boolean;
   own_message?: boolean;
@@ -43,4 +45,5 @@ export interface MessageGroup {
   timestamp: string;
   messages: Message[];
   lastAt: Date;
+  attachmentsCount?: number;
 }
