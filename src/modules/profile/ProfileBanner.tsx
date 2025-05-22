@@ -30,9 +30,7 @@ const ProfileBanner = () => {
 
   useEffect(() => {
     const getColorData = async () => {
-      const colorData = await getProfilePictureColors(
-        API.BASE_URL + user.profile_picture
-      );
+      const colorData = await getProfilePictureColors(user.profile_picture);
       setColorData(colorData);
     };
 

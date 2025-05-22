@@ -1,4 +1,3 @@
-import { API } from "../../utils/api";
 import { ROUTES } from "../../routes/routes";
 import { Link } from "react-router";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
@@ -128,7 +127,7 @@ const Results = ({ searchKey, setSearchKey }: ResultsProps) => {
                         <div className='result__img user'>
                           {profile_picture ? (
                             <Image
-                              src={API.BASE_URL + profile_picture}
+                              src={profile_picture}
                               alt={username.slice(0, 2)}
                             />
                           ) : (
@@ -156,7 +155,7 @@ const Results = ({ searchKey, setSearchKey }: ResultsProps) => {
                         className='result'>
                         <div className='result__img'>
                           {image ? (
-                            <Image src={API.BASE_URL + image} alt={title} />
+                            <Image src={image} alt={title} />
                           ) : (
                             <Footprints className='svg-20' />
                           )}

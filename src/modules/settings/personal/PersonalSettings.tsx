@@ -1,5 +1,3 @@
-import { API } from "../../../utils/api";
-
 import { ROUTES } from "../../../routes/routes";
 import { useEffect } from "react";
 import { Link, useNavigate } from "react-router";
@@ -101,7 +99,7 @@ const PersonalSettings = () => {
             <h3>Fénykép</h3>
             <div className='image-box__content'>
               <Image
-                src={API.BASE_URL + formData.profile_picture}
+                src={formData.profile_picture}
                 alt={formData.username.slice(0, 2)}
                 placeholderColor='#212529'
               />

@@ -1,33 +1,43 @@
 import "../assets/css/image.css";
-import { ImgHTMLAttributes, useState } from "react";
+import { ImgHTMLAttributes, useState, MouseEvent } from "react";
 
 interface ImageProps extends ImgHTMLAttributes<HTMLImageElement> {
   src: string;
   alt: string;
   placeholderColor?: string;
   className?: string;
+  onClick?: (e: MouseEvent<HTMLDivElement>) => void;
 }
 
 const Image = ({
   src,
   alt,
   placeholderColor = "#e0e0e0",
-  className,
+  className = "",
+  onClick,
   ...props
 }: ImageProps) => {
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [status, setStatus] = useState<"loading" | "loaded" | "error">(
+    "loading"
+  );
+
+  // Ha teljesen sikeres a kép, akkor legyen átlátszó; egyébként (loading vagy error) placeholder-szín
+  const bgColor = status === "loaded" ? "transparent" : placeholderColor;
 
   return (
     <div
-      className='image'
-      style={{ backgroundColor: isLoaded ? "transparent" : placeholderColor }}>
-      {!isLoaded && <div className='image__placeholder' />}
+      className={`image ${className}`}
+      style={{ backgroundColor: bgColor }}
+      onClick={onClick}>
+      {status === "loading" && <div className='image__placeholder' />}
+
       <img
         src={src}
         alt={alt}
-        className={`${className} ${isLoaded ? "loaded" : ""}`}
-        onLoad={() => setIsLoaded(true)}
-        onError={() => setIsLoaded(true)} // Optional: Add fallback error handling
+        loading='lazy'
+        className={`${status}`}
+        onLoad={() => setStatus("loaded")}
+        onError={() => setStatus("error")}
         {...props}
       />
     </div>
