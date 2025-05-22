@@ -1,4 +1,3 @@
-import { API } from "../../utils/api";
 import { ROUTES } from "../../routes/routes";
 
 import { useEffect, use } from "react";
@@ -111,7 +110,7 @@ const NavProfileMenu = ({
           onClick={() => toggleProfileMenu(true)}
           title='Profil'>
           <Image
-            src={API.BASE_URL + image}
+            src={image}
             alt={auth.user.username.slice(0, 2)}
             placeholderColor='#212529'
           />

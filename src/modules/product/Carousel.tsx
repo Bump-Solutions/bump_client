@@ -49,7 +49,7 @@ const Carousel = ({ images }: CarouselProps) => {
     <div className='product__item-carousel'>
       <button
         type='button'
-        title='Prev'
+        title='Előző'
         onClick={handlePrev}
         className='carousel__button prev'>
         <ArrowLeft />
@@ -68,7 +68,7 @@ const Carousel = ({ images }: CarouselProps) => {
 
       <button
         type='button'
-        title='Next'
+        title='Következő'
         onClick={handleNext}
         className='carousel__button next'>
         <ArrowRight />
@@ -79,7 +79,7 @@ const Carousel = ({ images }: CarouselProps) => {
           <button
             key={index}
             type='button'
-            title='Go to image'
+            title={`Kép ${index + 1}`}
             onClick={(e) => handleDotClick(e, index)}
             className={`dot ${index === currentIndex ? "active" : ""}`}
           />

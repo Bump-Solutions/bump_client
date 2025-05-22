@@ -26,7 +26,7 @@ const MessagesHeader = () => {
           </Link>
         )}
         <Image
-          src={API.BASE_URL + partner.profile_picture}
+          src={partner.profile_picture}
           alt={partner.username.slice(0, 2)}
           placeholderColor='#212529'
         />

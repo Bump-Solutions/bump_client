@@ -36,7 +36,7 @@ const MessageListItem = ({ message, onImageClick }: MessageListItemProps) => {
           {visible.map((src, idx) => (
             <div key={idx} onClick={() => onImageClick?.(src, message.id)}>
               <Image
-                src={API.BASE_URL + src}
+                src={src}
                 alt={`${idx + 1}. kép`}
                 placeholderColor='#212529'
               />

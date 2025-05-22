@@ -1,4 +1,3 @@
-import { API } from "../../utils/api";
 import { ROUTES } from "../../routes/routes";
 import { AnimatePresence } from "framer-motion";
 import { ChatGroup } from "../../types/chat";
@@ -73,7 +72,7 @@ const InboxListItem = ({ group }: InboxListItemProps) => {
         state={{ partner: group.user, createdAt: group.created_at }}
         {...longPressEvent}>
         <Image
-          src={API.BASE_URL + group.user.profile_picture}
+          src={group.user.profile_picture}
           alt={group.user.username.slice(0, 2)}
           placeholderColor='#212529'
         />

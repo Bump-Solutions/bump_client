@@ -1,4 +1,3 @@
-import { API } from "../../utils/api";
 import { User } from "../../types/user";
 import { Message, MessageGroup, MessagesPage } from "../../types/chat";
 import { useToggle } from "../../hooks/useToggle";
@@ -170,7 +169,7 @@ const renderGroup = (
       {group.partner && (
         <div className='group__avatar'>
           <Image
-            src={API.BASE_URL + group.partner.profile_picture}
+            src={group.partner.profile_picture}
             alt={group.partner.username.slice(0, 2)}
             placeholderColor='#212529'
           />
@@ -245,7 +244,7 @@ const MessagesList = ({
         const parts = msg.attachment.split(";;").filter(Boolean);
         parts.forEach((src) => {
           attachmentIndexes[`${msg.id}-${src}`] = allAttachments.length;
-          allAttachments.push(API.BASE_URL + src);
+          allAttachments.push(src);
         });
       }
     });
@@ -261,7 +260,7 @@ const MessagesList = ({
 
   const groupedElements = useMemo(
     () => groupMessages(allMessages, me, partner, openLightbox),
-    [allMessages, me, partner, openLightbox]
+    [allMessages, me, partner]
   );
 
   return (
