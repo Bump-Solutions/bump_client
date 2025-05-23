@@ -1,11 +1,13 @@
 import "../../assets/css/product.css";
 import { useProduct } from "../../hooks/product/useProduct";
 import { useTitle } from "react-use";
+import { useToggle } from "../../hooks/useToggle";
+import { useState, MouseEvent } from "react";
 
 import Spinner from "../../components/Spinner";
 import Image from "../../components/Image";
-
 import Back from "../../components/Back";
+import Lightbox from "../../components/Lightbox";
 
 type LayoutBox = { area: string };
 
@@ -85,6 +87,10 @@ const LAYOUT_MAP: Record<number, LayoutRow[]> = {
 const Gallery = () => {
   const { product, isLoading, isError } = useProduct();
 
+  // Lightbox state
+  const [lightboxOpen, toggleLightbox] = useToggle(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
+
   useTitle(`Képek - ${product ? product.title : "Termék"} - Bump`);
 
   if (isLoading) return <Spinner />;
@@ -96,6 +102,14 @@ const Gallery = () => {
 
   let imageIndex = 0;
 
+  const handleClick = (event: MouseEvent<HTMLDivElement>, index: number) => {
+    event.stopPropagation();
+    event.preventDefault();
+
+    setCurrentIndex(index);
+    toggleLightbox(true);
+  };
+
   return (
     <section className='product'>
       <div className='gallery__wrapper'>
@@ -104,12 +118,18 @@ const Gallery = () => {
         <div className='grid'>
           {layout.map((row, rowIndex) => {
             if (row.type === "single") {
-              const image = images[imageIndex++];
+              // Capture current index before increment
+              const idx = imageIndex;
+              const image = images[idx];
+              imageIndex++;
               if (!image) return null;
 
               return (
-                <div key={rowIndex} className='grid-row'>
-                  <Image src={image.src} alt={`${imageIndex}. kép `} />
+                <div
+                  key={rowIndex}
+                  className='grid-row'
+                  onClick={(e) => handleClick(e, idx)}>
+                  <Image src={image.src} alt={`${idx + 1}. kép `} />
                 </div>
               );
             }
@@ -126,12 +146,18 @@ const Gallery = () => {
                     gap: "0.5rem",
                   }}>
                   {row.boxes.map((box, i) => {
-                    const image = images[imageIndex++];
+                    // Capture index for each box
+                    const idx = imageIndex;
+                    const image = images[idx];
+                    imageIndex++;
                     if (!image) return null;
 
                     return (
-                      <div key={i} style={{ gridArea: box.area }}>
-                        <Image src={image.src} alt={`${imageIndex}. kép `} />
+                      <div
+                        key={i}
+                        style={{ gridArea: box.area }}
+                        onClick={(e) => handleClick(e, idx)}>
+                        <Image src={image.src} alt={`${idx + 1}. kép `} />
                       </div>
                     );
                   })}
@@ -143,6 +169,14 @@ const Gallery = () => {
           })}
         </div>
       </div>
+
+      {lightboxOpen && (
+        <Lightbox
+          attachments={images.map((image) => image.src)}
+          initialIndex={currentIndex}
+          onClose={() => toggleLightbox(false)}
+        />
+      )}
     </section>
   );
 };
