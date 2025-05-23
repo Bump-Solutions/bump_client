@@ -47,7 +47,7 @@ const NavProfileMenu = ({
     data: image,
     isError,
     error,
-  } = useGetProfilePicture([auth.user.profile_picture]);
+  } = useGetProfilePicture([auth?.user?.profile_picture]);
 
   useEffect(() => {
     if (isError) {
@@ -63,7 +63,7 @@ const NavProfileMenu = ({
       <div className='profile-menu__wrapper'>
         <div className='profile-menu__item '>
           <NavLink
-            to={ROUTES.PROFILE(auth.user.username).SAVED}
+            to={ROUTES.PROFILE(auth?.user?.username).SAVED}
             className='link black fw-600'>
             Mentett
           </NavLink>
@@ -105,16 +105,18 @@ const NavProfileMenu = ({
           </div>
         </Tooltip>
 
-        <button
-          type='button'
-          onClick={() => toggleProfileMenu(true)}
-          title='Profil'>
-          <Image
-            src={image}
-            alt={auth.user.username.slice(0, 2)}
-            placeholderColor='#212529'
-          />
-        </button>
+        <Tooltip content='Profil' showDelay={750} placement='bottom'>
+          <button
+            type='button'
+            onClick={() => toggleProfileMenu(true)}
+            aria-label='Profil'>
+            <Image
+              src={image}
+              alt={auth.user.username.slice(0, 2)}
+              placeholderColor='#212529'
+            />
+          </button>
+        </Tooltip>
       </div>
     </div>
   );

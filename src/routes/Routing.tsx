@@ -19,6 +19,7 @@ import Followings from "../modules/follow/Followings";
 import Search from "../modules/search/Search";
 import Report from "../modules/report/Report";
 import Messages from "../modules/chat/Messages";
+import { useMediaQuery } from "react-responsive";
 
 const Authentication = lazy(() => import("../modules/auth/Authentication"));
 const Login = lazy(() => import("../modules/auth/Login"));
@@ -118,6 +119,7 @@ export const privateRoutes = () => {
               {/* SETTINGS */}
               <Route path='/settings' element={withSuspense(Settings)}>
                 <Route index element={<PersonalSettings />} />
+                <Route path='personal' element={<PersonalSettings />} />
                 <Route path='upload' element={<ProfilePictureSettings />} />
                 <Route path='profile' element={<ProfileInfoSettings />} />
                 <Route path='addresses' element={<AddressSettings />} />

@@ -233,7 +233,8 @@ const ProfileInfoSettings = () => {
         </div>
       ) : (
         <div className='form-box'>
-          <Back to={ROUTES.SETTINGS.ROOT} />
+          <Back to={ROUTES.SETTINGS.ROOT} className='link hide-mobile' />
+
           <h1 className='page__title'>Adatok frissítése</h1>
           <p className='page__desc mb-2'>
             <b>Figyelem!</b> A <i>felhasználónév</i> megváltoztatása esetén a
