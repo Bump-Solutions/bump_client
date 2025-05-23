@@ -28,7 +28,7 @@ const Lightbox = ({
 
   const x = useMotionValue(0);
 
-  // ha index változik, újragörgetünk
+  // Scroll thumbnails when index changes
   useEffect(() => {
     const footer = footerRef.current;
     const thumbs = containerRef.current;
@@ -42,14 +42,19 @@ const Lightbox = ({
     const last = children[children.length - 1];
     if (!active || !last) return;
 
-    // 1. raw offset: középre helyezzük az aktívat
-    const raw = (containerW - active.clientWidth) / 2 - active.offsetLeft;
-    // 2. bal oldali határ
-    const maxOffset = 0;
-    // 3. jobb oldali határ: utolsó elem jobb széle container jobb széléhez igazítva
-    const rightBound = containerW - (last.offsetLeft + last.clientWidth);
-    // 4. clamp raw-ot
-    const target = Math.max(Math.min(raw, maxOffset), rightBound);
+    const totalWidth = last.offsetLeft + last.clientWidth;
+    let target: number;
+
+    // If thumbnails fit within container, center the strip
+    if (totalWidth <= containerW) {
+      target = (containerW - totalWidth) / 2;
+    } else {
+      // Center active thumb
+      const raw = (containerW - active.clientWidth) / 2 - active.offsetLeft;
+      const maxOffset = 0;
+      const rightBound = containerW - totalWidth;
+      target = Math.max(Math.min(raw, maxOffset), rightBound);
+    }
 
     animate(x, target, {
       type: "tween",

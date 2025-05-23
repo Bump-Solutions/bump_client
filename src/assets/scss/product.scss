@@ -694,7 +694,24 @@
           height: 100%;
           width: 100%;
           aspect-ratio: 5 / 4;
+          cursor: pointer;
           //border-radius: $border-radius-1;
+
+          &::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.15);
+            z-index: 1;
+            opacity: 0;
+            transition: opacity 0.2s $animation-cubic;
+          }
+
+          &:hover {
+            &::before {
+              opacity: 1;
+            }
+          }
 
           img {
             width: 100%;
