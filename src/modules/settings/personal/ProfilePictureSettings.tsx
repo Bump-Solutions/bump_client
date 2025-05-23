@@ -140,7 +140,7 @@ const ProfilePictureSettings = () => {
   return (
     <div className='page__wrapper'>
       <div className='form-box'>
-        <Back to={ROUTES.SETTINGS.ROOT} />
+        <Back to={ROUTES.SETTINGS.ROOT} className='link hide-mobile' />
 
         <h1 className='page__title'>Fénykép feltöltése</h1>
         <p className='page__desc mb-2'>

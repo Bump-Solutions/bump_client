@@ -42,6 +42,7 @@ export const ROUTES = {
 
   SETTINGS: {
     ROOT: "/settings",
+    PERSONAL: "/settings/personal",
     PROFILE: "/settings/profile",
     UPLOAD: "/settings/upload",
     ADDRESSES: "/settings/addresses",
