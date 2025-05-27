@@ -1,11 +1,12 @@
-import {JSX} from 'react';
+import { JSX } from "react";
+import { API } from "../../utils/api";
 
 interface GalleryProps {
   images: string[];
   columns: number;
 }
 
-const Gallery = ({images, columns}: GalleryProps) => {
+const Gallery = ({ images, columns }: GalleryProps) => {
   const imagePerColumn = Math.floor(images.length / columns);
 
   // Create a column of images starting at a specific index
@@ -14,7 +15,7 @@ const Gallery = ({images, columns}: GalleryProps) => {
     for (let j = 0; j < imagePerColumn; j++) {
       column.push(
         <div key={startIndex + j} className='image'>
-          <img src={images[startIndex + j]} alt='background' />
+          <img src={API.MEDIA_URL + images[startIndex + j]} alt='background' />
         </div>
       );
     }
@@ -26,7 +27,13 @@ const Gallery = ({images, columns}: GalleryProps) => {
     const gallery: JSX.Element[] = [];
     for (let i = 0; i < columns; i++) {
       gallery.push(
-        <div key={i} className={i % 2 === 0 ? 'image-column sliding-down' : 'image-column sliding-up'}>
+        <div
+          key={i}
+          className={
+            i % 2 === 0
+              ? "image-column sliding-down"
+              : "image-column sliding-up"
+          }>
           {createColumn(i * imagePerColumn)}
         </div>
       );

@@ -1,4 +1,5 @@
 import "../assets/css/image.css";
+import { API } from "../utils/api";
 import { ImgHTMLAttributes, useState, MouseEvent } from "react";
 
 interface ImageProps extends ImgHTMLAttributes<HTMLImageElement> {
@@ -9,10 +10,13 @@ interface ImageProps extends ImgHTMLAttributes<HTMLImageElement> {
   onClick?: (e: MouseEvent<HTMLDivElement>) => void;
 }
 
+// const PLACEHOLDER_COLOR = "#e0e0e0";
+const PLACEHOLDER_COLOR = "#212529";
+
 const Image = ({
   src,
   alt,
-  placeholderColor = "#e0e0e0",
+  placeholderColor = PLACEHOLDER_COLOR,
   className = "",
   onClick,
   ...props
@@ -32,7 +36,7 @@ const Image = ({
       {status === "loading" && <div className='image__placeholder' />}
 
       <img
-        src={src}
+        src={API.MEDIA_URL + src}
         alt={alt}
         loading='lazy'
         className={`${status}`}

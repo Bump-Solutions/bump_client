@@ -1,3 +1,4 @@
+import { API } from "../../../utils/api";
 import { forwardRef, useImperativeHandle } from "react";
 import { useToast } from "../../../hooks/useToast";
 import { useSell } from "../../../hooks/product/useSell";
@@ -63,7 +64,11 @@ const UploadStep = forwardRef<UploadStepRef>(({}, ref) => {
                 onClick={() => removeImage(image.id)}>
                 <Trash />
               </Button>
-              <img src={image.dataUrl} alt={image.name} draggable={false} />
+              <img
+                src={API.MEDIA_URL + image.dataUrl}
+                alt={image.name}
+                draggable={false}
+              />
             </Reorder.Item>
           ))}
         </Reorder.Group>
