@@ -7,6 +7,7 @@ import { MouseEvent } from "react";
 import Modal from "../../components/Modal";
 import Button from "../../components/Button";
 import StateButton from "../../components/StateButton";
+import Image from "../../components/Image";
 
 import { UserX } from "lucide-react";
 
@@ -77,7 +78,7 @@ const ConfirmUnfollow = ({
         <>
           <div className='modal__content'>
             <div>
-              <img
+              <Image
                 src={userToUnfollow.profile_picture}
                 alt={userToUnfollow.username}
               />

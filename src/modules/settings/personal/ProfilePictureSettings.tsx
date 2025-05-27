@@ -1,3 +1,4 @@
+import { API } from "../../../utils/api";
 import { ROUTES } from "../../../routes/routes";
 import { UploadedFile } from "../../../types/form";
 import cuid from "cuid";
@@ -169,7 +170,10 @@ const ProfilePictureSettings = () => {
 
           {images.length > 0 && (
             <div className='img-prev'>
-              <img src={images[0].dataUrl} alt={images[0].name} />
+              <img
+                src={API.MEDIA_URL + images[0].dataUrl}
+                alt={images[0].name}
+              />
               <div
                 className='color-prev'
                 style={{ backgroundColor: colorPreview }}

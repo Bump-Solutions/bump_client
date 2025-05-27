@@ -1,3 +1,4 @@
+import { API } from "../../utils/api";
 import { ProductImage } from "../../types/product";
 import { useState, MouseEvent } from "react";
 import { AnimatePresence, motion } from "framer-motion";
@@ -61,7 +62,11 @@ const Carousel = ({ images }: CarouselProps) => {
           animate={{ x: `-${currentIndex * 100}%` }}
           transition={{ duration: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}>
           {images.map((image, index) => (
-            <img key={index} src={image.src} alt={`Termék kép ${index + 1}`} />
+            <img
+              key={index}
+              src={API.MEDIA_URL + image.src}
+              alt={`Termék kép ${index + 1}`}
+            />
           ))}
         </motion.div>
       </AnimatePresence>

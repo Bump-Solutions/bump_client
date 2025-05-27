@@ -5,6 +5,8 @@ export const API = {
   // WS_BASE_URL: "ws://185.221.21.17:8100/ws",
   BASE_URL: "https://bumpmarket.hu",
   WS_BASE_URL: "wss://bumpmarket.hu/ws",
+  // MEDIA_URL: "https://bumpmarket.hu",
+  MEDIA_URL: "",
 
   AUTH: {
     REFRESH: "/api/v1/auth/token/refresh",
