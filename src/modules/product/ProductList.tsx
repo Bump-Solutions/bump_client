@@ -1,21 +1,16 @@
 import { Inventory } from "../../types/product";
 import { Fragment, useEffect } from "react";
 import { useInView } from "react-intersection-observer";
+import { PaginatedListProps } from "../../types/ui";
 
 import ProductListItem from "./ProductListItem";
 import Spinner from "../../components/Spinner";
-
-interface ProductListProps {
-  pages: Inventory[];
-  fetchNextPage: () => void;
-  isFetchingNextPage: boolean;
-}
 
 const ProductList = ({
   pages,
   fetchNextPage,
   isFetchingNextPage,
-}: ProductListProps) => {
+}: PaginatedListProps<Inventory>) => {
   const { ref, inView } = useInView();
 
   useEffect(() => {
