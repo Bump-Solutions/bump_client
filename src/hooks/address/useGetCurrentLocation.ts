@@ -19,7 +19,7 @@ export const useGetCurrentLocation = (
 
       getAddressFromCoords(geo.latitude, geo.longitude)
         .then((data) => {
-          if (data?.address) {
+          if (data?.address && onSuccess) {
             onSuccess(data);
           }
         })

@@ -113,7 +113,7 @@ const DetailsStep = forwardRef<DetailsStepRef>(({}, ref) => {
           updateData({ title: value });
         }}
         error={errors.title}
-        success={data.title && !errors.title}
+        success={!!data.title && !errors.title}
         autoFocus
       />
       <TextArea
@@ -139,7 +139,7 @@ const DetailsStep = forwardRef<DetailsStepRef>(({}, ref) => {
           <Input
             type='text'
             name='pr_brand'
-            value={data.product?.brand}
+            value={data.product?.brand || ""}
             placeholder='pl. Nike'
             label='Márka'
             required
@@ -147,12 +147,12 @@ const DetailsStep = forwardRef<DetailsStepRef>(({}, ref) => {
               updateData({ product: { ...data.product, brand: value } })
             }
             error={errors.brand}
-            success={data.product?.brand && !errors.brand}
+            success={!!data.product?.brand && !errors.brand}
           />
           <Input
             type='text'
             name='pr_model'
-            value={data.product?.model}
+            value={data.product?.model || ""}
             placeholder='pl. Air Force 1'
             label='Modell'
             required
@@ -160,12 +160,12 @@ const DetailsStep = forwardRef<DetailsStepRef>(({}, ref) => {
               updateData({ product: { ...data.product, model: value } })
             }
             error={errors.model}
-            success={data.product?.model && !errors.model}
+            success={!!data.product?.model && !errors.model}
           />
           <Input
             type='text'
             name='pr_colorway'
-            value={data.product?.colorway}
+            value={data.product?.colorway || ""}
             placeholder='pl. Triple White'
             label='Színállás'
             required
@@ -173,7 +173,7 @@ const DetailsStep = forwardRef<DetailsStepRef>(({}, ref) => {
               updateData({ product: { ...data.product, colorway: value } })
             }
             error={errors.colorway}
-            success={data.product?.colorway && !errors.colorway}
+            success={!!data.product?.colorway && !errors.colorway}
           />
         </>
       )}

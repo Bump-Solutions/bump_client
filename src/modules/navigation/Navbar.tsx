@@ -1,6 +1,7 @@
 import "../../assets/css/navbar.css";
 
-import { useEffect, createContext, useState } from "react";
+import { Notification } from "../../types/notification";
+import { useEffect, createContext, useState, Dispatch } from "react";
 import { AnimatePresence } from "framer-motion";
 import { useNavbarTheme } from "../../hooks/useNavbarTheme";
 import { useToggle } from "../../hooks/useToggle";
@@ -12,13 +13,19 @@ import NavProfileMenu from "./NavProfileMenu";
 import ProfileMenuActions from "./ProfileMenuActions";
 
 // TODO: Implement NotificationsContext
-export const NotificationsContext = createContext(undefined);
+export const NotificationsContext = createContext<
+  | {
+      notifications: Notification[];
+      setNotifications: Dispatch<React.SetStateAction<Notification[]>>;
+    }
+  | undefined
+>(undefined);
 
 const Navbar = () => {
   const { isSolid } = useNavbarTheme();
 
   // TODO: Implement notifications (interface, context, provider, etc.)
-  const [notifications, setNotifications] = useState([]);
+  const [notifications, setNotifications] = useState<Notification[]>([]);
 
   const [isProfileMenuOpen, toggleProfileMenu] = useToggle(false);
   const [isNotificationMenuOpen, toggleNotificationMenu] = useToggle(false);

@@ -2,7 +2,7 @@ import { createContext, ReactNode } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useGetProfile } from "../hooks/profile/useGetProfile";
 import { QUERY_KEY } from "../utils/queryKeys";
-import { Address } from "../types/address";
+import { NewAddress } from "../types/address";
 
 interface PersonalSettingsData {
   username: string;
@@ -10,7 +10,7 @@ interface PersonalSettingsData {
   last_name: string;
   phone_number?: string;
   bio?: string;
-  address?: Address;
+  address?: NewAddress;
   profile_picture: string;
   profile_picture_hash?: string;
 }

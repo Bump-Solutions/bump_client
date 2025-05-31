@@ -30,6 +30,8 @@ export const createChatGroup = async (
   axiosPrivate: AxiosInstance,
   uid: User["id"]
 ): Promise<ApiResponse> => {
+  if (!uid) throw new Error("Missing required parameter: uid");
+
   return await axiosPrivate.post(API.CHAT.CREATE_CHAT_GROUP, {
     user_id: uid,
   });
@@ -39,6 +41,8 @@ export const markMessageAsUnread = async (
   axiosPrivate: AxiosInstance,
   chat: ChatGroup["name"]
 ): Promise<ApiResponse> => {
+  if (!chat) throw new Error("Missing required parameter: chat");
+
   return await axiosPrivate.put(API.CHAT.MARK_MESSAGE_AS_UNREAD(chat));
 };
 
@@ -68,6 +72,8 @@ export const uploadChatImages = async (
   chat: ChatGroup["name"],
   images: UploadedFile[]
 ): Promise<ApiResponse> => {
+  if (!chat) throw new Error("Missing required parameter: chat");
+
   const formData = new FormData();
 
   images.forEach((image) => {

@@ -19,7 +19,7 @@ export const deleteSearchHistory = async (
   axiosPrivate: AxiosInstance,
   id: SearchHistoryItem["id"]
 ): Promise<ApiResponse> => {
-  if (!id) return;
+  if (!id) throw new Error("Missing required parameter: id");
 
   return await axiosPrivate.delete(API.SEARCH.DELETE_HISTORY(id));
 };

@@ -57,7 +57,7 @@ const toastReducer = (state: ToastState, action: ToastAction): ToastState => {
 const ToastProvider = ({ children }: ToastProviderProps) => {
   const [state, dispatch] = useReducer(toastReducer, INITIAL_STATE);
 
-  const [timers, setTimers] = useState({});
+  const [timers, setTimers] = useState<Record<number, number>>({});
 
   const addToast = (type: string, message: string): void => {
     if (state.toasts.length < 5) {

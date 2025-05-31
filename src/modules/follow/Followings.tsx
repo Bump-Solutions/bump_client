@@ -34,7 +34,7 @@ interface OutletContextType {
 
 const Followings = () => {
   const { user, isOwnProfile } = useProfile();
-  useTitle(`@${user.username} követései - Bump`);
+  useTitle(`@${user?.username} követései - Bump`);
 
   const queryClient = useQueryClient();
 
@@ -49,8 +49,8 @@ const Followings = () => {
   const { ref, inView } = useInView();
 
   const { isLoading, isFetchingNextPage, isError, fetchNextPage, data } =
-    useListFollowings([user.id, searchKeyDebounced], {
-      uid: user.id,
+    useListFollowings([user!.id, searchKeyDebounced], {
+      uid: user!.id,
       searchKey: searchKeyDebounced,
     });
 
@@ -69,7 +69,7 @@ const Followings = () => {
   const followMutation = useFollow((response, followingId) => {
     queryClient.setQueriesData(
       {
-        queryKey: [QUERY_KEY.listFollowings, user.id],
+        queryKey: [QUERY_KEY.listFollowings, user!.id],
         exact: false,
       },
       (prev: any) => {
@@ -139,14 +139,14 @@ const Followings = () => {
                     <li key={idx} className='user__list-item'>
                       <div className='item__user-info'>
                         <Image
-                          src={following.profile_picture}
-                          alt={following.username.slice(0, 2)}
+                          src={following.profile_picture!}
+                          alt={following.username?.slice(0, 2)!}
                           placeholderColor='#212529'
                         />
 
                         <div className='user__text'>
                           <Link
-                            to={ROUTES.PROFILE(following.username).ROOT}
+                            to={ROUTES.PROFILE(following.username!).ROOT}
                             className='username fs-18 link black'>
                             {following.username}
                           </Link>
@@ -167,22 +167,34 @@ const Followings = () => {
                           }}
                         />
                       ) : (
-                        auth.user.username !== following.username && (
-                          <Button
-                            className={
-                              following.my_following
-                                ? "primary"
-                                : "secondary blue"
-                            }
-                            text={
-                              following.my_following ? "Követed" : "Követés"
-                            }
-                            onClick={(e) =>
-                              handleFollow(e, following.following_user_id)
-                            }
-                            loading={followMutation.isPending}
-                          />
-                        )
+                        <>
+                          {/* Ha nem saját oldalon vagyunk, magunkat nem vesszük figyelembe */}
+                          {auth?.user?.username !== following.username && (
+                            <>
+                              {/* Egyébként gomb státusz alapján */}
+                              {following.my_following ? (
+                                <Button
+                                  className='primary'
+                                  text='Követed'
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    setUserToUnfollow(following);
+                                    toggleConfirmUnfollow();
+                                  }}
+                                />
+                              ) : (
+                                <Button
+                                  className='secondary blue'
+                                  text='Követés'
+                                  onClick={(e) =>
+                                    handleFollow(e, following.following_user_id)
+                                  }
+                                  loading={followMutation.isPending}
+                                />
+                              )}
+                            </>
+                          )}
+                        </>
                       )}
                     </li>
                   ))}

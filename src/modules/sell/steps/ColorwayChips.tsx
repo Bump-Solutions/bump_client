@@ -38,8 +38,8 @@ const ColorwayChips = () => {
     [searchKeyDebounced, data.product?.brand, data.product?.model],
     {
       isCatalogProduct: data.isCatalogProduct,
-      brand: data.product?.brand,
-      model: data.product?.model,
+      brand: data.product?.brand || "",
+      model: data.product?.model || "",
       searchKey: searchKeyDebounced,
     }
   );
@@ -62,7 +62,7 @@ const ColorwayChips = () => {
 
     if (
       !selectedColorway ||
-      firstPage.products.some((c) => c.color_way === selectedColorway)
+      firstPage.products.some((c: Colorway) => c.color_way === selectedColorway)
     ) {
       setPages(showAll ? resp.pages : [firstPage]);
       return;
@@ -102,7 +102,7 @@ const ColorwayChips = () => {
         pages.reduce((sum, page) => sum + page.products.length, 0)
       : 0;
 
-  const handleSelect = (id: number, colorway: string) => {
+  const handleSelect = (id: Colorway["id"], colorway: string) => {
     updateData({
       product: {
         ...data.product,

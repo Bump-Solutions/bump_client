@@ -681,7 +681,7 @@
   border-radius: 1rem 0.25rem 0.25rem 1rem !important;
 }
 .chat .messages__panel .messages__content .messages__list .message__group.own .group__messages .message .message__body {
-  background-color: #212529;
+  background-color: #0070e8;
   color: #f8f9fa;
   margin-left: auto;
   align-items: flex-end;
@@ -697,7 +697,7 @@
   background-color: #343a40 !important;
 }
 .chat .messages__panel .messages__content .messages__list .message__group.own .group__messages .message .message__body div {
-  color: #f8f9fa;
+  color: #fff;
 }
 .chat .messages__panel .messages__content .messages__list .message__group:not(.own) .message:only-child .message__body {
   border-radius: 1rem !important;

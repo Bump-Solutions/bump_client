@@ -10,7 +10,7 @@ export const listAvailableBrands = async (
   axiosPrivate: AxiosInstance,
   size: number,
   page: number,
-  searchKey: string
+  searchKey?: string
 ): Promise<ApiResponse> => {
   const response: ApiResponse = await axiosPrivate.get(
     API.PRODUCT.LIST_AVAILABLE_BRANDS(size, page, searchKey),
@@ -32,7 +32,7 @@ export const listAvailableModels = async (
   brand: string,
   size: number,
   page: number,
-  searchKey: string
+  searchKey?: string
 ): Promise<ApiResponse> => {
   const response: ApiResponse = await axiosPrivate.get(
     API.PRODUCT.LIST_AVAILABLE_MODELS(brand, size, page, searchKey),
@@ -55,7 +55,7 @@ export const listAvailableColorways = async (
   model: string,
   size: number,
   page: number,
-  searchKey: string
+  searchKey?: string
 ): Promise<ApiResponse> => {
   const response: ApiResponse = await axiosPrivate.get(
     API.PRODUCT.LIST_AVAILABLE_COLORWAYS(brand, model, size, page, searchKey),
@@ -82,21 +82,21 @@ export const uploadProduct = async (
     JSON.stringify({
       title: data.title,
       description: data.description,
-      product: data.product.id // Ha van id, akkor CatalogProduct
+      product: data.product?.id // Ha van id, akkor CatalogProduct
         ? data.product.id
         : {
-            brand: data.product.brand,
-            model: data.product.model,
-            color_way: data.product.colorway,
+            brand: data.product?.brand,
+            model: data.product?.model,
+            color_way: data.product?.colorway,
             category: 1, // TODO
             colors: "#fff", // TODO
           },
       county: 1, // TODO
       items: data.items.map((item) => ({
-        condition: item.condition.value,
-        gender: item.gender.value,
+        condition: item.condition?.value,
+        gender: item.gender?.value,
         price: item.price,
-        size: item.size.value,
+        size: item.size?.value,
         state: 1,
       })),
     })
@@ -170,8 +170,8 @@ export const getProduct = async (
 export const deletePrduct = async (
   axiosPrivate: AxiosInstance,
   pid: IProduct["id"]
-) => {
-  if (!pid) return;
+): Promise<ApiResponse> => {
+  if (!pid) throw new Error("Missing required parameter: pid");
 
   return await axiosPrivate.delete(API.PRODUCT.DELETE_PRODUCT(pid));
 };
@@ -179,8 +179,8 @@ export const deletePrduct = async (
 export const likeProduct = async (
   axiosPrivate: AxiosInstance,
   pid: IProduct["id"]
-) => {
-  if (!pid) return;
+): Promise<ApiResponse> => {
+  if (!pid) throw new Error("Missing required parameter: pid");
 
   return await axiosPrivate.post(API.PRODUCT.LIKE_PRODUCT, {
     product_id: pid,
@@ -190,8 +190,8 @@ export const likeProduct = async (
 export const unlikeProduct = async (
   axiosPrivate: AxiosInstance,
   pid: IProduct["id"]
-) => {
-  if (!pid) return;
+): Promise<ApiResponse> => {
+  if (!pid) throw new Error("Missing required parameter: pid");
 
   return await axiosPrivate.post(API.PRODUCT.UNLIKE_PRODUCT, {
     product_id: pid,
@@ -201,8 +201,8 @@ export const unlikeProduct = async (
 export const saveProduct = async (
   axiosPrivate: AxiosInstance,
   pid: IProduct["id"]
-) => {
-  if (!pid) return;
+): Promise<ApiResponse> => {
+  if (!pid) throw new Error("Missing required parameter: pid");
 
   return await axiosPrivate.post(API.PRODUCT.SAVE_PRODUCT, {
     product_id: pid,
@@ -212,8 +212,8 @@ export const saveProduct = async (
 export const unsaveProduct = async (
   axiosPrivate: AxiosInstance,
   pid: IProduct["id"]
-) => {
-  if (!pid) return;
+): Promise<ApiResponse> => {
+  if (!pid) throw new Error("Missing required parameter: pid");
 
   return await axiosPrivate.delete(API.PRODUCT.UNSAVE_PRODUCT(pid));
 };

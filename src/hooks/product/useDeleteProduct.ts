@@ -22,7 +22,7 @@ export const useDeleteProduct = (
       deletePrduct(axiosPrivate, productId),
     onSuccess: (resp, variables) => {
       queryClient.invalidateQueries({
-        queryKey: [QUERY_KEY.listProducts, user.id],
+        queryKey: [QUERY_KEY.listProducts, user?.id],
       });
       if (onSuccess) {
         onSuccess(resp, variables);

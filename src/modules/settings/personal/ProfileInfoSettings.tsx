@@ -1,6 +1,6 @@
 import { REGEX } from "../../../utils/regex";
 import { ROUTES } from "../../../routes/routes";
-import { Address } from "../../../types/address";
+import { Address, NewAddress } from "../../../types/address";
 
 import { usePersonalSettings } from "../../../hooks/settings/usePersonalSettings";
 import { useNavigate } from "react-router";
@@ -28,7 +28,7 @@ interface PersonalInfoSchema {
   firstname: string;
   phoneNumber: string;
   bio: string;
-  address: Address;
+  address: NewAddress;
 }
 
 interface PersonalInfoFormErrors {
@@ -173,8 +173,8 @@ const ProfileInfoSettings = () => {
     // logout user if username changed
 
     setTimeout(() => {
-      if (isMounted) {
-        if (newData.username !== auth.user.username) {
+      if (isMounted()) {
+        if (newData.username !== auth?.user?.username) {
           addToast("info", "Kijelentkezés: a felhasználónév megváltozott.");
           logout();
         } else {
@@ -194,9 +194,9 @@ const ProfileInfoSettings = () => {
       phoneNumber: newData.phoneNumber,
     };
 
-    const emptyInputs = Object.keys(inputFields).filter(
-      (key) => inputFields[key] === ""
-    );
+    const emptyInputs = (
+      Object.keys(inputFields) as Array<keyof typeof inputFields>
+    ).filter((key) => inputFields[key] === "");
 
     if (emptyInputs.length > 0) {
       emptyInputs.forEach((input) => {
@@ -258,7 +258,7 @@ const ProfileInfoSettings = () => {
                 }));
               }}
               error={errors.username}
-              success={newData.username && !errors.username}
+              success={!!newData.username && !errors.username}
             />
             <div className='field__wrapper'>
               <Input
@@ -275,7 +275,7 @@ const ProfileInfoSettings = () => {
                   }));
                 }}
                 error={errors.lastname}
-                success={newData.lastname && !errors.lastname}
+                success={!!newData.lastname && !errors.lastname}
               />
               <Input
                 type='text'
@@ -291,7 +291,7 @@ const ProfileInfoSettings = () => {
                   }));
                 }}
                 error={errors.firstname}
-                success={newData.firstname && !errors.firstname}
+                success={!!newData.firstname && !errors.firstname}
               />
             </div>
             <Phone
@@ -307,7 +307,7 @@ const ProfileInfoSettings = () => {
                 }));
               }}
               error={errors.phoneNumber}
-              success={newData.phoneNumber && !errors.phoneNumber}
+              success={!!newData.phoneNumber && !errors.phoneNumber}
             />
             <TextArea
               name='bio'

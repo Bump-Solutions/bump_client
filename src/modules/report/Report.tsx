@@ -30,10 +30,8 @@ const Report = () => {
     };
   }, []);
 
-  if (!REPORT_TYPES.includes(type)) {
-    navigate(ROUTES.NOTFOUND, {
-      replace: true,
-    });
+  if (type === undefined || !REPORT_TYPES.includes(type)) {
+    navigate(ROUTES.NOTFOUND, { replace: true });
     return null;
   }
 

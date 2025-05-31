@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 interface Stat {
   label: string;
   value: number | string | null;
-  href?: string;
+  href: string;
 }
 
 const UserInfo = () => {
@@ -19,13 +19,13 @@ const UserInfo = () => {
     setStats([
       {
         label: "Követők",
-        value: user.followers_count || null,
-        href: ROUTES.PROFILE(user.username).FOLLOWERS,
+        value: user?.followers_count || null,
+        href: ROUTES.PROFILE(user?.username!).FOLLOWERS,
       },
       {
         label: "Követések",
-        value: user.followings_count || null,
-        href: ROUTES.PROFILE(user.username).FOLLOWINGS,
+        value: user?.followings_count || null,
+        href: ROUTES.PROFILE(user?.username!).FOLLOWINGS,
       },
     ]);
   }, [user]);
@@ -63,7 +63,7 @@ const UserInfo = () => {
 
       <div className='user__info-block'>
         <p className='fc-light fs-14'>
-          {isOwnProfile ? "Csatlakoztál:" : "Csatlakozott:"} {user.joined}
+          {isOwnProfile ? "Csatlakoztál:" : "Csatlakozott:"} {user?.joined}
         </p>
       </div>
     </div>

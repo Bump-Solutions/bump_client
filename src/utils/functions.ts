@@ -1,7 +1,7 @@
-import ColorThief from "colorthief";
+import ColorThief from "color-thief-ts";
 
-export const rgbToHex = (rgb?: number[]): string | undefined => {
-  if (!rgb) return undefined;
+export const rgbToHex = (rgb?: number[]): string | null => {
+  if (!rgb) return null;
 
   return (
     "#" +
@@ -16,8 +16,8 @@ export const rgbToHex = (rgb?: number[]): string | undefined => {
 
 export const getImageDominantColor = async (
   image: string
-): Promise<string | undefined> => {
-  if (!image) return undefined;
+): Promise<string | null> => {
+  if (!image) return null;
 
   const colorThief = new ColorThief();
   const img = new Image();
@@ -35,7 +35,7 @@ export const getImageDominantColor = async (
 export const getImagePalette = async (
   image: string,
   count: number = 5
-): Promise<(string | undefined)[]> => {
+): Promise<(string | null)[]> => {
   if (!image) return [];
 
   const colorThief = new ColorThief();
@@ -53,11 +53,13 @@ export const getImagePalette = async (
 export const getImageDominantColorAndPalette = async (
   image: string,
   count: number = 5
-): Promise<
-  | { dominantColor: string | undefined; palette: (string | undefined)[] }
-  | undefined
-> => {
-  if (!image) return undefined;
+): Promise<{
+  dominantColor: string | null;
+  palette: (string | null)[];
+}> => {
+  if (!image) {
+    return { dominantColor: null, palette: [] };
+  }
 
   const colorThief = new ColorThief();
   const img = new Image();

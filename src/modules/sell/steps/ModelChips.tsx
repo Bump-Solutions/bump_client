@@ -34,7 +34,7 @@ const ModelChips = () => {
     data: resp,
   } = useListAvailableModels([searchKeyDebounced, data.product?.brand], {
     isCatalogProduct: data.isCatalogProduct,
-    brand: data.product?.brand,
+    brand: data.product?.brand || "",
     searchKey: searchKeyDebounced,
   });
 
@@ -55,7 +55,7 @@ const ModelChips = () => {
 
     if (
       !selectedModel ||
-      firstPage.products.some((m) => m.model === selectedModel)
+      firstPage.products.some((m: Model) => m.model === selectedModel)
     ) {
       setPages(showAll ? resp.pages : [firstPage]);
       return;

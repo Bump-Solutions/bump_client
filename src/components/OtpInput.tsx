@@ -17,12 +17,12 @@ const OtpInput = ({
   const [otp, setOtp] = useState<string[]>(new Array(numberOfDigits).fill(""));
   const [error, setError] = useState<string | null>(null);
 
-  const otpBoxRef = useRef<HTMLInputElement[] | null>([]);
+  const otpBoxRef = useRef<(HTMLInputElement | null)[]>([]);
 
   const inputClassName = `${className} ${error ? "error" : ""}`;
 
   useEffect(() => {
-    if (otpBoxRef.current[0]) {
+    if (otpBoxRef.current && otpBoxRef.current[0]) {
       otpBoxRef.current[0].focus();
     }
   }, []);

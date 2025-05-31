@@ -3,6 +3,7 @@ import { ApiResponse } from "../types/api";
 import { AxiosInstance } from "axios";
 import { getImageDominantColorAndPalette } from "../utils/functions";
 import { User } from "../types/user";
+import { ColorData } from "../modules/profile/ProfileBanner";
 
 export const getProfile = async (
   signal: AbortSignal,
@@ -46,13 +47,23 @@ export const getProfilePicture = async (
   return response.data.message.profile_picture;
 };
 
-export const getProfilePictureColors = async (image: string) => {
-  if (!image) return { dominantColor: null, palette: null };
+export const getProfilePictureColors = async (
+  image: string
+): Promise<ColorData | null> => {
+  if (!image) return null;
   const { dominantColor, palette } = await getImageDominantColorAndPalette(
     image,
     12
   );
-  return { dominantColor, palette };
+
+  if (!dominantColor) return null;
+
+  // filter out any nulls in the palette:
+  const cleanPalette = palette.filter(
+    (c): c is string => c !== null && typeof c === "string"
+  );
+
+  return { dominantColor, palette: cleanPalette };
 };
 
 // TODO: image type

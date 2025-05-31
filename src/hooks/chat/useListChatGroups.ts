@@ -10,7 +10,7 @@ const MAX_CHAT_PER_PAGE = 20;
 export const useListChatGroups = (
   dependencies: any[] = [],
   params: {
-    searchKey?: string;
+    searchKey: string;
   }
 ) => {
   const axiosPrivate = useAxiosPrivate();

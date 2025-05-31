@@ -18,8 +18,8 @@ const Products = () => {
   const [pages, setPages] = useState<Inventory[] | null>(null);
 
   const { data, isLoading, isFetchingNextPage, isError, fetchNextPage } =
-    useListProducts([user.id], {
-      uid: user.id,
+    useListProducts([user?.id], {
+      uid: user?.id!,
     });
 
   useEffect(() => {
@@ -74,7 +74,7 @@ const Products = () => {
             <p className='fc-light ta-center py-5'>
               <SearchX className='svg-64 mb-1' />
               <br />
-              {user.username} még nem rendelkezik termékekkel. Térj vissza
+              {user?.username} még nem rendelkezik termékekkel. Térj vissza
               később.
             </p>
           )}

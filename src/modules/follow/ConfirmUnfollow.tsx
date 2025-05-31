@@ -1,8 +1,9 @@
 import { QUERY_KEY } from "../../utils/queryKeys";
+import { UserToUnfollow } from "../../types/user";
 import { useQueryClient } from "@tanstack/react-query";
 import { useProfile } from "../../hooks/profile/useProfile";
 import { useUnfollow } from "../../hooks/user/useUnfollow";
-import { MouseEvent } from "react";
+import { Dispatch, MouseEvent, SetStateAction } from "react";
 
 import Modal from "../../components/Modal";
 import Button from "../../components/Button";
@@ -11,16 +12,9 @@ import Image from "../../components/Image";
 
 import { UserX } from "lucide-react";
 
-interface UserToUnfollow {
-  user_id?: number;
-  following_user_id?: number;
-  username?: string;
-  profile_picture: string;
-}
-
 interface ConfirmUnfollowProps {
   userToUnfollow: UserToUnfollow | null;
-  setUserToUnfollow: (user: UserToUnfollow | null) => void;
+  setUserToUnfollow: Dispatch<SetStateAction<UserToUnfollow | null>>;
   isOpen: boolean;
   close: () => void;
 }
@@ -42,7 +36,7 @@ const ConfirmUnfollow = ({
         switch (key) {
           case QUERY_KEY.listFollowers:
           case QUERY_KEY.listFollowings:
-            return query.queryKey[1] === user.id;
+            return query.queryKey[1] === user!.id;
           default:
             return false;
         }
@@ -51,7 +45,7 @@ const ConfirmUnfollow = ({
     });
 
     if (isOwnProfile) {
-      setUser({ followings_count: user.followings_count - 1 });
+      setUser({ followings_count: user?.followings_count! - 1 });
     }
 
     setUserToUnfollow(null);
@@ -63,9 +57,8 @@ const ConfirmUnfollow = ({
 
     if (unfollowMutation.isPending || !userToUnfollow) return;
 
-    return unfollowMutation.mutateAsync(
-      userToUnfollow.user_id || userToUnfollow.following_user_id
-    );
+    const id = userToUnfollow.user_id || userToUnfollow.following_user_id;
+    return unfollowMutation.mutateAsync(id!);
   };
 
   return (
@@ -80,7 +73,7 @@ const ConfirmUnfollow = ({
             <div>
               <Image
                 src={userToUnfollow.profile_picture}
-                alt={userToUnfollow.username}
+                alt={userToUnfollow.username!}
               />
             </div>
             <p>

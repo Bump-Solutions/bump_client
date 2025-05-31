@@ -2,14 +2,15 @@ import { API } from "../utils/api";
 import { IProduct } from "../types/product";
 import { User } from "../types/user";
 import { AxiosInstance } from "axios";
+import { ApiResponse } from "../types/api";
 
 export const reportProduct = async (
   axiosPrivate: AxiosInstance,
   pid: IProduct["id"],
   reason: number,
   description: string
-) => {
-  if (!pid) return;
+): Promise<ApiResponse> => {
+  if (!pid) throw new Error("Missing required parameter: pid");
 
   return await axiosPrivate.post(API.REPORT.PRODUCT, {
     product: pid,
@@ -23,8 +24,8 @@ export const reportUser = async (
   uid: User["id"],
   reason: number,
   description: string
-) => {
-  if (!uid) return;
+): Promise<ApiResponse> => {
+  if (!uid) throw new Error("Missing required parameter: uid");
 
   return await axiosPrivate.post(API.REPORT.USER, {
     user: uid,

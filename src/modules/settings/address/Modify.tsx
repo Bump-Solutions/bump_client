@@ -105,7 +105,7 @@ const Modify = ({ address, addresses, close }: ModifyProps) => {
   const modifyAddressMutation = useModifyAddress(
     () => {
       setTimeout(() => {
-        if (isMounted) {
+        if (isMounted()) {
           close();
         }
       }, 500);
@@ -113,14 +113,14 @@ const Modify = ({ address, addresses, close }: ModifyProps) => {
     (error) => {
       if (typeof error?.response?.data.message === "object") {
         addToast("error", "Kérjük javítsd a hibás mezőket!");
-        Object.entries(error?.response?.data.message).forEach(
-          ([field, messages]) => {
-            setErrors((prevErrors) => ({
-              ...prevErrors,
-              [field]: messages[0],
-            }));
-          }
-        );
+        Object.entries(
+          error.response!.data.message as Record<string, string[]>
+        ).forEach(([field, messages]: [string, string[]]) => {
+          setErrors((prev) => ({
+            ...prev,
+            [field]: messages[0],
+          }));
+        });
       } else {
         addToast(
           error?.response?.data.type || "error",
@@ -142,9 +142,9 @@ const Modify = ({ address, addresses, close }: ModifyProps) => {
       zip: newAddress.zip,
     };
 
-    const emptyInputs = Object.keys(inputFields).filter(
-      (key) => inputFields[key] === ""
-    );
+    const emptyInputs = (
+      Object.keys(inputFields) as Array<keyof typeof inputFields>
+    ).filter((key) => inputFields[key] === "");
 
     if (emptyInputs.length > 0) {
       emptyInputs.forEach((input) => {
@@ -209,7 +209,7 @@ const Modify = ({ address, addresses, close }: ModifyProps) => {
             }}
             autoFocus
             error={errors.name}
-            success={newAddress.name && !errors.name}
+            success={!!newAddress.name && !errors.name}
           />
           <Input
             type='text'
@@ -222,7 +222,7 @@ const Modify = ({ address, addresses, close }: ModifyProps) => {
               setNewAddress((prev) => ({ ...prev, country: value }));
             }}
             error={errors.country}
-            success={newAddress.country && !errors.country}
+            success={!!newAddress.country && !errors.country}
           />
           <div className='field__wrapper'>
             <Input
@@ -236,7 +236,7 @@ const Modify = ({ address, addresses, close }: ModifyProps) => {
                 setNewAddress((prev) => ({ ...prev, city: value }));
               }}
               error={errors.city}
-              success={newAddress.city && !errors.city}
+              success={!!newAddress.city && !errors.city}
             />
             <Input
               type='text'
@@ -249,7 +249,7 @@ const Modify = ({ address, addresses, close }: ModifyProps) => {
                 setNewAddress((prev) => ({ ...prev, zip: value }));
               }}
               error={errors.zip}
-              success={newAddress.zip && !errors.zip}
+              success={!!newAddress.zip && !errors.zip}
             />
           </div>
           <Input
@@ -262,7 +262,7 @@ const Modify = ({ address, addresses, close }: ModifyProps) => {
               setNewAddress((prev) => ({ ...prev, street: value }));
             }}
             error={errors.street}
-            success={newAddress.street && !errors.street}
+            success={!!newAddress.street && !errors.street}
           />
           <ToggleButton
             label='Alapértelmezett cím'

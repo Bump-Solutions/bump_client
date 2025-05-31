@@ -100,7 +100,7 @@ const ProfilePictureSettings = () => {
     }));
 
     setTimeout(() => {
-      if (isMounted) {
+      if (isMounted()) {
         navigate(ROUTES.SETTINGS.ROOT);
       }
     }, 500);

@@ -9,7 +9,7 @@ import { useAxiosPrivate } from "../auth/useAxiosPrivate";
 
 export const useGetUser = (
   dependencies: any[] = [],
-  params: { username: string }
+  params: { username: User["username"] }
 ) => {
   const axiosPrivate = useAxiosPrivate();
 

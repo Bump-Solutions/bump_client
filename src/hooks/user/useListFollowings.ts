@@ -12,7 +12,7 @@ const MAX_FOLLOWINGS_PER_PAGE = 10;
 export const useListFollowings = (
   dependencies: any[] = [],
   params: {
-    uid: User["id"] | null;
+    uid: User["id"];
     searchKey?: string;
   }
 ) => {

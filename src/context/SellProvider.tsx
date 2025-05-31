@@ -13,7 +13,7 @@ export interface SellFormData {
   isCatalogProduct: boolean;
   title: string;
   description: string;
-  product: Partial<CatalogProduct>;
+  product: Partial<CatalogProduct> | null;
   items: Item[];
   images: UploadedFile[];
 }

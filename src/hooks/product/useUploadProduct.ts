@@ -21,7 +21,7 @@ export const useUploadProduct = (
     mutationFn: (data: SellFormData) => uploadProduct(axiosPrivate, data),
     onSuccess: (resp, variables) => {
       queryClient.invalidateQueries({
-        queryKey: [QUERY_KEY.listProducts, auth.user.id],
+        queryKey: [QUERY_KEY.listProducts, auth?.user?.id],
         refetchType: "all",
       });
       if (onSuccess) {

@@ -17,10 +17,10 @@ const ProductHeader = () => {
   const { product, setProduct } = useProduct();
 
   const saveMutation = useSaveProduct((response) => {
-    setProduct({ saved: true, saves: product.saves + 1 });
+    setProduct({ saved: true, saves: product?.saves! + 1 });
 
     queryClient.setQueryData(
-      [QUERY_KEY.listProducts, product.user.id],
+      [QUERY_KEY.listProducts, product?.user.id],
       (prev: any) => {
         if (!prev) return prev;
         return {
@@ -28,7 +28,7 @@ const ProductHeader = () => {
           pages: prev.pages.map((page: Inventory) => ({
             ...page,
             products: page.products.map((p: IProduct) => {
-              if (p.id === product.id) {
+              if (p.id === product?.id) {
                 return {
                   ...p,
                   saved: true,
@@ -49,7 +49,7 @@ const ProductHeader = () => {
         pages: prev.pages.map((page: Inventory) => ({
           ...page,
           products: [
-            { ...product, saved: true, saves: product.saves + 1 },
+            { ...product, saved: true, saves: product?.saves! + 1 },
             ...page.products,
           ],
         })),
@@ -58,10 +58,10 @@ const ProductHeader = () => {
   });
 
   const unsaveMutation = useUnsaveProduct((response) => {
-    setProduct({ saved: false, saves: product.saves - 1 });
+    setProduct({ saved: false, saves: product?.saves! - 1 });
 
     queryClient.setQueryData(
-      [QUERY_KEY.listProducts, product.user.id],
+      [QUERY_KEY.listProducts, product?.user.id],
       (prev: any) => {
         if (!prev) return prev;
         return {
@@ -69,7 +69,7 @@ const ProductHeader = () => {
           pages: prev.pages.map((page: Inventory) => ({
             ...page,
             products: page.products.map((p: IProduct) => {
-              if (p.id === product.id) {
+              if (p.id === product?.id) {
                 return {
                   ...p,
                   saved: false,
@@ -89,7 +89,7 @@ const ProductHeader = () => {
         ...prev,
         pages: prev.pages.map((page: Inventory) => ({
           ...page,
-          products: page.products.filter((p: IProduct) => p.id !== product.id),
+          products: page.products.filter((p: IProduct) => p.id !== product?.id),
         })),
       };
     });
@@ -112,24 +112,26 @@ const ProductHeader = () => {
   };
 
   return (
-    <div className='product__header'>
-      <h1>{product.title}</h1>
+    product && (
+      <div className='product__header'>
+        <h1>{product.title}</h1>
 
-      <div>
-        <Button className='tertiary no-anim' text='Megosztás'>
-          <Share2 className='svg-16' />
-        </Button>
+        <div>
+          <Button className='tertiary no-anim' text='Megosztás'>
+            <Share2 className='svg-16' />
+          </Button>
 
-        <Button
-          className={`tertiary ${
-            product.saved ? "fill fc-yellow-500" : ""
-          } no-anim`}
-          text={`${product.saved ? "Mentve" : "Mentés"}`}
-          onClick={(e) => handleSave(e, product.id, product.saved)}>
-          <Bookmark className='svg-16 ' />
-        </Button>
+          <Button
+            className={`tertiary ${
+              product.saved ? "fill fc-yellow-500" : ""
+            } no-anim`}
+            text={`${product.saved ? "Mentve" : "Mentés"}`}
+            onClick={(e) => handleSave(e, product.id, product.saved)}>
+            <Bookmark className='svg-16 ' />
+          </Button>
+        </div>
       </div>
-    </div>
+    )
   );
 };
 

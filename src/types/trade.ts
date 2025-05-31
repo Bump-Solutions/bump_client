@@ -1,7 +1,7 @@
 import { IProduct } from "./product";
 import { User } from "./user";
 
-export type Seller = Partial<User>;
+export type Seller = { id: number } & Partial<Omit<User, "id">>;
 
 export interface TradeItem {
   id: number;

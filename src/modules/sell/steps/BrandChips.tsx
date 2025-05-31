@@ -46,7 +46,7 @@ const BrandChips = () => {
 
     if (
       !selectedBrand ||
-      firstPage.products.some((b) => b.brand === selectedBrand)
+      firstPage.products.some((b: Brand) => b.brand === selectedBrand)
     ) {
       setPages(showAll ? resp.pages : [firstPage]);
       return;

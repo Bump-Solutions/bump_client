@@ -5,9 +5,8 @@ import { useTitle } from "react-use";
 
 import Spinner from "../../components/Spinner";
 import Back from "../../components/Back";
-import ProductHeader from "./ProductHeader";
 import Thumbnail from "./Thumbnail";
-import ProductItemsCard from "./ProductItemsCard";
+import ProductDetails from "./ProductDetails";
 
 const Product = () => {
   const { product, isLoading, isError } = useProduct();
@@ -24,11 +23,9 @@ const Product = () => {
     <section className='product'>
       <div className='product__wrapper'>
         <Back />
-        <ProductHeader />
-        <Thumbnail />
         <div className='product__content'>
-          <div className='product__details'></div>
-          <ProductItemsCard />
+          <Thumbnail />
+          <ProductDetails />
         </div>
       </div>
     </section>
