@@ -14,7 +14,7 @@ import StateButton from "../../components/StateButton";
 import { Send, MoveLeft } from "lucide-react";
 
 interface ForgotPasswordProps {
-  setShowForgotPassword: Dispatch<SetStateAction<boolean>>;
+  setShowForgotPassword: any;
 }
 
 const ForgotPassword = ({ setShowForgotPassword }: ForgotPasswordProps) => {
