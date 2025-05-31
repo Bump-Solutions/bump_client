@@ -17,7 +17,7 @@ import { Flag } from "lucide-react";
 
 interface ReportFormProps {
   type: ReportType;
-  id: string;
+  id: string | undefined;
 }
 
 interface Field {
@@ -84,11 +84,19 @@ const DESCRIPTIONS: Record<ReportType, string> = {
   user: "Fontos számunkra, hogy a sneaker közösség biztonságos és tisztességes maradjon. Ha ez a felhasználó megtévesztő adatokat ad meg, hamis terméket kínál vagy tisztességtelenül kereskedik, kérjük, jelentsd. Minden esetet bizalmasan kezelünk és kivizsgálunk.",
 };
 
+const INITIAL_DATA: Record<string, any> = {
+  rprt_reason: {
+    value: "",
+    label: "",
+  },
+  rprt_description: "",
+};
+
 const ReportForm = ({ type, id }: ReportFormProps) => {
   const navigate = useNavigate();
 
   const fields = FIELDS[type];
-  const [formData, setFormData] = useState<Record<string, any>>({});
+  const [formData, setFormData] = useState<Record<string, any>>(INITIAL_DATA);
 
   const [errors, setErrors] = useState<Errors>({});
   const isMounted = useMounted();
@@ -109,7 +117,7 @@ const ReportForm = ({ type, id }: ReportFormProps) => {
 
   const reportMutation = useReport((resp, variables) => {
     setTimeout(() => {
-      if (isMounted) {
+      if (isMounted()) {
         navigate(-1);
       }
     }, 1000);
@@ -161,7 +169,7 @@ const ReportForm = ({ type, id }: ReportFormProps) => {
 
     return reportMutation.mutateAsync({
       type,
-      id: parseInt(id),
+      id: parseInt(id!),
       reason: formData.rprt_reason.value,
       description: formData.rprt_description,
     });

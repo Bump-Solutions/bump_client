@@ -18,7 +18,7 @@ const UserInteractions = () => {
     setUser({
       ...user,
       following: true,
-      followers_count: user.followers_count + 1,
+      followers_count: user?.followers_count! + 1,
     });
   });
 
@@ -26,7 +26,7 @@ const UserInteractions = () => {
     setUser({
       ...user,
       following: false,
-      followers_count: user.followers_count - 1,
+      followers_count: user?.followers_count! - 1,
     });
   });
 
@@ -34,9 +34,9 @@ const UserInteractions = () => {
     navigate(ROUTES.INBOX.CHAT(response.data.message), {
       state: {
         partner: {
-          id: user.id,
-          username: user.username,
-          profile_picture: user.profile_picture,
+          id: user?.id,
+          username: user?.username,
+          profile_picture: user?.profile_picture,
         },
       },
     });
@@ -47,7 +47,7 @@ const UserInteractions = () => {
 
     if (followMutation.isPending) return;
 
-    followMutation.mutateAsync(user.id);
+    followMutation.mutateAsync(user?.id!);
   };
 
   const handleUnfollow = (e: FormEvent) => {
@@ -55,13 +55,13 @@ const UserInteractions = () => {
 
     if (unfollowMutation.isPending) return;
 
-    unfollowMutation.mutateAsync(user.id);
+    unfollowMutation.mutateAsync(user?.id!);
   };
 
   const handleSendMessage = (e: FormEvent) => {
     e.preventDefault();
 
-    if (user.chat_name) {
+    if (user?.chat_name) {
       navigate(ROUTES.INBOX.CHAT(user.chat_name), {
         state: {
           partner: {
@@ -74,7 +74,7 @@ const UserInteractions = () => {
     } else {
       if (createChatGroupMutation.isPending) return;
 
-      createChatGroupMutation.mutateAsync(user.id);
+      createChatGroupMutation.mutateAsync(user?.id!);
     }
   };
 

@@ -7,7 +7,7 @@ const ItemsList = () => {
   const { data, updateData, errors, setErrors } = useSell();
 
   const groupedItems = data.items.reduce((acc, item) => {
-    const key = `${item.gender.label}-${item.size.label}-${item.condition.label}-${item.price}`;
+    const key = `${item.gender?.label}-${item.size?.label}-${item.condition?.label}-${item.price}`;
 
     if (acc[key]) {
       acc[key].count += 1;
@@ -25,7 +25,7 @@ const ItemsList = () => {
   const handleRemoveItem = (item: any) => {
     updateData({
       items: data.items.filter((i) => {
-        const key = `${i.gender.label}-${i.size.label}-${i.condition.label}-${i.price}`;
+        const key = `${i.gender?.label}-${i.size?.label}-${i.condition?.label}-${i.price}`;
         return key !== item.key;
       }),
     });

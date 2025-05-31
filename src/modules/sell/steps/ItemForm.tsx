@@ -7,16 +7,16 @@ import { useToast } from "../../../hooks/useToast";
 import Currency from "../../../components/Currency";
 import Select from "../../../components/Select";
 import Button from "../../../components/Button";
+import Stepper from "../../../components/Stepper";
 
 import { CirclePlus } from "lucide-react";
 import { useDebounce } from "../../../hooks/useDebounce";
-import Stepper from "../../../components/Stepper";
 
 interface FormItem {
-  gender: Option;
-  size: Option;
-  condition: Option;
-  price: number;
+  gender: Option | null;
+  size: Option | null;
+  condition: Option | null;
+  price: number | null;
 }
 
 const INITIAL_ITEM: FormItem = {
@@ -69,7 +69,10 @@ const ItemForm = () => {
     [item.condition]
   );
 
-  const handleChangeSelect = (name: keyof FormItem, option: Option) => {
+  const handleChangeSelect = (
+    name: keyof FormItem,
+    option: Option | Option[] | null
+  ) => {
     setItem((prev) => ({
       ...prev,
       [name]: option,
@@ -134,7 +137,7 @@ const ItemForm = () => {
         label='Nem'
         options={ENUM.PRODUCT.GENDER_OPTIONS}
         placeholder='Válassz az alábbiak közül ...'
-        onChange={(option: Option) => handleChangeSelect("gender", option)}
+        onChange={(option) => handleChangeSelect("gender", option)}
         error={errors.gender}
       />
       <Select
@@ -146,7 +149,7 @@ const ItemForm = () => {
         label='Méret'
         options={ENUM.PRODUCT.SIZE_OPTIONS}
         placeholder='Válassz az alábbiak közül ...'
-        onChange={(option: Option) => handleChangeSelect("size", option)}
+        onChange={(option) => handleChangeSelect("size", option)}
         error={errors.size}
       />
       <Select
@@ -157,7 +160,7 @@ const ItemForm = () => {
         label='Állapot'
         options={ENUM.PRODUCT.CONDITION_OPTIONS}
         placeholder='Válassz az alábbiak közül ...'
-        onChange={(option: Option) => handleChangeSelect("condition", option)}
+        onChange={(option) => handleChangeSelect("condition", option)}
         error={errors.condition}
       />
       <Currency

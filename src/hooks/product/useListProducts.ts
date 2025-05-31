@@ -10,7 +10,7 @@ const MAX_PRODUCTS_PER_PAGE = 20;
 export const useListProducts = (
   dependencies: any[] = [],
   params: {
-    uid: User["id"] | null;
+    uid: User["id"];
   }
 ) => {
   const axiosPrivate = useAxiosPrivate();

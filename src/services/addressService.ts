@@ -1,6 +1,6 @@
 import { API } from "../utils/api";
 import { ApiResponse } from "../types/api";
-import { Address } from "../types/address";
+import { Address, NewAddress } from "../types/address";
 import axios, { AxiosInstance } from "axios";
 
 export const getAddressFromCoords = async (
@@ -37,7 +37,7 @@ export const listAddresses = async (
 
 export const addAddress = async (
   axiosPrivate: AxiosInstance,
-  newAddress: Address
+  newAddress: NewAddress
 ): Promise<ApiResponse> => {
   return await axiosPrivate.post(API.ADDRESS.ADD_ADDRESS, {
     name: newAddress.name,
@@ -67,5 +67,7 @@ export const deleteAddress = async (
   axiosPrivate: AxiosInstance,
   addressId: number
 ): Promise<ApiResponse> => {
+  if (!addressId) throw new Error("Missing required parameter: addressId");
+
   return await axiosPrivate.delete(API.ADDRESS.DELETE_ADDRESS(addressId));
 };

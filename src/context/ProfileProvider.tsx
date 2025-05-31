@@ -38,7 +38,7 @@ const ProfileProvider = ({ children }: ProfileProviderProps) => {
     isLoading,
     isError,
     error,
-  } = useGetUser([uname], { username: uname });
+  } = useGetUser([uname], { username: uname! });
 
   useEffect(() => {
     if (isError) {
@@ -66,8 +66,8 @@ const ProfileProvider = ({ children }: ProfileProviderProps) => {
   };
 
   const isOwnProfile = useMemo(() => {
-    return auth.user.username === uname;
-  }, [auth.user.username, uname]);
+    return auth?.user?.username === uname;
+  }, [auth?.user?.username, uname]);
 
   return (
     <ProfileContext

@@ -1,5 +1,6 @@
 import "../../assets/css/follow.css";
 import { ENUM } from "../../utils/enum";
+import { UserToUnfollow } from "../../types/user";
 import { ROUTES } from "../../routes/routes";
 import { useMediaQuery } from "react-responsive";
 import { NavLink, Outlet, useNavigate } from "react-router";
@@ -26,7 +27,9 @@ const Follow = ({ background }: FollowProps) => {
 
   const { user } = useProfile();
 
-  const [userToUnfollow, setUserToUnfollow] = useState(null);
+  const [userToUnfollow, setUserToUnfollow] = useState<UserToUnfollow | null>(
+    null
+  );
   const [confirmUnfollow, toggleConfirmUnfollow] = useToggle(false);
 
   useEffect(() => {

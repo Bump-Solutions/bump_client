@@ -47,9 +47,9 @@ const AccountForm = forwardRef<AccountFormRef, AccountFormProps>(
     const isValid = () => {
       const inputFields = { email, username, password, passwordConfirmation };
 
-      const emptyInputs = Object.keys(inputFields).filter(
-        (key) => inputFields[key as keyof SignupFormData] === ""
-      );
+      const emptyInputs = (
+        Object.keys(inputFields) as Array<keyof typeof inputFields>
+      ).filter((key) => inputFields[key] === "");
 
       if (emptyInputs.length > 0) {
         emptyInputs.forEach((key) => {
@@ -192,7 +192,7 @@ const AccountForm = forwardRef<AccountFormRef, AccountFormProps>(
             updateData({ email: value });
           }}
           error={errors.email}
-          success={email && !errors.email}
+          success={!!email && !errors.email}
           autoFocus
         />
         <Input
@@ -206,7 +206,7 @@ const AccountForm = forwardRef<AccountFormRef, AccountFormProps>(
             updateData({ username: value });
           }}
           error={errors.username}
-          success={username && !errors.username}
+          success={!!username && !errors.username}
         />
         <div className='field__wrapper'>
           <Input

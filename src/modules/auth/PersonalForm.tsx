@@ -44,9 +44,9 @@ const PersonalForm = forwardRef<PersonalFormRef, PersonalFormProps>(
     const isValid = () => {
       const inputFields = { firstName, lastName, phoneNumber };
 
-      const emptyInputs = Object.keys(inputFields).filter(
-        (key) => inputFields[key as keyof SignupFormData] === ""
-      );
+      const emptyInputs = (
+        Object.keys(inputFields) as Array<keyof typeof inputFields>
+      ).filter((key) => inputFields[key] === "");
 
       if (emptyInputs.length > 0) {
         emptyInputs.forEach((key) => {
@@ -150,7 +150,7 @@ const PersonalForm = forwardRef<PersonalFormRef, PersonalFormProps>(
               updateData({ lastName: value });
             }}
             error={errors.lastName}
-            success={lastName && !errors.lastName}
+            success={!!lastName && !errors.lastName}
             autoFocus
           />
           <Input
@@ -164,7 +164,7 @@ const PersonalForm = forwardRef<PersonalFormRef, PersonalFormProps>(
               updateData({ firstName: value });
             }}
             error={errors.firstName}
-            success={firstName && !errors.firstName}
+            success={!!firstName && !errors.firstName}
           />
         </div>
 
@@ -178,7 +178,7 @@ const PersonalForm = forwardRef<PersonalFormRef, PersonalFormProps>(
             updateData({ phoneNumber: value });
           }}
           error={errors.phoneNumber}
-          success={phoneNumber && !errors.phoneNumber}
+          success={!!phoneNumber && !errors.phoneNumber}
         />
 
         <Select
@@ -187,7 +187,7 @@ const PersonalForm = forwardRef<PersonalFormRef, PersonalFormProps>(
           label='Nem'
           options={ENUM.AUTH.GENDER_OPTIONS}
           placeholder='Válassz az alábbiak közül ...'
-          onChange={(option: Option) => handleChangeSelect(option)}
+          onChange={(option) => handleChangeSelect(option as Option | null)}
         />
       </div>
     );

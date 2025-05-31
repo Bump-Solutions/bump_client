@@ -33,7 +33,7 @@ export const listFollowers = async (
   uid: User["id"],
   size: number,
   page: number,
-  searchKey: string
+  searchKey?: string
 ): Promise<ApiResponse> => {
   const response: ApiResponse = await axiosPrivate.get(
     API.USER.LIST_FOLLOWERS(uid, size, page, searchKey),
@@ -55,8 +55,8 @@ export const listFollowings = async (
   uid: User["id"],
   size: number,
   page: number,
-  searchKey: string
-): Promise<any> => {
+  searchKey?: string
+): Promise<ApiResponse> => {
   const response: ApiResponse = await axiosPrivate.get(
     API.USER.LIST_FOLLOWING(uid, size, page, searchKey),
     { signal }
@@ -75,7 +75,7 @@ export const follow = async (
   axiosPrivate: AxiosInstance,
   uid: User["id"]
 ): Promise<ApiResponse> => {
-  if (!uid) return;
+  if (!uid) throw new Error("Missing required parameter: uid");
 
   return await axiosPrivate.post(API.USER.FOLLOW, {
     following_user_id: uid,
@@ -86,7 +86,7 @@ export const unfollow = async (
   axiosPrivate: AxiosInstance,
   uid: User["id"]
 ): Promise<ApiResponse> => {
-  if (!uid) return;
+  if (!uid) throw new Error("Missing required parameter: uid");
 
   return await axiosPrivate.delete(API.USER.UNFOLLOW, {
     data: {
@@ -99,7 +99,7 @@ export const deleteFollower = async (
   axiosPrivate: AxiosInstance,
   uid: User["id"]
 ): Promise<ApiResponse> => {
-  if (!uid) return;
+  if (!uid) throw new Error("Missing required parameter: uid");
 
   return await axiosPrivate.delete(API.USER.DELETE_FOLLOWER, {
     data: {

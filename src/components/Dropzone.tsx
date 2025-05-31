@@ -6,7 +6,7 @@ interface DropzoneProps {
   onDrop: (acceptedFiles: File[]) => void;
   accept?: Accept;
   multiple?: boolean;
-  maxFiles?: number;
+  maxFiles: number;
   maxSize?: number;
   onDropRejected?: (fileRejections: any[]) => void;
   onFileDialogCancel?: () => void;

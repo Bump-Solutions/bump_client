@@ -17,7 +17,7 @@ interface ModalContentProps {
   className?: string;
   size?: "xsm" | "sm" | "md" | "lg";
   dark?: boolean;
-  modalRef: RefObject<HTMLDivElement>;
+  modalRef: RefObject<HTMLDivElement | null>;
 }
 
 const ModalContent = ({
@@ -66,7 +66,7 @@ interface ModalProps {
 }
 
 const Modal = ({ children, isOpen, close, className, size }: ModalProps) => {
-  const modalRef = useRef<HTMLDivElement>(null);
+  const modalRef = useRef<HTMLDivElement | null>(null);
   const isMobile = useMediaQuery({
     query: `(max-width: ${ENUM.MEDIA_MOBILE}px)`,
   });

@@ -10,8 +10,8 @@ const ProfileCardHeader = () => {
     <div className='profile__card__header'>
       <div className='avatar__wrapper'>
         <Image
-          src={user?.profile_picture}
-          alt={user?.username.slice(0, 2)}
+          src={user?.profile_picture!}
+          alt={user?.username.slice(0, 2)!}
           placeholderColor='#212529'
         />
       </div>

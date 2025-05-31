@@ -1,9 +1,9 @@
 import { RefObject, useEffect } from "react";
 
 interface UseClickOutsideProps {
-  ref: RefObject<HTMLElement>;
+  ref: RefObject<HTMLElement | null>;
   callback: () => void;
-  ignoreRefs?: RefObject<HTMLElement>[];
+  ignoreRefs?: RefObject<HTMLElement | null>[];
 }
 
 export const useClickOutside = ({

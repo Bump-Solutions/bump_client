@@ -1,5 +1,5 @@
 import { ApiError, ApiResponse } from "../../types/api";
-import { ReportType } from "../../types/form";
+import { ReportType } from "../../types/report";
 
 import { useMutation } from "@tanstack/react-query";
 import { useAxiosPrivate } from "../auth/useAxiosPrivate";
@@ -10,7 +10,7 @@ interface ReportPayload {
   type: ReportType;
   id: number;
   reason: number;
-  description?: string;
+  description: string;
 }
 
 export const useReport = (

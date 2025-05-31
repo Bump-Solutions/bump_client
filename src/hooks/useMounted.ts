@@ -1,4 +1,4 @@
-import {useCallback, useEffect, useRef} from 'react';
+import { useCallback, useEffect, useRef } from "react";
 
 // Custom hook to check if the component is mounted
 export const useMounted = (): (() => boolean) => {

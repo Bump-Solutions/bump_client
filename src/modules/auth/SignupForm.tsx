@@ -117,14 +117,14 @@ const SignupForm = () => {
     },
     (error) => {
       addToast("error", "Kérjük javítsd a hibás mezőket!");
-      Object.entries(error?.response?.data.message).forEach(
-        ([field, messages]) => {
-          setErrors((prevErrors) => ({
-            ...prevErrors,
-            [field]: messages[0],
-          }));
-        }
-      );
+      Object.entries(
+        error.response!.data.message as Record<string, string[]>
+      ).forEach(([field, messages]: [string, string[]]) => {
+        setErrors((prev) => ({
+          ...prev,
+          [field]: messages[0],
+        }));
+      });
       if (
         error?.response?.data.message.email ||
         error?.response?.data.message.username

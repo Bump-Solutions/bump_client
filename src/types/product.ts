@@ -2,7 +2,7 @@ import { Option } from "./form";
 import { User } from "./user";
 
 export interface CatalogProduct {
-  id?: number;
+  id?: number | null;
   brand: string;
   model: string;
   colorway: string;
@@ -36,10 +36,10 @@ export interface IProduct {
 
 export interface Item {
   id?: number;
-  size: Option;
-  condition: Option;
-  price: number;
-  gender: Option;
+  size: Option | null;
+  condition: Option | null;
+  price: number | null;
+  gender: Option | null;
   state?: number;
 }
 

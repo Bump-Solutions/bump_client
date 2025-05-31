@@ -113,7 +113,7 @@ const Add = ({ addresses, close }: AddProps) => {
   const addAddressMutation = useAddAddress(
     () => {
       setTimeout(() => {
-        if (isMounted) {
+        if (isMounted()) {
           close();
         }
       }, 500);
@@ -121,14 +121,14 @@ const Add = ({ addresses, close }: AddProps) => {
     (error) => {
       if (typeof error?.response?.data.message === "object") {
         addToast("error", "Kérjük javítsd a hibás mezőket!");
-        Object.entries(error?.response?.data.message).forEach(
-          ([field, messages]) => {
-            setErrors((prevErrors) => ({
-              ...prevErrors,
-              [field]: messages[0],
-            }));
-          }
-        );
+        Object.entries(
+          error.response!.data.message as Record<string, string[]>
+        ).forEach(([field, messages]: [string, string[]]) => {
+          setErrors((prev) => ({
+            ...prev,
+            [field]: messages[0],
+          }));
+        });
       } else {
         addToast(
           error?.response?.data.type || "error",
@@ -148,9 +148,9 @@ const Add = ({ addresses, close }: AddProps) => {
       zip: newAddress.zip,
     };
 
-    const emptyInputs = Object.keys(inputFields).filter(
-      (key) => inputFields[key] === ""
-    );
+    const emptyInputs = (
+      Object.keys(inputFields) as Array<keyof typeof inputFields>
+    ).filter((key) => inputFields[key] === "");
 
     if (emptyInputs.length > 0) {
       emptyInputs.forEach((input) => {
@@ -213,7 +213,7 @@ const Add = ({ addresses, close }: AddProps) => {
             }}
             autoFocus
             error={errors.name}
-            success={newAddress.name && !errors.name}
+            success={!!newAddress.name && !errors.name}
           />
           <Input
             type='text'
@@ -226,7 +226,7 @@ const Add = ({ addresses, close }: AddProps) => {
               setNewAddress((prev) => ({ ...prev, country: value }));
             }}
             error={errors.country}
-            success={newAddress.country && !errors.country}
+            success={!!newAddress.country && !errors.country}
           />
           <div className='field__wrapper'>
             <Input
@@ -240,7 +240,7 @@ const Add = ({ addresses, close }: AddProps) => {
                 setNewAddress((prev) => ({ ...prev, city: value }));
               }}
               error={errors.city}
-              success={newAddress.city && !errors.city}
+              success={!!newAddress.city && !errors.city}
             />
             <Input
               type='text'
@@ -253,7 +253,7 @@ const Add = ({ addresses, close }: AddProps) => {
                 setNewAddress((prev) => ({ ...prev, zip: value }));
               }}
               error={errors.zip}
-              success={newAddress.zip && !errors.zip}
+              success={!!newAddress.zip && !errors.zip}
             />
           </div>
           <Input
@@ -266,7 +266,7 @@ const Add = ({ addresses, close }: AddProps) => {
               setNewAddress((prev) => ({ ...prev, street: value }));
             }}
             error={errors.street}
-            success={newAddress.street && !errors.street}
+            success={!!newAddress.street && !errors.street}
           />
           <ToggleButton
             className='mt-1'

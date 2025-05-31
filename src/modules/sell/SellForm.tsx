@@ -106,7 +106,7 @@ const SellForm = () => {
 
   const uploadProductMutation = useUploadProduct((resp, variables) => {
     setTimeout(() => {
-      if (isMounted) {
+      if (isMounted()) {
         navigate(-1);
       }
     }, 1000);

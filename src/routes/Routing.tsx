@@ -19,7 +19,6 @@ import Followings from "../modules/follow/Followings";
 import Search from "../modules/search/Search";
 import Report from "../modules/report/Report";
 import Messages from "../modules/chat/Messages";
-import { useMediaQuery } from "react-responsive";
 
 const Authentication = lazy(() => import("../modules/auth/Authentication"));
 const Login = lazy(() => import("../modules/auth/Login"));
@@ -30,7 +29,6 @@ const Products = lazy(() => import("../modules/product/Products"));
 const SavedProducts = lazy(() => import("../modules/product/SavedProducts"));
 const ProductLayout = lazy(() => import("../modules/product/ProductLayout"));
 const Product = lazy(() => import("../modules/product/Product"));
-const Gallery = lazy(() => import("../modules/product/Gallery"));
 
 const Chat = lazy(() => import("../modules/chat/Chat"));
 
@@ -108,7 +106,6 @@ export const privateRoutes = () => {
               {/* PRODUCT */}
               <Route path='/product/:pid' element={withSuspense(ProductLayout)}>
                 <Route index element={<Product />} />
-                <Route path='gallery' element={<Gallery />} />
               </Route>
             </Route>
 

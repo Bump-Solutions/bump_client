@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, JSX, SetStateAction } from "react";
 import { SearchHistoryItem } from "../../types/search";
 import { useListSearchHistory } from "../../hooks/search/useListSearchHistory";
 import { useDeleteHistory } from "../../hooks/search/useDeleteHistory";
@@ -7,7 +7,7 @@ import Chip from "../../components/Chip";
 
 import { Footprints, Search, User } from "lucide-react";
 
-const SVG_MAP = {
+const SVG_MAP: Record<number, JSX.Element> = {
   0: <Footprints />,
   1: <User />,
 };

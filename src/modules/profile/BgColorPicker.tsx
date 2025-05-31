@@ -40,7 +40,7 @@ const Color = ({ color, selectedColor, setSelectedColor }: ColorProps) => {
 interface BgColorPickerProps {
   isOpen: boolean;
   close: () => void;
-  dominantColor: string;
+  dominantColor: string | null;
   palette: string[] | null;
   selectedColor: string | null;
   setSelectedColor: (color: string | null) => void;
@@ -65,12 +65,12 @@ const BgColorPicker = ({
   };
 
   const setProfileBackgroundColorMutation = useSetProfileBackgroundColor(() => {
-    setUser({ profile_background_color: selectedColor });
+    setUser({ profile_background_color: selectedColor! });
     close();
   });
 
   const handleSaveColor = async () => {
-    return setProfileBackgroundColorMutation.mutateAsync(selectedColor);
+    return setProfileBackgroundColorMutation.mutateAsync(selectedColor!);
   };
 
   return (
@@ -96,7 +96,7 @@ const BgColorPicker = ({
         <p className='ta-center'>vagy</p>
         <div className='color-picker__wrapper'>
           <ChromePicker
-            color={selectedColor || dominantColor}
+            color={selectedColor ?? dominantColor ?? undefined}
             onChange={handleColorChange}
             disableAlpha
           />

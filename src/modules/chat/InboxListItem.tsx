@@ -73,7 +73,7 @@ const InboxListItem = ({ group }: InboxListItemProps) => {
         {...longPressEvent}>
         <Image
           src={group.user.profile_picture}
-          alt={group.user.username.slice(0, 2)}
+          alt={group.user.username?.slice(0, 2)}
           placeholderColor='#212529'
         />
 

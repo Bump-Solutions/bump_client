@@ -35,7 +35,7 @@ interface OutletContextType {
 
 const Followers = () => {
   const { user, setUser, isOwnProfile } = useProfile();
-  useTitle(`@${user.username} követői - Bump`);
+  useTitle(`@${user?.username} követői - Bump`);
 
   const queryClient = useQueryClient();
 
@@ -49,8 +49,8 @@ const Followers = () => {
   const { ref, inView } = useInView();
 
   const { isLoading, isFetchingNextPage, isError, fetchNextPage, data } =
-    useListFollowers([user.id, searchKeyDebounced], {
-      uid: user.id,
+    useListFollowers([user!.id, searchKeyDebounced], {
+      uid: user!.id,
       searchKey: searchKeyDebounced,
     });
 
@@ -69,7 +69,7 @@ const Followers = () => {
   const followMutation = useFollow((response, followerId: number) => {
     queryClient.setQueriesData(
       {
-        queryKey: [QUERY_KEY.listFollowers, user.id],
+        queryKey: [QUERY_KEY.listFollowers, user?.id],
         exact: false,
       },
       (prev: any) => {
@@ -98,7 +98,7 @@ const Followers = () => {
     setUser({
       ...user,
       following: true,
-      followings_count: user.followings_count + 1,
+      followings_count: user?.followings_count! + 1,
     });
   });
 
@@ -106,7 +106,7 @@ const Followers = () => {
     (response, followerId: number) => {
       queryClient.setQueriesData(
         {
-          queryKey: [QUERY_KEY.listFollowers, user.id],
+          queryKey: [QUERY_KEY.listFollowers, user!.id],
           exact: false,
         },
         (prev: any) => {
@@ -129,7 +129,7 @@ const Followers = () => {
       setUser({
         ...user,
         following: false,
-        followers_count: user.followers_count - 1,
+        followers_count: user?.followers_count! - 1,
       });
     }
   );
@@ -185,14 +185,14 @@ const Followers = () => {
                     <li key={idx} className='user__list-item'>
                       <div className='item__user-info'>
                         <Image
-                          src={follower.profile_picture}
-                          alt={follower.username.slice(0, 2)}
+                          src={follower.profile_picture!}
+                          alt={follower.username?.slice(0, 2)!}
                           placeholderColor='#212529'
                         />
 
                         <div className='user__text'>
                           <Link
-                            to={ROUTES.PROFILE(follower.username).ROOT}
+                            to={ROUTES.PROFILE(follower.username!).ROOT}
                             className='username fs-18 link black'>
                             {follower.username}
                           </Link>
@@ -230,7 +230,7 @@ const Followers = () => {
                       ) : (
                         <>
                           {/* Ha nem saját oldalon vagyunk, magunkat nem vesszük figyelembe */}
-                          {auth.user.username !== follower.username && (
+                          {auth?.user?.username !== follower.username && (
                             <>
                               {/* Egyébként gomb státusz alapján */}
                               {follower.my_following ? (
@@ -276,7 +276,7 @@ const Followers = () => {
                 <p className='fc-light ta-center py-5'>Nincs találat.</p>
               ) : (
                 <p className='fc-light ta-center py-5'>
-                  {user.username} még nem rendelkezik követőkkel.
+                  {user?.username} még nem rendelkezik követőkkel.
                 </p>
               )}
             </>

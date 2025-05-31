@@ -1,49 +1,83 @@
-import { ENUM } from "../../utils/enum";
-import { ROUTES } from "../../routes/routes";
+import { useState } from "react";
 import { useProduct } from "../../hooks/product/useProduct";
-import { useMediaQuery } from "react-responsive";
-import { Link } from "react-router";
+import { useToggle } from "../../hooks/useToggle";
 
-import Badges from "./Badges";
 import Image from "../../components/Image";
+import Lightbox from "../../components/Lightbox";
 
-import { Grip } from "lucide-react";
+const MAX_IMAGES = 3; // Maximum number of images to display
 
 const Thumbnail = () => {
   const { product } = useProduct();
 
-  var maxGridItems = product.images.length > 4 ? 5 : 3;
+  const images = product?.images;
+  const [activeIndex, setActiveIndex] = useState(0);
 
-  const isMobile = useMediaQuery({
-    query: `(max-width: ${ENUM.MEDIA_MOBILE}px)`,
-  });
+  const [lightboxOpen, toggleLightbox] = useToggle(false);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
 
-  if (isMobile) {
-    maxGridItems = 3;
-  }
+  if (!images || images.length === 0) return null;
+
+  const showCount = images.length > MAX_IMAGES ? MAX_IMAGES : images.length;
+  const extraCount = images.length - showCount;
+
+  const handleClick = (index: number) => {
+    setLightboxIndex(index);
+    toggleLightbox(true);
+  };
 
   return (
-    <div className='product__images'>
-      {Object.keys(product.badges).length > 0 && (
-        <Badges badges={product.badges} initialToggle={true} />
-      )}
+    <>
+      <div className='product__thumbnail'>
+        {/* Nagy kép */}
+        <div
+          className='product__thumbnail--main'
+          onClick={() => handleClick(activeIndex)}>
+          <Image
+            src={images[activeIndex].src}
+            alt={`Termék ${activeIndex + 1}. kép`}
+          />
+        </div>
 
-      {product.images.length > maxGridItems && (
-        <Link
-          to={ROUTES.PRODUCT(product.id).GALLERY}
-          className='button secondary fill md'>
-          <Grip /> Összes kép megtekintése
-        </Link>
-      )}
+        {/* Mini-képek */}
+        <ul className='product__thumbnail--list'>
+          {images.slice(0, showCount).map((img, idx) => (
+            <li
+              key={idx}
+              className={`product__thumbnail--item ${
+                idx === activeIndex ? "active" : ""
+              }`}
+              onClick={() => setActiveIndex(idx)}
+              onDoubleClick={() => handleClick(idx)}>
+              <Image src={img.src} alt={`Termék ${idx + 1}. kép`} />
+            </li>
+          ))}
 
-      <div className={`image-grid ${maxGridItems > 4 ? "grid-5" : "grid-3"}`}>
-        {product.images.slice(0, maxGridItems).map((image, index) => (
-          <Link key={index} to={ROUTES.PRODUCT(product.id).GALLERY}>
-            <Image src={image.src} alt={product.title} />
-          </Link>
-        ))}
+          {images.length > MAX_IMAGES && (
+            <li
+              key='more'
+              className='product__thumbnail--item more'
+              onClick={() => {
+                handleClick(showCount);
+              }}>
+              <span>
+                +{extraCount}
+                <br />
+                bővebben
+              </span>
+            </li>
+          )}
+        </ul>
       </div>
-    </div>
+
+      {lightboxOpen && (
+        <Lightbox
+          attachments={images.map((i) => i.src)}
+          initialIndex={lightboxIndex}
+          onClose={() => toggleLightbox(false)}
+        />
+      )}
+    </>
   );
 };
 

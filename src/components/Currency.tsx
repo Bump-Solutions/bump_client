@@ -2,7 +2,7 @@ import { ChangeEvent, InputHTMLAttributes } from "react";
 import { useToggle } from "../hooks/useToggle";
 
 interface CurrencyProps
-  extends Omit<InputHTMLAttributes<HTMLInputElement>, "onChange"> {
+  extends Omit<InputHTMLAttributes<HTMLInputElement>, "onChange" | "value"> {
   label: string;
   value: number | null;
   name?: string;
@@ -55,7 +55,7 @@ const Currency = ({
     (error ? " error" : "") +
     (disabled ? " disabled" : "");
 
-  const formatNumber = (num: number) => {
+  const formatNumber = (num: number | null) => {
     if (num === null || num === 0) return "";
 
     return new Intl.NumberFormat("hu-HU", {

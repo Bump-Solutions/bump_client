@@ -5,7 +5,7 @@ interface ToggleButtonProps
   className?: string;
   label?: string;
   color?: string;
-  value: boolean;
+  value: boolean | undefined;
   onChange: (value: boolean) => void;
   error?: string;
   required?: boolean;

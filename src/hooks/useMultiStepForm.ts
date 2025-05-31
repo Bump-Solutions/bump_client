@@ -6,7 +6,7 @@ interface Step<T> {
   description?: string | JSX.Element;
   svg?: JSX.Element;
   component: JSX.Element;
-  ref: RefObject<T>;
+  ref: RefObject<T | null>;
 }
 
 interface StepRef {

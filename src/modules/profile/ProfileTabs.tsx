@@ -99,7 +99,7 @@ const ProfileTabs = () => {
       )}
 
       <ul ref={tabsRef} className='profile__tabs'>
-        {TABS(user.username)
+        {TABS(user!.username)
           .filter((tab) => !tab.private || isOwnProfile)
           .map((tab, index) => (
             <li key={index} className='profile__tab'>

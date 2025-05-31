@@ -1,13 +1,12 @@
 import { ROUTES } from "../../routes/routes";
 
-import { useEffect, use } from "react";
+import { useEffect } from "react";
 import { Link, NavLink, useNavigate } from "react-router";
 import { useAuth } from "../../hooks/auth/useAuth";
 import { useGetProfilePicture } from "../../hooks/profile/useGetProfilePicture";
 import { useToast } from "../../hooks/useToast";
 import { useCart } from "../../hooks/trade/useCart";
-
-import { NotificationsContext } from "./Navbar";
+import { useNotifications } from "../../hooks/notifications/useNotifications";
 
 import Tooltip from "../../components/Tooltip";
 import Image from "../../components/Image";
@@ -25,7 +24,7 @@ const NavProfileMenu = ({
 }: NavProfileMenuProps) => {
   const navigate = useNavigate();
 
-  const { notifications } = use(NotificationsContext);
+  const { notifications } = useNotifications();
   const { cart } = useCart();
 
   const { auth } = useAuth();
@@ -63,7 +62,7 @@ const NavProfileMenu = ({
       <div className='profile-menu__wrapper'>
         <div className='profile-menu__item '>
           <NavLink
-            to={ROUTES.PROFILE(auth?.user?.username).SAVED}
+            to={ROUTES.PROFILE(auth?.user?.username!).SAVED}
             className='link black fw-600'>
             Mentett
           </NavLink>
@@ -111,8 +110,8 @@ const NavProfileMenu = ({
             onClick={() => toggleProfileMenu(true)}
             aria-label='Profil'>
             <Image
-              src={image}
-              alt={auth.user.username.slice(0, 2)}
+              src={image!}
+              alt={auth?.user?.username?.slice(0, 2)!}
               placeholderColor='#212529'
             />
           </button>

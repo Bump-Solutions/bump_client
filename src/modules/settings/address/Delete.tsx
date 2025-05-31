@@ -18,7 +18,7 @@ const Delete = ({ address, close }: DeleteProps) => {
 
   const deleteAddressMutation = useDeleteAddress(() => {
     setTimeout(() => {
-      if (isMounted) {
+      if (isMounted()) {
         close();
       }
     }, 500);

@@ -68,7 +68,7 @@ const ProductListItem = ({ product }: ProductListItemProps) => {
           const key = query.queryKey[0];
           switch (key) {
             case QUERY_KEY.listProducts:
-              return query.queryKey[1] === user.id;
+              return query.queryKey[1] === user?.id;
             case QUERY_KEY.listSavedProducts:
               return true;
             default:
@@ -105,7 +105,7 @@ const ProductListItem = ({ product }: ProductListItemProps) => {
           const key = query.queryKey[0];
           switch (key) {
             case QUERY_KEY.listProducts:
-              return query.queryKey[1] === user.id;
+              return query.queryKey[1] === user?.id;
             case QUERY_KEY.listSavedProducts:
               return true;
             default:
@@ -136,25 +136,28 @@ const ProductListItem = ({ product }: ProductListItemProps) => {
   });
 
   const saveMutation = useSaveProduct((response, productId) => {
-    queryClient.setQueryData([QUERY_KEY.listProducts, user.id], (prev: any) => {
-      if (!prev) return prev;
-      return {
-        ...prev,
-        pages: prev.pages.map((page: Inventory) => ({
-          ...page,
-          products: page.products.map((product: IProduct) => {
-            if (product.id === productId) {
-              return {
-                ...product,
-                saved: true,
-                saves: product.saves + 1,
-              };
-            }
-            return product;
-          }),
-        })),
-      };
-    });
+    queryClient.setQueryData(
+      [QUERY_KEY.listProducts, user?.id],
+      (prev: any) => {
+        if (!prev) return prev;
+        return {
+          ...prev,
+          pages: prev.pages.map((page: Inventory) => ({
+            ...page,
+            products: page.products.map((product: IProduct) => {
+              if (product.id === productId) {
+                return {
+                  ...product,
+                  saved: true,
+                  saves: product.saves + 1,
+                };
+              }
+              return product;
+            }),
+          })),
+        };
+      }
+    );
 
     queryClient.setQueryData([QUERY_KEY.listSavedProducts], (prev: any) => {
       if (!prev) return prev;
@@ -172,25 +175,28 @@ const ProductListItem = ({ product }: ProductListItemProps) => {
   });
 
   const unsaveMutation = useUnsaveProduct((response, productId) => {
-    queryClient.setQueryData([QUERY_KEY.listProducts, user.id], (prev: any) => {
-      if (!prev) return prev;
-      return {
-        ...prev,
-        pages: prev.pages.map((page: Inventory) => ({
-          ...page,
-          products: page.products.map((product: IProduct) => {
-            if (product.id === productId) {
-              return {
-                ...product,
-                saved: false,
-                saves: product.saves - 1,
-              };
-            }
-            return product;
-          }),
-        })),
-      };
-    });
+    queryClient.setQueryData(
+      [QUERY_KEY.listProducts, user?.id],
+      (prev: any) => {
+        if (!prev) return prev;
+        return {
+          ...prev,
+          pages: prev.pages.map((page: Inventory) => ({
+            ...page,
+            products: page.products.map((product: IProduct) => {
+              if (product.id === productId) {
+                return {
+                  ...product,
+                  saved: false,
+                  saves: product.saves - 1,
+                };
+              }
+              return product;
+            }),
+          })),
+        };
+      }
+    );
 
     queryClient.setQueryData([QUERY_KEY.listSavedProducts], (prev: any) => {
       if (!prev) return prev;
@@ -329,12 +335,12 @@ const ProductListItem = ({ product }: ProductListItemProps) => {
               {product.discounted_price && (
                 <span className='discount'>
                   {product.discounted_price} Ft
-                  {product.items_count > 1 && "-tól"}
+                  {product?.items_count! > 1 && "-tól"}
                 </span>
               )}
               <span className='price__original'>
                 {product.min_price || product.price} Ft
-                {product.items_count > 1 && "-tól"}
+                {product?.items_count! > 1 && "-tól"}
               </span>
             </div>
           </div>

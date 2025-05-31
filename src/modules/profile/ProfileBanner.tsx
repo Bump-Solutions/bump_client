@@ -10,55 +10,54 @@ import { useToggle } from "../../hooks/useToggle";
 
 import BgColorPicker from "./BgColorPicker";
 import Button from "../../components/Button";
-
-import { PaintbrushVertical } from "lucide-react";
-import { API } from "../../utils/api";
 import Tooltip from "../../components/Tooltip";
 
-interface ColorData {
+import { PaintbrushVertical } from "lucide-react";
+
+export interface ColorData {
   dominantColor: string;
   palette: string[];
 }
 
 const ProfileBanner = () => {
   const { isOwnProfile, user } = useProfile();
-  useTitle(`@${user.username} - ${ENUM.BRAND.NAME}`);
+  useTitle(`@${user?.username} - ${ENUM.BRAND.NAME}`);
 
-  const [selectedColor, setSelectedColor] = useState<string>(undefined);
+  const [selectedColor, setSelectedColor] = useState<string | null>(null);
   const [openBgColorPicker, toggleBgColorPicker] = useToggle(false);
-  const [colorData, setColorData] = useState<ColorData>(undefined);
+  const [colorData, setColorData] = useState<ColorData | null>(null);
 
   useEffect(() => {
     const getColorData = async () => {
-      const colorData = await getProfilePictureColors(user.profile_picture);
+      const colorData = await getProfilePictureColors(user?.profile_picture!);
       setColorData(colorData);
     };
 
-    if (user.profile_picture) getColorData();
+    if (user?.profile_picture) getColorData();
 
     return () => {
-      setColorData(undefined);
+      setColorData(null);
     };
-  }, [user.profile_picture]);
+  }, [user?.profile_picture]);
 
   const dominantColor =
-    user.profile_background_color || colorData?.dominantColor;
+    user?.profile_background_color || colorData?.dominantColor;
 
   const palette =
-    user.profile_picture_color_palette?.split(";") || colorData?.palette;
+    user?.profile_picture_color_palette?.split(";") || colorData?.palette;
 
-  const isLight = isLightColor(user.profile_background_color || dominantColor);
+  const isLight = isLightColor(user?.profile_background_color || dominantColor);
 
   return (
     <>
       <BgColorPicker
         isOpen={openBgColorPicker}
         close={() => {
-          setSelectedColor(dominantColor);
+          setSelectedColor(dominantColor!);
           toggleBgColorPicker(false);
         }}
-        dominantColor={dominantColor}
-        palette={palette}
+        dominantColor={dominantColor!}
+        palette={palette!}
         selectedColor={selectedColor}
         setSelectedColor={setSelectedColor}
       />

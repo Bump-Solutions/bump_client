@@ -71,7 +71,7 @@ const ForgotPassword = ({ setShowForgotPassword }: ForgotPasswordProps) => {
               setEmail(value);
             }}
             error={errors.email}
-            success={email && !errors.email}
+            success={!!email && !errors.email}
           />
           <StateButton
             text='Kód küldése'

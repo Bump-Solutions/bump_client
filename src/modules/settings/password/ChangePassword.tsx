@@ -13,7 +13,7 @@ import OtpInput from "../../../components/OtpInput";
 
 const ChangePassword = () => {
   const { auth } = useAuth();
-  const [email, setEmail] = useState(auth.user.email || "");
+  const [email, setEmail] = useState(auth?.user?.email || "");
 
   const [errors, setErrors] = useState<Errors>({});
 
@@ -43,9 +43,9 @@ const ChangePassword = () => {
 
     const inputFields = { email };
 
-    const emptyInputs = Object.keys(inputFields).filter(
-      (key) => inputFields[key] === ""
-    );
+    const emptyInputs = (
+      Object.keys(inputFields) as Array<keyof typeof inputFields>
+    ).filter((key) => inputFields[key] === "");
 
     if (emptyInputs.length > 0) {
       emptyInputs.forEach((input) => {
@@ -91,7 +91,7 @@ const ChangePassword = () => {
               setEmail(value);
             }}
             error={errors.email}
-            success={email && !errors.email}
+            success={!!email && !errors.email}
           />
 
           <StateButton
