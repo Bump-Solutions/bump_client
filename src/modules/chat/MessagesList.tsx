@@ -28,7 +28,7 @@ const GROUP_TIMEOUT = 10; // 10 perc
 
 const groupMessages = (
   messages: Message[],
-  me: string,
+  me: string | undefined,
   partner: Partial<User>,
   openLightbox: (src: string, messageId: number) => void
 ): JSX.Element[] => {
@@ -40,7 +40,7 @@ const groupMessages = (
 
   for (let i = 0; i < reversed.length; i++) {
     const message = reversed[i];
-    const createdAt = new Date(message.created_at);
+    const createdAt = new Date(message.created_at!);
     const msgDay = startOfDay(createdAt);
     const isOwn = message.author_username === me;
     const timestamp = formatTimestamp(createdAt, "hh:mm");
@@ -144,8 +144,10 @@ const groupMessages = (
         lastAt: createdAt,
       };
     } else {
-      currentGroup.messages.push(...splitMessages);
-      currentGroup.lastAt = createdAt;
+      if (currentGroup) {
+        currentGroup.messages.push(...splitMessages);
+        currentGroup.lastAt = createdAt;
+      }
     }
   }
 
@@ -170,7 +172,7 @@ const renderGroup = (
         <div className='group__avatar'>
           <Image
             src={group.partner.profile_picture}
-            alt={group.partner.username.slice(0, 2)}
+            alt={group.partner.username?.slice(0, 2)}
             placeholderColor='#212529'
           />
         </div>
@@ -215,7 +217,7 @@ const MessagesList = ({
   const partner = location.state?.partner;
 
   const { auth } = useAuth();
-  const me = auth?.user.username;
+  const me = auth?.user?.username;
 
   // Lightbox state
   const [lightboxOpen, toggleLightbox] = useToggle(false);

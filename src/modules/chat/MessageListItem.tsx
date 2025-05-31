@@ -1,5 +1,4 @@
 import { JSX } from "react";
-import { API } from "../../utils/api";
 import { Message } from "../../types/chat";
 
 import Image from "../../components/Image";
@@ -48,7 +47,7 @@ const MessageListItem = ({ message, onImageClick }: MessageListItemProps) => {
             <div
               className='image more'
               onClick={() =>
-                onImageClick(atts.slice(MAX_IMAGE_VISIBLE)[0], message.id)
+                onImageClick?.(atts.slice(MAX_IMAGE_VISIBLE)[0], message.id)
               }>
               +{remaining}
             </div>

@@ -8,7 +8,7 @@ import {
 
 interface MessageDateDividerProps {
   date: Date;
-  detail?: string;
+  detail: string | null;
 }
 
 const months = [

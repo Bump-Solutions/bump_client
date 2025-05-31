@@ -24,7 +24,7 @@ const Messages = () => {
   const URL = useMemo(() => `${API.WS_BASE_URL}/chat/${chat}/`, [chat]);
   const { sendJsonMessage, lastJsonMessage } = useWebSocket(URL, {
     queryParams: {
-      token: auth?.accessToken,
+      token: auth?.accessToken!,
     },
     shouldReconnect: (closeEvent) => {
       return true;
@@ -49,17 +49,24 @@ const Messages = () => {
               ...page,
               messages: page.messages.map((chatGroup: ChatGroup) => {
                 if (chatGroup.name === chat) {
-                  // Ha mar olvasott, vagy own, akkor return
-                  if (
-                    chatGroup.last_message?.is_read ||
-                    chatGroup.last_message?.own_message
-                  ) {
+                  const last = chatGroup.last_message;
+
+                  if (!last) {
                     return chatGroup;
                   }
+
+                  // Ha mar olvasott, vagy own, akkor return
+                  if (last.is_read || last.own_message) {
+                    return chatGroup;
+                  }
+
                   // Ha nem, akkor frissítjük az üzenetet
-                  chatGroup.last_message = {
-                    ...chatGroup.last_message,
-                    is_read: true,
+                  return {
+                    ...chatGroup,
+                    last_message: {
+                      ...last,
+                      is_read: true, // csak ezt a mezőt változtatjuk
+                    },
                   };
                 }
                 return chatGroup;

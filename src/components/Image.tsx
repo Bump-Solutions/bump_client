@@ -3,8 +3,8 @@ import { API } from "../utils/api";
 import { ImgHTMLAttributes, useState, MouseEvent } from "react";
 
 interface ImageProps extends ImgHTMLAttributes<HTMLImageElement> {
-  src: string;
-  alt: string;
+  src: string | undefined;
+  alt: string | undefined;
   placeholderColor?: string;
   className?: string;
   onClick?: (e: MouseEvent<HTMLDivElement>) => void;

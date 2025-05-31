@@ -40,7 +40,7 @@ export interface MessagesPage {
 
 export interface MessageGroup {
   author: string;
-  partner: Partial<User>;
+  partner: Partial<User> | null;
   isOwn: boolean;
   timestamp: string;
   messages: Message[];
