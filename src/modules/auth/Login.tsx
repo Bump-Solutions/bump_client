@@ -81,9 +81,9 @@ const Login = () => {
       password,
     };
 
-    const emptyInputs = Object.keys(inputFields).filter(
-      (key) => inputFields[key] === ""
-    );
+    const emptyInputs = (
+      Object.keys(inputFields) as Array<keyof typeof inputFields>
+    ).filter((key) => inputFields[key] === "");
 
     if (emptyInputs.length > 0) {
       emptyInputs.forEach((input) => {
@@ -136,7 +136,7 @@ const Login = () => {
                 setEmail(value);
               }}
               error={errors.email}
-              success={email && !errors.email}
+              success={!!email && !errors.email}
               tabIndex={0}
             />
             <Input

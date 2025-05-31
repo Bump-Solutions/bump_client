@@ -1,24 +1,41 @@
-import { FormEvent } from "react";
+import { MouseEvent } from "react";
+import { ROUTES } from "../../../routes/routes";
+import { QUERY_KEY } from "../../../utils/queryKeys";
+import { useCreateChatGroup } from "../../../hooks/chat/useCreateChatGroup";
 import { useNavigate } from "react-router";
 import { useProfile } from "../../../hooks/profile/useProfile";
 import { useFollow } from "../../../hooks/user/useFollow";
 import { useUnfollow } from "../../../hooks/user/useUnfollow";
+import { useQueryClient } from "@tanstack/react-query";
 
 import Button from "../../../components/Button";
 
 import { UserPlus, Bell, Mail, UserX } from "lucide-react";
-import { ROUTES } from "../../../routes/routes";
-import { useCreateChatGroup } from "../../../hooks/chat/useCreateChatGroup";
 
 const UserInteractions = () => {
   const navigate = useNavigate();
   const { user, setUser } = useProfile();
+
+  const queryClient = useQueryClient();
 
   const followMutation = useFollow((response) => {
     setUser({
       ...user,
       following: true,
       followers_count: user?.followers_count! + 1,
+    });
+
+    // Ha bekövetünk valakit, akkor az összes listFollowers és listFollowings-et frissiteni kell
+    // TODO: if slow, use queryClient.setQueriesData
+    queryClient.invalidateQueries({
+      queryKey: [QUERY_KEY.listFollowers],
+      exact: false,
+      refetchType: "all",
+    });
+    queryClient.invalidateQueries({
+      queryKey: [QUERY_KEY.listFollowings],
+      exact: false,
+      refetchType: "all",
     });
   });
 
@@ -27,6 +44,19 @@ const UserInteractions = () => {
       ...user,
       following: false,
       followers_count: user?.followers_count! - 1,
+    });
+
+    // Ha kikövetünk valakit, akkor az összes listFollowers és listFollowings-et frissiteni kell
+    // TODO: if slow, use queryClient.setQueriesData
+    queryClient.invalidateQueries({
+      queryKey: [QUERY_KEY.listFollowers],
+      exact: false,
+      refetchType: "all",
+    });
+    queryClient.invalidateQueries({
+      queryKey: [QUERY_KEY.listFollowings],
+      exact: false,
+      refetchType: "all",
     });
   });
 
@@ -42,7 +72,7 @@ const UserInteractions = () => {
     });
   });
 
-  const handleFollow = (e: FormEvent) => {
+  const handleFollow = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
     if (followMutation.isPending) return;
@@ -50,7 +80,7 @@ const UserInteractions = () => {
     followMutation.mutateAsync(user?.id!);
   };
 
-  const handleUnfollow = (e: FormEvent) => {
+  const handleUnfollow = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
     if (unfollowMutation.isPending) return;
@@ -58,7 +88,7 @@ const UserInteractions = () => {
     unfollowMutation.mutateAsync(user?.id!);
   };
 
-  const handleSendMessage = (e: FormEvent) => {
+  const handleSendMessage = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
     if (user?.chat_name) {

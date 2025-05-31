@@ -1,16 +1,16 @@
-import { IInbox } from "../../types/chat";
-import { useInView } from "react-intersection-observer";
-import { PaginatedListProps } from "../../types/ui";
 import { Fragment, useEffect } from "react";
+import { PaginatedListProps } from "../../types/ui";
+import { FollowingsPage } from "../../types/user";
+import { useInView } from "react-intersection-observer";
 
 import Spinner from "../../components/Spinner";
-import InboxListItem from "./InboxListItem";
+import FollowingListItem from "./FollowingListItem";
 
-const InboxList = ({
+const FollowingList = ({
   pages,
   fetchNextPage,
   isFetchingNextPage,
-}: PaginatedListProps<IInbox>) => {
+}: PaginatedListProps<FollowingsPage>) => {
   const { ref, inView } = useInView();
 
   useEffect(() => {
@@ -21,11 +21,11 @@ const InboxList = ({
 
   return (
     <>
-      <ul className='inbox__list'>
+      <ul className='user__list'>
         {pages.map((page, index) => (
           <Fragment key={index}>
-            {page.messages.map((group, idx) => (
-              <InboxListItem key={idx} group={group} />
+            {page.followings.map((following, idx) => (
+              <FollowingListItem key={idx} following={following} />
             ))}
           </Fragment>
         ))}
@@ -42,4 +42,4 @@ const InboxList = ({
   );
 };
 
-export default InboxList;
+export default FollowingList;

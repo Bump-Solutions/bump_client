@@ -17,12 +17,7 @@ import MessageDateDivider from "./MessageDateDivider";
 import MessageListItem from "./MessageListItem";
 import Image from "../../components/Image";
 import Lightbox from "../../components/Lightbox";
-
-interface MessagesListProps {
-  pages: MessagesPage[];
-  fetchNextPage: () => void;
-  isFetchingNextPage: boolean;
-}
+import { PaginatedListProps } from "../../types/ui";
 
 const GROUP_TIMEOUT = 10; // 10 perc
 
@@ -212,7 +207,7 @@ const MessagesList = ({
   pages,
   fetchNextPage,
   isFetchingNextPage,
-}: MessagesListProps) => {
+}: PaginatedListProps<MessagesPage>) => {
   const location = useLocation();
   const partner = location.state?.partner;
 
