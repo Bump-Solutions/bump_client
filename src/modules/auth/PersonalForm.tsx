@@ -8,11 +8,10 @@ import {
   SetStateAction,
   useImperativeHandle,
 } from "react";
+import { SignupModel } from "../../models/authModel";
 
 import { useDebounce } from "../../hooks/useDebounce";
 import { useToast } from "../../hooks/useToast";
-
-import { SignupFormData } from "./SignupForm";
 
 import Input from "../../components/Input";
 import Phone from "../../components/Phone";
@@ -22,8 +21,8 @@ interface PersonalFormProps {
   firstName: string;
   lastName: string;
   phoneNumber: string;
-  gender: Option | null;
-  updateData: (fields: Partial<SignupFormData>) => void;
+  gender: Option<number> | null;
+  updateData: (fields: Partial<SignupModel>) => void;
   errors: Errors;
   setErrors: Dispatch<SetStateAction<Errors>>;
 }
@@ -106,7 +105,7 @@ const PersonalForm = forwardRef<PersonalFormRef, PersonalFormProps>(
         if (phoneNumber && !REGEX.PHONE.test(phoneNumber)) {
           setErrors((prevErrors) => ({
             ...prevErrors,
-            phoneNumber: "Hibás telefonszám. Formátum: +3630-123-4567",
+            phoneNumber: "Hibás telefonszám. Formátum: +36xx-xxx-xxxx",
           }));
         } else {
           setErrors((prevErrors) => ({
@@ -130,7 +129,7 @@ const PersonalForm = forwardRef<PersonalFormRef, PersonalFormProps>(
       [gender]
     );
 
-    const handleChangeSelect = (option: Option | null) => {
+    const handleChangeSelect = (option: Option<number> | null) => {
       updateData({
         gender: option,
       });
@@ -187,7 +186,9 @@ const PersonalForm = forwardRef<PersonalFormRef, PersonalFormProps>(
           label='Nem'
           options={ENUM.AUTH.GENDER_OPTIONS}
           placeholder='Válassz az alábbiak közül ...'
-          onChange={(option) => handleChangeSelect(option as Option | null)}
+          onChange={(option) =>
+            handleChangeSelect(option as Option<number> | null)
+          }
         />
       </div>
     );

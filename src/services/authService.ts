@@ -1,19 +1,25 @@
 import { API } from "../utils/api";
 import { ApiResponse } from "../types/api";
 import axios from "../setup/Axios";
+import { AuthModel, SignupModel } from "../models/authModel";
+import {
+  GoogleResponseDTO,
+  LoginResponseDTO,
+  SignupRequestDTO,
+} from "../dtos/AuthDTO";
+import {
+  fromGoogleResponseDTO,
+  fromLoginResponseDTO,
+  toSignupRequestDTO,
+} from "../mappers/authMapper";
 
 // ======================================== LOGIN ========================================
-
-interface LoginResponse {
-  email: string;
-  access_token: string;
-}
 
 export const login = async (
   email: string,
   password: string
-): Promise<LoginResponse> => {
-  const response = await axios.post<LoginResponse>(
+): Promise<AuthModel> => {
+  const response = await axios.post<LoginResponseDTO>(
     API.AUTH.LOGIN,
     JSON.stringify({ email, password }),
     {
@@ -22,37 +28,20 @@ export const login = async (
     }
   );
 
-  return {
+  return fromLoginResponseDTO({
     ...response.data,
     email,
-  };
+  });
 };
 
 // ======================================== SIGNUP ========================================
 
-interface SignupData {
-  email: string;
-  username: string;
-  password: string;
-  passwordConfirmation: string;
-  firstName: string;
-  lastName: string;
-  phoneNumber: string;
-  gender: string | number | null;
-}
-
-export const signup = async (data: SignupData): Promise<ApiResponse> => {
+export const signup = async (data: SignupModel): Promise<ApiResponse> => {
+  const payload: SignupRequestDTO = toSignupRequestDTO(data);
   const response = await axios.post(
     API.AUTH.REGISTER,
-    JSON.stringify({
-      username: data.username,
-      password: data.password,
-      last_name: data.lastName,
-      first_name: data.firstName,
-      email: data.email,
-      phone_number: data.phoneNumber,
-      gender: data.gender,
-    }),
+    JSON.stringify(payload),
+
     {
       headers: { "Content-Type": "application/json" },
       withCredentials: true,
@@ -64,8 +53,8 @@ export const signup = async (data: SignupData): Promise<ApiResponse> => {
 
 // ======================================== GOOGLE LOGIN ========================================
 
-export const googleLogin = async (code: string): Promise<string> => {
-  const response = await axios.post(
+export const googleLogin = async (code: string): Promise<AuthModel> => {
+  const response = await axios.post<GoogleResponseDTO>(
     API.AUTH.GOOGLE_AUTH,
     { code: code },
     {
@@ -74,7 +63,7 @@ export const googleLogin = async (code: string): Promise<string> => {
     }
   );
 
-  return response.data.access_token;
+  return fromGoogleResponseDTO(response.data.access_token);
 };
 
 // ======================================== LOGOUT ========================================

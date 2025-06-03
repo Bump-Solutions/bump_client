@@ -46,7 +46,7 @@ const ProfilePictureSettings = () => {
             {
               id: cuid(),
               file,
-              dataUrl: e.target.result as string,
+              dataUrl: e?.target?.result as string,
               name: file.name,
               size: file.size,
               type: file.type,
@@ -58,7 +58,7 @@ const ProfilePictureSettings = () => {
           .then((color) => {
             setColorPreview(color);
           })
-          .catch(() => {
+          .catch((error) => {
             addToast("error", "Hiba történt a kép feldolgozása során.");
           });
       };
@@ -91,7 +91,7 @@ const ProfilePictureSettings = () => {
       profile_picture: response.data.message,
     });
 
-    setAuth((prev) => ({
+    setAuth((prev: any) => ({
       ...prev,
       user: {
         ...prev.user,
@@ -132,7 +132,8 @@ const ProfilePictureSettings = () => {
       }
 
       await uploadProfilePictureMutation.mutateAsync(data);
-    } catch {
+    } catch (error) {
+      console.error("Error uploading profile picture:", error);
       addToast("error", "Hiba történt a kép feldolgozása során.");
       return Promise.reject("Image error");
     }
@@ -162,7 +163,9 @@ const ProfilePictureSettings = () => {
             Amikor új profilképet állítasz be, automatikusan kiválasztunk egy
             színt, amit háttérként használhatsz a profilodon. Ezt a színt
             bármikor megváltoztathatod a{" "}
-            <Link to={ROUTES.PROFILE(auth.user.username).ROOT} className='link'>
+            <Link
+              to={ROUTES.PROFILE(auth?.user?.username!).ROOT}
+              className='link'>
               profil
             </Link>{" "}
             oldalon.
@@ -176,7 +179,7 @@ const ProfilePictureSettings = () => {
               />
               <div
                 className='color-prev'
-                style={{ backgroundColor: colorPreview }}
+                style={{ backgroundColor: colorPreview! }}
               />
             </div>
           )}

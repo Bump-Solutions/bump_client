@@ -1,9 +1,7 @@
-import { Role } from "../../types/auth";
 import { ROUTES } from "../../routes/routes";
 import { useNavigate } from "react-router";
 import { useAuth } from "../../hooks/auth/useAuth";
 import { useToast } from "../../hooks/useToast";
-import { jwtDecode } from "jwt-decode";
 
 import { useGoogleLogin } from "@react-oauth/google";
 
@@ -12,35 +10,14 @@ import { FcGoogle } from "react-icons/fc";
 
 import Button from "../../components/Button";
 import { useLoginWithGoogle } from "../../hooks/auth/useLoginWithGoogle";
-interface JwtPayload {
-  user_id: string;
-  username: string;
-  email: string;
-  roles: Role[];
-}
-
 const SocialSignup = () => {
   const navigate = useNavigate();
 
   const { setAuth } = useAuth();
   const { addToast } = useToast();
 
-  const googleLoginMutation = useLoginWithGoogle((resp, variables) => {
-    const access_token = resp;
-
-    const decodedToken = jwtDecode<JwtPayload>(access_token);
-    const { roles, user_id, username, email } = decodedToken;
-
-    setAuth({
-      accessToken: access_token,
-      roles,
-      user: {
-        id: Number(user_id),
-        username,
-        email,
-      },
-    });
-
+  const googleLoginMutation = useLoginWithGoogle((authModel, variables) => {
+    setAuth(authModel);
     navigate(ROUTES.HOME, { replace: true });
   });
 

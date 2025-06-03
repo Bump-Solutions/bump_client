@@ -1,5 +1,5 @@
-import { Address } from "../../../types/address";
-import { FormEvent } from "react";
+import { AddressModel } from "../../../models/addressModel";
+import { MouseEvent } from "react";
 import { useDeleteAddress } from "../../../hooks/address/useDeleteAddress";
 import { useMounted } from "../../../hooks/useMounted";
 
@@ -9,7 +9,7 @@ import StateButton from "../../../components/StateButton";
 import { Trash } from "lucide-react";
 
 interface DeleteProps {
-  address: Address;
+  address: AddressModel;
   close: () => void;
 }
 
@@ -24,7 +24,7 @@ const Delete = ({ address, close }: DeleteProps) => {
     }, 500);
   });
 
-  const handleDelete = (e: FormEvent) => {
+  const handleDelete = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
     if (!address) return;

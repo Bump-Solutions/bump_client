@@ -1,7 +1,8 @@
 import "../../assets/css/multistepform.css";
 
 import { ROUTES } from "../../routes/routes";
-import { Option, Errors } from "../../types/form";
+import { Errors } from "../../types/form";
+import { SignupModel } from "../../models/authModel";
 import { FormEvent, useRef, useState, Fragment } from "react";
 import { useNavigate } from "react-router";
 
@@ -14,22 +15,10 @@ import { Check, MoveLeft, MoveRight, ClipboardPen } from "lucide-react";
 
 import Button from "../../components/Button";
 import StateButton from "../../components/StateButton";
-
 import AccountForm from "./AccountForm";
 import PersonalForm from "./PersonalForm";
 
-export interface SignupFormData {
-  email: string;
-  username: string;
-  password: string;
-  passwordConfirmation: string;
-  firstName: string;
-  lastName: string;
-  phoneNumber: string;
-  gender: Option | null;
-}
-
-const INITIAL_DATA: SignupFormData = {
+const INITIAL_DATA: SignupModel = {
   email: "",
   username: "",
   password: "",
@@ -48,10 +37,10 @@ const SignupForm = () => {
 
   const { addToast } = useToast();
 
-  const [data, setData] = useState<SignupFormData>(INITIAL_DATA);
+  const [data, setData] = useState<SignupModel>(INITIAL_DATA);
   const [errors, setErrors] = useState<Errors>({});
 
-  const updateData = (fields: Partial<SignupFormData>) => {
+  const updateData = (fields: Partial<SignupModel>) => {
     setData((prev) => ({
       ...prev,
       ...fields,
@@ -145,7 +134,7 @@ const SignupForm = () => {
 
     const formattedData = {
       ...data,
-      gender: data.gender ? data.gender.value : null,
+      gender: data.gender ? data.gender : null,
     };
 
     return signupMutation.mutateAsync(formattedData);

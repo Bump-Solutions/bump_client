@@ -2,7 +2,8 @@ import { createContext, ReactNode } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useGetProfile } from "../hooks/profile/useGetProfile";
 import { QUERY_KEY } from "../utils/queryKeys";
-import { NewAddress } from "../types/address";
+import { ApiError } from "../types/api";
+import { AddressModel } from "../models/addressModel";
 
 interface PersonalSettingsData {
   username: string;
@@ -10,7 +11,7 @@ interface PersonalSettingsData {
   last_name: string;
   phone_number?: string;
   bio?: string;
-  address?: NewAddress;
+  address?: AddressModel;
   profile_picture: string;
   profile_picture_hash?: string;
 }
@@ -20,7 +21,7 @@ interface PersonalSettingsContextType {
   setFormData: (data: Partial<PersonalSettingsData>) => void;
   isLoading: boolean;
   isError: boolean;
-  error: any;
+  error: ApiError | null;
 }
 
 export const PersonalSettingsContext = createContext<

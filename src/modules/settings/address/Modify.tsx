@@ -1,5 +1,5 @@
 import { REGEX } from "../../../utils/regex";
-import { Address } from "../../../types/address";
+import { AddressModel } from "../../../models/addressModel";
 import { Errors } from "../../../types/form";
 import { FormEvent, useState } from "react";
 import { useToast } from "../../../hooks/useToast";
@@ -15,8 +15,8 @@ import ToggleButton from "../../../components/ToggleButton";
 import { Pencil } from "lucide-react";
 
 interface ModifyProps {
-  address: Address;
-  addresses: Address[];
+  address: AddressModel;
+  addresses: AddressModel[];
   close: () => void;
 }
 
@@ -24,7 +24,7 @@ const Modify = ({ address, addresses, close }: ModifyProps) => {
   const { addToast } = useToast();
   const isMounted = useMounted();
 
-  const [newAddress, setNewAddress] = useState<Address>({ ...address });
+  const [newAddress, setNewAddress] = useState<AddressModel>({ ...address });
 
   const [errors, setErrors] = useState<Errors>({});
 

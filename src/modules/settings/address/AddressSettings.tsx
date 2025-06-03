@@ -1,6 +1,6 @@
 import { ROUTES } from "../../../routes/routes";
-import { Address } from "../../../types/address";
 import { useEffect, useReducer } from "react";
+import { AddressModel } from "../../../models/addressModel";
 
 import { usePersonalSettings } from "../../../hooks/settings/usePersonalSettings";
 import { useListAddresses } from "../../../hooks/address/useListAddresses";
@@ -30,11 +30,11 @@ enum CONTENTS {
 interface AddressFormState {
   isOpen: boolean;
   content: CONTENTS | null;
-  address: Address | null;
+  address: AddressModel | null;
 }
 
 type AddressFormAction =
-  | { type: ACTIONS.OPEN; content: CONTENTS; address?: Address }
+  | { type: ACTIONS.OPEN; content: CONTENTS; address?: AddressModel }
   | { type: ACTIONS.CLOSE };
 
 const reducer = (
@@ -96,18 +96,20 @@ const AddressSettings = () => {
       if (defaultAddress) {
         setFormData({
           address: {
+            id: defaultAddress.id,
             name: defaultAddress.name,
             country: defaultAddress.country,
             city: defaultAddress.city,
             zip: defaultAddress.zip,
             street: defaultAddress.street,
+            default: defaultAddress.default,
           },
         });
       }
     }
   }, [addresses, setFormData]);
 
-  const openForm = (content: CONTENTS, address?: Address) => {
+  const openForm = (content: CONTENTS, address?: AddressModel) => {
     dispatch({ type: ACTIONS.OPEN, content, address });
   };
 
@@ -157,7 +159,7 @@ const AddressSettings = () => {
 
               {addresses
                 .sort((_, b) => (b.default ? 1 : -1))
-                .map((address: Address, index: number) => {
+                .map((address: AddressModel, index: number) => {
                   return (
                     <article key={index} className='address'>
                       <Button

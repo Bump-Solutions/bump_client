@@ -83,7 +83,7 @@ const BrandChips = () => {
         brand: selectedBrand === brand ? "" : brand,
         id: null,
         model: "",
-        colorway: "",
+        color_way: "",
       },
     });
   };

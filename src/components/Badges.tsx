@@ -1,5 +1,5 @@
-import { Badge, BadgeCollection } from "../../types/product";
-import { useToggle } from "../../hooks/useToggle";
+import { Badge, BadgeCollection } from "../types/product";
+import { useToggle } from "../hooks/useToggle";
 
 import { X } from "lucide-react";
 
@@ -14,9 +14,14 @@ const BadgeComponent = ({ badge }: BadgeProps) => {
 interface BadgesProps {
   badges: BadgeCollection;
   initialToggle?: boolean;
+  showToggle?: boolean;
 }
 
-const Badges = ({ badges, initialToggle = false }: BadgesProps) => {
+const Badges = ({
+  badges,
+  initialToggle = false,
+  showToggle = true,
+}: BadgesProps) => {
   const [showAll, toggleShowAll] = useToggle(initialToggle);
 
   const badgeArray: Badge[] = Object.values(badges)
@@ -31,7 +36,7 @@ const Badges = ({ badges, initialToggle = false }: BadgesProps) => {
             <BadgeComponent key={index} badge={badge} />
           ))}
 
-          {badgeArray.length > 1 && (
+          {showToggle && badgeArray.length > 1 && (
             <span
               className='badge icon-only'
               onClick={(e) => {
@@ -46,7 +51,7 @@ const Badges = ({ badges, initialToggle = false }: BadgesProps) => {
         <>
           {badgeArray[0] && <BadgeComponent badge={badgeArray[0]} />}
 
-          {badgeArray.length > 1 && (
+          {showToggle && badgeArray.length > 1 && (
             <span
               className='badge'
               onClick={(e) => {

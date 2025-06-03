@@ -87,7 +87,7 @@ export const uploadProduct = async (
         : {
             brand: data.product?.brand,
             model: data.product?.model,
-            color_way: data.product?.colorway,
+            color_way: data.product?.color_way,
             category: 1, // TODO
             colors: "#fff", // TODO
           },
@@ -159,6 +159,8 @@ export const getProduct = async (
   axiosPrivate: AxiosInstance,
   pid: IProduct["id"]
 ) => {
+  if (!pid) throw new Error("Missing required parameter: pid");
+
   const response: ApiResponse = await axiosPrivate.get(
     API.PRODUCT.GET_PRODUCT(pid),
     { signal }

@@ -1,7 +1,11 @@
-export interface Option {
+export interface Option<T = string | number> {
   label: string;
-  value: string | number;
+  value: T;
   description?: string;
+}
+
+export interface Errors {
+  [key: string]: string;
 }
 
 export interface UploadedFile {
@@ -11,8 +15,4 @@ export interface UploadedFile {
   name: string;
   size: number;
   type: string;
-}
-
-export interface Errors {
-  [key: string]: string;
 }

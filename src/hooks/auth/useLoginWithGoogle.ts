@@ -3,14 +3,15 @@ import { useMutation } from "@tanstack/react-query";
 
 import { useToast } from "../useToast";
 import { googleLogin } from "../../services/authService";
+import { AuthModel } from "../../models/authModel";
 
 export const useLoginWithGoogle = (
-  onSuccess?: (resp: string, variables: string) => void,
+  onSuccess?: (resp: AuthModel, variables: string) => void,
   onError?: (error: ApiError, variables: string) => void
 ) => {
   const { addToast } = useToast();
 
-  return useMutation<string, ApiError, string>({
+  return useMutation<AuthModel, ApiError, string>({
     mutationFn: (code: string) => googleLogin(code),
     onSuccess: (resp, variables) => {
       if (onSuccess) {

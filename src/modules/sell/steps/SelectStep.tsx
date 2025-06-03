@@ -27,7 +27,7 @@ const SelectStep = forwardRef<SelectStepRef>(({}, ref) => {
           id: null,
           brand: "",
           model: "",
-          colorway: "",
+          color_way: "",
         },
       });
     }

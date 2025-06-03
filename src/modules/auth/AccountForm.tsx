@@ -6,11 +6,11 @@ import {
   SetStateAction,
   useImperativeHandle,
 } from "react";
+import { SignupModel } from "../../models/authModel";
 
 import { useDebounce } from "../../hooks/useDebounce";
 import { useToast } from "../../hooks/useToast";
 
-import { SignupFormData } from "./SignupForm";
 import Input from "../../components/Input";
 
 interface AccountFormProps {
@@ -18,7 +18,7 @@ interface AccountFormProps {
   username: string;
   password: string;
   passwordConfirmation: string;
-  updateData: (fields: Partial<SignupFormData>) => void;
+  updateData: (fields: Partial<SignupModel>) => void;
   errors: Errors;
   setErrors: Dispatch<SetStateAction<Errors>>;
 }

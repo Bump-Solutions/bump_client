@@ -1,25 +1,13 @@
 import { ROUTES } from "../../routes/routes";
-import { Role } from "../../types/auth";
 import { ApiError } from "../../types/api";
 import { login } from "../../services/authService";
 
-import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router";
 import { useMutation } from "@tanstack/react-query";
 
 import { useAuth } from "./useAuth";
 import { useToast } from "../useToast";
-
-interface LoginResponse {
-  access_token: string;
-  email: string;
-}
-
-interface JwtPayload {
-  user_id: string;
-  username: string;
-  roles: Role[];
-}
+import { AuthModel } from "../../models/authModel";
 
 interface LoginArgs {
   email: string;
@@ -32,23 +20,10 @@ export const useLogin = () => {
   const { setAuth } = useAuth();
   const { addToast } = useToast();
 
-  return useMutation<LoginResponse, ApiError, LoginArgs>({
+  return useMutation<AuthModel, ApiError, LoginArgs>({
     mutationFn: ({ email, password }: LoginArgs) => login(email, password),
-    onSuccess: (data) => {
-      const { access_token, email } = data;
-
-      const decodedToken = jwtDecode<JwtPayload>(access_token);
-      const { roles, user_id, username } = decodedToken;
-
-      setAuth({
-        accessToken: access_token,
-        roles: roles,
-        user: {
-          id: Number(user_id),
-          username,
-          email,
-        },
-      });
+    onSuccess: (authModel) => {
+      setAuth(authModel);
       navigate(ROUTES.HOME, { replace: true });
     },
     onError: (error) => {

@@ -16,7 +16,7 @@ import { MouseEvent, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
 
 import Carousel from "./Carousel";
-import Badges from "./Badges";
+import Badges from "../../components/Badges";
 import ProductContextMenu from "./ProductContextMenu";
 import Delete from "./Delete";
 

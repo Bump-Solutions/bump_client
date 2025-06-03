@@ -12,7 +12,7 @@ interface ItemsStepRef {
 const ItemsStep = forwardRef<ItemsStepRef>(({}, ref) => {
   const { addToast } = useToast();
 
-  const { data, updateData, errors, setErrors } = useSell();
+  const { data, setErrors } = useSell();
 
   useImperativeHandle(ref, () => ({ isValid }));
 
