@@ -2,15 +2,15 @@ import { CreateAddressDTO, FetchedAddressDTO } from "../dtos/AddressDTO";
 import { AddressModel } from "../models/addressModel";
 
 export function toCreateAddressDTO(
-  input: Omit<AddressModel, "id">
+  model: Omit<AddressModel, "id">
 ): CreateAddressDTO {
   return {
-    name: input.name,
-    country: input.country,
-    city: input.city,
-    zip: input.zip,
-    street: input.street,
-    default: input.default ?? false,
+    name: model.name,
+    country: model.country,
+    city: model.city,
+    zip: model.zip,
+    street: model.street,
+    default: model.default ?? false,
   };
 }
 

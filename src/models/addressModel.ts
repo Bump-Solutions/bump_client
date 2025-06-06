@@ -1,9 +1,9 @@
 export interface AddressModel {
-  id: number;
+  id?: number;
   name: string;
   country: string;
   city: string;
   zip: string;
   street: string;
-  default: boolean;
+  default?: boolean;
 }

@@ -68,7 +68,7 @@ const AddressSettings = () => {
     address: null,
   };
 
-  const { setFormData } = usePersonalSettings();
+  const { setData } = usePersonalSettings();
 
   const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
 
@@ -94,7 +94,7 @@ const AddressSettings = () => {
     if (addresses.length > 0) {
       const defaultAddress = addresses.find((address) => address.default);
       if (defaultAddress) {
-        setFormData({
+        setData({
           address: {
             id: defaultAddress.id,
             name: defaultAddress.name,
@@ -107,7 +107,7 @@ const AddressSettings = () => {
         });
       }
     }
-  }, [addresses, setFormData]);
+  }, [addresses, setData]);
 
   const openForm = (content: CONTENTS, address?: AddressModel) => {
     dispatch({ type: ACTIONS.OPEN, content, address });

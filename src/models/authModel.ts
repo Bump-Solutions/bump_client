@@ -15,7 +15,7 @@ export interface JwtPayload {
 export interface AuthModel {
   accessToken: string;
   roles: Role[];
-  user: UserModel | null;
+  user: Partial<UserModel> | null;
 }
 
 export type Role = 4001 | 5002 | 6003 | 7004;

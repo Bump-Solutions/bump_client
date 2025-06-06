@@ -23,7 +23,7 @@ import { Upload } from "lucide-react";
 
 const ProfilePictureSettings = () => {
   const navigate = useNavigate();
-  const { setFormData } = usePersonalSettings();
+  const { setData } = usePersonalSettings();
 
   const [images, setImages] = useState<UploadedFile[]>([]);
   const [colorPreview, setColorPreview] = useState<string | null>(null);
@@ -87,15 +87,15 @@ const ProfilePictureSettings = () => {
   };
 
   const uploadProfilePictureMutation = useUploadProfilePicture((response) => {
-    setFormData({
-      profile_picture: response.data.message,
+    setData({
+      profilePicture: response.data.message,
     });
 
     setAuth((prev: any) => ({
       ...prev,
       user: {
         ...prev.user,
-        profile_picture: response.data.message,
+        profilePicture: response.data.message,
       },
     }));
 

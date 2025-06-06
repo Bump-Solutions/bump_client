@@ -44,15 +44,15 @@ export function fromRefreshResponseDTO(accessToken: string): AuthModel {
   };
 }
 
-export function toSignupRequestDTO(input: SignupModel): SignupRequestDTO {
+export function toSignupRequestDTO(model: SignupModel): SignupRequestDTO {
   return {
-    email: input.email,
-    username: input.username,
-    password: input.password,
-    passwordConfirmation: input.passwordConfirmation,
-    firstName: input.firstName,
-    lastName: input.lastName,
-    phoneNumber: input.phoneNumber,
-    gender: input.gender ? input.gender.value : null,
+    email: model.email,
+    username: model.username,
+    password: model.password,
+    passwordConfirmation: model.passwordConfirmation,
+    firstName: model.firstName,
+    lastName: model.lastName,
+    phoneNumber: model.phoneNumber,
+    gender: model.gender ? model.gender.value : null,
   };
 }

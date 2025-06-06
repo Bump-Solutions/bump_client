@@ -43,10 +43,10 @@ const NavProfileMenu = ({
   };
 
   const {
-    data: image,
+    data: pc,
     isError,
     error,
-  } = useGetProfilePicture([auth?.user?.profile_picture]);
+  } = useGetProfilePicture([auth?.user?.profilePicture]);
 
   useEffect(() => {
     if (isError) {
@@ -110,7 +110,7 @@ const NavProfileMenu = ({
             onClick={() => toggleProfileMenu(true)}
             aria-label='Profil'>
             <Image
-              src={image!}
+              src={pc?.profilePicture}
               alt={auth?.user?.username?.slice(0, 2)!}
               placeholderColor='#212529'
             />
