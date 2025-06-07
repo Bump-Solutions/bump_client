@@ -1,7 +1,8 @@
 import { REGEX } from "../../../utils/regex";
 import { ROUTES } from "../../../routes/routes";
-import { Address, NewAddress } from "../../../types/address";
 
+import { Errors } from "../../../types/form";
+import { ProfileModel } from "../../../models/profileModel";
 import { usePersonalSettings } from "../../../hooks/settings/usePersonalSettings";
 import { useNavigate } from "react-router";
 
@@ -22,30 +23,11 @@ import Back from "../../../components/Back";
 
 import { Download } from "lucide-react";
 
-interface PersonalInfoSchema {
-  username: string;
-  lastname: string;
-  firstname: string;
-  phoneNumber: string;
-  bio: string;
-  address: NewAddress;
-}
-
-interface PersonalInfoFormErrors {
-  username?: string;
-  lastname?: string;
-  firstname?: string;
-  phoneNumber?: string;
-}
-
-const ProfileInfoSettings = () => {
-  const navigate = useNavigate();
-  const { formData, setFormData, isLoading } = usePersonalSettings();
-
-  const [newData, setNewData] = useState<PersonalInfoSchema>({
+const INITAL_DATA: Omit<ProfileModel, "profilePicture" | "profilePictureHash"> =
+  {
     username: "",
-    lastname: "",
-    firstname: "",
+    firstName: "",
+    lastName: "",
     phoneNumber: "",
     bio: "",
     address: {
@@ -55,9 +37,18 @@ const ProfileInfoSettings = () => {
       zip: "",
       street: "",
     },
-  });
+  };
 
-  const [errors, setErrors] = useState<PersonalInfoFormErrors>({});
+const ProfileInfoSettings = () => {
+  const navigate = useNavigate();
+  const { data, setData, isLoading } = usePersonalSettings();
+
+  const [newData, setNewData] =
+    useState<Omit<ProfileModel, "profilePicture" | "profilePictureHash">>(
+      INITAL_DATA
+    );
+
+  const [errors, setErrors] = useState<Errors>({});
 
   const isMounted = useMounted();
   const logout = useLogout();
@@ -65,14 +56,14 @@ const ProfileInfoSettings = () => {
   const { addToast } = useToast();
 
   useEffect(() => {
-    if (formData) {
+    if (data) {
       setNewData({
-        username: formData.username || "",
-        lastname: formData.last_name || "",
-        firstname: formData.first_name || "",
-        phoneNumber: formData.phone_number || "",
-        bio: formData.bio || "",
-        address: formData.address || {
+        username: data.username || "",
+        lastName: data.lastName || "",
+        firstName: data.firstName || "",
+        phoneNumber: data.phoneNumber || "",
+        bio: data.bio || "",
+        address: data.address || {
           name: "",
           country: "",
           city: "",
@@ -81,7 +72,7 @@ const ProfileInfoSettings = () => {
         },
       });
     }
-  }, [formData]);
+  }, [data]);
 
   useDebounce(
     () => {
@@ -114,32 +105,32 @@ const ProfileInfoSettings = () => {
 
   useDebounce(
     () => {
-      if (newData.firstname && !REGEX.NAME.test(newData.firstname)) {
+      if (newData.firstName && !REGEX.NAME.test(newData.firstName)) {
         setErrors((prevErrors) => ({
           ...prevErrors,
-          firstname: "Hibás keresztnév formátum.",
+          firstName: "Hibás keresztnév formátum.",
         }));
       } else {
         setErrors((prevErrors) => ({
           ...prevErrors,
-          firstname: "",
+          firstName: "",
         }));
       }
 
-      if (newData.lastname && !REGEX.NAME.test(newData.lastname)) {
+      if (newData.lastName && !REGEX.NAME.test(newData.lastName)) {
         setErrors((prevErrors) => ({
           ...prevErrors,
-          lastname: "Hibás vezetéknév formátum.",
+          lastName: "Hibás vezetéknév formátum.",
         }));
       } else {
         setErrors((prevErrors) => ({
           ...prevErrors,
-          lastname: "",
+          lastName: "",
         }));
       }
     },
     250,
-    [newData.firstname, newData.lastname]
+    [newData.firstName, newData.lastName]
   );
 
   useDebounce(
@@ -161,11 +152,11 @@ const ProfileInfoSettings = () => {
   );
 
   const updateProfileMutation = useUpdateProfile((response) => {
-    setFormData({
+    setData({
       username: newData.username,
-      last_name: newData.lastname,
-      first_name: newData.firstname,
-      phone_number: newData.phoneNumber,
+      lastName: newData.lastName,
+      firstName: newData.firstName,
+      phoneNumber: newData.phoneNumber,
       bio: newData.bio,
       address: newData.address,
     });
@@ -189,8 +180,8 @@ const ProfileInfoSettings = () => {
 
     const inputFields = {
       username: newData.username,
-      firstname: newData.firstname,
-      lastname: newData.lastname,
+      firstname: newData.firstName,
+      lastname: newData.lastName,
       phoneNumber: newData.phoneNumber,
     };
 
@@ -215,14 +206,7 @@ const ProfileInfoSettings = () => {
       return Promise.reject("Invalid fields");
     }
 
-    return updateProfileMutation.mutateAsync({
-      username: newData.username,
-      last_name: newData.lastname,
-      first_name: newData.firstname,
-      phone_number: newData.phoneNumber,
-      bio: newData.bio,
-      address: newData.address,
-    });
+    return updateProfileMutation.mutateAsync(newData);
   };
 
   return (
@@ -248,7 +232,7 @@ const ProfileInfoSettings = () => {
               name='st_username'
               value={newData.username}
               label='Felhasználónév'
-              placeholder={formData.username}
+              placeholder={data.username}
               required
               autoFocus
               onChange={(value) => {
@@ -264,41 +248,41 @@ const ProfileInfoSettings = () => {
               <Input
                 type='text'
                 name='st_lastname'
-                value={newData.lastname}
-                placeholder={formData.last_name || "pl. Minta"}
+                value={newData.lastName || ""}
+                placeholder={data.lastName || "pl. Minta"}
                 label='Vezetéknév'
                 required
                 onChange={(value) => {
                   setNewData((prevData) => ({
                     ...prevData,
-                    lastname: value,
+                    lastName: value,
                   }));
                 }}
-                error={errors.lastname}
-                success={!!newData.lastname && !errors.lastname}
+                error={errors.lastName}
+                success={!!newData.lastName && !errors.lastName}
               />
               <Input
                 type='text'
                 name='st_firstname'
-                value={newData.firstname}
+                value={newData.firstName || ""}
                 label='Keresztnév'
-                placeholder={formData.first_name || "pl. Minta"}
+                placeholder={data.firstName || "pl. Minta"}
                 required
                 onChange={(value) => {
                   setNewData((prevData) => ({
                     ...prevData,
-                    firstname: value,
+                    firstName: value,
                   }));
                 }}
-                error={errors.firstname}
-                success={!!newData.firstname && !errors.firstname}
+                error={errors.firstName}
+                success={!!newData.firstName && !errors.firstName}
               />
             </div>
             <Phone
               name='st_phone'
-              value={newData.phoneNumber}
+              value={newData.phoneNumber || ""}
               label='Mobil telefonszám'
-              placeholder={formData.phone_number || "+3630-123-4567"}
+              placeholder={data.phoneNumber || "+3630-123-4567"}
               required
               onChange={(value) => {
                 setNewData((prevData) => ({
@@ -311,7 +295,7 @@ const ProfileInfoSettings = () => {
             />
             <TextArea
               name='bio'
-              value={newData.bio}
+              value={newData.bio || ""}
               label='Bemutatkozás'
               placeholder='Mondj valamit magadról'
               onChange={(value) => {

@@ -65,13 +65,13 @@ const SettingsBox = ({ title, edit, data }: SettingsBoxProps) => {
 const PersonalSettings = () => {
   const navigate = useNavigate();
 
-  const { formData, isLoading, isError, error } = usePersonalSettings();
+  const { data, isLoading, isError, error } = usePersonalSettings();
 
   const { addToast } = useToast();
 
   useEffect(() => {
     if (isError) {
-      addToast("error", error);
+      addToast("error", error!);
       navigate(-1);
     }
   }, [isError]);
@@ -90,7 +90,7 @@ const PersonalSettings = () => {
         <div className='relative py-3'>
           <Spinner />
         </div>
-      ) : formData ? (
+      ) : data ? (
         <>
           <article className='settings-box image-box'>
             <Link to={ROUTES.SETTINGS.UPLOAD} className='button secondary'>
@@ -99,20 +99,20 @@ const PersonalSettings = () => {
             <h3>Fénykép</h3>
             <div className='image-box__content'>
               <Image
-                src={formData.profile_picture}
-                alt={formData.username.slice(0, 2)}
+                src={data.profilePicture}
+                alt={data.username.slice(0, 2)}
                 placeholderColor='#212529'
               />
               <div>
                 <Link
-                  to={ROUTES.PROFILE(formData.username).ROOT}
+                  to={ROUTES.PROFILE(data.username).ROOT}
                   className='image-box__name link'>
-                  {formData.username}
+                  {data.username}
                 </Link>
                 <span className='image-box__rank'>Contributor</span>
-                {formData.address?.city && formData.address?.country ? (
+                {data.address?.city && data.address?.country ? (
                   <span className='image-box__address'>
-                    {formData.address.city}, {formData.address.country}
+                    {data.address.city}, {data.address.country}
                   </span>
                 ) : (
                   <span style={{ height: "25.6px" }} />
@@ -128,27 +128,27 @@ const PersonalSettings = () => {
               [
                 {
                   label: "Vezetéknév",
-                  value: formData.last_name || "Nincs megadva",
+                  value: data.lastName || "Nincs megadva",
                 },
                 {
                   label: "Keresztnév",
-                  value: formData.first_name || "Nincs megadva",
+                  value: data.firstName || "Nincs megadva",
                 },
               ],
               [
                 {
                   label: "Felhasználónév",
-                  value: formData.username || "Nincs megadva",
+                  value: data.username || "Nincs megadva",
                 },
                 {
                   label: "Telefonszám",
-                  value: formData.phone_number || "Nincs megadva",
+                  value: data.phoneNumber || "Nincs megadva",
                 },
               ],
               [
                 {
                   label: "Bemutatkozás",
-                  value: formData.bio || "Nincs megadva",
+                  value: data.bio || "Nincs megadva",
                   span: true,
                 },
               ],
@@ -162,23 +162,23 @@ const PersonalSettings = () => {
               [
                 {
                   label: "Név",
-                  value: formData.address?.name || "Nincs megadva",
+                  value: data.address?.name || "Nincs megadva",
                 },
                 {
                   label: "Ország",
-                  value: formData.address?.country || "Nincs megadva",
+                  value: data.address?.country || "Nincs megadva",
                 },
               ],
               [
                 {
                   label: "Város, irányítószám",
-                  value: formData.address?.city
-                    ? `${formData.address.city}, ${formData.address.zip}`
+                  value: data.address?.city
+                    ? `${data.address.city}, ${data.address.zip}`
                     : "Nincs megadva",
                 },
                 {
                   label: "Utca, házszám",
-                  value: formData.address?.street || "Nincs megadva",
+                  value: data.address?.street || "Nincs megadva",
                 },
               ],
             ]}

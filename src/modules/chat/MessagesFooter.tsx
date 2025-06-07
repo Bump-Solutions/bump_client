@@ -47,6 +47,7 @@ const MessagesFooter = ({ chat, onSend }: MessagesFooterProps) => {
   const [message, setMessage] = useState<string>("");
   const [images, setImages] = useState<UploadedFile[]>([]);
   const [isFocused, toggleFocus] = useToggle(false);
+  const [isLoading, toggleLoading] = useToggle(false);
 
   const { addToast } = useToast();
 
@@ -64,6 +65,10 @@ const MessagesFooter = ({ chat, onSend }: MessagesFooterProps) => {
   const uploadChatImagesMutation = useUploadChatImages();
 
   const handleSend = async () => {
+    if (isLoading) return; // Prevent sending if already loading
+
+    toggleLoading(true);
+
     const text = message.trim();
     const hasText = text.length > 0;
     const hasImages = images.length > 0;
@@ -102,6 +107,8 @@ const MessagesFooter = ({ chat, onSend }: MessagesFooterProps) => {
     if (textareaRef.current) {
       textareaRef.current.style.height = "auto"; // Reset the height to auto
     }
+
+    toggleLoading(false);
   };
 
   const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
@@ -176,7 +183,8 @@ const MessagesFooter = ({ chat, onSend }: MessagesFooterProps) => {
             <Button
               className='primary'
               onClick={handleSend}
-              disabled={disabled}>
+              disabled={disabled || isLoading}
+              loading={isLoading}>
               <ArrowUp />
             </Button>
           </div>

@@ -1,12 +1,13 @@
 import { REGEX } from "../../../utils/regex";
 import { FormEvent, useState } from "react";
-import { Address } from "../../../types/address";
 import { Errors } from "../../../types/form";
 import { useToast } from "../../../hooks/useToast";
 import { useDebounce } from "../../../hooks/useDebounce";
 import { useAddAddress } from "../../../hooks/address/useAddAddress";
 import { useGetCurrentLocation } from "../../../hooks/address/useGetCurrentLocation";
 import { useMounted } from "../../../hooks/useMounted";
+import { CreateAddressDTO } from "../../../dtos/AddressDTO";
+import { AddressModel } from "../../../models/addressModel";
 
 import Button from "../../../components/Button";
 import StateButton from "../../../components/StateButton";
@@ -16,15 +17,13 @@ import Spinner from "../../../components/Spinner";
 
 import { CirclePlus } from "lucide-react";
 
-interface FormState extends Omit<Address, "id"> {}
-
 interface AddProps {
-  addresses: Address[];
+  addresses: AddressModel[];
   close: () => void;
 }
 
 const Add = ({ addresses, close }: AddProps) => {
-  const [newAddress, setNewAddress] = useState<FormState>({
+  const [newAddress, setNewAddress] = useState<CreateAddressDTO>({
     name: "",
     country: "",
     city: "",

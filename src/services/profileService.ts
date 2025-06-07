@@ -4,47 +4,50 @@ import { AxiosInstance } from "axios";
 import { getImageDominantColorAndPalette } from "../utils/functions";
 import { User } from "../types/user";
 import { ColorData } from "../modules/profile/ProfileBanner";
+import { ProfileModel, ProfilePictureModel } from "../models/profileModel";
+import {
+  fromFetchedProfileDTO,
+  fromFetchedProfilePictureDTO,
+  toUpdateProfileDTO,
+} from "../mappers/profileMapper";
+import {
+  FetchedProfileDTO,
+  FetchedProfilePictureDTO,
+  UpdateProfileDTO,
+} from "../dtos/ProfileDTO";
 
 export const getProfile = async (
   signal: AbortSignal,
   axiosPrivate: AxiosInstance
-): Promise<ApiResponse> => {
-  const response: ApiResponse = await axiosPrivate.get(
-    API.PROFILE.GET_PROFILE,
-    {
-      signal,
-    }
-  );
+): Promise<ProfileModel> => {
+  const response: ApiResponse = await axiosPrivate.get<{
+    message: FetchedProfileDTO;
+  }>(API.PROFILE.GET_PROFILE, {
+    signal,
+  });
 
-  return response.data.message;
+  return fromFetchedProfileDTO(response.data.message);
 };
 
 export const updateProfile = async (
   axiosPrivate: AxiosInstance,
-  newProfile: Partial<User>
+  newProfile: Partial<ProfileModel>
 ): Promise<ApiResponse> => {
-  return await axiosPrivate.put(API.PROFILE.UPDATE_PROFILE, {
-    username: newProfile.username,
-    first_name: newProfile.first_name,
-    last_name: newProfile.last_name,
-    phone_number: newProfile.phone_number,
-    bio: newProfile.bio,
-    location: newProfile.address,
-  });
+  const payload: UpdateProfileDTO = toUpdateProfileDTO(newProfile);
+  return await axiosPrivate.put(API.PROFILE.UPDATE_PROFILE, payload);
 };
 
 export const getProfilePicture = async (
   signal: AbortSignal,
   axiosPrivate: AxiosInstance
-): Promise<string> => {
-  const response: ApiResponse = await axiosPrivate.get(
-    API.PROFILE.GET_PROFILE_PICTURE,
-    {
-      signal,
-    }
-  );
+): Promise<ProfilePictureModel> => {
+  const response: ApiResponse = await axiosPrivate.get<{
+    message: FetchedProfilePictureDTO;
+  }>(API.PROFILE.GET_PROFILE_PICTURE, {
+    signal,
+  });
 
-  return response.data.message.profile_picture;
+  return fromFetchedProfilePictureDTO(response.data.message);
 };
 
 export const getProfilePictureColors = async (
@@ -69,17 +72,20 @@ export const getProfilePictureColors = async (
 // TODO: image type
 export const uploadProfilePicture = async (
   axiosPrivate: AxiosInstance,
-  newProfilePicture: File
-): Promise<ApiResponse> => {
-  return await axiosPrivate.put(
+  file: File
+): Promise<ProfilePictureModel> => {
+  const response: ApiResponse = await axiosPrivate.put(
     API.PROFILE.UPLOAD_PROFILE_PICTURE,
-    newProfilePicture,
+    file,
     {
       headers: {
         "Content-Type": "multipart/form-data",
       },
     }
   );
+
+  console.log("uploadProfilePicture response:", response);
+  return fromFetchedProfilePictureDTO(response.data.message);
 };
 
 export const setProfileBackgroundColor = async (

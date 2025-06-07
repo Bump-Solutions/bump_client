@@ -46,7 +46,7 @@ const ColorwayChips = () => {
 
   const selectedBrand = data.product?.brand;
   const selectedModel = data.product?.model;
-  const selectedColorway = data.product?.colorway;
+  const selectedColorway = data.product?.color_way;
 
   useEffect(() => {
     // Reset pages if brand or model changes to null
@@ -107,7 +107,7 @@ const ColorwayChips = () => {
       product: {
         ...data.product,
         id: selectedColorway === colorway ? null : id,
-        colorway: selectedColorway === colorway ? "" : colorway,
+        color_way: selectedColorway === colorway ? "" : colorway,
       },
     });
   };

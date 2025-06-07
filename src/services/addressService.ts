@@ -1,7 +1,12 @@
 import { API } from "../utils/api";
 import { ApiResponse } from "../types/api";
-import { Address, NewAddress } from "../types/address";
 import axios, { AxiosInstance } from "axios";
+import { AddressModel } from "../models/addressModel";
+import { CreateAddressDTO, FetchedAddressDTO } from "../dtos/AddressDTO";
+import {
+  fromFetchedAddressDTO,
+  toCreateAddressDTO,
+} from "../mappers/addressMapper";
 
 export const getAddressFromCoords = async (
   lat: number,
@@ -24,48 +29,38 @@ export const getAddressFromCoords = async (
 export const listAddresses = async (
   signal: AbortSignal,
   axiosPrivate: AxiosInstance
-): Promise<Address[]> => {
-  const response: ApiResponse = await axiosPrivate.get(
-    API.ADDRESS.LIST_ADDRESSES,
-    {
-      signal,
-    }
-  );
+): Promise<AddressModel[]> => {
+  const response: ApiResponse = await axiosPrivate.get<{
+    message: FetchedAddressDTO[];
+  }>(API.ADDRESS.LIST_ADDRESSES, {
+    signal,
+  });
 
-  return response.data.message;
+  return response.data.message.map(fromFetchedAddressDTO);
 };
 
 export const addAddress = async (
   axiosPrivate: AxiosInstance,
-  newAddress: NewAddress
+  newAddress: Omit<AddressModel, "id">
 ): Promise<ApiResponse> => {
-  return await axiosPrivate.post(API.ADDRESS.ADD_ADDRESS, {
-    name: newAddress.name,
-    country: newAddress.country,
-    city: newAddress.city,
-    zip: newAddress.zip,
-    street: newAddress.street,
-    default: newAddress.default,
-  });
+  const payload: CreateAddressDTO = toCreateAddressDTO(newAddress);
+  return await axiosPrivate.post(API.ADDRESS.ADD_ADDRESS, payload);
 };
 
 export const modifyAddress = async (
   axiosPrivate: AxiosInstance,
-  address: Address
+  address: AddressModel
 ): Promise<ApiResponse> => {
-  return await axiosPrivate.put(API.ADDRESS.UPDATE_ADDRESS(address.id), {
-    name: address.name,
-    country: address.country,
-    city: address.city,
-    zip: address.zip,
-    street: address.street,
-    default: address.default,
-  });
+  const payload: CreateAddressDTO = toCreateAddressDTO(address);
+  return await axiosPrivate.put(
+    API.ADDRESS.UPDATE_ADDRESS(address.id),
+    payload
+  );
 };
 
 export const deleteAddress = async (
   axiosPrivate: AxiosInstance,
-  addressId: number
+  addressId: AddressModel["id"]
 ): Promise<ApiResponse> => {
   if (!addressId) throw new Error("Missing required parameter: addressId");
 

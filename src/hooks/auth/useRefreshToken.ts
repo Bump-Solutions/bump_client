@@ -1,18 +1,9 @@
 import { API } from "../../utils/api";
-import { User } from "../../types/user";
-import { Role } from "../../types/auth";
 
 import axios from "axios";
-import { jwtDecode } from "jwt-decode";
 
 import { useAuth } from "./useAuth";
-
-interface JwtPayload {
-  user_id: string;
-  username: User["username"];
-  email: User["email"];
-  roles: Role[];
-}
+import { fromRefreshResponseDTO } from "../../mappers/authMapper";
 
 export const useRefreshToken = (): (() => Promise<string>) => {
   const { setAuth } = useAuth();
@@ -22,18 +13,8 @@ export const useRefreshToken = (): (() => Promise<string>) => {
       withCredentials: true,
     });
 
-    const decodedToken = jwtDecode<JwtPayload>(response.data.access_token);
-
-    setAuth((prev) => ({
-      ...prev,
-      accessToken: response.data.access_token,
-      roles: decodedToken.roles,
-      user: {
-        id: Number(decodedToken.user_id),
-        username: decodedToken.username,
-        email: decodedToken.email,
-      },
-    }));
+    const authModel = fromRefreshResponseDTO(response.data.access_token);
+    setAuth(authModel);
 
     return response.data.access_token;
   };

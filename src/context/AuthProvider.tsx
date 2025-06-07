@@ -5,11 +5,11 @@ import {
   Dispatch,
   SetStateAction,
 } from "react";
-import { Auth } from "../types/auth";
+import { AuthModel } from "../models/authModel";
 
 interface AuthContextType {
-  auth: Auth | null;
-  setAuth: Dispatch<SetStateAction<Auth | null>>;
+  auth: AuthModel | null;
+  setAuth: Dispatch<SetStateAction<AuthModel | null>>;
 }
 
 interface AuthProviderProps {
@@ -21,7 +21,7 @@ export const AuthContext = createContext<AuthContextType | undefined>(
 );
 
 const AuthProvider = ({ children }: AuthProviderProps) => {
-  const [auth, setAuth] = useState<Auth | null>(null);
+  const [auth, setAuth] = useState<AuthModel | null>(null);
 
   return <AuthContext value={{ auth, setAuth }}>{children}</AuthContext>;
 };

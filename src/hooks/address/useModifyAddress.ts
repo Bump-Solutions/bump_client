@@ -1,22 +1,22 @@
 import { QUERY_KEY } from "../../utils/queryKeys";
 import { ApiError, ApiResponse } from "../../types/api";
-import { Address } from "../../types/address";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAxiosPrivate } from "../auth/useAxiosPrivate";
 import { useToast } from "../useToast";
 import { modifyAddress } from "../../services/addressService";
+import { AddressModel } from "../../models/addressModel";
 
 export const useModifyAddress = (
-  onSuccess?: (resp: ApiResponse, variables: Address) => void,
-  onError?: (error: ApiError, variables: Address) => void
+  onSuccess?: (resp: ApiResponse, variables: AddressModel) => void,
+  onError?: (error: ApiError, variables: AddressModel) => void
 ) => {
   const queryClient = useQueryClient();
   const axiosPrivate = useAxiosPrivate();
   const { addToast } = useToast();
 
-  return useMutation<ApiResponse, ApiError, Address>({
-    mutationFn: (address: Address) => modifyAddress(axiosPrivate, address),
+  return useMutation<ApiResponse, ApiError, AddressModel>({
+    mutationFn: (address: AddressModel) => modifyAddress(axiosPrivate, address),
     onSuccess: (resp, variables) => {
       queryClient.invalidateQueries({ queryKey: [QUERY_KEY.listAddresses] });
       if (onSuccess) {

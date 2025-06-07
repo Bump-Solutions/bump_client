@@ -32,11 +32,11 @@ export const ENUM = {
     ],
 
     SIZE_OPTIONS: [
-      { label: "EU 35", value: 1 },
-      { label: "EU 37", value: 2 },
-      { label: "EU 39", value: 3 },
-      { label: "EU 41", value: 4 },
-      { label: "EU 43", value: 5 },
+      { label: "EU 35", value: 35 },
+      { label: "EU 37", value: 37 },
+      { label: "EU 39", value: 39 },
+      { label: "EU 41", value: 41 },
+      { label: "EU 43", value: 43 },
     ],
 
     CONDITION_OPTIONS: [

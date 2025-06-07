@@ -9,8 +9,9 @@ const MAX_IMAGES = 3; // Maximum number of images to display
 
 const Thumbnail = () => {
   const { product } = useProduct();
+  if (!product) return null;
 
-  const images = product?.images;
+  const images = product.images;
   const [activeIndex, setActiveIndex] = useState(0);
 
   const [lightboxOpen, toggleLightbox] = useToggle(false);

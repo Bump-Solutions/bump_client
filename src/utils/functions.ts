@@ -28,8 +28,10 @@ export const getImageDominantColor = async (
     img.onload = () => resolve();
   });
 
-  const color = colorThief.getColor(img);
-  return rgbToHex(color);
+  const color = colorThief.getColor(img, {
+    colorType: "hex",
+  });
+  return color;
 };
 
 export const getImagePalette = async (
@@ -70,10 +72,9 @@ export const getImageDominantColorAndPalette = async (
     img.onload = () => resolve();
   });
 
-  const dominantColor = rgbToHex(colorThief.getColor(img));
+  const dominantColor = colorThief.getColor(img, { colorType: "hex" });
   const palette = colorThief
-    .getPalette(img, count)
-    .map((rgb) => rgbToHex(rgb))
+    .getPalette(img, count, { colorType: "hex" })
     .filter((value, index, self) => self.indexOf(value) === index); // Remove duplicates
 
   return { dominantColor, palette };

@@ -26,7 +26,7 @@ const DetailsStep = forwardRef<DetailsStepRef>(({}, ref) => {
       title: data.title,
       brand: data.product?.brand,
       model: data.product?.model,
-      colorway: data.product?.colorway,
+      colorway: data.product?.color_way,
     };
 
     const emptyInputs = Object.keys(inputFields).filter(
@@ -94,7 +94,7 @@ const DetailsStep = forwardRef<DetailsStepRef>(({}, ref) => {
       }));
     },
     0,
-    [data.product?.colorway]
+    [data.product?.color_way]
   );
 
   return (
@@ -165,15 +165,15 @@ const DetailsStep = forwardRef<DetailsStepRef>(({}, ref) => {
           <Input
             type='text'
             name='pr_colorway'
-            value={data.product?.colorway || ""}
+            value={data.product?.color_way || ""}
             placeholder='pl. Triple White'
             label='Színállás'
             required
             onChange={(value) =>
-              updateData({ product: { ...data.product, colorway: value } })
+              updateData({ product: { ...data.product, color_way: value } })
             }
-            error={errors.colorway}
-            success={!!data.product?.colorway && !errors.colorway}
+            error={errors.color_way}
+            success={!!data.product?.color_way && !errors.color_way}
           />
         </>
       )}

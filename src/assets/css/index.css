@@ -372,6 +372,10 @@ form .field__wrapper .input {
   text-align: center !important;
 }
 
+.ta-justify {
+  text-align: justify !important;
+}
+
 .va-middle {
   vertical-align: middle !important;
 }

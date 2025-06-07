@@ -91,7 +91,7 @@ const ModelChips = () => {
         ...data.product,
         id: null,
         model: selectedModel === model ? "" : model,
-        colorway: "",
+        color_way: "",
       },
     });
   };

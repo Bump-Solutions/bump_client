@@ -15,6 +15,7 @@ import { Bookmark, Share2 } from "lucide-react";
 const ProductHeader = () => {
   const queryClient = useQueryClient();
   const { product, setProduct } = useProduct();
+  if (!product) return null;
 
   const saveMutation = useSaveProduct((response) => {
     setProduct({ saved: true, saves: product?.saves! + 1 });

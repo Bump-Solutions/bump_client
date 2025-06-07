@@ -5,11 +5,12 @@ import { useAxiosPrivate } from "../auth/useAxiosPrivate";
 import { getProfilePicture } from "../../services/profileService";
 import { QUERY_KEY } from "../../utils/queryKeys";
 import { ApiError } from "../../types/api";
+import { ProfilePictureModel } from "../../models/profileModel";
 
 export const useGetProfilePicture = (dependencies: any[] = []) => {
   const axiosPrivate = useAxiosPrivate();
 
-  return useQuery<string, ApiError>({
+  return useQuery<ProfilePictureModel, ApiError>({
     queryKey: [QUERY_KEY.getProfilePicture, ...dependencies],
     queryFn: ({ signal }) => getProfilePicture(signal, axiosPrivate),
     refetchOnWindowFocus: false,
