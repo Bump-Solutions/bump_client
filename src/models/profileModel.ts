@@ -22,4 +22,5 @@ export interface ProfileModel {
  */
 export interface ProfilePictureModel {
   profilePicture: string;
+  profilePictureHash: string;
 }

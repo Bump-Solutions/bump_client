@@ -44,12 +44,5 @@ export interface UpdateProfileDTO {
  */
 export interface FetchedProfilePictureDTO {
   profile_picture: string;
-}
-
-/**
- * A backend /profile/picture PUT (upload) végpontja által elfogadott form-data DTO.
- * A kulcsoknak pontosan egyezniük kell a backend elvárásaival.
- */
-export interface UploadProfilePictureDTO {
-  profile_picture: File;
+  profile_picture_hash: string;
 }

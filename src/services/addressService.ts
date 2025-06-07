@@ -51,9 +51,11 @@ export const modifyAddress = async (
   axiosPrivate: AxiosInstance,
   address: AddressModel
 ): Promise<ApiResponse> => {
+  if (!address.id) throw new Error("Missing required parameter: address.id");
+
   const payload: CreateAddressDTO = toCreateAddressDTO(address);
   return await axiosPrivate.put(
-    API.ADDRESS.UPDATE_ADDRESS(address.id),
+    API.ADDRESS.UPDATE_ADDRESS(address.id!),
     payload
   );
 };
