@@ -2,7 +2,6 @@ import {
   FetchedProfileDTO,
   FetchedProfilePictureDTO,
   UpdateProfileDTO,
-  UploadProfilePictureDTO,
 } from "../dtos/ProfileDTO";
 import { ProfileModel } from "../models/profileModel";
 
@@ -77,11 +76,6 @@ export function toUpdateProfileDTO(
 export function fromFetchedProfilePictureDTO(dto: FetchedProfilePictureDTO) {
   return {
     profilePicture: dto.profile_picture,
-  };
-}
-
-export function toUploadProfilePictureDTO(file: File): UploadProfilePictureDTO {
-  return {
-    profile_picture: file,
+    profilePictureHash: dto.profile_picture_hash,
   };
 }

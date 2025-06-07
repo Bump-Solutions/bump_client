@@ -3,23 +3,23 @@ import { useMutation } from "@tanstack/react-query";
 import { useToast } from "../useToast";
 import { useAxiosPrivate } from "../auth/useAxiosPrivate";
 import { uploadProfilePicture } from "../../services/profileService";
-import { AxiosResponse } from "axios";
+import { ApiError, ApiResponse } from "../../types/api";
 
 export const useUploadProfilePicture = (
-  onSuccess?: (resp: AxiosResponse, variables: string) => void,
-  onError?: (error: any, variables: string) => void
+  onSuccess?: (resp: ApiResponse, variables: string) => void,
+  onError?: (error: ApiError, variables: string) => void
 ) => {
   const axiosPrivate = useAxiosPrivate();
   const { addToast } = useToast();
 
-  return useMutation<AxiosResponse, any, any>({
+  return useMutation<ApiResponse, ApiError, any>({
     mutationFn: (file: File) => uploadProfilePicture(axiosPrivate, file),
-    onSuccess: (resp: AxiosResponse, variables: string) => {
+    onSuccess: (resp: ApiResponse, variables: string) => {
       if (onSuccess) {
         onSuccess(resp, variables);
       }
     },
-    onError: (error: any, variables: string) => {
+    onError: (error: ApiError, variables: string) => {
       if (onError) {
         onError(error, variables);
       } else {

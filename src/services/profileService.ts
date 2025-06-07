@@ -2,7 +2,6 @@ import { API } from "../utils/api";
 import { ApiResponse } from "../types/api";
 import { AxiosInstance } from "axios";
 import { getImageDominantColorAndPalette } from "../utils/functions";
-import { User } from "../types/user";
 import { ColorData } from "../modules/profile/ProfileBanner";
 import { ProfileModel, ProfilePictureModel } from "../models/profileModel";
 import {
@@ -73,19 +72,12 @@ export const getProfilePictureColors = async (
 export const uploadProfilePicture = async (
   axiosPrivate: AxiosInstance,
   file: File
-): Promise<ProfilePictureModel> => {
-  const response: ApiResponse = await axiosPrivate.put(
-    API.PROFILE.UPLOAD_PROFILE_PICTURE,
-    file,
-    {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    }
-  );
-
-  console.log("uploadProfilePicture response:", response);
-  return fromFetchedProfilePictureDTO(response.data.message);
+): Promise<ApiResponse> => {
+  return await axiosPrivate.put(API.PROFILE.UPLOAD_PROFILE_PICTURE, file, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
 };
 
 export const setProfileBackgroundColor = async (

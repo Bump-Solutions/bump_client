@@ -1,5 +1,5 @@
 import { ROUTES } from "../../routes/routes";
-import { Auth } from "../../types/auth";
+import { AuthModel } from "../../models/authModel";
 
 import { useRef, JSX } from "react";
 import { Link, useLocation } from "react-router";
@@ -25,7 +25,7 @@ type MenuAction = {
   class: string;
 };
 
-const ACTIONS = (auth: Auth): MenuAction[] => {
+const ACTIONS = (auth: AuthModel): MenuAction[] => {
   return [
     {
       icon: <MessagesSquare />,
@@ -36,13 +36,13 @@ const ACTIONS = (auth: Auth): MenuAction[] => {
     {
       icon: <User />,
       label: "Bump profilom",
-      route: ROUTES.PROFILE(auth.user.username).ROOT,
+      route: ROUTES.PROFILE(auth?.user?.username!).ROOT,
       class: "",
     },
     {
       icon: <Bookmark />,
       label: "Mentett",
-      route: ROUTES.PROFILE(auth.user.username).SAVED,
+      route: ROUTES.PROFILE(auth?.user?.username!).SAVED,
       class: "show-sm-only",
     },
     {
@@ -93,14 +93,14 @@ const ProfileMenuActions = ({ toggleProfileMenu }: ProfileMenuActionsProps) => {
           <li className='px-0_5 pt-0_5'>
             <Link
               onClick={() => toggleProfileMenu(false)}
-              to={ROUTES.PROFILE(auth.user.username).ROOT}
+              to={ROUTES.PROFILE(auth?.user?.username!).ROOT}
               className='fs-16 truncate fw-600 link black'>
-              {auth.user.username}
+              {auth?.user?.username}
             </Link>
           </li>
           <li>
             <div className='truncate fs-14 fc-light px-0_5'>
-              {auth.user.email}
+              {auth?.user?.email}
             </div>
           </li>
         </ul>
@@ -118,7 +118,7 @@ const ProfileMenuActions = ({ toggleProfileMenu }: ProfileMenuActionsProps) => {
         </ul>
 
         <ul className='action-list'>
-          {ACTIONS(auth).map((action, index) => (
+          {ACTIONS(auth!).map((action, index) => (
             <li key={index} className={`action-list-item ${action.class}`}>
               <Link onClick={() => toggleProfileMenu(false)} to={action.route}>
                 {action.icon}
