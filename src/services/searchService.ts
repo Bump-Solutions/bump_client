@@ -1,23 +1,32 @@
 import { API } from "../utils/api";
 import { ApiResponse } from "../types/api";
-import { SearchHistoryItem } from "../types/search";
 import { AxiosInstance } from "axios";
+import {
+  ProductSearchModel,
+  SearchHistoryItemModel,
+  SearchPageModel,
+  UserSearchModel,
+} from "../models/searchModel";
+import { ProductSearchDTO, UserSearchDTO } from "../dtos/SearchDTO";
+import {
+  fromProductSearchDTO,
+  fromUserSearchDTO,
+} from "../mappers/searchMapper";
 
 export const listSearchHistory = async (
   signal: AbortSignal,
   axiosPrivate: AxiosInstance
-): Promise<SearchHistoryItem[]> => {
-  const response: ApiResponse = await axiosPrivate.get(
-    API.SEARCH.LIST_HISTORY,
-    { signal }
-  );
+): Promise<SearchHistoryItemModel[]> => {
+  const response: ApiResponse = await axiosPrivate.get<{
+    message: SearchHistoryItemModel[];
+  }>(API.SEARCH.LIST_HISTORY, { signal });
 
   return response.data.message;
 };
 
 export const deleteSearchHistory = async (
   axiosPrivate: AxiosInstance,
-  id: SearchHistoryItem["id"]
+  id: SearchHistoryItemModel["id"]
 ): Promise<ApiResponse> => {
   if (!id) throw new Error("Missing required parameter: id");
 
@@ -30,19 +39,21 @@ export const searchProducts = async (
   size: number,
   page: number,
   searchKey: string
-) => {
-  const response: ApiResponse = await axiosPrivate.get(
-    API.SEARCH.PRODUCTS(size, page, searchKey),
-    { signal }
-  );
+): Promise<SearchPageModel<ProductSearchModel>> => {
+  const response: ApiResponse = await axiosPrivate.get<{
+    message: SearchPageModel<ProductSearchDTO>;
+  }>(API.SEARCH.PRODUCTS(size, page, searchKey), { signal });
 
-  const data = response.data.message;
+  const data: SearchPageModel<ProductSearchDTO> = response.data.message;
 
   if (data.next) {
     data.next = page + 1;
   }
 
-  return data;
+  return {
+    ...data,
+    search_result: data.search_result.map(fromProductSearchDTO),
+  };
 };
 
 export const searchUsers = async (
@@ -51,16 +62,19 @@ export const searchUsers = async (
   size: number,
   page: number,
   searchKey: string
-) => {
-  const response: ApiResponse = await axiosPrivate.get(
-    API.SEARCH.USERS(size, page, searchKey),
-    { signal }
-  );
+): Promise<SearchPageModel<UserSearchModel>> => {
+  const response: ApiResponse = await axiosPrivate.get<{
+    message: SearchPageModel<UserSearchDTO>;
+  }>(API.SEARCH.USERS(size, page, searchKey), { signal });
 
-  const data = response.data.message;
+  const data: SearchPageModel<UserSearchDTO> = response.data.message;
+
   if (data.next) {
     data.next = page + 1;
   }
 
-  return data;
+  return {
+    ...data,
+    search_result: data.search_result.map(fromUserSearchDTO),
+  };
 };

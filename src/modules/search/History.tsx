@@ -1,7 +1,7 @@
 import { Dispatch, JSX, SetStateAction } from "react";
-import { SearchHistoryItem } from "../../types/search";
 import { useListSearchHistory } from "../../hooks/search/useListSearchHistory";
 import { useDeleteHistory } from "../../hooks/search/useDeleteHistory";
+import { SearchHistoryItemModel } from "../../models/searchModel";
 
 import Chip from "../../components/Chip";
 
@@ -22,7 +22,7 @@ const History = ({ searchKey, setSearchKey }: HistoryProps) => {
 
   const deleteHistoryMutation = useDeleteHistory();
 
-  const handleClick = (item: SearchHistoryItem) => () => {
+  const handleClick = (item: SearchHistoryItemModel) => () => {
     if (!item.query) return;
 
     if (item.query === searchKey) {
@@ -37,7 +37,7 @@ const History = ({ searchKey, setSearchKey }: HistoryProps) => {
     setSearchKey(query);
   };
 
-  const handleDelete = (id: SearchHistoryItem["id"]) => () => {
+  const handleDelete = (id: SearchHistoryItemModel["id"]) => () => {
     if (!id) return;
 
     deleteHistoryMutation.mutateAsync(id);
@@ -54,7 +54,7 @@ const History = ({ searchKey, setSearchKey }: HistoryProps) => {
   return (
     history.length > 0 && (
       <section className='search__history'>
-        {history.map((item: SearchHistoryItem) => (
+        {history.map((item: SearchHistoryItemModel) => (
           <Chip
             key={item.id}
             label={item.query}
