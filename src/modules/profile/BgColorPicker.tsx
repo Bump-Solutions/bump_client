@@ -65,12 +65,14 @@ const BgColorPicker = ({
   };
 
   const setProfileBackgroundColorMutation = useSetProfileBackgroundColor(() => {
-    setUser({ profile_background_color: selectedColor! });
+    setUser({ profileBackgroundColor: selectedColor });
     close();
   });
 
   const handleSaveColor = async () => {
-    return setProfileBackgroundColorMutation.mutateAsync(selectedColor!);
+    if (!selectedColor) return;
+
+    return setProfileBackgroundColorMutation.mutateAsync(selectedColor);
   };
 
   return (

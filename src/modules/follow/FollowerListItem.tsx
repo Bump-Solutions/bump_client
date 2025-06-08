@@ -1,6 +1,6 @@
 import { ROUTES } from "../../routes/routes";
 import { QUERY_KEY } from "../../utils/queryKeys";
-import { Follower, FollowersPage } from "../../types/user";
+import { FollowerModel, FollowersPageModel } from "../../models/userModel";
 import { Link, useOutletContext } from "react-router";
 import { useProfile } from "../../hooks/profile/useProfile";
 import { useFollow } from "../../hooks/user/useFollow";
@@ -13,12 +13,12 @@ import Image from "../../components/Image";
 import Button from "../../components/Button";
 
 interface FollowerListItemProps {
-  follower: Follower;
+  follower: FollowerModel;
 }
 
 interface OutletContextType {
   toggleConfirmUnfollow: () => void;
-  setUserToUnfollow: (user: Follower) => void;
+  setUserToUnfollow: (user: FollowerModel) => void;
 }
 
 const FollowerListItem = ({ follower }: FollowerListItemProps) => {
@@ -31,7 +31,7 @@ const FollowerListItem = ({ follower }: FollowerListItemProps) => {
     useOutletContext<OutletContextType>();
 
   const followMutation = useFollow((response, followerId: number) => {
-    // Frissítjük a user-hez tartozó követők listáját
+    // Frissítjük a user-hez tartozó követők listáját (annak a usernek, akinek az oldalán vagyunk)
     queryClient.setQueriesData(
       {
         queryKey: [QUERY_KEY.listFollowers, user?.id],
@@ -42,14 +42,14 @@ const FollowerListItem = ({ follower }: FollowerListItemProps) => {
 
         return {
           ...prev,
-          pages: prev.pages.map((page: FollowersPage) => {
+          pages: prev.pages.map((page: FollowersPageModel) => {
             return {
               ...page,
-              followers: page.followers.map((follower: Follower) => {
-                if (follower.user_id === followerId) {
+              followers: page.followers.map((follower: FollowerModel) => {
+                if (follower.userId === followerId) {
                   return {
                     ...follower,
-                    my_following: true,
+                    myFollowing: true,
                   };
                 }
                 return follower;
@@ -60,11 +60,24 @@ const FollowerListItem = ({ follower }: FollowerListItemProps) => {
       }
     );
 
-    // Frissítjük a követők számlálóját, ha sa saját profil oldal
+    // A bekövetett user követőinek frissítése, hogy a session user megjelenjen
+    queryClient.invalidateQueries({
+      queryKey: [QUERY_KEY.listFollowers, followerId],
+      exact: false,
+      refetchType: "all",
+    });
+
+    // Frissítjük a követéseket, ha saját profil oldalon vagyunk
     if (isOwnProfile) {
       setUser({
         ...user,
-        followers_count: user?.followers_count! + 1,
+        followingsCount: user?.followingsCount! + 1,
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEY.listFollowings, user?.id],
+        exact: false,
+        refetchType: "all",
       });
     }
   });
@@ -73,7 +86,7 @@ const FollowerListItem = ({ follower }: FollowerListItemProps) => {
     (response, followerId: number) => {
       queryClient.setQueriesData(
         {
-          queryKey: [QUERY_KEY.listFollowers, user!.id],
+          queryKey: [QUERY_KEY.listFollowers, user?.id],
           exact: false,
         },
         (prev: any) => {
@@ -81,11 +94,11 @@ const FollowerListItem = ({ follower }: FollowerListItemProps) => {
 
           return {
             ...prev,
-            pages: prev.pages.map((page: FollowersPage) => {
+            pages: prev.pages.map((page: FollowersPageModel) => {
               return {
                 ...page,
                 followers: page.followers.filter(
-                  (follower: Follower) => follower.user_id !== followerId
+                  (follower: FollowerModel) => follower.userId !== followerId
                 ),
               };
             }),
@@ -96,7 +109,14 @@ const FollowerListItem = ({ follower }: FollowerListItemProps) => {
       // Ez mindig csak a saját profil oldalon történik
       setUser({
         ...user,
-        followers_count: user?.followers_count! - 1,
+        followersCount: user?.followersCount! - 1,
+      });
+
+      // A user követéseinek frissítése
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEY.listFollowings, followerId],
+        exact: false,
+        refetchType: "all",
       });
     }
   );
@@ -127,7 +147,7 @@ const FollowerListItem = ({ follower }: FollowerListItemProps) => {
     <li className='user__list-item'>
       <div className='item__user-info'>
         <Image
-          src={follower.profile_picture}
+          src={follower.profilePicture || ""}
           alt={follower.username?.slice(0, 2)}
         />
 
@@ -139,9 +159,9 @@ const FollowerListItem = ({ follower }: FollowerListItemProps) => {
           </Link>
 
           {/* Ha a session user a sajat oldalan van, es nem koveti */}
-          {isOwnProfile && !follower.my_following && (
+          {isOwnProfile && !follower.myFollowing && (
             <span
-              onClick={(e) => handleFollow(e, follower.user_id)}
+              onClick={(e) => handleFollow(e, follower.userId)}
               className='link fs-15 ml-0_5'>
               Követés
             </span>
@@ -155,7 +175,7 @@ const FollowerListItem = ({ follower }: FollowerListItemProps) => {
           <Button
             className='secondary red'
             text='Eltávolítás'
-            onClick={(e) => handleDeleteFollower(e, follower.user_id)}
+            onClick={(e) => handleDeleteFollower(e, follower.userId)}
             loading={deleteFollowerMutation.isPending}
           />
         ) : (
@@ -164,7 +184,7 @@ const FollowerListItem = ({ follower }: FollowerListItemProps) => {
             {auth?.user?.username !== follower.username && (
               <>
                 {/* Egyébként gomb státusz alapján: már követjük? */}
-                {follower.my_following ? (
+                {follower.myFollowing ? (
                   <Button
                     className='primary'
                     text='Követed'
@@ -178,7 +198,7 @@ const FollowerListItem = ({ follower }: FollowerListItemProps) => {
                   <Button
                     className='secondary blue'
                     text='Követés'
-                    onClick={(e) => handleFollow(e, follower.user_id)}
+                    onClick={(e) => handleFollow(e, follower.userId)}
                     loading={followMutation.isPending}
                   />
                 )}

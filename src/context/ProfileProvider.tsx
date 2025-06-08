@@ -1,7 +1,7 @@
 import { ROUTES } from "../routes/routes";
 import { QUERY_KEY } from "../utils/queryKeys";
-import { User } from "../types/user";
 import { ApiError } from "../types/api";
+import { UserModel } from "../models/userModel";
 
 import { createContext, ReactNode, useEffect, useMemo } from "react";
 import { useParams, useNavigate } from "react-router";
@@ -11,8 +11,8 @@ import { useAuth } from "../hooks/auth/useAuth";
 import { useGetUser } from "../hooks/user/useGetUser";
 
 interface ProfileContextType {
-  user: User | undefined;
-  setUser: (data: Partial<User>) => void;
+  user: UserModel | undefined;
+  setUser: (data: Partial<UserModel>) => void;
   isOwnProfile: boolean;
   isLoading: boolean;
   error?: ApiError | null;
@@ -55,10 +55,10 @@ const ProfileProvider = ({ children }: ProfileProviderProps) => {
     }
   }, [isError]);
 
-  const setUser = (data: Partial<User>) => {
+  const setUser = (data: Partial<UserModel>) => {
     queryClient.setQueryData(
       [QUERY_KEY.getUser, uname],
-      (prev: User | undefined) => ({
+      (prev: UserModel | undefined) => ({
         ...prev,
         ...data,
       })

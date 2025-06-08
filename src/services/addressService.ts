@@ -44,6 +44,7 @@ export const addAddress = async (
   newAddress: Omit<AddressModel, "id">
 ): Promise<ApiResponse> => {
   const payload: CreateAddressDTO = toCreateAddressDTO(newAddress);
+
   return await axiosPrivate.post(API.ADDRESS.ADD_ADDRESS, payload);
 };
 
@@ -54,6 +55,7 @@ export const modifyAddress = async (
   if (!address.id) throw new Error("Missing required parameter: address.id");
 
   const payload: CreateAddressDTO = toCreateAddressDTO(address);
+
   return await axiosPrivate.put(
     API.ADDRESS.UPDATE_ADDRESS(address.id!),
     payload

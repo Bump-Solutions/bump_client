@@ -3,7 +3,7 @@ import { ROUTES } from "../../routes/routes";
 import { QUERY_KEY } from "../../utils/queryKeys";
 import { MouseEvent } from "react";
 import { useFollow } from "../../hooks/user/useFollow";
-import { Following, FollowingsPage } from "../../types/user";
+import { FollowingModel, FollowingsPageModel } from "../../models/userModel";
 import { useAuth } from "../../hooks/auth/useAuth";
 import { useProfile } from "../../hooks/profile/useProfile";
 import { useQueryClient } from "@tanstack/react-query";
@@ -12,12 +12,12 @@ import Image from "../../components/Image";
 import Button from "../../components/Button";
 
 interface FollowingListItemProps {
-  following: Following;
+  following: FollowingModel;
 }
 
 interface OutletContextType {
   toggleConfirmUnfollow: () => void;
-  setUserToUnfollow: (user: Following) => void;
+  setUserToUnfollow: (user: FollowingModel) => void;
 }
 
 const FollowingListItem = ({ following }: FollowingListItemProps) => {
@@ -41,14 +41,14 @@ const FollowingListItem = ({ following }: FollowingListItemProps) => {
 
         return {
           ...prev,
-          pages: prev.pages.map((page: FollowingsPage) => {
+          pages: prev.pages.map((page: FollowingsPageModel) => {
             return {
               ...page,
-              followings: page.followings.map((following: Following) => {
-                if (following.following_user_id === followingId) {
+              followings: page.followings.map((following: FollowingModel) => {
+                if (following.userId === followingId) {
                   return {
                     ...following,
-                    my_following: true,
+                    myFollowing: true,
                   };
                 }
                 return following;
@@ -58,6 +58,27 @@ const FollowingListItem = ({ following }: FollowingListItemProps) => {
         };
       }
     );
+
+    // A bekövetett user követőinek frissítése, hogy a session user megjelenjen
+    queryClient.invalidateQueries({
+      queryKey: [QUERY_KEY.listFollowers, followingId],
+      exact: false,
+      refetchType: "all",
+    });
+
+    // Frissítjük a saját követéseket
+    if (isOwnProfile) {
+      setUser({
+        ...user,
+        followingsCount: user?.followingsCount! + 1,
+      });
+    }
+
+    queryClient.invalidateQueries({
+      queryKey: [QUERY_KEY.listFollowings, auth?.user?.id],
+      exact: false,
+      refetchType: "all",
+    });
   });
 
   const handleFollow = (
@@ -75,7 +96,7 @@ const FollowingListItem = ({ following }: FollowingListItemProps) => {
     <li className='user__list-item'>
       <div className='item__user-info'>
         <Image
-          src={following.profile_picture}
+          src={following.profilePicture ?? ""}
           alt={following.username?.slice(0, 2)}
         />
 
@@ -104,7 +125,7 @@ const FollowingListItem = ({ following }: FollowingListItemProps) => {
             {auth?.user?.username !== following.username && (
               <>
                 {/* Egyébként gomb státusz alapján: már követjük? */}
-                {following.my_following ? (
+                {following.myFollowing ? (
                   <Button
                     className='primary'
                     text='Követed'
@@ -118,9 +139,7 @@ const FollowingListItem = ({ following }: FollowingListItemProps) => {
                   <Button
                     className='secondary blue'
                     text='Követés'
-                    onClick={(e) =>
-                      handleFollow(e, following.following_user_id)
-                    }
+                    onClick={(e) => handleFollow(e, following.userId)}
                     loading={followMutation.isPending}
                   />
                 )}

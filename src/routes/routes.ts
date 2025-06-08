@@ -1,4 +1,3 @@
-import { User } from "../types/user";
 import { IProduct } from "../types/product";
 import { ReportType } from "../types/report";
 
@@ -7,7 +6,7 @@ export const ROUTES = {
   SEARCH: "/search",
   RELEASES: "/releases",
 
-  PROFILE: (username: User["username"]) => ({
+  PROFILE: (username: string) => ({
     ROOT: `/profile/${username}`,
     PRODUCTS: `/profile/${username}`,
     SAVED: `/profile/${username}/saved`,

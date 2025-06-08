@@ -1,7 +1,7 @@
-import { User } from "../../types/user";
 import { useTitle } from "react-use";
 import { useProfile } from "../../hooks/profile/useProfile";
 import { useListFollowings } from "../../hooks/user/useListFollowings";
+import { FollowingsPageModel } from "../../models/userModel";
 
 import { useEffect, useState } from "react";
 
@@ -9,22 +9,12 @@ import Spinner from "../../components/Spinner";
 import SearchBar from "./SearchBar";
 import FollowingList from "./FollowingList";
 
-interface FollowingUser extends Partial<User> {
-  role: string;
-  following_user_id: number;
-  my_following: boolean;
-}
-
-interface FollowingsPage {
-  followings: FollowingUser[];
-}
-
 const Followings = () => {
   const { user } = useProfile();
   useTitle(`@${user?.username} követései - Bump`);
 
   const [searchKeyDebounced, setSearchKeyDebounced] = useState("");
-  const [pages, setPages] = useState<FollowingsPage[] | null>(null);
+  const [pages, setPages] = useState<FollowingsPageModel[] | null>(null);
 
   const { isLoading, isFetchingNextPage, isError, fetchNextPage, data } =
     useListFollowings([user!.id, searchKeyDebounced], {

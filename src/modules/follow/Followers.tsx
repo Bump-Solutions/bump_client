@@ -1,4 +1,4 @@
-import { FollowersPage } from "../../types/user";
+import { FollowersPageModel } from "../../models/userModel";
 import { useProfile } from "../../hooks/profile/useProfile";
 import { useListFollowers } from "../../hooks/user/useListFollowers";
 
@@ -14,7 +14,7 @@ const Followers = () => {
   useTitle(`@${user?.username} követői - Bump`);
 
   const [searchKeyDebounced, setSearchKeyDebounced] = useState<string>("");
-  const [pages, setPages] = useState<FollowersPage[] | null>(null);
+  const [pages, setPages] = useState<FollowersPageModel[] | null>(null);
 
   const { isLoading, isFetchingNextPage, isError, fetchNextPage, data } =
     useListFollowers([user!.id, searchKeyDebounced], {

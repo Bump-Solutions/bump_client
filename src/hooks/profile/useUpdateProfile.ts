@@ -1,5 +1,5 @@
 import { ApiError } from "../../types/api";
-import { User } from "../../types/user";
+import { ProfileModel } from "../../models/profileModel";
 
 import { useMutation } from "@tanstack/react-query";
 
@@ -16,7 +16,7 @@ export const useUpdateProfile = (
   const { addToast } = useToast();
 
   return useMutation<AxiosResponse, ApiError, any>({
-    mutationFn: (newProfile: Partial<User>) =>
+    mutationFn: (newProfile: Partial<ProfileModel>) =>
       updateProfile(axiosPrivate, newProfile),
     onSuccess: (resp, variables) => {
       if (onSuccess) {

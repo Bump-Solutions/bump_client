@@ -1,6 +1,6 @@
 import { QUERY_KEY } from "../../utils/queryKeys";
 import { ApiError } from "../../types/api";
-import { User } from "../../types/user";
+import { UserModel } from "../../models/userModel";
 
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useAxiosPrivate } from "../auth/useAxiosPrivate";
@@ -12,7 +12,7 @@ const MAX_FOLLOWERS_PER_PAGE = 10;
 export const useListFollowers = (
   dependencies: any[] = [],
   params: {
-    uid: User["id"];
+    uid: UserModel["id"];
     searchKey?: string;
   }
 ) => {
