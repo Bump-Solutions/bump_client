@@ -7,7 +7,12 @@ export interface SearchPageModel<T> {
   count: number;
 }
 
-export type UserSearchModel = Partial<UserModel>;
+export interface UserSearchModel {
+  username: string;
+  email: string;
+  profilePicture: string | null;
+  followersCount: number;
+}
 
 export interface ProductSearchModel {
   id: number;
