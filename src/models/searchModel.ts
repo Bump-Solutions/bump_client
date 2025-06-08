@@ -1,5 +1,3 @@
-import { UserModel } from "./userModel";
-
 export interface SearchPageModel<T> {
   search_result: T[]; // Array of search results, can be products or users
   next: number | null;
