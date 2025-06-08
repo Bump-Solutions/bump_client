@@ -50,7 +50,7 @@ export const listFollowers = async (
   uid: UserModel["id"],
   size: number,
   page: number,
-  searchKey?: string
+  searchKey: string
 ): Promise<FollowersPageModel> => {
   const response: ApiResponse = await axiosPrivate.get<{
     message: FollowersPageDTO;
@@ -74,7 +74,7 @@ export const listFollowings = async (
   uid: UserModel["id"],
   size: number,
   page: number,
-  searchKey?: string
+  searchKey: string
 ): Promise<FollowingsPageModel> => {
   const response: ApiResponse = await axiosPrivate.get<{
     message: FollowingsPageDTO;

@@ -13,7 +13,7 @@ export const useListFollowings = (
   dependencies: any[] = [],
   params: {
     uid: UserModel["id"];
-    searchKey?: string;
+    searchKey: string;
   }
 ) => {
   const axiosPrivate = useAxiosPrivate();

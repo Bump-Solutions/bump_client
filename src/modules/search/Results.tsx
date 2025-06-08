@@ -3,6 +3,11 @@ import { Link } from "react-router";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useSearch } from "../../hooks/search/useSearch";
 import { useInView } from "react-intersection-observer";
+import {
+  ProductSearchModel,
+  SearchPageModel,
+  UserSearchModel,
+} from "../../models/searchModel";
 
 import Image from "../../components/Image";
 import Spinner from "../../components/Spinner";
@@ -16,7 +21,9 @@ interface ResultsProps {
 }
 
 const Results = ({ searchKey, setSearchKey }: ResultsProps) => {
-  const [pages, setPages] = useState<any[] | null>(null);
+  const [pages, setPages] = useState<
+    SearchPageModel<UserSearchModel | ProductSearchModel>[] | null
+  >(null);
   const [displayedSearchKey, setDisplayedSearchKey] = useState(searchKey);
 
   const isUserSearch = searchKey.startsWith("@");
@@ -107,69 +114,75 @@ const Results = ({ searchKey, setSearchKey }: ResultsProps) => {
 
             {pages.map((page, index) => (
               <ul key={index}>
-                {page.search_result.map((result: any, index: number) => {
-                  if (isUserSearch) {
-                    const { username, profile_picture, followers_count } =
-                      result;
+                {page.search_result.map(
+                  (
+                    result: UserSearchModel | ProductSearchModel,
+                    index: number
+                  ) => {
+                    if (isUserSearch) {
+                      const { username, profilePicture, followersCount } =
+                        result as UserSearchModel;
 
-                    const label =
-                      followers_count > 0
-                        ? followers_count >= 1000
-                          ? `${Math.floor(followers_count / 1000)}k követő`
-                          : `${followers_count} követő`
-                        : null;
+                      const label =
+                        followersCount && followersCount > 0
+                          ? followersCount >= 1000
+                            ? `${Math.floor(followersCount / 1000)}k követő`
+                            : `${followersCount} követő`
+                          : null;
 
-                    return (
-                      <Link
-                        key={index}
-                        to={ROUTES.PROFILE(username).ROOT}
-                        className='result'>
-                        <div className='result__img user'>
-                          {profile_picture ? (
-                            <Image
-                              src={profile_picture}
-                              alt={username.slice(0, 2)}
-                            />
-                          ) : (
-                            <User className='svg-20' />
-                          )}
-                        </div>
-                        <div className='result__text'>
-                          <span className='fw-700 truncate'>
-                            {result.username}
-                          </span>
-                          {label && (
+                      return (
+                        <Link
+                          key={index}
+                          to={ROUTES.PROFILE(username!).ROOT}
+                          className='result'>
+                          <div className='result__img user'>
+                            {profilePicture ? (
+                              <Image
+                                src={profilePicture}
+                                alt={username?.slice(0, 2)}
+                              />
+                            ) : (
+                              <User className='svg-20' />
+                            )}
+                          </div>
+                          <div className='result__text'>
+                            <span className='fw-700 truncate'>
+                              {result.username}
+                            </span>
+                            {label && (
+                              <span className='truncate fc-dark-500 fs-14'>
+                                {label}
+                              </span>
+                            )}
+                          </div>
+                        </Link>
+                      );
+                    } else {
+                      const { id, title, label, image } =
+                        result as ProductSearchModel;
+                      return (
+                        <Link
+                          to={ROUTES.PRODUCT(id).ROOT}
+                          key={index}
+                          className='result'>
+                          <div className='result__img'>
+                            {image ? (
+                              <Image src={image} alt={title} />
+                            ) : (
+                              <Footprints className='svg-20' />
+                            )}
+                          </div>
+                          <div className='result__text'>
+                            <span className='fw-700 truncate'>{title}</span>
                             <span className='truncate fc-dark-500 fs-14'>
                               {label}
                             </span>
-                          )}
-                        </div>
-                      </Link>
-                    );
-                  } else {
-                    const { id, title, label, image } = result;
-                    return (
-                      <Link
-                        to={ROUTES.PRODUCT(id).ROOT}
-                        key={index}
-                        className='result'>
-                        <div className='result__img'>
-                          {image ? (
-                            <Image src={image} alt={title} />
-                          ) : (
-                            <Footprints className='svg-20' />
-                          )}
-                        </div>
-                        <div className='result__text'>
-                          <span className='fw-700 truncate'>{title}</span>
-                          <span className='truncate fc-dark-500 fs-14'>
-                            {label}
-                          </span>
-                        </div>
-                      </Link>
-                    );
+                          </div>
+                        </Link>
+                      );
+                    }
                   }
-                })}
+                )}
               </ul>
             ))}
 
