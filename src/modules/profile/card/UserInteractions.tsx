@@ -22,11 +22,10 @@ const UserInteractions = () => {
     setUser({
       ...user,
       following: true,
-      followers_count: user?.followers_count! + 1,
+      followersCount: user?.followersCount! + 1,
     });
 
     // Ha bekövetünk valakit, akkor az összes listFollowers és listFollowings-et frissiteni kell
-    // TODO: if slow, use queryClient.setQueriesData
     queryClient.invalidateQueries({
       queryKey: [QUERY_KEY.listFollowers],
       exact: false,
@@ -43,11 +42,10 @@ const UserInteractions = () => {
     setUser({
       ...user,
       following: false,
-      followers_count: user?.followers_count! - 1,
+      followersCount: user?.followersCount! - 1,
     });
 
     // Ha kikövetünk valakit, akkor az összes listFollowers és listFollowings-et frissiteni kell
-    // TODO: if slow, use queryClient.setQueriesData
     queryClient.invalidateQueries({
       queryKey: [QUERY_KEY.listFollowers],
       exact: false,
@@ -66,7 +64,7 @@ const UserInteractions = () => {
         partner: {
           id: user?.id,
           username: user?.username,
-          profile_picture: user?.profile_picture,
+          profilePicture: user?.profilePicture,
         },
       },
     });
@@ -91,13 +89,13 @@ const UserInteractions = () => {
   const handleSendMessage = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
-    if (user?.chat_name) {
-      navigate(ROUTES.INBOX.CHAT(user.chat_name), {
+    if (user?.chatName) {
+      navigate(ROUTES.INBOX.CHAT(user.chatName), {
         state: {
           partner: {
             id: user.id,
             username: user.username,
-            profile_picture: user.profile_picture,
+            profilePicture: user.profilePicture,
           },
         },
       });

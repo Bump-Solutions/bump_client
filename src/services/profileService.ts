@@ -33,6 +33,7 @@ export const updateProfile = async (
   newProfile: Partial<ProfileModel>
 ): Promise<ApiResponse> => {
   const payload: UpdateProfileDTO = toUpdateProfileDTO(newProfile);
+
   return await axiosPrivate.put(API.PROFILE.UPDATE_PROFILE, payload);
 };
 
@@ -50,7 +51,7 @@ export const getProfilePicture = async (
 };
 
 export const getProfilePictureColors = async (
-  image: string
+  image: string | null | undefined
 ): Promise<ColorData | null> => {
   if (!image) return null;
   const { dominantColor, palette } = await getImageDominantColorAndPalette(

@@ -17,30 +17,3 @@ export interface User {
   following?: boolean; // if the authenticated user is following this user
   chat_name?: string; // the name of the chat group for this user
 }
-
-export interface Follower extends Partial<User> {
-  user_id: number;
-  my_following: boolean;
-  role: string;
-}
-
-export interface FollowersPage {
-  followers: Follower[];
-}
-
-export interface Following extends Partial<User> {
-  following_user_id: number;
-  my_following: boolean;
-  role: string;
-}
-
-export interface FollowingsPage {
-  followings: Following[];
-}
-
-export interface UserToUnfollow {
-  user_id?: number;
-  following_user_id?: number;
-  username?: string;
-  profile_picture: string;
-}

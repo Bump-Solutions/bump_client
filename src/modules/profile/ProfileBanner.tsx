@@ -29,24 +29,24 @@ const ProfileBanner = () => {
 
   useEffect(() => {
     const getColorData = async () => {
-      const colorData = await getProfilePictureColors(user?.profile_picture!);
+      const colorData = await getProfilePictureColors(user?.profilePicture);
       setColorData(colorData);
     };
 
-    if (user?.profile_picture) getColorData();
+    if (user?.profilePicture) getColorData();
 
     return () => {
       setColorData(null);
     };
-  }, [user?.profile_picture]);
+  }, [user?.profilePicture]);
 
   const dominantColor =
-    user?.profile_background_color || colorData?.dominantColor;
+    user?.profileBackgroundColor || colorData?.dominantColor;
 
   const palette =
-    user?.profile_picture_color_palette?.split(";") || colorData?.palette;
+    user?.profilePictureColorPalette?.split(";") || colorData?.palette;
 
-  const isLight = isLightColor(user?.profile_background_color || dominantColor);
+  const isLight = isLightColor(user?.profileBackgroundColor || dominantColor);
 
   return (
     <>

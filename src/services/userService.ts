@@ -1,79 +1,100 @@
 import { API } from "../utils/api";
 import { ApiResponse } from "../types/api";
-import { User } from "../types/user";
 import { AxiosInstance } from "axios";
+import {
+  FollowersPageModel,
+  FollowingsPageModel,
+  UserModel,
+} from "../models/userModel";
+import {
+  FetchedUserDTO,
+  FollowersPageDTO,
+  FollowingsPageDTO,
+} from "../dtos/UserDTO";
+import {
+  fromFetchedUserDTO,
+  fromFollowerDTO,
+  fromFollowingDTO,
+} from "../mappers/userMapper";
 
 export const listUsers = async (
   signal: AbortSignal,
   axiosPrivate: AxiosInstance
-): Promise<ApiResponse> => {
-  const response: ApiResponse = await axiosPrivate.get(API.USER.LIST_USERS, {
+): Promise<UserModel[]> => {
+  const response: ApiResponse = await axiosPrivate.get<{
+    message: FetchedUserDTO[];
+  }>(API.USER.LIST_USERS, {
     signal,
   });
-  return response.data.message;
+
+  return response.data.message.map(fromFetchedUserDTO);
 };
 
 export const getUser = async (
   signal: AbortSignal,
   axiosPrivate: AxiosInstance,
-  uname: User["username"]
-): Promise<User> => {
-  const response: ApiResponse = await axiosPrivate.get(
-    API.USER.GET_USER(uname),
-    {
-      signal,
-    }
-  );
-  return response.data.message;
+  uname: UserModel["username"]
+): Promise<UserModel> => {
+  const response: ApiResponse = await axiosPrivate.get<{
+    message: FetchedUserDTO;
+  }>(API.USER.GET_USER(uname), {
+    signal,
+  });
+
+  return fromFetchedUserDTO(response.data.message);
 };
 
 export const listFollowers = async (
   signal: AbortSignal,
   axiosPrivate: AxiosInstance,
-  uid: User["id"],
+  uid: UserModel["id"],
   size: number,
   page: number,
   searchKey?: string
-): Promise<ApiResponse> => {
-  const response: ApiResponse = await axiosPrivate.get(
-    API.USER.LIST_FOLLOWERS(uid, size, page, searchKey),
-    { signal }
-  );
+): Promise<FollowersPageModel> => {
+  const response: ApiResponse = await axiosPrivate.get<{
+    message: FollowersPageDTO;
+  }>(API.USER.LIST_FOLLOWERS(uid, size, page, searchKey), { signal });
 
-  const data = response.data.message;
+  const data: FollowersPageDTO = response.data.message;
 
   if (data.next) {
     data.next = page + 1;
   }
 
-  return data;
+  return {
+    ...data,
+    followers: data.followers.map(fromFollowerDTO),
+  };
 };
 
 export const listFollowings = async (
   signal: AbortSignal,
   axiosPrivate: AxiosInstance,
-  uid: User["id"],
+  uid: UserModel["id"],
   size: number,
   page: number,
   searchKey?: string
-): Promise<ApiResponse> => {
-  const response: ApiResponse = await axiosPrivate.get(
-    API.USER.LIST_FOLLOWING(uid, size, page, searchKey),
-    { signal }
-  );
+): Promise<FollowingsPageModel> => {
+  const response: ApiResponse = await axiosPrivate.get<{
+    message: FollowingsPageDTO;
+  }>(API.USER.LIST_FOLLOWING(uid, size, page, searchKey), { signal });
 
-  const data = response.data.message;
+  const data: FollowingsPageDTO = response.data.message;
 
   if (data.next) {
     data.next = page + 1;
   }
 
-  return data;
+  return {
+    ...data,
+    followings: data.followings.map(fromFollowingDTO),
+  };
 };
 
 export const follow = async (
   axiosPrivate: AxiosInstance,
-  uid: User["id"]
+  uid: UserModel["id"]
 ): Promise<ApiResponse> => {
   if (!uid) throw new Error("Missing required parameter: uid");
 
@@ -84,7 +105,7 @@ export const follow = async (
 
 export const unfollow = async (
   axiosPrivate: AxiosInstance,
-  uid: User["id"]
+  uid: UserModel["id"]
 ): Promise<ApiResponse> => {
   if (!uid) throw new Error("Missing required parameter: uid");
 
@@ -97,7 +118,7 @@ export const unfollow = async (
 
 export const deleteFollower = async (
   axiosPrivate: AxiosInstance,
-  uid: User["id"]
+  uid: UserModel["id"]
 ): Promise<ApiResponse> => {
   if (!uid) throw new Error("Missing required parameter: uid");
 

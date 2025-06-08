@@ -19,12 +19,12 @@ const UserInfo = () => {
     setStats([
       {
         label: "Követők",
-        value: user?.followers_count || null,
+        value: user?.followersCount || null,
         href: ROUTES.PROFILE(user?.username!).FOLLOWERS,
       },
       {
         label: "Követések",
-        value: user?.followings_count || null,
+        value: user?.followingsCount || null,
         href: ROUTES.PROFILE(user?.username!).FOLLOWINGS,
       },
     ]);

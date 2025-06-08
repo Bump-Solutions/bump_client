@@ -1,5 +1,5 @@
 import { PaginatedListProps } from "../../types/ui";
-import { FollowersPage } from "../../types/user";
+import { FollowersPageModel } from "../../models/userModel";
 import { useInView } from "react-intersection-observer";
 
 import Spinner from "../../components/Spinner";
@@ -10,7 +10,7 @@ const FollowerList = ({
   pages,
   fetchNextPage,
   isFetchingNextPage,
-}: PaginatedListProps<FollowersPage>) => {
+}: PaginatedListProps<FollowersPageModel>) => {
   const { ref, inView } = useInView();
 
   useEffect(() => {

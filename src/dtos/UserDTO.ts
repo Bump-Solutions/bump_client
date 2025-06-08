@@ -5,9 +5,9 @@
 export interface FetchedUserDTO {
   id: number;
   username: string;
+  email: string;
   first_name: string;
   last_name: string;
-  email: string;
   phone_number: string | null;
   joined: string;
 
@@ -19,7 +19,37 @@ export interface FetchedUserDTO {
   chat_name: string | null; // A session user es a felhasznalo kozotti chat azonositoja
   chat_created_at: string | null;
 
-  followers_count: number; // A felhasznalot koveto felhasznalok szama
   following: boolean; // A session user koveti-e a felhasznalot
+  followers_count: number; // A felhasznalot koveto felhasznalok szama
   followings_count: number; // A felhasznalo altal kovetett felhasznalok szama
+}
+
+export interface FollowerDTO {
+  user_id: number;
+  username: string;
+  profile_picture: string | null;
+  my_following: boolean;
+  role: string;
+}
+
+export interface FollowersPageDTO {
+  followers: FollowerDTO[];
+  next: number | null;
+  previous: string | null;
+  count: number;
+}
+
+export interface FollowingDTO {
+  following_user_id: number;
+  username: string;
+  profile_picture: string | null;
+  my_following: boolean;
+  role: string;
+}
+
+export interface FollowingsPageDTO {
+  followings: FollowingDTO[];
+  next: number | null;
+  previous: string | null;
+  count: number;
 }

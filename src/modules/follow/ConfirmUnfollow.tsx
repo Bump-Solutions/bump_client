@@ -1,5 +1,4 @@
 import { QUERY_KEY } from "../../utils/queryKeys";
-import { UserToUnfollow } from "../../types/user";
 import { useQueryClient } from "@tanstack/react-query";
 import { useProfile } from "../../hooks/profile/useProfile";
 import { useUnfollow } from "../../hooks/user/useUnfollow";
@@ -11,10 +10,13 @@ import StateButton from "../../components/StateButton";
 import Image from "../../components/Image";
 
 import { UserX } from "lucide-react";
+import { FollowerModel, FollowingModel } from "../../models/userModel";
 
 interface ConfirmUnfollowProps {
-  userToUnfollow: UserToUnfollow | null;
-  setUserToUnfollow: Dispatch<SetStateAction<UserToUnfollow | null>>;
+  userToUnfollow: FollowerModel | FollowingModel | null;
+  setUserToUnfollow: Dispatch<
+    SetStateAction<FollowerModel | FollowingModel | null>
+  >;
   isOpen: boolean;
   close: () => void;
 }
@@ -30,13 +32,14 @@ const ConfirmUnfollow = ({
   const queryClient = useQueryClient();
 
   const unfollowMutation = useUnfollow(() => {
+    // Adott felhasználó (user) követői és követései listáját frissítjük
     queryClient.invalidateQueries({
       predicate(query) {
         const key = query.queryKey[0];
         switch (key) {
           case QUERY_KEY.listFollowers:
           case QUERY_KEY.listFollowings:
-            return query.queryKey[1] === user!.id;
+            return query.queryKey[1] === user?.id;
           default:
             return false;
         }
@@ -44,8 +47,15 @@ const ConfirmUnfollow = ({
       refetchType: "all",
     });
 
+    // A kikövetett felhasználó követőinek listáját is frissítjük
+    queryClient.invalidateQueries({
+      queryKey: [QUERY_KEY.listFollowers, userToUnfollow?.userId],
+      exact: false,
+      refetchType: "all",
+    });
+
     if (isOwnProfile) {
-      setUser({ followings_count: user?.followings_count! - 1 });
+      setUser({ followingsCount: user?.followingsCount! - 1 });
     }
 
     setUserToUnfollow(null);
@@ -57,8 +67,7 @@ const ConfirmUnfollow = ({
 
     if (unfollowMutation.isPending || !userToUnfollow) return;
 
-    const id = userToUnfollow.user_id || userToUnfollow.following_user_id;
-    return unfollowMutation.mutateAsync(id!);
+    return unfollowMutation.mutateAsync(userToUnfollow.userId);
   };
 
   return (
@@ -72,7 +81,7 @@ const ConfirmUnfollow = ({
           <div className='modal__content'>
             <div>
               <Image
-                src={userToUnfollow.profile_picture}
+                src={userToUnfollow.profilePicture || ""}
                 alt={userToUnfollow.username!}
               />
             </div>
