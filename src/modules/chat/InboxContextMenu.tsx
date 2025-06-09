@@ -1,11 +1,11 @@
 import { motion } from "framer-motion";
-import { ChatGroup } from "../../types/chat";
+import { ChatGroupModel } from "../../models/chatModel";
 import { useRef } from "react";
 import { useClickOutside } from "../../hooks/useClickOutside";
 import { useMarkMessageAsUnread } from "../../hooks/chat/useMarkMessageAsUnread";
 
 interface InboxContextMenuProps {
-  group: ChatGroup;
+  group: ChatGroupModel;
   toggleContextMenu: (value?: boolean) => void;
 }
 
@@ -25,10 +25,10 @@ const InboxContextMenu = ({
   });
 
   const handleUnreadMessage = () => {
-    if (!group.last_message) return;
+    if (!group.lastMessage) return;
 
     // Ha mar olvasatlan, vagy own, akkor return
-    if (!group.last_message.is_read || group.last_message.own_message) {
+    if (!group.lastMessage.isRead || group.lastMessage.ownMessage) {
       toggleContextMenu(false);
       return;
     }

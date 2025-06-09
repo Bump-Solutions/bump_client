@@ -1,10 +1,10 @@
 import { JSX } from "react";
-import { Message } from "../../types/chat";
+import { MessageModel } from "../../models/chatModel";
 
 import Image from "../../components/Image";
 
 interface MessageListItemProps {
-  message: Message;
+  message: MessageModel;
   onImageClick?: (src: string, messageId: number) => void;
 }
 

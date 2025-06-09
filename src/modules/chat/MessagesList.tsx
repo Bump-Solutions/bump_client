@@ -1,5 +1,9 @@
-import { User } from "../../types/user";
-import { Message, MessageGroup, MessagesPage } from "../../types/chat";
+import {
+  MessageGroupModel,
+  MessageModel,
+  MessagesPageModel,
+} from "../../models/chatModel";
+import { UserModel } from "../../models/userModel";
 import { useToggle } from "../../hooks/useToggle";
 import {
   differenceInMinutes,
@@ -11,33 +15,33 @@ import { useLocation } from "react-router";
 import { useInView } from "react-intersection-observer";
 import { useAuth } from "../../hooks/auth/useAuth";
 import { JSX, useEffect, useMemo, useState } from "react";
+import { PaginatedListProps } from "../../types/ui";
 
 import Spinner from "../../components/Spinner";
 import MessageDateDivider from "./MessageDateDivider";
 import MessageListItem from "./MessageListItem";
 import Image from "../../components/Image";
 import Lightbox from "../../components/Lightbox";
-import { PaginatedListProps } from "../../types/ui";
 
 const GROUP_TIMEOUT = 10; // 10 perc
 
 const groupMessages = (
-  messages: Message[],
+  messages: MessageModel[],
   me: string | undefined,
-  partner: Partial<User>,
+  partner: Partial<UserModel>,
   openLightbox: (src: string, messageId: number) => void
 ): JSX.Element[] => {
   const elements: JSX.Element[] = [];
   let lastDay: Date | null = null;
-  let currentGroup: MessageGroup | null = null;
+  let currentGroup: MessageGroupModel | null = null;
 
   const reversed = [...messages].reverse(); // Feldolgozás: legrégebbitől a legfrissebbig
 
   for (let i = 0; i < reversed.length; i++) {
     const message = reversed[i];
-    const createdAt = new Date(message.created_at!);
+    const createdAt = new Date(message.createdAt);
     const msgDay = startOfDay(createdAt);
-    const isOwn = message.author_username === me;
+    const isOwn = message.authorUsername === me;
     const timestamp = formatTimestamp(createdAt, "hh:mm");
 
     // Ha új nap következik, akkor:
@@ -67,7 +71,7 @@ const groupMessages = (
       : 0;
 
     // --- bontás: switch a type+attachmentsCount alapján ---
-    let splitMessages: Message[] = [];
+    let splitMessages: MessageModel[] = [];
     switch (true) {
       // csak szöveg
       case message.type === 0 || attachmentsCount === 0:
@@ -91,7 +95,7 @@ const groupMessages = (
         elements.push(
           renderGroup(
             {
-              author: message.author_username,
+              author: message.authorUsername,
               partner: isOwn ? null : partner,
               isOwn,
               timestamp,
@@ -131,7 +135,7 @@ const groupMessages = (
       }
 
       currentGroup = {
-        author: message.author_username,
+        author: message.authorUsername,
         partner: isOwn ? null : partner,
         isOwn,
         timestamp,
@@ -155,7 +159,7 @@ const groupMessages = (
 };
 
 const renderGroup = (
-  group: MessageGroup,
+  group: MessageGroupModel,
   index: number,
   openLightbox: (src: string, messageId: number) => void
 ) => {
@@ -166,7 +170,7 @@ const renderGroup = (
       {group.partner && (
         <div className='group__avatar'>
           <Image
-            src={group.partner.profile_picture}
+            src={group.partner.profilePicture || ""}
             alt={group.partner.username?.slice(0, 2)}
             placeholderColor='#212529'
           />
@@ -192,7 +196,7 @@ const renderGroup = (
         <div className='group__messages'>
           {group.messages.map((msg, idx) => (
             <MessageListItem
-              key={`msg-${msg.id}-${msg.created_at}-${idx}`}
+              key={`msg-${msg.id}-${msg.createdAt}-${idx}`}
               message={msg}
               onImageClick={openLightbox}
             />
@@ -207,7 +211,7 @@ const MessagesList = ({
   pages,
   fetchNextPage,
   isFetchingNextPage,
-}: PaginatedListProps<MessagesPage>) => {
+}: PaginatedListProps<MessagesPageModel>) => {
   const location = useLocation();
   const partner = location.state?.partner;
 

@@ -1,4 +1,4 @@
-import { IInbox } from "../../types/chat";
+import { InboxModel } from "../../models/chatModel";
 import { useEffect, useState } from "react";
 import { useListChatGroups } from "../../hooks/chat/useListChatGroups";
 
@@ -10,7 +10,7 @@ import { MessageSquareOff, SearchX } from "lucide-react";
 
 const Inbox = () => {
   const [searchKeyDebounced, setSearchKeyDebounced] = useState<string>("");
-  const [pages, setPages] = useState<IInbox[] | null>(null);
+  const [pages, setPages] = useState<InboxModel[] | null>(null);
 
   const { isLoading, isFetchingNextPage, isError, fetchNextPage, data } =
     useListChatGroups([searchKeyDebounced], {

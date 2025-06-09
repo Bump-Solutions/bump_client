@@ -1,4 +1,4 @@
-import { IInbox } from "../../types/chat";
+import { InboxModel } from "../../models/chatModel";
 import { useInView } from "react-intersection-observer";
 import { PaginatedListProps } from "../../types/ui";
 import { Fragment, useEffect } from "react";
@@ -10,7 +10,7 @@ const InboxList = ({
   pages,
   fetchNextPage,
   isFetchingNextPage,
-}: PaginatedListProps<IInbox>) => {
+}: PaginatedListProps<InboxModel>) => {
   const { ref, inView } = useInView();
 
   useEffect(() => {

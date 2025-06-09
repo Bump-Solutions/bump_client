@@ -1,7 +1,7 @@
-import { MessagesPage } from "../../types/chat";
 import { useEffect, useState } from "react";
 import { useListMessages } from "../../hooks/chat/useListMessages";
 import { useLocation } from "react-router";
+import { MessagesPageModel } from "../../models/chatModel";
 
 import Spinner from "../../components/Spinner";
 import MessagesList from "./MessagesList";
@@ -17,7 +17,7 @@ const MessagesContent = ({ chat }: MessagesContentProps) => {
     ? new Date(location.state.createdAt)
     : new Date();
 
-  const [pages, setPages] = useState<MessagesPage[] | null>(null);
+  const [pages, setPages] = useState<MessagesPageModel[] | null>(null);
 
   const { isLoading, isFetchingNextPage, isError, fetchNextPage, data } =
     useListMessages([chat], {

@@ -1,4 +1,4 @@
-import { MessageType, MessageTypeOptions } from "../../types/chat";
+import { MessageType, MessageTypeOptions } from "../../models/chatModel";
 import {
   useCallback,
   useEffect,

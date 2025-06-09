@@ -1,17 +1,17 @@
-import { ChatGroup } from "../../types/chat";
 import { ApiError } from "../../types/api";
 import { QUERY_KEY } from "../../utils/queryKeys";
 
 import { useAxiosPrivate } from "../auth/useAxiosPrivate";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { listMessages } from "../../services/chatService";
+import { ChatGroupModel } from "../../models/chatModel";
 
 const MAX_MESSAGES_PER_PAGE = 20;
 
 export const useListMessages = (
   dependencies: any[] = [],
   params: {
-    chat: ChatGroup["name"];
+    chat: ChatGroupModel["name"];
   }
 ) => {
   const axiosPrivate = useAxiosPrivate();
