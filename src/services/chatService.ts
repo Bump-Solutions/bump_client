@@ -1,6 +1,6 @@
 import { API } from "../utils/api";
 import { ApiResponse } from "../types/api";
-import { User } from "../types/user";
+import { UserModel } from "../models/userModel";
 import { AxiosInstance } from "axios";
 import { UploadedFile } from "../types/form";
 import {
@@ -36,7 +36,7 @@ export const listChatGroups = async (
 
 export const createChatGroup = async (
   axiosPrivate: AxiosInstance,
-  uid: User["id"]
+  uid: UserModel["id"]
 ): Promise<ApiResponse> => {
   if (!uid) throw new Error("Missing required parameter: uid");
 
