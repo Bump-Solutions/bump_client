@@ -2,11 +2,11 @@ import "../../assets/css/chat.css";
 import { ENUM } from "../../utils/enum";
 import { useTitle } from "react-use";
 import { Outlet, useParams } from "react-router";
+import { useMediaQuery } from "react-responsive";
 
 import Inbox from "./Inbox";
 
 import { MessageSquareDashed } from "lucide-react";
-import { useMediaQuery } from "react-responsive";
 
 const Chat = () => {
   useTitle(`Üzenetek - ${ENUM.BRAND.NAME}`);

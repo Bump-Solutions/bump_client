@@ -1,15 +1,21 @@
 import { API } from "../../utils/api";
 import { QUERY_KEY } from "../../utils/queryKeys";
-import { ChatGroup, IInbox, Message, MessagesPage } from "../../types/chat";
 import { useOutletContext } from "react-router";
 import { useAuth } from "../../hooks/auth/useAuth";
 import { useEffect, useMemo } from "react";
 import { useQueryClient } from "@tanstack/react-query";
+import {
+  ChatGroupModel,
+  InboxModel,
+  MessageModel,
+} from "../../models/chatModel";
 import useWebSocket from "react-use-websocket";
 
 import MessagesHeader from "./MessagesHeader";
 import MessagesContent from "./MessagesContent";
 import MessagesFooter from "./MessagesFooter";
+import { MessageDTO } from "../../dtos/ChatDTO";
+import { fromMessageDTO } from "../../mappers/chatMapper";
 
 interface OutletContextType {
   chat: string;
@@ -44,28 +50,28 @@ const Messages = () => {
 
         return {
           ...prev,
-          pages: prev.pages.map((page: IInbox) => {
+          pages: prev.pages.map((page: InboxModel) => {
             return {
               ...page,
-              messages: page.messages.map((chatGroup: ChatGroup) => {
+              messages: page.messages.map((chatGroup: ChatGroupModel) => {
                 if (chatGroup.name === chat) {
-                  const last = chatGroup.last_message;
+                  const last = chatGroup.lastMessage;
 
                   if (!last) {
                     return chatGroup;
                   }
 
                   // Ha mar olvasott, vagy own, akkor return
-                  if (last.is_read || last.own_message) {
+                  if (last.isRead || last.ownMessage) {
                     return chatGroup;
                   }
 
                   // Ha nem, akkor frissítjük az üzenetet
                   return {
                     ...chatGroup,
-                    last_message: {
+                    lastMessage: {
                       ...last,
-                      is_read: true, // csak ezt a mezőt változtatjuk
+                      isRead: true, // csak ezt a mezőt változtatjuk
                     },
                   };
                 }
@@ -82,8 +88,8 @@ const Messages = () => {
   useEffect(() => {
     if (!lastJsonMessage) return;
 
-    const newMessage = lastJsonMessage as Message;
-    const isOwn = auth?.user?.username === newMessage.author_username;
+    const newMessage = fromMessageDTO(lastJsonMessage as MessageDTO);
+    const isOwn = auth?.user?.username === newMessage.authorUsername;
 
     // Update messages
     queryClient.setQueryData([QUERY_KEY.listMessages, chat], (prev: any) => {
@@ -112,20 +118,20 @@ const Messages = () => {
 
         return {
           ...prev,
-          pages: prev.pages.map((page: IInbox) => {
+          pages: prev.pages.map((page: InboxModel) => {
             return {
               ...page,
-              messages: page.messages.map((chatGroup: ChatGroup) => {
+              messages: page.messages.map((chatGroup: ChatGroupModel) => {
                 if (chatGroup.name === chat) {
                   return {
                     ...chatGroup,
-                    last_message: {
+                    lastMessage: {
                       id: newMessage.id,
-                      author_username: newMessage.author_username,
+                      authorUsername: newMessage.authorUsername,
                       body: newMessage.body,
-                      is_read: isOwn,
-                      created_at: newMessage.created_at,
-                      own_message: isOwn,
+                      isRead: isOwn,
+                      createdAt: newMessage.createdAt,
+                      ownMessage: isOwn,
                     },
                   };
                 }

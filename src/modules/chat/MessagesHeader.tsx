@@ -1,5 +1,5 @@
-import { API } from "../../utils/api";
 import { ROUTES } from "../../routes/routes";
+import { UserModel } from "../../models/userModel";
 import { Link, useLocation } from "react-router";
 import { useMediaQuery } from "react-responsive";
 
@@ -9,7 +9,7 @@ import { ArrowLeft, MoveRight } from "lucide-react";
 
 const MessagesHeader = () => {
   const location = useLocation();
-  const partner = location.state?.partner;
+  const partner = location.state?.partner as UserModel;
 
   const isMobile = useMediaQuery({
     query: "(max-width: 768px)",
@@ -26,7 +26,7 @@ const MessagesHeader = () => {
           </Link>
         )}
         <Image
-          src={partner.profile_picture}
+          src={partner.profilePicture || ""}
           alt={partner.username.slice(0, 2)}
           placeholderColor='#212529'
         />

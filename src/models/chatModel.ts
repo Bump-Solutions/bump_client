@@ -1,3 +1,5 @@
+import { UserModel } from "./userModel";
+
 // Defines the paginated message group list
 export interface InboxModel {
   messages: ChatGroupModel[];
@@ -25,18 +27,34 @@ export interface LastMessageModel extends MessageModel {
 
 export interface MessagesPageModel {
   messages: MessageModel[];
-  count: number;
   next: number | null;
   previous: string | null;
+  count: number;
 }
 
 export interface MessageModel {
   id: number;
   authorUsername: string;
   body: string;
-  attachment: string | null;
+  attachment: string;
   type: MessageType;
   createdAt: string;
 }
 
 export type MessageType = 0 | 1 | 2; // text, images, text + images
+
+export interface MessageTypeOptions {
+  hasText: boolean;
+  hasImages: boolean;
+  // bővíthető pl. videó, fájl stb.
+}
+
+export interface MessageGroupModel {
+  author: string;
+  partner: Partial<UserModel> | null;
+  isOwn: boolean;
+  timestamp: string;
+  messages: MessageModel[];
+  lastAt: Date;
+  attachmentsCount?: number;
+}

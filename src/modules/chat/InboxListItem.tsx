@@ -1,6 +1,6 @@
 import { ROUTES } from "../../routes/routes";
 import { AnimatePresence } from "framer-motion";
-import { ChatGroup } from "../../types/chat";
+import { ChatGroupModel } from "../../models/chatModel";
 import { useEffect } from "react";
 import { NavLink } from "react-router";
 import { useLongPress } from "react-use";
@@ -18,7 +18,7 @@ import InboxContextMenu from "./InboxContextMenu";
 import { Ellipsis } from "lucide-react";
 
 interface InboxListItemProps {
-  group: ChatGroup;
+  group: ChatGroupModel;
 }
 
 const InboxListItem = ({ group }: InboxListItemProps) => {
@@ -44,7 +44,7 @@ const InboxListItem = ({ group }: InboxListItemProps) => {
   });
 
   const referenceDate = new Date(
-    group?.last_message?.created_at || group.created_at
+    group?.lastMessage?.createdAt || group.createdAt
   );
 
   const formattedTimestamp = isToday(referenceDate)
@@ -54,7 +54,7 @@ const InboxListItem = ({ group }: InboxListItemProps) => {
     : formatTimestamp(referenceDate, "YYYY.MM.DD");
 
   const showUnread =
-    !group?.last_message?.is_read && !group?.last_message?.own_message;
+    !group?.lastMessage?.isRead && !group?.lastMessage?.ownMessage;
 
   return (
     <li className='inbox__item'>
@@ -69,29 +69,29 @@ const InboxListItem = ({ group }: InboxListItemProps) => {
 
       <NavLink
         to={ROUTES.INBOX.CHAT(group.name)}
-        state={{ partner: group.user, createdAt: group.created_at }}
+        state={{ partner: group.user, createdAt: group.createdAt }}
         {...longPressEvent}>
         <Image
-          src={group.user.profile_picture}
+          src={group.user.profilePicture || ""}
           alt={group.user.username?.slice(0, 2)}
           placeholderColor='#212529'
         />
 
         <div
           className={`inbox__item__details ${
-            group.last_message && showUnread ? "unread" : ""
+            group.lastMessage && showUnread ? "unread" : ""
           }`}>
           <div>
             <span className='truncate'>{group.user.username}</span>
             <span className='fs-12'>{formattedTimestamp}</span>
           </div>
 
-          {group?.last_message && (
+          {group.lastMessage && (
             <div>
               {showUnread && <span className='new-indicator' />}
               <span className='truncate'>
-                {group.last_message.own_message && "Te: "}
-                {group.last_message.body}
+                {group.lastMessage.ownMessage && "Te: "}
+                {group.lastMessage.body}
               </span>
             </div>
           )}

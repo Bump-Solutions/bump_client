@@ -1,9 +1,15 @@
 import { API } from "../utils/api";
 import { ApiResponse } from "../types/api";
-import { ChatGroup } from "../types/chat";
 import { User } from "../types/user";
 import { AxiosInstance } from "axios";
 import { UploadedFile } from "../types/form";
+import {
+  ChatGroupModel,
+  InboxModel,
+  MessagesPageModel,
+} from "../models/chatModel";
+import { InboxDTO, MessagesPageDTO } from "../dtos/ChatDTO";
+import { fromChatGroupDTO, fromMessageDTO } from "../mappers/chatMapper";
 
 export const listChatGroups = async (
   signal: AbortSignal,
@@ -11,19 +17,21 @@ export const listChatGroups = async (
   size: number,
   page: number,
   searchKey: string
-): Promise<ApiResponse> => {
-  const response: ApiResponse = await axiosPrivate.get(
-    API.CHAT.LIST_CHAT_GROUPS(size, page, searchKey),
-    { signal }
-  );
+): Promise<InboxModel> => {
+  const response: ApiResponse = await axiosPrivate.get<{
+    message: InboxDTO;
+  }>(API.CHAT.LIST_CHAT_GROUPS(size, page, searchKey), { signal });
 
-  const data = response.data.message;
+  const data: InboxDTO = response.data.message;
 
   if (data.next) {
     data.next = page + 1;
   }
 
-  return data;
+  return {
+    ...data,
+    messages: data.messages.map(fromChatGroupDTO),
+  };
 };
 
 export const createChatGroup = async (
@@ -39,7 +47,7 @@ export const createChatGroup = async (
 
 export const markMessageAsUnread = async (
   axiosPrivate: AxiosInstance,
-  chat: ChatGroup["name"]
+  chat: ChatGroupModel["name"]
 ): Promise<ApiResponse> => {
   if (!chat) throw new Error("Missing required parameter: chat");
 
@@ -49,27 +57,29 @@ export const markMessageAsUnread = async (
 export const listMessages = async (
   signal: AbortSignal,
   axiosPrivate: AxiosInstance,
-  chat: ChatGroup["name"],
+  chat: ChatGroupModel["name"],
   size: number,
   page: number
-): Promise<ApiResponse> => {
-  const response: ApiResponse = await axiosPrivate.get(
-    API.CHAT.LIST_MESSAGES(chat, size, page),
-    { signal }
-  );
+): Promise<MessagesPageModel> => {
+  const response: ApiResponse = await axiosPrivate.get<{
+    message: MessagesPageDTO;
+  }>(API.CHAT.LIST_MESSAGES(chat, size, page), { signal });
 
-  const data = response.data.message;
+  const data: MessagesPageDTO = response.data.message;
 
   if (data.next) {
     data.next = page + 1;
   }
 
-  return data;
+  return {
+    ...data,
+    messages: data.messages.map(fromMessageDTO),
+  };
 };
 
 export const uploadChatImages = async (
   axiosPrivate: AxiosInstance,
-  chat: ChatGroup["name"],
+  chat: ChatGroupModel["name"],
   images: UploadedFile[]
 ): Promise<ApiResponse> => {
   if (!chat) throw new Error("Missing required parameter: chat");
