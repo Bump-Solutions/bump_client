@@ -35,14 +35,14 @@ const Thumbnail = () => {
           className='product__thumbnail--main'
           onClick={() => handleClick(activeIndex)}>
           <Image
-            src={images[activeIndex].src}
+            src={images[activeIndex]}
             alt={`Termék ${activeIndex + 1}. kép`}
           />
         </div>
 
         {/* Mini-képek */}
         <ul className='product__thumbnail--list'>
-          {images.slice(0, showCount).map((img, idx) => (
+          {images.slice(0, showCount).map((src, idx) => (
             <li
               key={idx}
               className={`product__thumbnail--item ${
@@ -50,7 +50,7 @@ const Thumbnail = () => {
               }`}
               onClick={() => setActiveIndex(idx)}
               onDoubleClick={() => handleClick(idx)}>
-              <Image src={img.src} alt={`Termék ${idx + 1}. kép`} />
+              <Image src={src} alt={`Termék ${idx + 1}. kép`} />
             </li>
           ))}
 
@@ -73,7 +73,7 @@ const Thumbnail = () => {
 
       {lightboxOpen && (
         <Lightbox
-          attachments={images.map((i) => i.src)}
+          attachments={images}
           initialIndex={lightboxIndex}
           onClose={() => toggleLightbox(false)}
         />

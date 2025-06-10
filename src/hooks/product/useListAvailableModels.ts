@@ -11,7 +11,7 @@ export const useListAvailableModels = (
   params: {
     isCatalogProduct: boolean;
     brand: string;
-    searchKey?: string;
+    searchKey: string;
   }
 ) => {
   const axiosPrivate = useAxiosPrivate();

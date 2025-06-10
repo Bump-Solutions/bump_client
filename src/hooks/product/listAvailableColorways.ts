@@ -12,7 +12,7 @@ export const useListAvailableColorways = (
     isCatalogProduct: boolean;
     brand: string;
     model: string;
-    searchKey?: string;
+    searchKey: string;
   }
 ) => {
   const axiosPrivate = useAxiosPrivate();

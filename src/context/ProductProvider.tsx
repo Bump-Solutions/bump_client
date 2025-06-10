@@ -1,5 +1,5 @@
 import { ROUTES } from "../routes/routes";
-import { IProduct } from "../types/product";
+import { ProductModel } from "../models/productModel";
 import { ApiError } from "../types/api";
 import { QUERY_KEY } from "../utils/queryKeys";
 import { useGetProduct } from "../hooks/product/useGetProduct";
@@ -9,8 +9,8 @@ import { useNavigate, useParams } from "react-router";
 import { useQueryClient } from "@tanstack/react-query";
 
 interface ProductContextType {
-  product: IProduct | undefined;
-  setProduct: (data: Partial<IProduct>) => void;
+  product: ProductModel | undefined;
+  setProduct: (data: Partial<ProductModel>) => void;
   isLoading: boolean;
   error?: ApiError | null;
   isError: boolean;
@@ -52,10 +52,10 @@ const ProductProvider = ({ children }: ProductProviderProps) => {
     }
   }, [isError]);
 
-  const setProduct = (data: Partial<IProduct>) => {
+  const setProduct = (data: Partial<ProductModel>) => {
     queryClient.setQueryData(
       [QUERY_KEY.getProduct, productId],
-      (prev: IProduct | undefined) => ({
+      (prev: ProductModel | undefined) => ({
         ...prev,
         ...data,
       })

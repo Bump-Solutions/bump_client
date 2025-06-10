@@ -1,6 +1,6 @@
 import "../../assets/css/product.css";
-import { Inventory } from "../../types/product";
 import { useEffect, useState } from "react";
+import { InventoryModel } from "../../models/productModel";
 import { useListSavedProducts } from "../../hooks/product/useListSavedProducts";
 
 import Spinner from "../../components/Spinner";
@@ -9,7 +9,7 @@ import ProductList from "./ProductList";
 import { SearchX } from "lucide-react";
 
 const SavedProducts = () => {
-  const [pages, setPages] = useState<Inventory[] | null>(null);
+  const [pages, setPages] = useState<InventoryModel[] | null>(null);
 
   const { data, isLoading, isFetchingNextPage, isError, fetchNextPage } =
     useListSavedProducts();
@@ -40,7 +40,7 @@ const SavedProducts = () => {
     <main className='user-products__wrapper'>
       {pages && (
         <>
-          {pages[0]?.products.length > 0 ? (
+          {pages[0].products.length > 0 ? (
             <ProductList
               pages={pages}
               fetchNextPage={fetchNextPage}

@@ -1,14 +1,13 @@
-import { IProduct } from "./product";
-import { User } from "./user";
+import { UserModel } from "../models/userModel";
 
-export type Seller = { id: number } & Partial<Omit<User, "id">>;
+export type Seller = { id: number } & Partial<Omit<UserModel, "id">>;
 
 export interface TradeItem {
   id: number;
 }
 
 export interface TradeProduct {
-  id: IProduct["id"];
+  id: number;
   items: TradeItem[];
 }
 

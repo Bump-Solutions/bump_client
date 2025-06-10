@@ -1,6 +1,6 @@
 import "../../assets/css/product.css";
 import { ROUTES } from "../../routes/routes";
-import { Inventory } from "../../types/product";
+import { InventoryModel } from "../../models/productModel";
 import { Link, useLocation } from "react-router";
 import { useProfile } from "../../hooks/profile/useProfile";
 import { useEffect, useState } from "react";
@@ -15,7 +15,7 @@ const Products = () => {
   const location = useLocation();
   const { user, isOwnProfile } = useProfile();
 
-  const [pages, setPages] = useState<Inventory[] | null>(null);
+  const [pages, setPages] = useState<InventoryModel[] | null>(null);
 
   const { data, isLoading, isFetchingNextPage, isError, fetchNextPage } =
     useListProducts([user?.id], {
@@ -48,7 +48,7 @@ const Products = () => {
     <main className='user-products__wrapper'>
       {pages && (
         <>
-          {pages[0]?.products.length > 0 ? (
+          {pages[0].products.length > 0 ? (
             <ProductList
               pages={pages}
               fetchNextPage={fetchNextPage}

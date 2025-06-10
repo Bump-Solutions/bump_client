@@ -1,7 +1,8 @@
 import { useProduct } from "../../hooks/product/useProduct";
-import { BadgeCollection } from "../../types/product";
-import Badges from "../../components/Badges";
 import { useMemo, useState } from "react";
+import { BadgeCollection } from "../../models/productModel";
+
+import Badges from "../../components/Badges";
 
 const BADGES: BadgeCollection = {
   discount: {
@@ -56,9 +57,9 @@ const ProductDetails = () => {
     const filtered = availableItems
       .filter(
         (item) =>
-          item.gender?.value === selectedGender &&
-          item.size?.value === selectedSize &&
-          item.condition?.value === selectedCondition
+          item.gender === selectedGender &&
+          Number(item.size) === selectedSize &&
+          item.condition === selectedCondition
       )
       .sort((a, b) => a.id! - b.id!);
 
@@ -82,7 +83,7 @@ const ProductDetails = () => {
     " " +
     product.product.model +
     " " +
-    product.product.color_way;
+    product.product.colorWay;
 
   return (
     <article className='product__details'>
