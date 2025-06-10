@@ -1,4 +1,4 @@
-import { UploadedFile } from "../../types/form";
+import { FileUpload } from "../../types/form";
 import { useToast } from "../../hooks/useToast";
 import { Dispatch, SetStateAction, useRef } from "react";
 
@@ -9,7 +9,7 @@ import Button from "../../components/Button";
 import { ImageUp } from "lucide-react";
 
 interface ImageUploadProps {
-  setImages: Dispatch<SetStateAction<UploadedFile[]>>;
+  setImages: Dispatch<SetStateAction<FileUpload[]>>;
 }
 
 const MAX_FILES = 10;
@@ -20,7 +20,7 @@ const ImageUpload = ({ setImages }: ImageUploadProps) => {
 
   const { addToast } = useToast();
 
-  const handleFiles = (files: UploadedFile[]) => {
+  const handleFiles = (files: FileUpload[]) => {
     setImages((prev) => {
       const newFiles = files.filter((file) => {
         return !prev.some((prevFile) => prevFile.id === file.id);

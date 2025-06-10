@@ -35,6 +35,8 @@ export const getUser = async (
   axiosPrivate: AxiosInstance,
   uname: UserModel["username"]
 ): Promise<UserModel> => {
+  if (!uname) throw new Error("Missing required parameter: uname");
+
   const response: ApiResponse = await axiosPrivate.get<{
     message: FetchedUserDTO;
   }>(API.USER.GET_USER(uname), {
@@ -52,6 +54,8 @@ export const listFollowers = async (
   page: number,
   searchKey: string
 ): Promise<FollowersPageModel> => {
+  if (!uid) throw new Error("Missing required parameter: uid");
+
   const response: ApiResponse = await axiosPrivate.get<{
     message: FollowersPageDTO;
   }>(API.USER.LIST_FOLLOWERS(uid, size, page, searchKey), { signal });
@@ -76,6 +80,8 @@ export const listFollowings = async (
   page: number,
   searchKey: string
 ): Promise<FollowingsPageModel> => {
+  if (!uid) throw new Error("Missing required parameter: uid");
+
   const response: ApiResponse = await axiosPrivate.get<{
     message: FollowingsPageDTO;
   }>(API.USER.LIST_FOLLOWING(uid, size, page, searchKey), { signal });

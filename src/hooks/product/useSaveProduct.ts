@@ -1,20 +1,18 @@
 import { useMutation } from "@tanstack/react-query";
 import { ApiError, ApiResponse } from "../../types/api";
-import { IProduct } from "../../types/product";
 import { saveProduct } from "../../services/productService";
 import { useAxiosPrivate } from "../auth/useAxiosPrivate";
 import { useToast } from "../useToast";
 
 export const useSaveProduct = (
-  onSuccess?: (resp: ApiResponse, variables: IProduct["id"]) => void,
-  onError?: (error: ApiError, variables: IProduct["id"]) => void
+  onSuccess?: (resp: ApiResponse, variables: number) => void,
+  onError?: (error: ApiError, variables: number) => void
 ) => {
   const axiosPrivate = useAxiosPrivate();
   const { addToast } = useToast();
 
-  return useMutation<ApiResponse, ApiError, IProduct["id"]>({
-    mutationFn: (productId: IProduct["id"]) =>
-      saveProduct(axiosPrivate, productId),
+  return useMutation<ApiResponse, ApiError, number>({
+    mutationFn: (productId: number) => saveProduct(axiosPrivate, productId),
     onSuccess: (resp, variables) => {
       if (onSuccess) {
         onSuccess(resp, variables);

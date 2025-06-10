@@ -13,7 +13,7 @@ export const useUnfollow = (
   const { addToast } = useToast();
 
   return useMutation<ApiResponse, ApiError, number>({
-    mutationFn: (uId: number) => unfollow(axiosPrivate, uId),
+    mutationFn: (uid: number) => unfollow(axiosPrivate, uid),
     onSuccess: (resp, variables) => {
       if (onSuccess) {
         onSuccess(resp, variables);

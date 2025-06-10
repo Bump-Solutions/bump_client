@@ -1,4 +1,4 @@
-import { UploadedFile } from "../types/form";
+import { FileUpload } from "../types/form";
 import { ChangeEvent, forwardRef, useImperativeHandle, useRef } from "react";
 import { useToast } from "../hooks/useToast";
 import cuid from "cuid";
@@ -8,7 +8,7 @@ export interface UploaderHandle {
 }
 
 interface UploaderProps {
-  onInputChange?: (files: UploadedFile[]) => void;
+  onInputChange?: (files: FileUpload[]) => void;
   accept?: string;
   multiple?: boolean;
   maxFiles?: number;
@@ -56,7 +56,7 @@ const Uploader = forwardRef<UploaderHandle, UploaderProps>(
         return;
       }
 
-      const fileReadPromises: Promise<UploadedFile>[] = files.map((file) => {
+      const fileReadPromises: Promise<FileUpload>[] = files.map((file) => {
         return new Promise((resolve, reject) => {
           const reader = new FileReader();
 

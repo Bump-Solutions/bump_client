@@ -49,7 +49,7 @@ const SellForm = () => {
             Minél több infót adsz meg, annál könnyebb az eladás.
           </>
         ),
-        description: data.isCatalogProduct ? (
+        description: data.product.isCatalog ? (
           <>
             Kérjük, tüntesd fel a termék méretét, állapotát és más fontos
             jellemzőit.
@@ -117,8 +117,7 @@ const SellForm = () => {
 
     const isValid = steps[currentStepIndex].ref?.current?.isValid();
     if (!isValid) {
-      Promise.reject("Invalid fields");
-      return;
+      return Promise.reject("Invalid fields");
     }
 
     // console.log("submit", data);

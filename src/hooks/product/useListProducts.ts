@@ -1,16 +1,16 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { ApiError } from "../../types/api";
-import { User } from "../../types/user";
 import { useAxiosPrivate } from "../auth/useAxiosPrivate";
 import { QUERY_KEY } from "../../utils/queryKeys";
 import { listProducts } from "../../services/productService";
+import { UserModel } from "../../models/userModel";
 
 const MAX_PRODUCTS_PER_PAGE = 20;
 
 export const useListProducts = (
   dependencies: any[] = [],
   params: {
-    uid: User["id"];
+    uid: UserModel["id"];
   }
 ) => {
   const axiosPrivate = useAxiosPrivate();

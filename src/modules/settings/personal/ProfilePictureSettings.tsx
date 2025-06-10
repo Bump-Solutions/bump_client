@@ -1,6 +1,6 @@
 import { API } from "../../../utils/api";
 import { ROUTES } from "../../../routes/routes";
-import { UploadedFile } from "../../../types/form";
+import { FileUpload } from "../../../types/form";
 import cuid from "cuid";
 import { FormEvent, useState } from "react";
 import { usePersonalSettings } from "../../../hooks/settings/usePersonalSettings";
@@ -25,7 +25,7 @@ const ProfilePictureSettings = () => {
   const navigate = useNavigate();
   const { setData } = usePersonalSettings();
 
-  const [images, setImages] = useState<UploadedFile[]>([]);
+  const [images, setImages] = useState<FileUpload[]>([]);
   const [colorPreview, setColorPreview] = useState<string | null>(null);
   const [changeBackground, setChangeBackground] = useState<boolean>(false);
 

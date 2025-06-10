@@ -1,12 +1,10 @@
 import { API } from "../utils/api";
-import { UserModel } from "../models/userModel";
-import { IProduct } from "../types/product";
 import { AxiosInstance } from "axios";
 import { ApiResponse } from "../types/api";
 
 export const reportProduct = async (
   axiosPrivate: AxiosInstance,
-  pid: IProduct["id"],
+  pid: number,
   reason: number,
   description: string
 ): Promise<ApiResponse> => {
@@ -21,7 +19,7 @@ export const reportProduct = async (
 
 export const reportUser = async (
   axiosPrivate: AxiosInstance,
-  uid: UserModel["id"],
+  uid: number,
   reason: number,
   description: string
 ): Promise<ApiResponse> => {

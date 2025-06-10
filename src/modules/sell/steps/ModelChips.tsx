@@ -2,6 +2,7 @@ import { Fragment, useEffect, useState } from "react";
 import { useSell } from "../../../hooks/product/useSell";
 import { useListAvailableModels } from "../../../hooks/product/useListAvailableModels";
 import { useToggle } from "../../../hooks/useToggle";
+import { ModelModel, ModelsPageModel } from "../../../models/productModel";
 
 import Spinner from "../../../components/Spinner";
 import Chip from "../../../components/Chip";
@@ -9,20 +10,11 @@ import SearchChip from "./SearchChip";
 
 import { X } from "lucide-react";
 
-interface Model {
-  model: string;
-}
-
-interface ModelsPage {
-  count: number;
-  products: Model[];
-}
-
 const ModelChips = () => {
   const { data, updateData, errors } = useSell();
 
   const [searchKeyDebounced, setSearchKeyDebounced] = useState<string>("");
-  const [pages, setPages] = useState<ModelsPage[]>([]);
+  const [pages, setPages] = useState<ModelsPageModel[]>([]);
   const [showAll, toggleShowAll] = useToggle(false);
 
   const {
@@ -32,14 +24,14 @@ const ModelChips = () => {
     isError,
     fetchNextPage,
     data: resp,
-  } = useListAvailableModels([searchKeyDebounced, data.product?.brand], {
-    isCatalogProduct: data.isCatalogProduct,
-    brand: data.product?.brand || "",
+  } = useListAvailableModels([searchKeyDebounced, data.product.brand], {
+    isCatalogProduct: data.product.isCatalog,
+    brand: data.product.brand || "",
     searchKey: searchKeyDebounced,
   });
 
-  const selectedBrand = data.product?.brand;
-  const selectedModel = data.product?.model;
+  const selectedBrand = data.product.brand;
+  const selectedModel = data.product.model;
 
   useEffect(() => {
     // Reset pages if brandchanges to null
@@ -55,7 +47,7 @@ const ModelChips = () => {
 
     if (
       !selectedModel ||
-      firstPage.products.some((m: Model) => m.model === selectedModel)
+      firstPage.products.some((m: ModelModel) => m.model === selectedModel)
     ) {
       setPages(showAll ? resp.pages : [firstPage]);
       return;
@@ -91,7 +83,7 @@ const ModelChips = () => {
         ...data.product,
         id: null,
         model: selectedModel === model ? "" : model,
-        color_way: "",
+        colorWay: "",
       },
     });
   };

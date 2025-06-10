@@ -13,9 +13,9 @@ import { CirclePlus } from "lucide-react";
 import { useDebounce } from "../../../hooks/useDebounce";
 
 interface FormItem {
-  gender: Option | null;
-  size: Option | null;
-  condition: Option | null;
+  condition: Option<number> | null;
+  gender: Option<number> | null;
+  size: Option<number> | null;
   price: number | null;
 }
 

@@ -10,7 +10,7 @@ export const useListAvailableBrands = (
   dependencies: any[] = [],
   params: {
     isCatalogProduct: boolean;
-    searchKey?: string;
+    searchKey: string;
   }
 ) => {
   const axiosPrivate = useAxiosPrivate();

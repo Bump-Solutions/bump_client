@@ -1,4 +1,4 @@
-import { UploadedFile } from "../../../types/form";
+import { FileUpload } from "../../../types/form";
 import { useToast } from "../../../hooks/useToast";
 import { useSell } from "../../../hooks/product/useSell";
 
@@ -26,7 +26,7 @@ const UploadDropzone = () => {
     }
 
     // Create a promise for each file to be read
-    const fileReadPromises: Promise<UploadedFile>[] = acceptedFiles.map(
+    const fileReadPromises: Promise<FileUpload>[] = acceptedFiles.map(
       (file) => {
         return new Promise((resolve, reject) => {
           const reader = new FileReader();

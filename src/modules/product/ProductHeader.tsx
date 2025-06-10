@@ -1,7 +1,6 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { QUERY_KEY } from "../../utils/queryKeys";
-
-import { Inventory, IProduct } from "../../types/product";
+import { InventoryModel, ProductListModel } from "../../models/productModel";
 import { useProduct } from "../../hooks/product/useProduct";
 import { useSaveProduct } from "../../hooks/product/useSaveProduct";
 import { useUnsaveProduct } from "../../hooks/product/useUnsaveProduct";
@@ -15,21 +14,22 @@ import { Bookmark, Share2 } from "lucide-react";
 const ProductHeader = () => {
   const queryClient = useQueryClient();
   const { product, setProduct } = useProduct();
+
   if (!product) return null;
 
   const saveMutation = useSaveProduct((response) => {
-    setProduct({ saved: true, saves: product?.saves! + 1 });
+    setProduct({ saved: true, saves: product.saves + 1 });
 
     queryClient.setQueryData(
-      [QUERY_KEY.listProducts, product?.user.id],
+      [QUERY_KEY.listProducts, product.user.id],
       (prev: any) => {
         if (!prev) return prev;
         return {
           ...prev,
-          pages: prev.pages.map((page: Inventory) => ({
+          pages: prev.pages.map((page: InventoryModel) => ({
             ...page,
-            products: page.products.map((p: IProduct) => {
-              if (p.id === product?.id) {
+            products: page.products.map((p: ProductListModel) => {
+              if (p.id === product.id) {
                 return {
                   ...p,
                   saved: true,
@@ -47,10 +47,10 @@ const ProductHeader = () => {
       if (!prev) return prev;
       return {
         ...prev,
-        pages: prev.pages.map((page: Inventory) => ({
+        pages: prev.pages.map((page: InventoryModel) => ({
           ...page,
           products: [
-            { ...product, saved: true, saves: product?.saves! + 1 },
+            { ...product, saved: true, saves: product.saves + 1 },
             ...page.products,
           ],
         })),
@@ -59,7 +59,7 @@ const ProductHeader = () => {
   });
 
   const unsaveMutation = useUnsaveProduct((response) => {
-    setProduct({ saved: false, saves: product?.saves! - 1 });
+    setProduct({ saved: false, saves: product.saves - 1 });
 
     queryClient.setQueryData(
       [QUERY_KEY.listProducts, product?.user.id],
@@ -67,9 +67,9 @@ const ProductHeader = () => {
         if (!prev) return prev;
         return {
           ...prev,
-          pages: prev.pages.map((page: Inventory) => ({
+          pages: prev.pages.map((page: InventoryModel) => ({
             ...page,
-            products: page.products.map((p: IProduct) => {
+            products: page.products.map((p: ProductListModel) => {
               if (p.id === product?.id) {
                 return {
                   ...p,
@@ -88,9 +88,11 @@ const ProductHeader = () => {
       if (!prev) return prev;
       return {
         ...prev,
-        pages: prev.pages.map((page: Inventory) => ({
+        pages: prev.pages.map((page: InventoryModel) => ({
           ...page,
-          products: page.products.filter((p: IProduct) => p.id !== product?.id),
+          products: page.products.filter(
+            (p: ProductListModel) => p.id !== product.id
+          ),
         })),
       };
     });
@@ -98,7 +100,7 @@ const ProductHeader = () => {
 
   const handleSave = (
     e: MouseEvent<HTMLSpanElement>,
-    pid: IProduct["id"],
+    pid: number,
     isSaved: boolean
   ) => {
     e.preventDefault();

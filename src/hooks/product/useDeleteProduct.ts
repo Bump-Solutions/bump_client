@@ -1,15 +1,14 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ApiError, ApiResponse } from "../../types/api";
-import { IProduct } from "../../types/product";
 import { useAxiosPrivate } from "../auth/useAxiosPrivate";
 import { useToast } from "../useToast";
-import { deletePrduct } from "../../services/productService";
+import { deleteProduct } from "../../services/productService";
 import { QUERY_KEY } from "../../utils/queryKeys";
 import { useProfile } from "../profile/useProfile";
 
 export const useDeleteProduct = (
-  onSuccess?: (resp: ApiResponse, variables: IProduct["id"]) => void,
-  onError?: (error: ApiError, variables: IProduct["id"]) => void
+  onSuccess?: (resp: ApiResponse, variables: number) => void,
+  onError?: (error: ApiError, variables: number) => void
 ) => {
   const { user } = useProfile();
 
@@ -17,9 +16,8 @@ export const useDeleteProduct = (
   const axiosPrivate = useAxiosPrivate();
   const { addToast } = useToast();
 
-  return useMutation<ApiResponse, ApiError, IProduct["id"]>({
-    mutationFn: (productId: IProduct["id"]) =>
-      deletePrduct(axiosPrivate, productId),
+  return useMutation<ApiResponse, ApiError, number>({
+    mutationFn: (productId: number) => deleteProduct(axiosPrivate, productId),
     onSuccess: (resp, variables) => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEY.listProducts, user?.id],

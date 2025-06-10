@@ -1,5 +1,5 @@
 import { ROUTES } from "../../routes/routes";
-import { IProduct } from "../../types/product";
+import { ProductListModel } from "../../models/productModel";
 import { useClickOutside } from "../../hooks/useClickOutside";
 import { Link, useLocation, useNavigate } from "react-router";
 import { useRef } from "react";
@@ -8,7 +8,7 @@ import { motion } from "framer-motion";
 import { ArrowUpRight, Percent } from "lucide-react";
 
 interface ProductContextMenuProps {
-  product: IProduct;
+  product: ProductListModel;
   toggleContextMenu: (value?: boolean) => void;
   toggleDelete: (value?: boolean) => void;
 }
@@ -48,7 +48,7 @@ const ProductContextMenu = ({
         </li>
       </ul>
 
-      {product.own_product && (
+      {product.ownProduct && (
         <ul className='action-list'>
           <li className='action-list-item'>
             <div
@@ -67,7 +67,7 @@ const ProductContextMenu = ({
       )}
 
       <ul className='action-list no-border'>
-        {product.own_product ? (
+        {product.ownProduct ? (
           <>
             <li className='action-list-item'>
               <div>

@@ -11,7 +11,7 @@ import { useToggle } from "../../hooks/useToggle";
 import { useToast } from "../../hooks/useToast";
 import { useClickOutside } from "../../hooks/useClickOutside";
 import { useUploadChatImages } from "../../hooks/chat/useUploadChatImages";
-import { UploadedFile } from "../../types/form";
+import { FileUpload } from "../../types/form";
 
 import Button from "../../components/Button";
 import ImageUpload from "./ImageUpload";
@@ -45,7 +45,7 @@ const MessagesFooter = ({ chat, onSend }: MessagesFooterProps) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const [message, setMessage] = useState<string>("");
-  const [images, setImages] = useState<UploadedFile[]>([]);
+  const [images, setImages] = useState<FileUpload[]>([]);
   const [isFocused, toggleFocus] = useToggle(false);
   const [isLoading, toggleLoading] = useToggle(false);
 

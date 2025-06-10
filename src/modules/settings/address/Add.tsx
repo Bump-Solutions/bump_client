@@ -6,7 +6,6 @@ import { useDebounce } from "../../../hooks/useDebounce";
 import { useAddAddress } from "../../../hooks/address/useAddAddress";
 import { useGetCurrentLocation } from "../../../hooks/address/useGetCurrentLocation";
 import { useMounted } from "../../../hooks/useMounted";
-import { CreateAddressDTO } from "../../../dtos/AddressDTO";
 import { AddressModel } from "../../../models/addressModel";
 
 import Button from "../../../components/Button";
@@ -23,7 +22,7 @@ interface AddProps {
 }
 
 const Add = ({ addresses, close }: AddProps) => {
-  const [newAddress, setNewAddress] = useState<CreateAddressDTO>({
+  const [newAddress, setNewAddress] = useState<AddressModel>({
     name: "",
     country: "",
     city: "",

@@ -1,4 +1,3 @@
-import { IProduct } from "../types/product";
 import { ReportType } from "../types/report";
 
 export const ROUTES = {
@@ -14,7 +13,7 @@ export const ROUTES = {
     FOLLOWINGS: `/profile/${username}/followings`,
   }),
 
-  PRODUCT: (pid: IProduct["id"]) => ({
+  PRODUCT: (pid: number) => ({
     ROOT: `/product/${pid}`,
     GALLERY: `/product/${pid}/gallery`,
     DISCOUNT: `/product/${pid}/discount`,

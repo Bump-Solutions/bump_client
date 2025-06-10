@@ -1,9 +1,8 @@
 import { ROUTES } from "../../routes/routes";
-import { IProduct, Inventory } from "../../types/product";
 import { AnimatePresence } from "framer-motion";
 import { useQueryClient } from "@tanstack/react-query";
 import { QUERY_KEY } from "../../utils/queryKeys";
-
+import { InventoryModel, ProductListModel } from "../../models/productModel";
 import { useProfile } from "../../hooks/profile/useProfile";
 import { useLikeProduct } from "../../hooks/product/useLikeProduct";
 import { useUnlikeProduct } from "../../hooks/product/useUnlikeProduct";
@@ -29,7 +28,7 @@ import {
 } from "lucide-react";
 
 interface ProductListItemProps {
-  product: IProduct;
+  product: ProductListModel;
 }
 
 const ProductListItem = ({ product }: ProductListItemProps) => {
@@ -80,9 +79,9 @@ const ProductListItem = ({ product }: ProductListItemProps) => {
         if (!prev) return prev;
         return {
           ...prev,
-          pages: prev.pages.map((page: Inventory) => ({
+          pages: prev.pages.map((page: InventoryModel) => ({
             ...page,
-            products: page.products.map((product: IProduct) => {
+            products: page.products.map((product: ProductListModel) => {
               if (product.id === productId) {
                 return {
                   ...product,
@@ -117,9 +116,9 @@ const ProductListItem = ({ product }: ProductListItemProps) => {
         if (!prev) return prev;
         return {
           ...prev,
-          pages: prev.pages.map((page: Inventory) => ({
+          pages: prev.pages.map((page: InventoryModel) => ({
             ...page,
-            products: page.products.map((product: IProduct) => {
+            products: page.products.map((product: ProductListModel) => {
               if (product.id === productId) {
                 return {
                   ...product,
@@ -142,9 +141,9 @@ const ProductListItem = ({ product }: ProductListItemProps) => {
         if (!prev) return prev;
         return {
           ...prev,
-          pages: prev.pages.map((page: Inventory) => ({
+          pages: prev.pages.map((page: InventoryModel) => ({
             ...page,
-            products: page.products.map((product: IProduct) => {
+            products: page.products.map((product: ProductListModel) => {
               if (product.id === productId) {
                 return {
                   ...product,
@@ -163,7 +162,7 @@ const ProductListItem = ({ product }: ProductListItemProps) => {
       if (!prev) return prev;
       return {
         ...prev,
-        pages: prev.pages.map((page: Inventory) => ({
+        pages: prev.pages.map((page: InventoryModel) => ({
           ...page,
           products: [
             { ...product, saved: true, saves: product.saves + 1 },
@@ -181,9 +180,9 @@ const ProductListItem = ({ product }: ProductListItemProps) => {
         if (!prev) return prev;
         return {
           ...prev,
-          pages: prev.pages.map((page: Inventory) => ({
+          pages: prev.pages.map((page: InventoryModel) => ({
             ...page,
-            products: page.products.map((product: IProduct) => {
+            products: page.products.map((product: ProductListModel) => {
               if (product.id === productId) {
                 return {
                   ...product,
@@ -202,10 +201,10 @@ const ProductListItem = ({ product }: ProductListItemProps) => {
       if (!prev) return prev;
       return {
         ...prev,
-        pages: prev.pages.map((page: Inventory) => ({
+        pages: prev.pages.map((page: InventoryModel) => ({
           ...page,
           products: page.products.filter(
-            (product: IProduct) => product.id !== productId
+            (product: ProductListModel) => product.id !== productId
           ),
         })),
       };
@@ -214,7 +213,7 @@ const ProductListItem = ({ product }: ProductListItemProps) => {
 
   const handleLike = (
     e: MouseEvent<HTMLSpanElement>,
-    pid: IProduct["id"],
+    pid: number,
     isLiked: boolean
   ) => {
     e.preventDefault();
@@ -230,7 +229,7 @@ const ProductListItem = ({ product }: ProductListItemProps) => {
 
   const handleSave = (
     e: MouseEvent<HTMLSpanElement>,
-    pid: IProduct["id"],
+    pid: number,
     isSaved: boolean
   ) => {
     e.preventDefault();
@@ -275,7 +274,7 @@ const ProductListItem = ({ product }: ProductListItemProps) => {
               <EllipsisVertical strokeWidth={3} />
             </span>
 
-            {isOwnProfile && !product.discounted_price && (
+            {isOwnProfile && !product.discountedPrice && (
               <span
                 className='product__item-actions discount'
                 onClick={(e) => {
@@ -332,15 +331,15 @@ const ProductListItem = ({ product }: ProductListItemProps) => {
             </div>
 
             <div className='item__price'>
-              {product.discounted_price && (
+              {product.discountedPrice && (
                 <span className='discount'>
-                  {product.discounted_price} Ft
-                  {product?.items_count! > 1 && "-tól"}
+                  {product.discountedPrice} Ft
+                  {product.itemsCount > 1 && "-tól"}
                 </span>
               )}
               <span className='price__original'>
-                {product.min_price || product.price} Ft
-                {product?.items_count! > 1 && "-tól"}
+                {product.minPrice || product.price} Ft
+                {product.itemsCount > 1 && "-tól"}
               </span>
             </div>
           </div>

@@ -1,11 +1,10 @@
 import { API } from "../../utils/api";
-import { ProductImage } from "../../types/product";
 import { useState, MouseEvent } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
 interface CarouselProps {
-  images: ProductImage[];
+  images: string[];
 }
 
 const Carousel = ({ images }: CarouselProps) => {
@@ -61,10 +60,10 @@ const Carousel = ({ images }: CarouselProps) => {
           className='carousel__images'
           animate={{ x: `-${currentIndex * 100}%` }}
           transition={{ duration: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}>
-          {images.map((image, index) => (
+          {images.map((src, index) => (
             <img
               key={index}
-              src={API.MEDIA_URL + image.src}
+              src={API.MEDIA_URL + src}
               alt={`Termék kép ${index + 1}`}
             />
           ))}

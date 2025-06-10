@@ -17,17 +17,18 @@ const SelectStep = forwardRef<SelectStepRef>(({}, ref) => {
   };
 
   const handleSelect = (value: boolean) => {
-    if (data.isCatalogProduct === value) {
+    if (data.product.isCatalog === value) {
       return;
     } else {
       // Ha változik a kiválasztott érték, akkor frissítjük a product state-et is
+
       updateData({
-        isCatalogProduct: value,
         product: {
+          isCatalog: value,
           id: null,
           brand: "",
           model: "",
-          color_way: "",
+          colorWay: "",
         },
       });
     }
@@ -36,7 +37,7 @@ const SelectStep = forwardRef<SelectStepRef>(({}, ref) => {
   return (
     <div className='options__wrapper'>
       <article
-        className={`option ${data.isCatalogProduct ? "selected" : ""}`}
+        className={`option ${data.product.isCatalog ? "selected" : ""}`}
         onClick={() => handleSelect(true)}>
         <div className='option__col--radio'>
           <div />
@@ -55,7 +56,7 @@ const SelectStep = forwardRef<SelectStepRef>(({}, ref) => {
       </article>
 
       <article
-        className={`option ${data.isCatalogProduct ? "" : "selected"}`}
+        className={`option ${data.product.isCatalog ? "" : "selected"}`}
         onClick={() => handleSelect(false)}>
         <div className='option__col--radio'>
           <div />

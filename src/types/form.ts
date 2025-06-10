@@ -8,7 +8,7 @@ export interface Errors {
   [key: string]: string;
 }
 
-export interface UploadedFile {
+export interface FileUpload {
   id: string;
   file: File;
   dataUrl: string;

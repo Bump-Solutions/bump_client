@@ -1,4 +1,4 @@
-import { UploadedFile } from "../../types/form";
+import { FileUpload } from "../../types/form";
 import { Dispatch, SetStateAction } from "react";
 
 import Image from "../../components/Image";
@@ -6,8 +6,8 @@ import Image from "../../components/Image";
 import { X } from "lucide-react";
 
 interface MessagesFooterImagesProps {
-  images: UploadedFile[];
-  setImages: Dispatch<SetStateAction<UploadedFile[]>>;
+  images: FileUpload[];
+  setImages: Dispatch<SetStateAction<FileUpload[]>>;
 }
 
 const MessagesFooterImages = ({
