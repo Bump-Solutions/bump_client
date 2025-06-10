@@ -1,4 +1,4 @@
-import { Badge, BadgeCollection } from "../types/product";
+import { Badge, BadgeCollection } from "../models/productModel";
 import { useToggle } from "../hooks/useToggle";
 
 import { X } from "lucide-react";

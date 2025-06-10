@@ -5,32 +5,27 @@ import {
   SetStateAction,
   useState,
 } from "react";
-import { CatalogProduct, Item } from "../types/product";
-import { UploadedFile } from "../types/form";
+import { CreateProductModel } from "../models/productModel";
 import { Errors } from "../types/form";
 
-export interface SellFormData {
-  isCatalogProduct: boolean;
-  title: string;
-  description: string;
-  product: Partial<CatalogProduct> | null;
-  items: Item[];
-  images: UploadedFile[];
-}
-
 interface SellContextType {
-  data: SellFormData;
-  updateData: (fields: Partial<SellFormData>) => void;
+  data: CreateProductModel;
+  updateData: (fields: Partial<CreateProductModel>) => void;
   errors: Errors;
   setErrors: Dispatch<SetStateAction<Errors>>;
   clearErrors: () => void;
 }
 
-const INITIAL_DATA: SellFormData = {
-  isCatalogProduct: true,
+const INITIAL_DATA: CreateProductModel = {
   title: "",
   description: "",
-  product: null,
+  product: {
+    isCatalog: true,
+    id: null,
+    brand: "",
+    model: "",
+    colorWay: "",
+  },
   items: [],
   images: [],
 };
@@ -44,10 +39,10 @@ interface SellProviderProps {
 }
 
 const SellProvider = ({ children }: SellProviderProps) => {
-  const [data, setData] = useState<SellFormData>(INITIAL_DATA);
+  const [data, setData] = useState<CreateProductModel>(INITIAL_DATA);
   const [errors, setErrors] = useState<Errors>({});
 
-  const updateData = (fields: Partial<SellFormData>) => {
+  const updateData = (fields: Partial<CreateProductModel>) => {
     setData((prev) => ({ ...prev, ...fields }));
   };
 
@@ -61,7 +56,7 @@ const SellProvider = ({ children }: SellProviderProps) => {
           }));
           setData((prev) => ({
             ...prev,
-            [key]: INITIAL_DATA[key as keyof SellFormData],
+            [key]: INITIAL_DATA[key as keyof CreateProductModel],
           }));
         }
       });

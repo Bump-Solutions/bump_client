@@ -1,6 +1,9 @@
 import { Fragment, useEffect, useState } from "react";
 import { useSell } from "../../../hooks/product/useSell";
-import { CatalogProduct } from "../../../types/product";
+import {
+  ColorwayModel,
+  ColorwaysPageModel,
+} from "../../../models/productModel";
 import { useListAvailableColorways } from "../../../hooks/product/listAvailableColorways";
 import { useToggle } from "../../../hooks/useToggle";
 
@@ -10,21 +13,11 @@ import Chip from "../../../components/Chip";
 
 import { X } from "lucide-react";
 
-interface Colorway {
-  id: CatalogProduct["id"]; // IMPORTANT: This is the ID of the catalog product
-  color_way: string;
-}
-
-interface ColorwaysPage {
-  count: number;
-  products: Colorway[];
-}
-
 const ColorwayChips = () => {
   const { data, updateData, errors } = useSell();
 
   const [searchKeyDebounced, setSearchKeyDebounced] = useState<string>("");
-  const [pages, setPages] = useState<ColorwaysPage[]>([]);
+  const [pages, setPages] = useState<ColorwaysPageModel[]>([]);
   const [showAll, toggleShowAll] = useToggle(false);
 
   const {
@@ -37,16 +30,16 @@ const ColorwayChips = () => {
   } = useListAvailableColorways(
     [searchKeyDebounced, data.product?.brand, data.product?.model],
     {
-      isCatalogProduct: data.isCatalogProduct,
-      brand: data.product?.brand || "",
-      model: data.product?.model || "",
+      isCatalogProduct: data.product.isCatalog,
+      brand: data.product.brand || "",
+      model: data.product.model || "",
       searchKey: searchKeyDebounced,
     }
   );
 
-  const selectedBrand = data.product?.brand;
-  const selectedModel = data.product?.model;
-  const selectedColorway = data.product?.color_way;
+  const selectedBrand = data.product.brand;
+  const selectedModel = data.product.model;
+  const selectedColorway = data.product.colorWay;
 
   useEffect(() => {
     // Reset pages if brand or model changes to null
@@ -62,7 +55,9 @@ const ColorwayChips = () => {
 
     if (
       !selectedColorway ||
-      firstPage.products.some((c: Colorway) => c.color_way === selectedColorway)
+      firstPage.products.some(
+        (c: ColorwayModel) => c.colorWay === selectedColorway
+      )
     ) {
       setPages(showAll ? resp.pages : [firstPage]);
       return;
@@ -102,12 +97,12 @@ const ColorwayChips = () => {
         pages.reduce((sum, page) => sum + page.products.length, 0)
       : 0;
 
-  const handleSelect = (id: Colorway["id"], colorway: string) => {
+  const handleSelect = (id: number, colorway: string) => {
     updateData({
       product: {
         ...data.product,
         id: selectedColorway === colorway ? null : id,
-        color_way: selectedColorway === colorway ? "" : colorway,
+        colorWay: selectedColorway === colorway ? "" : colorway,
       },
     });
   };
@@ -154,12 +149,12 @@ const ColorwayChips = () => {
 
           {pages.map((page, index) => (
             <Fragment key={index}>
-              {page.products.map((clr) => (
-                <li key={clr.color_way}>
+              {page.products.map((clr, idx) => (
+                <li key={clr.colorWay}>
                   <Chip
-                    label={clr.color_way}
-                    selected={selectedColorway === clr.color_way}
-                    onClick={() => handleSelect(clr.id, clr.color_way)}
+                    label={clr.colorWay}
+                    selected={selectedColorway === clr.colorWay}
+                    onClick={() => handleSelect(clr.id, clr.colorWay)}
                   />
                 </li>
               ))}

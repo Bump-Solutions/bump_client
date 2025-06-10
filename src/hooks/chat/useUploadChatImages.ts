@@ -1,13 +1,13 @@
 import { useMutation } from "@tanstack/react-query";
 import { ApiError, ApiResponse } from "../../types/api";
-import { UploadedFile } from "../../types/form";
+import { FileUpload } from "../../types/form";
 import { useAxiosPrivate } from "../auth/useAxiosPrivate";
 import { useToast } from "../useToast";
 import { uploadChatImages } from "../../services/chatService";
 
 interface UploadChatImagesVariables {
   chat: string;
-  images: UploadedFile[];
+  images: FileUpload[];
 }
 
 export const useUploadChatImages = (

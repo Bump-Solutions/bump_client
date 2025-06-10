@@ -41,7 +41,7 @@ export const listAddresses = async (
 
 export const addAddress = async (
   axiosPrivate: AxiosInstance,
-  newAddress: Omit<AddressModel, "id">
+  newAddress: AddressModel
 ): Promise<ApiResponse> => {
   const payload: CreateAddressDTO = toCreateAddressDTO(newAddress);
 

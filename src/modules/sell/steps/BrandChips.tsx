@@ -2,6 +2,7 @@ import { Fragment, useEffect, useState } from "react";
 import { useSell } from "../../../hooks/product/useSell";
 import { useListAvailableBrands } from "../../../hooks/product/useListAvailableBrands";
 import { useToggle } from "../../../hooks/useToggle";
+import { BrandModel, BrandsPageModel } from "../../../models/productModel";
 
 import Spinner from "../../../components/Spinner";
 import Chip from "../../../components/Chip";
@@ -9,20 +10,11 @@ import SearchChip from "./SearchChip";
 
 import { X } from "lucide-react";
 
-interface Brand {
-  brand: string;
-}
-
-interface BrandsPage {
-  count: number;
-  products: Brand[];
-}
-
 const BrandChips = () => {
   const { data, updateData, errors } = useSell();
 
   const [searchKeyDebounced, setSearchKeyDebounced] = useState<string>("");
-  const [pages, setPages] = useState<BrandsPage[]>([]);
+  const [pages, setPages] = useState<BrandsPageModel[]>([]);
   const [showAll, toggleShowAll] = useToggle(false);
 
   const {
@@ -33,7 +25,7 @@ const BrandChips = () => {
     fetchNextPage,
     data: resp,
   } = useListAvailableBrands([searchKeyDebounced], {
-    isCatalogProduct: data.isCatalogProduct,
+    isCatalogProduct: data.product.isCatalog,
     searchKey: searchKeyDebounced,
   });
 
@@ -46,7 +38,7 @@ const BrandChips = () => {
 
     if (
       !selectedBrand ||
-      firstPage.products.some((b: Brand) => b.brand === selectedBrand)
+      firstPage.products.some((b: BrandModel) => b.brand === selectedBrand)
     ) {
       setPages(showAll ? resp.pages : [firstPage]);
       return;
@@ -83,7 +75,7 @@ const BrandChips = () => {
         brand: selectedBrand === brand ? "" : brand,
         id: null,
         model: "",
-        color_way: "",
+        colorWay: "",
       },
     });
   };

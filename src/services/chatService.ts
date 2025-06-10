@@ -2,7 +2,7 @@ import { API } from "../utils/api";
 import { ApiResponse } from "../types/api";
 import { UserModel } from "../models/userModel";
 import { AxiosInstance } from "axios";
-import { UploadedFile } from "../types/form";
+import { FileUpload } from "../types/form";
 import {
   ChatGroupModel,
   InboxModel,
@@ -80,7 +80,7 @@ export const listMessages = async (
 export const uploadChatImages = async (
   axiosPrivate: AxiosInstance,
   chat: ChatGroupModel["name"],
-  images: UploadedFile[]
+  images: FileUpload[]
 ): Promise<ApiResponse> => {
   if (!chat) throw new Error("Missing required parameter: chat");
 

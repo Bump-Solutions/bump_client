@@ -12,7 +12,7 @@ export const useDeleteFollower = (
   const { addToast } = useToast();
 
   return useMutation<ApiResponse, ApiError, number>({
-    mutationFn: (uId: number) => deleteFollower(axiosPrivate, uId),
+    mutationFn: (uid: number) => deleteFollower(axiosPrivate, uid),
     onSuccess: (response, variables) => {
       if (onSuccess) {
         onSuccess(response, variables);

@@ -12,7 +12,7 @@ export const useFollow = (
   const { addToast } = useToast();
 
   return useMutation<ApiResponse, ApiError, number>({
-    mutationFn: (uId: number) => follow(axiosPrivate, uId),
+    mutationFn: (uid: number) => follow(axiosPrivate, uid),
     onSuccess: (resp, variables) => {
       if (onSuccess) {
         onSuccess(resp, variables);

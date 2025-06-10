@@ -24,9 +24,9 @@ const DetailsStep = forwardRef<DetailsStepRef>(({}, ref) => {
   const isValid = () => {
     const inputFields = {
       title: data.title,
-      brand: data.product?.brand,
-      model: data.product?.model,
-      colorway: data.product?.color_way,
+      brand: data.product.brand,
+      model: data.product.model,
+      colorway: data.product.colorWay,
     };
 
     const emptyInputs = Object.keys(inputFields).filter(
@@ -72,7 +72,7 @@ const DetailsStep = forwardRef<DetailsStepRef>(({}, ref) => {
       }));
     },
     0,
-    [data.product?.brand]
+    [data.product.brand]
   );
 
   useDebounce(
@@ -83,7 +83,7 @@ const DetailsStep = forwardRef<DetailsStepRef>(({}, ref) => {
       }));
     },
     0,
-    [data.product?.model]
+    [data.product.model]
   );
 
   useDebounce(
@@ -94,13 +94,13 @@ const DetailsStep = forwardRef<DetailsStepRef>(({}, ref) => {
       }));
     },
     0,
-    [data.product?.color_way]
+    [data.product.colorWay]
   );
 
   return (
     <div
       className={`details__wrapper ${
-        data.isCatalogProduct ? "catalog" : "custom"
+        data.product.isCatalog ? "catalog" : "custom"
       }`}>
       <Input
         type='text'
@@ -128,7 +128,7 @@ const DetailsStep = forwardRef<DetailsStepRef>(({}, ref) => {
         rows={4}
       />
 
-      {data.isCatalogProduct ? (
+      {data.product.isCatalog ? (
         <>
           <BrandChips />
           <ModelChips />
@@ -147,7 +147,7 @@ const DetailsStep = forwardRef<DetailsStepRef>(({}, ref) => {
               updateData({ product: { ...data.product, brand: value } })
             }
             error={errors.brand}
-            success={!!data.product?.brand && !errors.brand}
+            success={!!data.product.brand && !errors.brand}
           />
           <Input
             type='text'
@@ -160,20 +160,20 @@ const DetailsStep = forwardRef<DetailsStepRef>(({}, ref) => {
               updateData({ product: { ...data.product, model: value } })
             }
             error={errors.model}
-            success={!!data.product?.model && !errors.model}
+            success={!!data.product.model && !errors.model}
           />
           <Input
             type='text'
             name='pr_colorway'
-            value={data.product?.color_way || ""}
+            value={data.product.colorWay || ""}
             placeholder='pl. Triple White'
             label='Színállás'
             required
             onChange={(value) =>
-              updateData({ product: { ...data.product, color_way: value } })
+              updateData({ product: { ...data.product, colorWay: value } })
             }
-            error={errors.color_way}
-            success={!!data.product?.color_way && !errors.color_way}
+            error={errors.colorWay}
+            success={!!data.product?.colorWay && !errors.colorWay}
           />
         </>
       )}

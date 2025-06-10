@@ -1,6 +1,19 @@
-import { FetchedProductDTO, ListProductDTO } from "../dtos/ProductDTO";
-import { ProductListModel, ProductModel } from "../models/productModel";
-import { fromFetchedUserDTO } from "./userMapper";
+import {
+  BrandDTO,
+  ColorwayDTO,
+  CreateProductDTO,
+  FetchedProductDTO,
+  ListProductDTO,
+  ModelDTO,
+} from "../dtos/ProductDTO";
+import {
+  BrandModel,
+  ColorwayModel,
+  CreateProductModel,
+  ModelModel,
+  ProductListModel,
+  ProductModel,
+} from "../models/productModel";
 
 export function fromListProductDTO(dto: ListProductDTO): ProductListModel {
   return {
@@ -68,5 +81,57 @@ export function fromFetchedProductDTO(dto: FetchedProductDTO): ProductModel {
     liked: dto.liked,
     badges: dto.badges,
     ownProduct: dto.own_product,
+  };
+}
+
+export function fromBrandDTO(dto: BrandDTO): BrandModel {
+  return {
+    brand: dto.brand,
+  };
+}
+
+export function fromModelDTO(dto: ModelDTO): ModelModel {
+  return {
+    model: dto.model,
+  };
+}
+
+export function fromColorwayDTO(dto: ColorwayDTO): ColorwayModel {
+  return {
+    id: dto.id,
+    colorWay: dto.color_way,
+  };
+}
+
+export function toCreateProductDTO(
+  model: CreateProductModel
+): CreateProductDTO {
+  return {
+    title: model.title,
+    description: model.description,
+
+    product: {
+      is_catalog: model.product.isCatalog,
+      id: model.product.isCatalog ? model.product.id : null,
+      brand: model.product.brand,
+      model: model.product.model,
+      color_way: model.product.colorWay,
+      category: 2,
+      colors: "#fff",
+    },
+
+    items: model.items.map((item) => ({
+      condition: item.condition?.value!,
+      gender: item.gender?.value!,
+      size: item.size?.value!,
+      price: item.price!,
+      state: 1,
+    })),
+
+    county: 1, // TODO: Replace with actual county ID
+
+    images: model.images.map((image) => ({
+      file: image.file,
+    })),
   };
 }

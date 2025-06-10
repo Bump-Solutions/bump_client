@@ -1,13 +1,29 @@
 import { API } from "../utils/api";
 import { ApiResponse } from "../types/api";
 import { AxiosInstance } from "axios";
-import { SellFormData } from "../context/SellProvider";
 import { UserModel } from "../models/userModel";
-import { InventoryModel, ProductModel } from "../models/productModel";
-import { FetchedProductDTO, InventoryDTO } from "../dtos/ProductDTO";
 import {
+  BrandsPageModel,
+  ColorwaysPageModel,
+  CreateProductModel,
+  InventoryModel,
+  ModelsPageModel,
+  ProductModel,
+} from "../models/productModel";
+import {
+  BrandsPageDTO,
+  ColorwaysPageDTO,
+  FetchedProductDTO,
+  InventoryDTO,
+  ModelsPageDTO,
+} from "../dtos/ProductDTO";
+import {
+  fromBrandDTO,
+  fromColorwayDTO,
   fromFetchedProductDTO,
   fromListProductDTO,
+  fromModelDTO,
+  toCreateProductDTO,
 } from "../mappers/productMapper";
 
 export const listAvailableBrands = async (
@@ -16,19 +32,21 @@ export const listAvailableBrands = async (
   size: number,
   page: number,
   searchKey: string
-): Promise<ApiResponse> => {
-  const response: ApiResponse = await axiosPrivate.get(
-    API.PRODUCT.LIST_AVAILABLE_BRANDS(size, page, searchKey),
-    { signal }
-  );
+): Promise<BrandsPageModel> => {
+  const response: ApiResponse = await axiosPrivate.get<{
+    message: BrandsPageDTO;
+  }>(API.PRODUCT.LIST_AVAILABLE_BRANDS(size, page, searchKey), { signal });
 
-  const data = response.data.message;
+  const data: BrandsPageDTO = response.data.message;
 
   if (data.next) {
     data.next = page + 1;
   }
 
-  return data;
+  return {
+    ...data,
+    products: data.products.map(fromBrandDTO),
+  };
 };
 
 export const listAvailableModels = async (
@@ -38,19 +56,23 @@ export const listAvailableModels = async (
   size: number,
   page: number,
   searchKey: string
-): Promise<ApiResponse> => {
-  const response: ApiResponse = await axiosPrivate.get(
-    API.PRODUCT.LIST_AVAILABLE_MODELS(brand, size, page, searchKey),
-    { signal }
-  );
+): Promise<ModelsPageModel> => {
+  const response: ApiResponse = await axiosPrivate.get<{
+    message: ModelsPageDTO;
+  }>(API.PRODUCT.LIST_AVAILABLE_MODELS(brand, size, page, searchKey), {
+    signal,
+  });
 
-  const data = response.data.message;
+  const data: ModelsPageDTO = response.data.message;
 
   if (data.next) {
     data.next = page + 1;
   }
 
-  return data;
+  return {
+    ...data,
+    products: data.products.map(fromModelDTO),
+  };
 };
 
 export const listAvailableColorways = async (
@@ -61,55 +83,41 @@ export const listAvailableColorways = async (
   size: number,
   page: number,
   searchKey: string
-): Promise<ApiResponse> => {
-  const response: ApiResponse = await axiosPrivate.get(
+): Promise<ColorwaysPageModel> => {
+  const response: ApiResponse = await axiosPrivate.get<{
+    message: ColorwaysPageDTO;
+  }>(
     API.PRODUCT.LIST_AVAILABLE_COLORWAYS(brand, model, size, page, searchKey),
     { signal }
   );
 
-  const data = response.data.message;
+  const data: ColorwaysPageDTO = response.data.message;
 
   if (data.next) {
     data.next = page + 1;
   }
 
-  return data;
+  return {
+    ...data,
+    products: data.products.map(fromColorwayDTO),
+  };
 };
 
 export const uploadProduct = async (
   axiosPrivate: AxiosInstance,
-  data: SellFormData
+  newProduct: CreateProductModel
 ): Promise<ApiResponse> => {
+  const dto = toCreateProductDTO(newProduct);
+  const { images, ...payload } = dto;
+
   const formData = new FormData();
+  formData.append("data", JSON.stringify(payload));
 
-  formData.append(
-    "data",
-    JSON.stringify({
-      title: data.title,
-      description: data.description,
-      product: data.product?.id // Ha van id, akkor CatalogProduct
-        ? data.product.id
-        : {
-            brand: data.product?.brand,
-            model: data.product?.model,
-            color_way: data.product?.color_way,
-            category: 1, // TODO
-            colors: "#fff", // TODO
-          },
-      county: 1, // TODO
-      items: data.items.map((item) => ({
-        condition: item.condition?.value,
-        gender: item.gender?.value,
-        price: item.price,
-        size: item.size?.value,
-        state: 1,
-      })),
-    })
-  );
-
-  data.images.forEach((image) => {
+  images.forEach((image) => {
     formData.append("images", image.file);
   });
+
+  console.log("FormData:", formData, images);
 
   return await axiosPrivate.post(API.PRODUCT.UPLOAD_PRODUCT, formData, {
     headers: {

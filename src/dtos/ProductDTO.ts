@@ -73,3 +73,64 @@ export interface FetchedProductDTO {
   badges: BadgeCollection;
   own_product: boolean; // if the authenticated user is the owner of this product
 }
+
+export interface BrandDTO {
+  brand: string;
+}
+
+export interface BrandsPageDTO {
+  products: BrandDTO[];
+  next: number | null; // The next page number, or null if there are no more pages
+  previous: string | null; // The previous page URL, or null if there are no previous pages
+  count: number; // The total number of brands available
+}
+
+export interface ModelDTO {
+  model: string;
+}
+
+export interface ModelsPageDTO {
+  products: ModelDTO[];
+  next: number | null; // The next page number, or null if there are no more pages
+  previous: string | null; // The previous page URL, or null if there are no previous pages
+  count: number; // The total number of models available
+}
+
+export interface ColorwayDTO {
+  id: number; // Catalog product ID (brand + model + colorway)
+  color_way: string;
+}
+
+export interface ColorwaysPageDTO {
+  products: ColorwayDTO[];
+  next: number | null; // The next page number, or null if there are no more pages
+  previous: string | null; // The previous page URL, or null if there are no previous pages
+  count: number; // The total number of colorways available
+}
+
+export interface CreateProductDTO {
+  title: string;
+  description: string;
+
+  product: {
+    is_catalog: boolean; // true if the product is a catalog product, false if it's a custom product
+    id: number | null; // Catalog product ID, null if creating a new product
+    brand?: string; // Required if isCatalog is false
+    model?: string; // Required if isCatalog is false
+    color_way?: string; // Required if isCatalog is false
+    category?: number; // Required if isCatalog is false
+    colors?: string; // Comma separated colors, required if isCatalog is false
+  };
+
+  items: {
+    condition: number;
+    gender: number;
+    size: number;
+    price: number;
+    state: number;
+  }[];
+
+  county: number;
+
+  images: { file: File }[];
+}
