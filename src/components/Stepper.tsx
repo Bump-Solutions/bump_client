@@ -55,6 +55,7 @@ const Stepper = ({
   };
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (disabled) return;
     let newValue = e.target.value;
 
     if (newValue === "") {
@@ -88,7 +89,10 @@ const Stepper = ({
   return (
     <div className='input flex-none'>
       {description && <p className='input__desc'>{description}</p>}
-      <div className={`stepper__wrapper ${isFocused ? "focused" : ""}`}>
+      <div
+        className={`stepper__wrapper ${isFocused ? "focused" : ""} ${
+          disabled ? "disabled" : ""
+        }`}>
         <button
           type='button'
           title='Csökkentés'

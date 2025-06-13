@@ -333,12 +333,14 @@ const ProductListItem = ({ product }: ProductListItemProps) => {
             <div className='item__price'>
               {product.discountedPrice && (
                 <span className='discount'>
-                  {product.discountedPrice} Ft
+                  {product.discountedPrice.toLocaleString()} Ft
                   {product.itemsCount > 1 && "-tól"}
                 </span>
               )}
               <span className='price__original'>
-                {product.minPrice || product.price} Ft
+                {product.minPrice?.toLocaleString() ||
+                  product.price?.toLocaleString()}{" "}
+                Ft
                 {product.itemsCount > 1 && "-tól"}
               </span>
             </div>

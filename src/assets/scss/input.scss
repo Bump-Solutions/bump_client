@@ -131,11 +131,33 @@
     position: relative;
     display: flex;
     flex-direction: row;
+    align-items: center;
+    justify-content: center;
     width: fit-content;
     height: $input-height;
     border-radius: $border-radius-1;
     background-color: color(gray, 50);
     border: 1px solid color(gray, 400);
+
+    &.disabled {
+      background-color: color(gray, 200) !important;
+      cursor: not-allowed !important;
+
+      .stepper__btn {
+        cursor: not-allowed !important;
+        color: color(gray, 600) !important;
+      }
+
+      input {
+        cursor: not-allowed !important;
+        color: color(gray, 600) !important;
+      }
+
+      &:hover {
+        border: 1px solid color(gray, 400);
+        outline: none;
+      }
+    }
 
     &:hover {
       border: 1px solid color(blue, 500);

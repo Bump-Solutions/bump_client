@@ -17,8 +17,6 @@ const Product = () => {
 
   if (isError) return null;
 
-  console.log(product);
-
   return (
     <section className='product'>
       <div className='product__wrapper'>

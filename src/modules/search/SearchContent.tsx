@@ -6,10 +6,10 @@ import { useState } from "react";
 import History from "./History";
 import Button from "../../components/Button";
 import Tooltip from "../../components/Tooltip";
-
-import { Info, Search } from "lucide-react";
 import Results from "./Results";
 import Brands from "./Brands";
+
+import { Info, Search } from "lucide-react";
 
 const SearchContent = () => {
   const navigate = useNavigate();

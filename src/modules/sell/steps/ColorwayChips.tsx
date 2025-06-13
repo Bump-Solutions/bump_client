@@ -4,7 +4,7 @@ import {
   ColorwayModel,
   ColorwaysPageModel,
 } from "../../../models/productModel";
-import { useListAvailableColorways } from "../../../hooks/product/listAvailableColorways";
+import { useListAvailableColorways } from "../../../hooks/product/useListAvailableColorways";
 import { useToggle } from "../../../hooks/useToggle";
 
 import Spinner from "../../../components/Spinner";

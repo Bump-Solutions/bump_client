@@ -117,8 +117,6 @@ export const uploadProduct = async (
     formData.append("images", image.file);
   });
 
-  console.log("FormData:", formData, images);
-
   return await axiosPrivate.post(API.PRODUCT.UPLOAD_PRODUCT, formData, {
     headers: {
       "Content-Type": "multipart/form-data",

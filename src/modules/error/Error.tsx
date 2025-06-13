@@ -40,7 +40,8 @@ const Error = ({ code }: ErrorProps) => {
   const location = useLocation();
 
   const from =
-    (location?.state as { from?: { pathname: string } })?.from?.pathname || "/";
+    (location?.state as { from?: { pathname: string } })?.from?.pathname ||
+    ROUTES.HOME;
 
   const error: ErrorObject = (location?.state as { error?: ErrorObject })
     ?.error ||

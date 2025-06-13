@@ -148,6 +148,14 @@
                   gap: 0.5rem;
                   margin-block: 0.5rem;
 
+                  .chip {
+                    &.selected {
+                      border: none;
+                      background-color: color(gray, 900);
+                      color: $clr-white;
+                    }
+                  }
+
                   .search-box {
                     position: relative;
                     display: flex;
@@ -524,6 +532,14 @@
                     flex-wrap: wrap;
                     gap: 0.5rem;
                     margin-block: 0.5rem;
+
+                    .chip {
+                      &.selected {
+                        border: none;
+                        background-color: color(gray, 900);
+                        color: $clr-white;
+                      }
+                    }
 
                     .search-box {
                       position: relative;

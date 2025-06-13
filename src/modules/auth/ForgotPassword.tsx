@@ -50,7 +50,7 @@ const ForgotPassword = ({ setShowForgotPassword }: ForgotPasswordProps) => {
       animate={{ x: "0" }}
       exit={{ x: "100%" }}
       transition={{ duration: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
-      className='forgot  -password'>
+      className='forgot-password'>
       <Back onClick={() => setShowForgotPassword(false)} className='link' />
       <div className='forgot-password__wrapper'>
         <h1>Elfelejtett jelszó</h1>

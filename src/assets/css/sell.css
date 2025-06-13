@@ -267,6 +267,11 @@
   gap: 0.5rem;
   margin-block: 0.5rem;
 }
+.modal__wrapper .modal.sell .modal__content form.step-2 .details__wrapper.catalog .chips__wrapper .chip.selected {
+  border: none;
+  background-color: #212529;
+  color: #fff;
+}
 .modal__wrapper .modal.sell .modal__content form.step-2 .details__wrapper.catalog .chips__wrapper .search-box {
   position: relative;
   display: flex;
@@ -566,6 +571,11 @@
   flex-wrap: wrap;
   gap: 0.5rem;
   margin-block: 0.5rem;
+}
+.drawer__wrapper .drawer.sell .drawer__content .modal__content form.step-2 .details__wrapper.catalog .chips__wrapper .chip.selected {
+  border: none;
+  background-color: #212529;
+  color: #fff;
 }
 .drawer__wrapper .drawer.sell .drawer__content .modal__content form.step-2 .details__wrapper.catalog .chips__wrapper .search-box {
   position: relative;

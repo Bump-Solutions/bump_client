@@ -256,12 +256,30 @@
   position: relative;
   display: flex;
   flex-direction: row;
+  align-items: center;
+  justify-content: center;
   width: -moz-fit-content;
   width: fit-content;
   height: 3.25rem;
   border-radius: 1rem;
   background-color: #f8f9fa;
   border: 1px solid #ced4da;
+}
+.input .stepper__wrapper.disabled {
+  background-color: #e9ecef !important;
+  cursor: not-allowed !important;
+}
+.input .stepper__wrapper.disabled .stepper__btn {
+  cursor: not-allowed !important;
+  color: #868e96 !important;
+}
+.input .stepper__wrapper.disabled input {
+  cursor: not-allowed !important;
+  color: #868e96 !important;
+}
+.input .stepper__wrapper.disabled:hover {
+  border: 1px solid #ced4da;
+  outline: none;
 }
 .input .stepper__wrapper:hover {
   border: 1px solid #0070e8;
