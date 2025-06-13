@@ -1,9 +1,13 @@
 import { useProduct } from "../../hooks/product/useProduct";
-import { useMemo, useState } from "react";
-import { BadgeCollection } from "../../models/productModel";
+import { useFacetedSearch } from "../../hooks/product/useFacetedSearch";
 
 import Badges from "../../components/Badges";
+import FacetedSearch from "./FacetedSearch";
+import Stepper from "../../components/Stepper";
+import PriceTag from "./PriceTag";
+import ProductActions from "./ProductActions";
 
+/*
 const BADGES: BadgeCollection = {
   discount: {
     text: "-10%",
@@ -26,71 +30,63 @@ const BADGES: BadgeCollection = {
     priority: 96,
   },
 };
+*/
 
 const ProductDetails = () => {
   const { product } = useProduct();
+  const facets = useFacetedSearch(); // Ha null, akkor nincs elérhető szűrhető tétel
+
   if (!product) return null;
 
-  const [selectedGender, setSelectedGender] = useState<number | null>(null);
-  const [selectedSize, setSelectedSize] = useState<number | null>(null);
-  const [selectedCondition, setSelectedCondition] = useState<number | null>(
-    null
-  );
+  const LABEL = [
+    product.product.brand,
+    product.product.model,
+    product.product.colorWay,
+  ].join(" ");
 
-  // Csak az elérhető (state=1) tételek
-  const items = product.items || [];
-  const availableItems = useMemo(
-    () => items.filter((item) => item.state === 1),
-    [items]
-  );
+  const discountValue = (product.badges.discount?.value as number) || null;
 
-  // Összesítés: darabszám, egységár, firstAvailableItemId
-  const { availableCount, unitPrice, firstAvailableItemId } = useMemo(() => {
-    if (
-      selectedGender === null ||
-      selectedSize === null ||
-      selectedCondition === null
-    ) {
-      return { availableCount: 0, unitPrice: 0, firstAvailableItemId: null };
-    }
-
-    const filtered = availableItems
-      .filter(
-        (item) =>
-          item.gender === selectedGender &&
-          Number(item.size) === selectedSize &&
-          item.condition === selectedCondition
-      )
-      .sort((a, b) => a.id! - b.id!);
-
-    if (filtered.length === 0) {
-      return { availableCount: 0, unitPrice: 0, firstAvailableItemId: null };
-    }
-
-    const count = filtered.length;
-    const minPrice = Math.min(...filtered.map((i) => i.price!));
-    const firstId = filtered[0].id;
-
-    return {
-      availableCount: count,
-      unitPrice: minPrice,
-      firstAvailableItemId: firstId,
-    };
-  }, [availableItems, selectedGender, selectedSize, selectedCondition]);
-
-  const LABEL =
-    product.product.brand +
-    " " +
-    product.product.model +
-    " " +
-    product.product.colorWay;
+  console.log(product);
 
   return (
     <article className='product__details'>
-      <Badges badges={BADGES} initialToggle={true} showToggle={false} />
+      <Badges badges={product.badges} initialToggle={true} showToggle={false} />
+
       <h1 className='mb-0_5'>{LABEL}</h1>
       {product.description && (
-        <p className='fc-light ta-justify'>{product.description}</p>
+        <p className='fc-light ta-justify fs-16'>{product.description}</p>
+      )}
+
+      {facets ? (
+        <>
+          <FacetedSearch {...facets} />
+
+          <div className='product__quantity'>
+            <h4>
+              Darabszám{" "}
+              {facets?.filteredCount > 0 && (
+                <span className='fc-light'>
+                  - max {facets.filteredCount} db
+                </span>
+              )}
+            </h4>
+            <Stepper
+              value={facets.quantity}
+              min={1}
+              max={facets?.filteredCount}
+              onChange={(value: number) => facets.setQuantity(value)}
+              disabled={facets?.filteredCount === 0}
+            />
+          </div>
+
+          <PriceTag discount={discountValue} {...facets} />
+
+          <ProductActions {...facets} />
+        </>
+      ) : (
+        <div className='product__no-items'>
+          TODO: Nincsenek elérhető tételek.
+        </div>
       )}
     </article>
   );

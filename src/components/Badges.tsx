@@ -8,7 +8,12 @@ interface BadgeProps {
 }
 
 const BadgeComponent = ({ badge }: BadgeProps) => {
-  return <span className={`badge ${badge.type}`}>{badge.text}</span>;
+  return (
+    <span className={`badge ${badge.type}`}>
+      {badge.type === "discount" && "-"}
+      {badge.text}
+    </span>
+  );
 };
 
 interface BadgesProps {
@@ -27,6 +32,8 @@ const Badges = ({
   const badgeArray: Badge[] = Object.values(badges)
     .filter(Boolean)
     .sort((a, b) => b.priority - a.priority); // filter out undefined values
+
+  if (badgeArray.length === 0) return null;
 
   return (
     <div className='product__item-badges'>

@@ -40,6 +40,7 @@ const Input = ({
   const [isPasswordVisible, togglePasswordVisibility] = useToggle(false);
 
   const handleOnChange = (event: ChangeEvent<HTMLInputElement>) => {
+    if (disabled) return;
     onChange(event.target.value);
   };
 

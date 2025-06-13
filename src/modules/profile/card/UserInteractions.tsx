@@ -11,6 +11,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import Button from "../../../components/Button";
 
 import { UserPlus, Bell, Mail, UserX } from "lucide-react";
+import Tooltip from "../../../components/Tooltip";
 
 const UserInteractions = () => {
   const navigate = useNavigate();
@@ -110,9 +111,11 @@ const UserInteractions = () => {
     <div className='user__interactions '>
       {/* IF FOLLOWING DISPLAY TOOLTIP */}
       <div className='user__interaction--tooltip'>
-        <Button className='secondary'>
-          <Bell />
-        </Button>
+        <Tooltip content='Értesíts' showDelay={750} placement='top'>
+          <Button className='secondary'>
+            <Bell />
+          </Button>
+        </Tooltip>
       </div>
 
       <div className='user__interaction--follow'>

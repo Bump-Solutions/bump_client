@@ -1,28 +1,33 @@
 import { createContext, Dispatch, ReactNode } from "react";
-import { ICart, Seller, TradeItem, TradeProduct } from "../types/trade";
 import { useLocalStorage } from "react-use";
+import {
+  CartModel,
+  SellerModel,
+  TradeItemModel,
+  TradeProductModel,
+} from "../models/tradeModel";
 
 type TradeAction =
   | {
       type: "ADD_ITEM";
       payload: {
-        seller: Seller;
-        productId: TradeProduct["id"];
-        item: TradeItem;
+        seller: SellerModel;
+        productId: TradeProductModel["id"];
+        item: TradeItemModel;
       };
     }
   | {
       type: "REMOVE_ITEM";
       payload: {
-        sellerId: Seller["id"];
-        productId: TradeProduct["id"];
-        itemId: TradeItem["id"];
+        sellerId: SellerModel["id"];
+        productId: TradeProductModel["id"];
+        itemId: TradeItemModel["id"];
       };
     }
   | {
       type: "REMOVE_PACKAGE";
       payload: {
-        sellerId: Seller["id"];
+        sellerId: SellerModel["id"];
       };
     }
   | {
@@ -30,8 +35,12 @@ type TradeAction =
     };
 
 export interface TradeContextType {
-  cart: ICart;
-  addItem: (seller: Seller, productId: number, item: TradeItem) => void;
+  cart: CartModel;
+  addItem: (
+    seller: SellerModel,
+    productId: number,
+    item: TradeItemModel
+  ) => void;
   removeItem: (sellerId: number, productId: number, itemId: number) => void;
   removePackage: (sellerId: number) => void;
   clearCart: () => void;
@@ -45,11 +54,11 @@ interface TradeProviderProps {
   children: ReactNode;
 }
 
-function tradeReducer(state: ICart, action: TradeAction): ICart {
+function tradeReducer(state: CartModel, action: TradeAction): CartModel {
   switch (action.type) {
     case "ADD_ITEM": {
       const { seller, productId, item } = action.payload;
-      const sellerId = String(seller.id);
+      const sellerId = seller.id;
       const prevPackage = state[sellerId] || { seller, products: [] };
 
       // Megkeressük, van-e már ilyen termékblokk
@@ -57,12 +66,12 @@ function tradeReducer(state: ICart, action: TradeAction): ICart {
         (p) => p.id === productId
       );
 
-      let newProducts: TradeProduct[];
+      let newProducts: TradeProductModel[];
 
       if (existingProductIndex > -1) {
         // Már van ilyen termék, csak hozzáadjuk a tételt
         const existingProduct = prevPackage.products[existingProductIndex];
-        const updatedProduct: TradeProduct = {
+        const updatedProduct: TradeProductModel = {
           ...existingProduct,
           items: [...existingProduct.items, item],
         };
@@ -82,7 +91,7 @@ function tradeReducer(state: ICart, action: TradeAction): ICart {
       return {
         ...state,
         [sellerId]: {
-          seller,
+          ...prevPackage,
           products: newProducts,
         },
       };
@@ -138,13 +147,17 @@ function tradeReducer(state: ICart, action: TradeAction): ICart {
 }
 
 const TradeProvider = ({ children }: TradeProviderProps) => {
-  const [cart = {}, setCart] = useLocalStorage<ICart>("cart", {});
+  const [cart = {}, setCart] = useLocalStorage<CartModel>("CART", {});
 
   const dispatch: Dispatch<TradeAction> = (action) => {
     setCart((prev) => tradeReducer(prev || {}, action));
   };
 
-  const addItem = (seller: Seller, productId: number, item: TradeItem) =>
+  const addItem = (
+    seller: SellerModel,
+    productId: number,
+    item: TradeItemModel
+  ) =>
     dispatch({
       type: "ADD_ITEM",
       payload: { seller, productId, item },

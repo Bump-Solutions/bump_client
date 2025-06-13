@@ -31,7 +31,11 @@ const Chip = ({
       {label && <span>{label}</span>}
       {svg && svg}
       {onDelete && (
-        <span title='Remove Icon' className='delete' onClick={handleDelete}>
+        <span
+          role='button'
+          title='Törlés'
+          className='delete'
+          onClick={handleDelete}>
           <X />
         </span>
       )}
