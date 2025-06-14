@@ -742,6 +742,26 @@
             order: 1;
             margin-left: 0.5rem;
 
+            &.active {
+              .button {
+                svg {
+                  color: color(yellow, 500);
+                  fill: color(yellow, 500);
+                  transition: color 0.2s $animation-cubic,
+                    fill 0.2s $animation-cubic;
+                }
+              }
+
+              &:hover {
+                .button {
+                  svg {
+                    color: color(yellow, 600);
+                    fill: color(yellow, 600);
+                  }
+                }
+              }
+            }
+
             .button {
               padding: 0.3125rem;
               aspect-ratio: 1 / 1;
