@@ -75,7 +75,7 @@ const ProfileMenuActions = ({ toggleProfileMenu }: ProfileMenuActionsProps) => {
       style={{
         position: "fixed",
         inset: 0,
-        background: "rgba(0, 0, 0, 0.1)",
+        background: "rgba(0, 0, 0, 0.2)",
         zIndex: 100,
       }}
       initial={{ opacity: 0 }}

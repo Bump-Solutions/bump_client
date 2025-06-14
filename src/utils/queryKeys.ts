@@ -26,6 +26,9 @@ export const QUERY_KEY = {
   listChatGroups: "listChatGroups",
   listMessages: "listMessages",
 
+  // NOTIFICATION
+  listNotifications: "listNotifications",
+
   // SEARCH
   listSearchHistory: "listSearchHistory",
   searchProducts: "searchProducts",
