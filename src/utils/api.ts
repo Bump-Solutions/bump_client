@@ -107,6 +107,10 @@ export const API = {
       `/api/v1/chat/upload_chat_images/${chat}`,
   },
 
+  NOTIFICATIONS: {
+    LIST_NOTIFICATIONS: (size: number, page: number) =>
+      `/api/v1/notifications/list_notifications?page_size=${size}&page=${page}`,
+  },
   REPORT: {
     PRODUCT: "/api/v1/product/report_product",
     USER: "/api/v1/user/report_user",

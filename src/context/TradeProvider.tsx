@@ -34,7 +34,7 @@ type TradeAction =
       type: "CLEAR_CART";
     };
 
-export interface TradeContextType {
+interface TradeContextType {
   cart: CartModel;
   addItem: (
     seller: SellerModel,

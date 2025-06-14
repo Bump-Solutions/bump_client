@@ -746,6 +746,15 @@
   order: 1;
   margin-left: 0.5rem;
 }
+.product .product__wrapper .product__content .product__details .product__actions .product__action--save.active .button svg {
+  color: #f59f00;
+  fill: #f59f00;
+  transition: color 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94), fill 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.product .product__wrapper .product__content .product__details .product__actions .product__action--save.active:hover .button svg {
+  color: #df9100;
+  fill: #df9100;
+}
 .product .product__wrapper .product__content .product__details .product__actions .product__action--save .button {
   padding: 0.3125rem;
   aspect-ratio: 1/1;

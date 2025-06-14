@@ -24,18 +24,12 @@ const NavProfileMenu = ({
 }: NavProfileMenuProps) => {
   const navigate = useNavigate();
 
-  const { notifications } = useNotifications();
+  const { unreadNotificationCount } = useNotifications();
   const { cart } = useCart();
 
   const { auth } = useAuth();
 
   const { addToast } = useToast();
-
-  const unreadNotificationCount = () => {
-    // TODO: notification
-    return notifications.filter((notification: any) => !notification.read)
-      .length;
-  };
 
   const cartPackageCount = () => {
     // Return the number of packages in the cart
@@ -78,11 +72,11 @@ const NavProfileMenu = ({
         <Tooltip content='Értesítések' showDelay={750} placement='bottom'>
           <div className='profile-menu__item no-hide '>
             <div onClick={() => toggleNotificationMenu(true)}>
-              {unreadNotificationCount() > 0 && (
+              {unreadNotificationCount > 0 && (
                 <span className='badge fw-600'>
-                  {unreadNotificationCount() > 99
+                  {unreadNotificationCount > 99
                     ? "99+"
-                    : unreadNotificationCount()}
+                    : unreadNotificationCount}
                 </span>
               )}
               <Bell />
