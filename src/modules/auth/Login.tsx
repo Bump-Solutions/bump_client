@@ -137,7 +137,7 @@ const Login = () => {
               }}
               error={errors.email}
               success={!!email && !errors.email}
-              tabIndex={0}
+              tabIndex={1}
             />
             <Input
               type='password'
@@ -150,25 +150,29 @@ const Login = () => {
                 setPassword(value);
               }}
               error={errors.password}
-              tabIndex={1}
+              tabIndex={2}
             />
 
-            <p onClick={() => setShowForgotPassword(true)} className='link'>
+            <p
+              onClick={() => setShowForgotPassword(true)}
+              className='link'
+              tabIndex={3}>
               Elfelejtetted a jelszavadat?
             </p>
 
             <StateButton
+              type='submit'
               text='Bejelentkezés'
               className='primary'
               onClick={handleLogin}
-              tabIndex={2}>
+              tabIndex={4}>
               <LogIn />
             </StateButton>
           </form>
 
           <p className='mt-2 ta-center fs-18'>
             Még nincs fiókod?{" "}
-            <Link to={ROUTES.SIGNUP} className='link'>
+            <Link to={ROUTES.SIGNUP} className='link' tabIndex={5}>
               Regisztrálj ingyen.
             </Link>
           </p>

@@ -25,7 +25,6 @@ export const useMarkNotificationAsRead = (
       queryClient.setQueryData(
         [QUERY_KEY.getProfileMeta, auth?.user?.profilePicture],
         (prev: ProfileMetaModel | undefined) => {
-          console.log("prev", prev);
           if (!prev) return prev;
 
           return {

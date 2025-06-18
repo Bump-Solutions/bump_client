@@ -24,6 +24,7 @@ interface SelectProps {
   name: string;
   error?: string;
   className?: string;
+  tabIndex?: number;
 }
 
 const Select = ({
@@ -38,6 +39,7 @@ const Select = ({
   name,
   error,
   className,
+  tabIndex,
 }: SelectProps) => {
   const [showMenu, setShowMenu] = useState(false);
   const [selectedValue, setSelectedValue] = useState<Option[] | Option | null>(
@@ -196,7 +198,8 @@ const Select = ({
           onClick={handleInputClick}
           className={`dropdown__input ${showMenu ? "focused" : ""} ${
             hasSelectedValue ? "filled" : ""
-          } ${error ? "error" : ""}`}>
+          } ${error ? "error" : ""}`}
+          tabIndex={tabIndex}>
           <div
             className={`dropdown__selected-value ${
               !selectedValue ||

@@ -2,14 +2,14 @@ import { ROUTES } from "../../routes/routes";
 import { useNavigate } from "react-router";
 import { useAuth } from "../../hooks/auth/useAuth";
 import { useToast } from "../../hooks/useToast";
-
 import { useGoogleLogin } from "@react-oauth/google";
+import { useLoginWithGoogle } from "../../hooks/auth/useLoginWithGoogle";
+
+import Button from "../../components/Button";
 
 import { ImFacebook } from "react-icons/im";
 import { FcGoogle } from "react-icons/fc";
 
-import Button from "../../components/Button";
-import { useLoginWithGoogle } from "../../hooks/auth/useLoginWithGoogle";
 const SocialSignup = () => {
   const navigate = useNavigate();
 
@@ -47,11 +47,12 @@ const SocialSignup = () => {
           if (googleLoginMutation.isPending) return;
           handleGoogleLogin();
         }}
-        loading={googleLoginMutation.isPending}>
+        loading={googleLoginMutation.isPending}
+        tabIndex={0}>
         <FcGoogle style={{ color: "#db4437" }} />
       </Button>
 
-      <Button text='folytatás Facebook-kal' className='secondary'>
+      <Button text='folytatás Facebook-kal' className='secondary' tabIndex={0}>
         <ImFacebook style={{ color: "#1877f2" }} />
       </Button>
     </div>
