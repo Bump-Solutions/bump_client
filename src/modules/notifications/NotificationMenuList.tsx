@@ -2,7 +2,7 @@ import { useNotifications } from "../../hooks/notifications/useNotifications";
 import { ROUTES } from "../../routes/routes";
 import { Link } from "react-router";
 
-import NotificationMenuListItem from "./NotificationMenuListItem";
+import NotificationMenuListItem from "./NotificationsListItem";
 
 import { BellOff } from "lucide-react";
 
@@ -11,18 +11,19 @@ interface NotificationMenuListProps {
   toggleNotificationMenu: (bool: boolean) => void;
 }
 
+const LIMIT = 5;
+
 const NotificationMenuList = ({
   activeTabIndex,
   toggleNotificationMenu,
 }: NotificationMenuListProps) => {
   const { getTab } = useNotifications();
-  const { ...tab } = getTab(activeTabIndex);
-  // console.log(tab);
+  const { notifications, count } = getTab(activeTabIndex);
 
-  return tab.notifications.length > 0 ? (
+  return notifications && notifications.length > 0 ? (
     <>
       <ul className='notification-menu__list'>
-        {tab.notifications.map((notification, idx) => (
+        {notifications.slice(0, LIMIT).map((notification, idx) => (
           <NotificationMenuListItem
             key={idx}
             notification={notification}
@@ -31,7 +32,7 @@ const NotificationMenuList = ({
         ))}
       </ul>
 
-      {tab.hasNextPage && (
+      {count > LIMIT && (
         <div>
           <Link
             to={ROUTES.NOTIFICATIONS}

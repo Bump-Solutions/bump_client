@@ -10,6 +10,7 @@ type NotificationType = (typeof TYPES)[number];
 
 interface TabQuery {
   notifications: NotificationModel[];
+  count: number;
   unreadCount: number;
   isLoading: boolean;
   isFetchingNextPage: boolean;
@@ -42,6 +43,7 @@ const NotificationsProvider = ({ children }: NotificationsProviderProps) => {
           notifications: pages.flatMap(
             (page: NotificationsPageModel) => page.notifications
           ),
+          count: pages[0]?.count ?? 0,
           unreadCount: pages[0]?.unreadCount ?? 0,
           isLoading: q.isLoading,
           isFetchingNextPage: q.isFetchingNextPage,
