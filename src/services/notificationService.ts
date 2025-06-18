@@ -3,6 +3,7 @@ import { API } from "../utils/api";
 import { NotificationsPageModel } from "../models/notificationModel";
 import { NotificationsPageDTO } from "../dtos/NotificationDTO";
 import { fromNotificationDTO } from "../mappers/notificationMapper";
+import { ApiResponse } from "../types/api";
 
 export const listNotifications = async (
   signal: AbortSignal,
@@ -46,4 +47,17 @@ export const listNotifications = async (
     unreadCount: unread_count,
     notifications: data.notifications.map(fromNotificationDTO),
   };
+};
+
+export const markNotificationAsRead = async (
+  axiosPrivate: AxiosInstance,
+  notificationId: number
+): Promise<ApiResponse> => {
+  if (!notificationId) {
+    throw new Error("Missing required parameter: notificationId");
+  }
+
+  return await axiosPrivate.put(
+    API.NOTIFICATIONS.MARK_NOTIFICATION_AS_READ(notificationId)
+  );
 };

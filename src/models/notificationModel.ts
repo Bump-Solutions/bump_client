@@ -4,7 +4,7 @@ export interface NotificationModel {
   senderProfilePicture: string; // The profile picture URL of the sender
   type: number;
 
-  targetId: number; // The ID of the target object (e.g., product, user, etc.)
+  targetId: number | string; // The ID of the target object (e.g., product, user, etc.)
   targetType: string; // The type of the target object (e.g., "product", "user", etc.)
 
   verb: string;

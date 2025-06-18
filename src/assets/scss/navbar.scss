@@ -516,14 +516,14 @@
       transition: background-color 0.2s $animation-cubic;
 
       &.unread {
-        background-color: lighten($color: color(purple, 50), $amount: 3%);
+        background-color: lighten($color: color(pink, 50), $amount: 3%);
       }
 
       &:hover {
         background-color: color(gray, 100);
 
         &.unread {
-          background-color: lighten($color: color(purple, 50), $amount: 1%);
+          background-color: lighten($color: color(pink, 50), $amount: 1%);
         }
       }
 
@@ -589,7 +589,7 @@
         width: 0.5rem;
         height: 0.5rem;
         border-radius: $border-radius-50;
-        background-color: color(purple, 500);
+        background-color: color(pink, 500);
       }
     }
   }

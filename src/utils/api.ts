@@ -107,12 +107,12 @@ export const API = {
   },
 
   NOTIFICATIONS: {
-    LIST_NOTIFICATIONS: (size: number, page: number) =>
-      `/api/v1/notifications/list_notifications?page_size=${size}&page=${page}`,
     LIST_MESSAGE_RELATED_NOTIFICATIONS: (size: number, page: number) =>
       `/api/v1/notifications/list_message_related_notifications?page_size=${size}&page=${page}`,
     LIST_GENERAL_NOTIFICATIONS: (size: number, page: number) =>
       `/api/v1/notifications/list_general_notifications?page_size=${size}&page=${page}`,
+    MARK_NOTIFICATION_AS_READ: (id: number) =>
+      `/api/v1/notifications/mark_notification_read/${id}`,
   },
   REPORT: {
     PRODUCT: "/api/v1/product/report_product",

@@ -1,5 +1,5 @@
 import "../../assets/css/settings.css";
-
+import { ENUM } from "../../utils/enum";
 import { Outlet, useLocation } from "react-router";
 import { useTitle } from "react-use";
 import { useMediaQuery } from "react-responsive";
@@ -9,7 +9,7 @@ import SettingsNav from "./SettingsNav";
 import Back from "../../components/Back";
 
 const Settings = () => {
-  useTitle("Beállítások - Bump");
+  useTitle(`Beállítások - ${ENUM.BRAND}`);
 
   const { pathname } = useLocation();
   const isRoot = pathname === "/settings";

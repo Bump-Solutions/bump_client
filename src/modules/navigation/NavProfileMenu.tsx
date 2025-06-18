@@ -69,7 +69,7 @@ const NavProfileMenu = ({
         <Tooltip content='Értesítések' showDelay={750} placement='bottom'>
           <div className='profile-menu__item no-hide '>
             <div onClick={() => toggleNotificationMenu(true)}>
-              {meta?.unreadNotifications && meta.unreadNotifications > 0 && (
+              {!!meta?.unreadNotifications && meta.unreadNotifications > 0 && (
                 <span className='badge fw-600'>
                   {meta.unreadNotifications > 99
                     ? "99+"

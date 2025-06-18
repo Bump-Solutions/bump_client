@@ -2,26 +2,32 @@ import { useNotifications } from "../../hooks/notifications/useNotifications";
 import { ROUTES } from "../../routes/routes";
 import { Link } from "react-router";
 
-import { BellOff } from "lucide-react";
 import NotificationMenuListItem from "./NotificationMenuListItem";
+
+import { BellOff } from "lucide-react";
 
 interface NotificationMenuListProps {
   activeTabIndex: 1 | 2;
+  toggleNotificationMenu: (bool: boolean) => void;
 }
 
 const NotificationMenuList = ({
   activeTabIndex,
+  toggleNotificationMenu,
 }: NotificationMenuListProps) => {
   const { getTab } = useNotifications();
-
   const { ...tab } = getTab(activeTabIndex);
-  console.log("Tab", tab);
+  // console.log(tab);
 
   return tab.notifications.length > 0 ? (
     <>
       <ul className='notification-menu__list'>
         {tab.notifications.map((notification, idx) => (
-          <NotificationMenuListItem key={idx} notification={notification} />
+          <NotificationMenuListItem
+            key={idx}
+            notification={notification}
+            toggleNotificationMenu={toggleNotificationMenu}
+          />
         ))}
       </ul>
 
@@ -30,6 +36,7 @@ const NotificationMenuList = ({
           <Link
             to={ROUTES.NOTIFICATIONS}
             state={{ type: activeTabIndex }}
+            onClick={() => toggleNotificationMenu(false)}
             className='mx-auto p-1 link blue w-full'>
             Összes megtekintése
           </Link>
