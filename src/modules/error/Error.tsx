@@ -53,7 +53,8 @@ const Error = ({ code }: ErrorProps) => {
     };
 
   const handleOnClick = () => {
-    navigate(from, { replace: true });
+    // navigate(from, { replace: true });
+    navigate(ROUTES.HOME, { replace: true });
   };
 
   return (

@@ -1,3 +1,5 @@
+import { ROUTES } from "../../routes/routes";
+import { useMarkNotificationAsRead } from "../../hooks/notifications/useMarkNotificationAsRead";
 import { MouseEvent } from "react";
 import { useNavigate } from "react-router";
 import { NotificationModel } from "../../models/notificationModel";
@@ -7,14 +9,18 @@ import Image from "../../components/Image";
 
 interface NotificationMenuListItemProps {
   notification: NotificationModel;
+  toggleNotificationMenu: (bool: boolean) => void;
 }
 
 const IMAGE_IDENTIFIER = "fbad7900-a30c-4700-a52b-dc9f29dfb1f2";
 
 const NotificationMenuListItem = ({
   notification,
+  toggleNotificationMenu,
 }: NotificationMenuListItemProps) => {
   const navigate = useNavigate();
+
+  const markNotificationAsRead = useMarkNotificationAsRead();
 
   const renderContent = () => {
     const { updatedAt, type, sender, verb } = notification;
@@ -68,7 +74,44 @@ const NotificationMenuListItem = ({
     }
   };
 
-  const handleOnClick = (e: MouseEvent<HTMLLIElement>) => {};
+  const handleOnClick = (e: MouseEvent<HTMLLIElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const { isRead, targetType, targetId } = notification;
+
+    if (!targetId) return;
+
+    if (!isRead) {
+      markNotificationAsRead.mutateAsync(notification.id);
+    }
+
+    toggleNotificationMenu(false);
+
+    switch (targetType) {
+      case "product":
+        navigate(ROUTES.PRODUCT(targetId as number).ROOT);
+        break;
+
+      case "user":
+        navigate(ROUTES.PROFILE(String(targetId)).ROOT);
+        break;
+
+      case "message":
+        navigate(ROUTES.INBOX.CHAT(String(targetId)), {
+          state: {
+            partner: {
+              username: notification.sender,
+              profilePicture: notification.senderProfilePicture,
+            },
+          },
+        });
+        break;
+
+      default:
+        return;
+    }
+  };
 
   return (
     <li

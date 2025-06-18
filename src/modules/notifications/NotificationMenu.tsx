@@ -47,7 +47,10 @@ const NotificationMenu = ({
           setActiveTabIndex={setActiveTabIndex}
         />
 
-        <NotificationMenuList activeTabIndex={activeTabIndex} />
+        <NotificationMenuList
+          activeTabIndex={activeTabIndex}
+          toggleNotificationMenu={toggleNotificationMenu}
+        />
       </motion.div>
     </motion.div>
   );

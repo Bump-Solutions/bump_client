@@ -56,7 +56,11 @@ const ProductDetails = () => {
 
       <h1 className='mb-0_5'>{LABEL}</h1>
       {product.description && (
-        <p className='fc-light ta-justify fs-16'>{product.description}</p>
+        <p
+          className='fc-light ta-justify fs-16'
+          style={{ whiteSpace: "pre-line" }}>
+          {product.description}
+        </p>
       )}
 
       {facets ? (

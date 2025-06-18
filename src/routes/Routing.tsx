@@ -30,6 +30,10 @@ const SavedProducts = lazy(() => import("../modules/product/SavedProducts"));
 const ProductLayout = lazy(() => import("../modules/product/ProductLayout"));
 const Product = lazy(() => import("../modules/product/Product"));
 
+const Notifications = lazy(
+  () => import("../modules/notifications/Notifications")
+);
+
 const Chat = lazy(() => import("../modules/chat/Chat"));
 
 const Error = lazy(() => import("../modules/error/Error"));
@@ -107,6 +111,12 @@ export const privateRoutes = () => {
               <Route path='/product/:pid' element={withSuspense(ProductLayout)}>
                 <Route index element={<Product />} />
               </Route>
+
+              {/* NOTIFICATIONS */}
+              <Route
+                path='/notifications'
+                element={withSuspense(Notifications)}
+              />
             </Route>
 
             <Route

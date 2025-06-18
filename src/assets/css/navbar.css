@@ -506,13 +506,13 @@
   transition: background-color 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 .notification-menu .notification-menu__list .notification-menu__item.unread {
-  background-color: #fbf4fd;
+  background-color: #fef9fb;
 }
 .notification-menu .notification-menu__list .notification-menu__item:hover {
   background-color: #f1f3f5;
 }
 .notification-menu .notification-menu__list .notification-menu__item:hover.unread {
-  background-color: #f8ebfb;
+  background-color: #fdf0f4;
 }
 .notification-menu .notification-menu__list .notification-menu__item .item__avatar {
   flex-shrink: 0;
@@ -569,7 +569,7 @@
   width: 0.5rem;
   height: 0.5rem;
   border-radius: 50%;
-  background-color: #a512c9;
+  background-color: #e63774;
 }
 
 .profile-menu__actions {
