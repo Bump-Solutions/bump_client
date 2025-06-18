@@ -5,7 +5,7 @@ import { QUERY_KEY } from "../utils/queryKeys";
 import { ProfileModel } from "../models/profileModel";
 
 interface PersonalSettingsContextType {
-  data: ProfileModel;
+  data: ProfileModel | undefined;
   setData: (data: Partial<ProfileModel>) => void;
   isLoading: boolean;
   isError: boolean;

@@ -4,7 +4,6 @@ import { useEffect } from "react";
 import { AnimatePresence } from "framer-motion";
 import { useNavbarTheme } from "../../hooks/useNavbarTheme";
 import { useToggle } from "../../hooks/useToggle";
-import { useNotifications } from "../../hooks/notifications/useNotifications";
 
 import NavMenu from "./NavMenu";
 import NavMenuMobile from "./NavMenuMobile";
@@ -18,8 +17,6 @@ const Navbar = () => {
 
   const [isProfileMenuOpen, toggleProfileMenu] = useToggle(false);
   const [isNotificationMenuOpen, toggleNotificationMenu] = useToggle(false);
-
-  const { pages } = useNotifications();
 
   useEffect(() => {
     document.body.style.overflow =
@@ -46,10 +43,7 @@ const Navbar = () => {
 
       <AnimatePresence mode='wait'>
         {isNotificationMenuOpen && (
-          <NotificationMenu
-            toggleNotificationMenu={toggleNotificationMenu}
-            pages={pages}
-          />
+          <NotificationMenu toggleNotificationMenu={toggleNotificationMenu} />
         )}
       </AnimatePresence>
 

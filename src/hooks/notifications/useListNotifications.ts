@@ -5,9 +5,14 @@ import { QUERY_KEY } from "../../utils/queryKeys";
 import { listNotifications } from "../../services/notificationService";
 import { useAuth } from "../auth/useAuth";
 
-const MAX_NOTIFICATIONS_PER_PAGE = 20;
+const MAX_NOTIFICATIONS_PER_PAGE = 5;
 
-export const useListNotifications = (dependencies: any[] = [], params: {}) => {
+export const useListNotifications = (
+  dependencies: any[] = [],
+  params: {
+    type: number; // 0 for all, 1 for message-related, 2 for general
+  }
+) => {
   const axiosPrivate = useAxiosPrivate();
   const { auth } = useAuth();
 
@@ -17,11 +22,12 @@ export const useListNotifications = (dependencies: any[] = [], params: {}) => {
       listNotifications(
         signal,
         axiosPrivate,
+        params.type,
         MAX_NOTIFICATIONS_PER_PAGE,
         pageParam as number
       ),
     enabled: !!auth, // Only fetch if user is authenticated
-    staleTime: 1000 * 60 * 5,
+    staleTime: 1000 * 60 * 5, // 5 minutes
     refetchOnWindowFocus: true,
     initialPageParam: 1,
     getNextPageParam: (lastPage) => lastPage.next ?? undefined,

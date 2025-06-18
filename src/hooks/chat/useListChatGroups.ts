@@ -27,5 +27,10 @@ export const useListChatGroups = (
       ),
     initialPageParam: 1,
     getNextPageParam: (lastPage) => lastPage.next ?? undefined,
+    refetchOnWindowFocus: true,
+    refetchOnReconnect: true,
+    refetchOnMount: true,
+    staleTime: 0, // No caching
+    gcTime: 0, // No caching
   });
 };

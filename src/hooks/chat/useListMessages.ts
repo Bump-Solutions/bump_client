@@ -31,6 +31,9 @@ export const useListMessages = (
     getNextPageParam: (lastPage) => lastPage.next ?? undefined,
     refetchOnWindowFocus: true,
     refetchOnReconnect: true,
-    staleTime: 1000 * 60 * 15, // 15 minutes
+    refetchOnMount: true,
+    // staleTime: 1000 * 60 * 15, // 15 minutes
+    staleTime: 0, // No caching
+    gcTime: 0, // No caching
   });
 };

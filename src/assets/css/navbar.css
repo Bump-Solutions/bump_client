@@ -342,7 +342,7 @@
 }
 
 .notification-menu {
-  width: 25rem;
+  width: 30rem;
   height: auto;
   overflow-y: auto;
   z-index: 100;
@@ -366,7 +366,8 @@
 }
 .notification-menu .notification-menu__header button {
   all: unset;
-  font-size: 0.9375rem;
+  font-size: 0.875rem;
+  height: 1.5rem;
   color: #0070e8;
   cursor: pointer;
   -webkit-user-select: none;
@@ -378,7 +379,7 @@
   color: #549ff0;
 }
 .notification-menu .notification-menu__nav {
-  padding-inline: 1rem;
+  padding-inline: 1rem 0;
   border-bottom: 1px solid #dee2e6;
 }
 .notification-menu .notification-menu__nav ul {
@@ -403,6 +404,7 @@
 }
 .notification-menu .notification-menu__nav ul li:last-child {
   margin-left: auto;
+  padding: 0.5rem 1rem;
 }
 .notification-menu .notification-menu__nav ul li:last-child a {
   height: 100%;
@@ -421,7 +423,7 @@
 .notification-menu .notification-menu__nav ul li::after {
   content: "";
   position: absolute;
-  bottom: -1px;
+  bottom: -2px;
   left: 0;
   width: 100%;
   height: 0px;
@@ -467,16 +469,107 @@
 .notification-menu .notification-menu__list {
   display: flex;
   flex-direction: column;
-  padding: 1rem;
+  padding: 0;
   max-height: 40vh;
   overflow-y: auto;
   scrollbar-width: thin;
 }
-.notification-menu .notification-menu__list .notification-menu__list-empty {
-  padding: 2rem;
+.notification-menu .notification-menu__list.empty {
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  padding: 3rem;
   text-align: center;
   color: #868e96;
-  font-size: 1.125rem;
+  font-size: 0.875rem;
+}
+.notification-menu .notification-menu__list.empty svg {
+  width: 3rem;
+  height: 3rem;
+  color: #ced4da;
+}
+.notification-menu .notification-menu__list.empty h5 {
+  font-size: 1rem;
+  color: #212529;
+  margin-bottom: 0.25rem;
+}
+.notification-menu .notification-menu__list .notification-menu__item {
+  position: relative;
+  padding: 0.75rem 1rem;
+  padding-right: 3rem;
+  border-bottom: 1px solid #e9ecef;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  height: auto;
+  cursor: pointer;
+  transition: background-color 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.notification-menu .notification-menu__list .notification-menu__item.unread {
+  background-color: #fbf4fd;
+}
+.notification-menu .notification-menu__list .notification-menu__item:hover {
+  background-color: #f1f3f5;
+}
+.notification-menu .notification-menu__list .notification-menu__item:hover.unread {
+  background-color: #f8ebfb;
+}
+.notification-menu .notification-menu__list .notification-menu__item .item__avatar {
+  flex-shrink: 0;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  overflow: hidden;
+}
+.notification-menu .notification-menu__list .notification-menu__item .item__avatar .image {
+  width: 100%;
+  height: 100%;
+}
+.notification-menu .notification-menu__list .notification-menu__item .item__avatar .image img {
+  width: 100%;
+  height: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+  line-height: 3rem;
+  font-size: 1rem;
+}
+.notification-menu .notification-menu__list .notification-menu__item .item__content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.notification-menu .notification-menu__list .notification-menu__item .item__content p {
+  margin: 0;
+  font-size: 0.9375rem;
+  color: #868e96;
+  line-height: 1.4;
+}
+.notification-menu .notification-menu__list .notification-menu__item .item__content p strong {
+  color: #212529;
+}
+.notification-menu .notification-menu__list .notification-menu__item .item__content p span {
+  font-weight: 600;
+}
+.notification-menu .notification-menu__list .notification-menu__item .item__content .verb {
+  font-size: 0.9375rem;
+  color: #868e96;
+  line-height: 1.4;
+  margin-top: 0.25rem;
+  max-width: 15rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.notification-menu .notification-menu__list .notification-menu__item .item__indicator {
+  position: absolute;
+  top: 50%;
+  right: 1.3125rem;
+  transform: translateY(-50%);
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background-color: #a512c9;
 }
 
 .profile-menu__actions {
@@ -641,7 +734,7 @@
   .notification-menu {
     width: calc(100% - 2 * var(--container-x-padding));
     right: 0;
-    max-width: 25rem;
+    max-width: 30rem;
     margin-inline: var(--container-x-padding);
   }
 }/*# sourceMappingURL=navbar.css.map */

@@ -28,23 +28,23 @@ export const API = {
       uid: number,
       size: number,
       page: number,
-      searchKey?: string
+      searchKey: string
     ) =>
       `/api/v1/user/list_followers/${uid}?page_size=${size}&page=${page}&username=${searchKey}`,
     LIST_FOLLOWING: (
       uid: number,
       size: number,
       page: number,
-      searchKey?: string
+      searchKey: string
     ) =>
       `/api/v1/user/list_followings/${uid}?page_size=${size}&page=${page}&username=${searchKey}`,
   },
 
   PROFILE: {
     GET_PROFILE: "/api/v1/user/get_profile_data",
+    GET_PROFILE_META: "/api/v1/user/get_profile_meta",
     UPDATE_PROFILE: "/api/v1/user/update_profile_data",
 
-    GET_PROFILE_PICTURE: "/api/v1/user/get_profile_picture",
     UPLOAD_PROFILE_PICTURE: "/api/v1/user/upload_profile_picture",
 
     SET_PROFILE_BACKGROUND_COLOR:
@@ -63,14 +63,13 @@ export const API = {
       `/api/v1/product/list_sizes?category=${category}&gender=${gender}`,
     LIST_CONDITIONS: "/api/v1/product/list_conditions",
 
-    // TODO: searchKez
     LIST_AVAILABLE_BRANDS: (size: number, page: number, searchKey?: string) =>
       `/api/v1/product/list_available_brands?page_size=${size}&page=${page}&brand=${searchKey}`,
     LIST_AVAILABLE_MODELS: (
       brand: string,
       size: number,
       page: number,
-      searchKey?: string
+      searchKey: string
     ) =>
       `/api/v1/product/list_available_models/${brand}?page_size=${size}&page=${page}&model=${searchKey}`,
     LIST_AVAILABLE_COLORWAYS: (
@@ -78,7 +77,7 @@ export const API = {
       model: string,
       size: number,
       page: number,
-      searchKey?: string
+      searchKey: string
     ) =>
       `/api/v1/product/list_available_colorways/${brand}/${model}?page_size=${size}&page=${page}&colorway=${searchKey}`,
 
@@ -110,6 +109,10 @@ export const API = {
   NOTIFICATIONS: {
     LIST_NOTIFICATIONS: (size: number, page: number) =>
       `/api/v1/notifications/list_notifications?page_size=${size}&page=${page}`,
+    LIST_MESSAGE_RELATED_NOTIFICATIONS: (size: number, page: number) =>
+      `/api/v1/notifications/list_message_related_notifications?page_size=${size}&page=${page}`,
+    LIST_GENERAL_NOTIFICATIONS: (size: number, page: number) =>
+      `/api/v1/notifications/list_general_notifications?page_size=${size}&page=${page}`,
   },
   REPORT: {
     PRODUCT: "/api/v1/product/report_product",
