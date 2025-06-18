@@ -98,7 +98,7 @@ const SignupForm = () => {
 
   const signupMutation = useSignup(
     (response) => {
-      //console.log(response);
+      // console.log(response);
 
       addToast("success", "Sikeres regisztráció. Kérjük jelentkezz be!");
       setData(INITIAL_DATA);
@@ -186,7 +186,8 @@ const SignupForm = () => {
               onClick={() => {
                 clearErrors();
                 prev();
-              }}>
+              }}
+              tabIndex={5}>
               <MoveLeft />
             </Button>
           )}
@@ -196,14 +197,17 @@ const SignupForm = () => {
               type='button'
               text='Következő'
               className='tertiary icon--reverse'
-              onClick={(e) => next(e)}>
+              onClick={(e) => next(e)}
+              tabIndex={6}>
               <MoveRight />
             </Button>
           ) : (
             <StateButton
+              type='submit'
               text='Regisztráció'
               className='primary'
-              onClick={handleSignup}>
+              onClick={handleSignup}
+              tabIndex={6}>
               <ClipboardPen />
             </StateButton>
           )}

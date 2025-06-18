@@ -193,6 +193,7 @@ const AccountForm = forwardRef<AccountFormRef, AccountFormProps>(
           }}
           error={errors.email}
           success={!!email && !errors.email}
+          tabIndex={1}
           autoFocus
         />
         <Input
@@ -207,6 +208,7 @@ const AccountForm = forwardRef<AccountFormRef, AccountFormProps>(
           }}
           error={errors.username}
           success={!!username && !errors.username}
+          tabIndex={2}
         />
         <div className='field__wrapper'>
           <Input
@@ -220,6 +222,7 @@ const AccountForm = forwardRef<AccountFormRef, AccountFormProps>(
               updateData({ password: value });
             }}
             error={errors.password}
+            tabIndex={3}
           />
           <Input
             type='password'
@@ -232,6 +235,7 @@ const AccountForm = forwardRef<AccountFormRef, AccountFormProps>(
               updateData({ passwordConfirmation: value });
             }}
             error={errors.passwordConfirmation}
+            tabIndex={4}
           />
         </div>
       </div>

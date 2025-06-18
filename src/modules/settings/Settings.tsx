@@ -9,7 +9,7 @@ import SettingsNav from "./SettingsNav";
 import Back from "../../components/Back";
 
 const Settings = () => {
-  useTitle(`Beállítások - ${ENUM.BRAND}`);
+  useTitle(`Beállítások - ${ENUM.BRAND.NAME}`);
 
   const { pathname } = useLocation();
   const isRoot = pathname === "/settings";

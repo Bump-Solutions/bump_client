@@ -151,6 +151,7 @@ const PersonalForm = forwardRef<PersonalFormRef, PersonalFormProps>(
             error={errors.lastName}
             success={!!lastName && !errors.lastName}
             autoFocus
+            tabIndex={1}
           />
           <Input
             type='text'
@@ -164,6 +165,7 @@ const PersonalForm = forwardRef<PersonalFormRef, PersonalFormProps>(
             }}
             error={errors.firstName}
             success={!!firstName && !errors.firstName}
+            tabIndex={2}
           />
         </div>
 
@@ -178,6 +180,7 @@ const PersonalForm = forwardRef<PersonalFormRef, PersonalFormProps>(
           }}
           error={errors.phoneNumber}
           success={!!phoneNumber && !errors.phoneNumber}
+          tabIndex={3}
         />
 
         <Select
@@ -189,6 +192,7 @@ const PersonalForm = forwardRef<PersonalFormRef, PersonalFormProps>(
           onChange={(option) =>
             handleChangeSelect(option as Option<number> | null)
           }
+          tabIndex={4}
         />
       </div>
     );

@@ -7,17 +7,17 @@ import { formatRelativeTime } from "../../utils/functions";
 
 import Image from "../../components/Image";
 
-interface NotificationMenuListItemProps {
+interface NotificationsListItemProps {
   notification: NotificationModel;
-  toggleNotificationMenu: (bool: boolean) => void;
+  toggleNotificationMenu?: (bool: boolean) => void;
 }
 
 const IMAGE_IDENTIFIER = "fbad7900-a30c-4700-a52b-dc9f29dfb1f2";
 
-const NotificationMenuListItem = ({
+const NotificationsListItem = ({
   notification,
   toggleNotificationMenu,
-}: NotificationMenuListItemProps) => {
+}: NotificationsListItemProps) => {
   const navigate = useNavigate();
 
   const markNotificationAsRead = useMarkNotificationAsRead();
@@ -86,7 +86,9 @@ const NotificationMenuListItem = ({
       markNotificationAsRead.mutateAsync(notification.id);
     }
 
-    toggleNotificationMenu(false);
+    if (toggleNotificationMenu) {
+      toggleNotificationMenu(false);
+    }
 
     switch (targetType) {
       case "product":
@@ -115,9 +117,7 @@ const NotificationMenuListItem = ({
 
   return (
     <li
-      className={`notification-menu__item ${
-        notification.isRead ? "" : "unread"
-      }`}
+      className={`notification__item ${notification.isRead ? "" : "unread"}`}
       onClick={handleOnClick}>
       <div className='item__avatar'>
         <Image
@@ -133,4 +133,4 @@ const NotificationMenuListItem = ({
   );
 };
 
-export default NotificationMenuListItem;
+export default NotificationsListItem;

@@ -5,6 +5,7 @@ import SocialSignup from "./SocialSignup";
 import SignupForm from "./SignupForm";
 
 import { useTitle } from "react-use";
+import { ROUTES } from "../../routes/routes";
 
 const Signup = () => {
   useTitle(`Regisztráció - ${ENUM.BRAND.NAME}`);
@@ -22,7 +23,7 @@ const Signup = () => {
 
       <p className=' mt-2 ta-center fs-18'>
         Már van fiókod?{" "}
-        <Link to={"/auth"} className='link'>
+        <Link to={ROUTES.LOGIN} className='link' tabIndex={5}>
           Jelentkezz be.
         </Link>
       </p>
