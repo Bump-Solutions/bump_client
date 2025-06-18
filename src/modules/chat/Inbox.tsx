@@ -46,7 +46,7 @@ const Inbox = () => {
 
       {!isLoading && !isError && (
         <div className='inbox__content'>
-          {pages && pages[0].messages.length > 0 ? (
+          {pages && pages[0].messages.length < 0 ? (
             <InboxList
               pages={pages}
               fetchNextPage={fetchNextPage}
@@ -56,7 +56,7 @@ const Inbox = () => {
             <div className='no-messages'>
               {searchKeyDebounced ? (
                 <>
-                  <SearchX className='svg-32' />
+                  <SearchX className='svg-32 fc-gray-400' />
                   <div className='ta-center'>
                     <h4 className='fw-600 mb-0_25'>Nincs találat</h4>
                     <p className='fc-light fs-14'>
@@ -66,7 +66,7 @@ const Inbox = () => {
                 </>
               ) : (
                 <>
-                  <MessageSquareOff className='svg-32' />
+                  <MessageSquareOff className='svg-32 fc-gray-400' />
                   <div className='ta-center'>
                     <h4 className='fw-600 mb-0_25'>Nincsenek üzeneteid</h4>
                     <p className='fc-light fs-14'>

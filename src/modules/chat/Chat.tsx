@@ -34,7 +34,7 @@ const Chat = () => {
           <Outlet key={chat} context={{ chat }} />
         ) : (
           <div className='messages__panel no-selection'>
-            <MessageSquareDashed className='svg-40' />
+            <MessageSquareDashed className='svg-64 fc-gray-400' />
             <div className='ta-center'>
               <h4 className='fw-600 mb-0_25 fs-18'>Nincs kiválasztva chat</h4>
               <p className='fc-light fs-16'>

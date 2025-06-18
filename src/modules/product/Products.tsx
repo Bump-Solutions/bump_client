@@ -56,27 +56,38 @@ const Products = () => {
             />
           ) : isOwnProfile ? (
             <>
-              <p className='fc-light ta-center py-5'>
-                <SearchX className='svg-64 mb-1' />
-                <br />
-                Még nem hírdettél meg terméket. <br />
-                Kattints a gombra és töltsd fel első termékedet.
+              <div className='fc-light ta-center p-5 d-flex flex-column a-center gap-1 '>
+                <SearchX className='svg-64 fc-gray-400' />
+                <div className='ta-center'>
+                  <h4 className='fw-600 mb-0_25 fs-18'>
+                    Még nem hírdettél meg terméket.{" "}
+                  </h4>
+                  <p className='fc-light fs-16'>
+                    Kattints a gombra és töltsd fel első termékedet.
+                  </p>
+                </div>
                 <Link
                   to={ROUTES.SELL}
                   state={{ background: location }}
-                  className='button primary  mt-1_5 w-fc mx-auto'>
+                  className='button primary w-fc mx-auto'>
                   <Tag />
                   Add el most!
                 </Link>
-              </p>
+              </div>
             </>
           ) : (
-            <p className='fc-light ta-center py-5'>
-              <SearchX className='svg-64 mb-1' />
-              <br />
-              {user?.username} még nem rendelkezik termékekkel. Térj vissza
-              később.
-            </p>
+            <div className='fc-light ta-center p-5'>
+              <SearchX className='svg-64 fc-gray-400' />
+              <div className='ta-center'>
+                <h4 className='fw-600 mb-0_25 fs-18'>
+                  {user?.username} még nem rendelkezik termékekkel.
+                </h4>
+                <p className='fc-light fs-16'>
+                  Kattints az értesítések gombra, hogy értesülj a legújabb
+                  termékekről.
+                </p>
+              </div>
+            </div>
           )}
         </>
       )}
