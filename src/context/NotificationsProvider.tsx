@@ -51,7 +51,7 @@ const NotificationsProvider = ({ children }: NotificationsProviderProps) => {
         };
         return acc;
       },
-      {} as any
+      {} as Record<NotificationType, TabQuery>
     );
   }, [queries]);
 

@@ -1,4 +1,5 @@
 import { MouseEvent } from "react";
+import { useNavigate } from "react-router";
 import { NotificationModel } from "../../models/notificationModel";
 import { formatRelativeTime } from "../../utils/functions";
 
@@ -13,6 +14,8 @@ const IMAGE_IDENTIFIER = "fbad7900-a30c-4700-a52b-dc9f29dfb1f2";
 const NotificationMenuListItem = ({
   notification,
 }: NotificationMenuListItemProps) => {
+  const navigate = useNavigate();
+
   const renderContent = () => {
     const { updatedAt, type, sender, verb } = notification;
 
