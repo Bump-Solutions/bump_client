@@ -1,0 +1,12 @@
+@import "variables";
+@import "mixins";
+
+.notifications {
+  position: relative;
+  padding: 2rem var(--container-x-padding);
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: $max-width-700;
+  margin: 0 auto;
+}
