@@ -3,15 +3,14 @@ import { ROUTES } from "../../routes/routes";
 import { useEffect } from "react";
 import { Link, NavLink, useNavigate } from "react-router";
 import { useAuth } from "../../hooks/auth/useAuth";
-import { useGetProfilePicture } from "../../hooks/profile/useGetProfilePicture";
 import { useToast } from "../../hooks/useToast";
 import { useCart } from "../../hooks/trade/useCart";
-import { useNotifications } from "../../hooks/notifications/useNotifications";
 
 import Tooltip from "../../components/Tooltip";
 import Image from "../../components/Image";
 
 import { ArrowUpRight, Bell, ShoppingBag } from "lucide-react";
+import { useGetProfileMeta } from "../../hooks/profile/useGetProfileMeta";
 
 interface NavProfileMenuProps {
   toggleNotificationMenu: (bool: boolean) => void;
@@ -24,10 +23,8 @@ const NavProfileMenu = ({
 }: NavProfileMenuProps) => {
   const navigate = useNavigate();
 
-  const { unreadNotificationCount } = useNotifications();
-  const { cart } = useCart();
-
   const { auth } = useAuth();
+  const { cart } = useCart();
 
   const { addToast } = useToast();
 
@@ -37,10 +34,10 @@ const NavProfileMenu = ({
   };
 
   const {
-    data: pc,
+    data: meta,
     isError,
     error,
-  } = useGetProfilePicture([auth?.user?.profilePicture]);
+  } = useGetProfileMeta([auth?.user?.profilePicture]);
 
   useEffect(() => {
     if (isError) {
@@ -72,11 +69,11 @@ const NavProfileMenu = ({
         <Tooltip content='Értesítések' showDelay={750} placement='bottom'>
           <div className='profile-menu__item no-hide '>
             <div onClick={() => toggleNotificationMenu(true)}>
-              {unreadNotificationCount > 0 && (
+              {meta?.unreadNotifications && meta.unreadNotifications > 0 && (
                 <span className='badge fw-600'>
-                  {unreadNotificationCount > 99
+                  {meta.unreadNotifications > 99
                     ? "99+"
-                    : unreadNotificationCount}
+                    : meta.unreadNotifications}
                 </span>
               )}
               <Bell />
@@ -104,8 +101,8 @@ const NavProfileMenu = ({
             onClick={() => toggleProfileMenu(true)}
             aria-label='Profil'>
             <Image
-              src={pc?.profilePicture}
-              alt={auth?.user?.username?.slice(0, 2)!}
+              src={meta?.profilePicture}
+              alt={auth?.user?.username?.slice(0, 2)}
               placeholderColor='#212529'
             />
           </button>

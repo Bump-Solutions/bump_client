@@ -6,8 +6,8 @@ export function fromNotificationDTO(
 ): NotificationModel {
   return {
     id: dto.id,
-    sender: dto.sender,
-    recipient: dto.recipient,
+    sender: dto.sender_username,
+    senderProfilePicture: dto.sender_profile_picture,
 
     type: dto.notification_type,
     targetId: dto.target_id,
@@ -16,7 +16,6 @@ export function fromNotificationDTO(
     verb: dto.verb,
     isRead: dto.is_read,
 
-    createdAt: dto.created_at,
     updatedAt: dto.updated_at,
   };
 }

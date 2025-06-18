@@ -1,6 +1,6 @@
 import {
   FetchedProfileDTO,
-  FetchedProfilePictureDTO,
+  FetchedProfileMetaDTO,
   UpdateProfileDTO,
 } from "../dtos/ProfileDTO";
 import { ProfileModel } from "../models/profileModel";
@@ -70,12 +70,9 @@ export function toUpdateProfileDTO(
   return dto;
 }
 
-/**
- * DTO → ProfilePictureModelInterface
- */
-export function fromFetchedProfilePictureDTO(dto: FetchedProfilePictureDTO) {
+export function fromFetchedProfileMetaDTO(dto: FetchedProfileMetaDTO) {
   return {
     profilePicture: dto.profile_picture,
-    profilePictureHash: dto.profile_picture_hash,
+    unreadNotifications: dto.unread_notifications,
   };
 }

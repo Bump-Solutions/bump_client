@@ -1,7 +1,7 @@
 export const QUERY_KEY = {
   // PROFILE
   getProfile: "getProfile",
-  getProfilePicture: "getProfilePicture",
+  getProfileMeta: "getProfileMeta",
   getProfilePictureColors: "getProfilePictureColors",
 
   // USER

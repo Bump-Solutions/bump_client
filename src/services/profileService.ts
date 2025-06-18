@@ -3,15 +3,15 @@ import { ApiResponse } from "../types/api";
 import { AxiosInstance } from "axios";
 import { getImageDominantColorAndPalette } from "../utils/functions";
 import { ColorData } from "../modules/profile/ProfileBanner";
-import { ProfileModel, ProfilePictureModel } from "../models/profileModel";
+import { ProfileMetaModel, ProfileModel } from "../models/profileModel";
 import {
   fromFetchedProfileDTO,
-  fromFetchedProfilePictureDTO,
+  fromFetchedProfileMetaDTO,
   toUpdateProfileDTO,
 } from "../mappers/profileMapper";
 import {
   FetchedProfileDTO,
-  FetchedProfilePictureDTO,
+  FetchedProfileMetaDTO,
   UpdateProfileDTO,
 } from "../dtos/ProfileDTO";
 
@@ -37,17 +37,17 @@ export const updateProfile = async (
   return await axiosPrivate.put(API.PROFILE.UPDATE_PROFILE, payload);
 };
 
-export const getProfilePicture = async (
+export const getProfileMeta = async (
   signal: AbortSignal,
   axiosPrivate: AxiosInstance
-): Promise<ProfilePictureModel> => {
+): Promise<ProfileMetaModel> => {
   const response: ApiResponse = await axiosPrivate.get<{
-    message: FetchedProfilePictureDTO;
-  }>(API.PROFILE.GET_PROFILE_PICTURE, {
+    message: FetchedProfileMetaDTO;
+  }>(API.PROFILE.GET_PROFILE_META, {
     signal,
   });
 
-  return fromFetchedProfilePictureDTO(response.data.message);
+  return fromFetchedProfileMetaDTO(response.data.message);
 };
 
 export const getProfilePictureColors = async (

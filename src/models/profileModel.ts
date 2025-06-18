@@ -16,11 +16,7 @@ export interface ProfileModel {
   profilePictureHash: string;
 }
 
-/**
- * A domain modell a képhez tartozó adatokhoz:
- * a profilkép URL-je, a színpaletta és a háttérszín.
- */
-export interface ProfilePictureModel {
+export interface ProfileMetaModel {
   profilePicture: string;
-  profilePictureHash: string;
+  unreadNotifications: number; // unread notifications count
 }

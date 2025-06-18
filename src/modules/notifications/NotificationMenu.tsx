@@ -1,25 +1,25 @@
 import { motion } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useClickOutside } from "../../hooks/useClickOutside";
-import { NotificationsPageModel } from "../../models/notificationModel";
+
+import NotificationMenuNav from "./NotificationMenuNav";
+import NotificationMenuList from "./NotificationMenuList";
 
 interface NotificationMenuProps {
   toggleNotificationMenu: (bool: boolean) => void;
-  pages: NotificationsPageModel[] | null;
 }
 
 const NotificationMenu = ({
   toggleNotificationMenu,
-  pages,
 }: NotificationMenuProps) => {
+  const [activeTabIndex, setActiveTabIndex] = useState<1 | 2>(1);
+
   const ref = useRef<HTMLDivElement>(null);
 
   useClickOutside({
     ref: ref,
     callback: () => toggleNotificationMenu(false),
   });
-
-  console.log("NotificationMenu", pages);
 
   return (
     <motion.div
@@ -36,7 +36,19 @@ const NotificationMenu = ({
         duration: 0.2,
         ease: [0.25, 0.46, 0.45, 0.94],
       }}>
-      <motion.div ref={ref}></motion.div>
+      <motion.div ref={ref} className='notification-menu'>
+        <header className='notification-menu__header'>
+          <h4 className='fw-600'>Értesítések</h4>
+          <button type='button'>Összes megjelölése olvasottként</button>
+        </header>
+
+        <NotificationMenuNav
+          activeTabIndex={activeTabIndex}
+          setActiveTabIndex={setActiveTabIndex}
+        />
+
+        <NotificationMenuList activeTabIndex={activeTabIndex} />
+      </motion.div>
     </motion.div>
   );
 };

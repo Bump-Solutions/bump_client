@@ -1,4 +1,5 @@
 import { QUERY_KEY } from "../../utils/queryKeys";
+import { InventoryModel, ProductListModel } from "../../models/productModel";
 import { FacetProps } from "../../hooks/product/useFacetedSearch";
 import { useProduct } from "../../hooks/product/useProduct";
 import { useSaveProduct } from "../../hooks/product/useSaveProduct";
@@ -10,7 +11,6 @@ import Button from "../../components/Button";
 import Tooltip from "../../components/Tooltip";
 
 import { Bookmark, Mail, ShoppingBag } from "lucide-react";
-import { InventoryModel, ProductListModel } from "../../models/productModel";
 
 const ProductActions = ({ quantity, filtered, filteredCount }: FacetProps) => {
   const queryClient = useQueryClient();

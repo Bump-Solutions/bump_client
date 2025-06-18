@@ -40,9 +40,9 @@ export interface UpdateProfileDTO {
 }
 
 /**
- * A backend /profile/picture GET végpontja által visszaadott DTO.
+ * A backend /profile/meta GET végpontja által visszaadott DTO.
  */
-export interface FetchedProfilePictureDTO {
+export interface FetchedProfileMetaDTO {
   profile_picture: string;
-  profile_picture_hash: string;
+  unread_notifications: number; // unread notifications count
 }

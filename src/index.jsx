@@ -26,7 +26,7 @@ import NavbarThemeProvider from "./context/NavbarThemeProvider";
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      retry: 3,
+      retry: 2,
       retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000), // 1s, 2s, 4s, 8s, 16s, 30s
     },
   },

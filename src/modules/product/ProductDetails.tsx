@@ -1,11 +1,13 @@
 import { useProduct } from "../../hooks/product/useProduct";
 import { useFacetedSearch } from "../../hooks/product/useFacetedSearch";
+import { Link } from "react-router";
 
 import Badges from "../../components/Badges";
 import FacetedSearch from "./FacetedSearch";
 import Stepper from "../../components/Stepper";
 import PriceTag from "./PriceTag";
 import ProductActions from "./ProductActions";
+import { ROUTES } from "../../routes/routes";
 
 /*
 const BADGES: BadgeCollection = {
@@ -82,6 +84,10 @@ const ProductDetails = () => {
           <PriceTag discount={discountValue} {...facets} />
 
           <ProductActions {...facets} />
+
+          <Link to={ROUTES.HOME} className='link ml-auto py-0_5 fs-14'>
+            Hogyan működik?
+          </Link>
         </>
       ) : (
         <div className='product__no-items'>

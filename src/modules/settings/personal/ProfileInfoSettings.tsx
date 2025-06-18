@@ -232,7 +232,7 @@ const ProfileInfoSettings = () => {
               name='st_username'
               value={newData.username}
               label='Felhasználónév'
-              placeholder={data.username}
+              placeholder={data?.username}
               required
               autoFocus
               onChange={(value) => {
@@ -249,7 +249,7 @@ const ProfileInfoSettings = () => {
                 type='text'
                 name='st_lastname'
                 value={newData.lastName || ""}
-                placeholder={data.lastName || "pl. Minta"}
+                placeholder={data?.lastName || "pl. Minta"}
                 label='Vezetéknév'
                 required
                 onChange={(value) => {
@@ -266,7 +266,7 @@ const ProfileInfoSettings = () => {
                 name='st_firstname'
                 value={newData.firstName || ""}
                 label='Keresztnév'
-                placeholder={data.firstName || "pl. Minta"}
+                placeholder={data?.firstName || "pl. Minta"}
                 required
                 onChange={(value) => {
                   setNewData((prevData) => ({
@@ -282,7 +282,7 @@ const ProfileInfoSettings = () => {
               name='st_phone'
               value={newData.phoneNumber || ""}
               label='Mobil telefonszám'
-              placeholder={data.phoneNumber || "+3630-123-4567"}
+              placeholder={data?.phoneNumber || "+3630-123-4567"}
               required
               onChange={(value) => {
                 setNewData((prevData) => ({
