@@ -30,5 +30,6 @@ export const useListAvailableModels = (
     initialPageParam: 1,
     getNextPageParam: (lastPage) => lastPage.next ?? undefined,
     enabled: params.isCatalogProduct && !!params.brand,
+    staleTime: Infinity, // Static list from server
   });
 };

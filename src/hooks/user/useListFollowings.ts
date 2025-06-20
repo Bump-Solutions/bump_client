@@ -6,6 +6,7 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { useAxiosPrivate } from "../auth/useAxiosPrivate";
 
 import { listFollowings } from "../../services/userService";
+import { ENUM } from "../../utils/enum";
 
 const MAX_FOLLOWINGS_PER_PAGE = 10;
 
@@ -31,6 +32,7 @@ export const useListFollowings = (
       ),
     initialPageParam: 1,
     getNextPageParam: (lastPage) => lastPage.next ?? undefined,
-    enabled: !!params.uid,
+    enabled: Boolean(params.uid),
+    staleTime: ENUM.GLOBALS.staleTime,
   });
 };

@@ -26,13 +26,12 @@ export const useListMessages = (
         MAX_MESSAGES_PER_PAGE,
         pageParam as number
       ),
-    enabled: !!params.chat,
+    enabled: Boolean(params.chat),
     initialPageParam: 1,
     getNextPageParam: (lastPage) => lastPage.next ?? undefined,
     refetchOnWindowFocus: true,
     refetchOnReconnect: true,
     refetchOnMount: true,
-    // staleTime: 1000 * 60 * 15, // 15 minutes
     staleTime: 0, // No caching
     gcTime: 0, // No caching
   });

@@ -26,8 +26,8 @@ export const useListNotifications = (
         MAX_NOTIFICATIONS_PER_PAGE,
         pageParam as number
       ),
-    enabled: !!auth, // Only fetch if user is authenticated
-    staleTime: 1000 * 60 * 5, // 5 minutes
+    enabled: Boolean(auth), // Only fetch if user is authenticated
+    staleTime: 1000 * 60 * 1, // 1 minute
     refetchOnWindowFocus: true,
     initialPageParam: 1,
     getNextPageParam: (lastPage) => lastPage.next ?? undefined,

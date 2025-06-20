@@ -1,3 +1,4 @@
+import { ENUM } from "../../utils/enum";
 import { QUERY_KEY } from "../../utils/queryKeys";
 import { useQuery } from "@tanstack/react-query";
 import { ProfileModel } from "../../models/profileModel";
@@ -11,5 +12,6 @@ export const useGetProfile = (dependencies: any[] = []) => {
   return useQuery<ProfileModel, string>({
     queryKey: [QUERY_KEY.getProfile, ...dependencies],
     queryFn: ({ signal }) => getProfile(signal, axiosPrivate),
+    staleTime: ENUM.GLOBALS.staleTime,
   });
 };

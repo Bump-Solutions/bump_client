@@ -31,6 +31,8 @@ export const useListAvailableColorways = (
       ),
     initialPageParam: 1,
     getNextPageParam: (lastPage) => lastPage.next ?? undefined,
-    enabled: params.isCatalogProduct && !!params.brand && !!params.model,
+    enabled:
+      params.isCatalogProduct && Boolean(params.brand) && Boolean(params.model),
+    staleTime: Infinity, // Static list from server
   });
 };

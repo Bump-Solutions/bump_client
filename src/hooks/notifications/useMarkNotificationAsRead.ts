@@ -14,7 +14,6 @@ export const useMarkNotificationAsRead = (
 ) => {
   const queryClient = useQueryClient();
   const axiosPrivate = useAxiosPrivate();
-  const { auth } = useAuth();
   const { addToast } = useToast();
 
   return useMutation<ApiResponse, ApiError, number>({
@@ -23,7 +22,7 @@ export const useMarkNotificationAsRead = (
     onSuccess: (resp, variables) => {
       // Navbar notification count update
       queryClient.setQueryData(
-        [QUERY_KEY.getProfileMeta, auth?.user?.profilePicture],
+        [QUERY_KEY.getProfileMeta],
         (prev: ProfileMetaModel | undefined) => {
           if (!prev) return prev;
 

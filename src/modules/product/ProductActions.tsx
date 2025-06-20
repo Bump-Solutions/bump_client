@@ -27,6 +27,7 @@ const ProductActions = ({ quantity, filtered, filteredCount }: FacetProps) => {
       [QUERY_KEY.listProducts, product.user.id],
       (prev: any) => {
         if (!prev) return prev;
+
         return {
           ...prev,
           pages: prev.pages.map((page: InventoryModel) => ({
@@ -48,6 +49,7 @@ const ProductActions = ({ quantity, filtered, filteredCount }: FacetProps) => {
 
     queryClient.setQueryData([QUERY_KEY.listSavedProducts], (prev: any) => {
       if (!prev) return prev;
+
       return {
         ...prev,
         pages: prev.pages.map((page: InventoryModel) => ({
@@ -68,6 +70,7 @@ const ProductActions = ({ quantity, filtered, filteredCount }: FacetProps) => {
       [QUERY_KEY.listProducts, product?.user.id],
       (prev: any) => {
         if (!prev) return prev;
+
         return {
           ...prev,
           pages: prev.pages.map((page: InventoryModel) => ({
@@ -89,6 +92,7 @@ const ProductActions = ({ quantity, filtered, filteredCount }: FacetProps) => {
 
     queryClient.setQueryData([QUERY_KEY.listSavedProducts], (prev: any) => {
       if (!prev) return prev;
+
       return {
         ...prev,
         pages: prev.pages.map((page: InventoryModel) => ({

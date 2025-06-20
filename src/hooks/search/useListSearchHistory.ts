@@ -14,5 +14,6 @@ export const useListSearchHistory = (dependencies: any[] = []) => {
     queryFn: ({ signal }) => listSearchHistory(signal, axiosPrivate),
     retry: 0,
     refetchOnWindowFocus: false,
+    staleTime: Infinity,
   });
 };

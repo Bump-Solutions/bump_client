@@ -4,6 +4,7 @@ import { useAxiosPrivate } from "../auth/useAxiosPrivate";
 import { QUERY_KEY } from "../../utils/queryKeys";
 import { getProduct } from "../../services/productService";
 import { ProductModel } from "../../models/productModel";
+import { ENUM } from "../../utils/enum";
 
 export const useGetProduct = (
   dependencies: any[] = [],
@@ -15,5 +16,6 @@ export const useGetProduct = (
     queryKey: [QUERY_KEY.getProduct, ...dependencies],
     queryFn: ({ signal }) => getProduct(signal, axiosPrivate, params.pid),
     retry: 1,
+    staleTime: ENUM.GLOBALS.staleTime,
   });
 };

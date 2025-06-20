@@ -80,7 +80,8 @@ export const useSearch = (
           ),
     initialPageParam: 1,
     getNextPageParam: (lastPage) => lastPage.next ?? undefined,
-    enabled: !!debounced.key && debounced.key.length > 0,
+    enabled: Boolean(debounced.key) && debounced.key.length > 0,
+    staleTime: 0,
     retry: 1,
   });
 
