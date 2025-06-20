@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { useRef, useState } from "react";
 import { useClickOutside } from "../../hooks/useClickOutside";
+import { NotificationType } from "../../context/NotificationsProvider";
 
 import NotificationMenuNav from "./NotificationMenuNav";
 import NotificationMenuList from "./NotificationMenuList";
@@ -12,7 +13,7 @@ interface NotificationMenuProps {
 const NotificationMenu = ({
   toggleNotificationMenu,
 }: NotificationMenuProps) => {
-  const [activeTabIndex, setActiveTabIndex] = useState<1 | 2>(1);
+  const [activeTabIndex, setActiveTabIndex] = useState<NotificationType>(1);
 
   const ref = useRef<HTMLDivElement>(null);
 

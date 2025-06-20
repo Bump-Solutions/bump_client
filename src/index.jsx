@@ -27,7 +27,7 @@ const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       retry: 2,
-      retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000), // 1s, 2s, 4s, 8s, 16s, 30s
+      retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 10000), // 1s, 2s, 4s, 8s, 10s
     },
   },
 });
@@ -36,22 +36,22 @@ createRoot(document.getElementById("root")).render(
   <QueryClientProvider client={queryClient}>
     <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
       <Router>
-        <QueryParamProvider adapter={ReactRouter6Adapter}>
-          <AuthProvider>
-            <NotificationsProvider>
-              <TradeProvider>
-                <NavbarThemeProvider>
-                  <ToastProvider>
+        <ToastProvider>
+          <QueryParamProvider adapter={ReactRouter6Adapter}>
+            <AuthProvider>
+              <NotificationsProvider>
+                <TradeProvider>
+                  <NavbarThemeProvider>
                     <ToastContainer />
                     <Routes>
                       <Route path='/*' element={<App />} />
                     </Routes>
-                  </ToastProvider>
-                </NavbarThemeProvider>
-              </TradeProvider>
-            </NotificationsProvider>
-          </AuthProvider>
-        </QueryParamProvider>
+                  </NavbarThemeProvider>
+                </TradeProvider>
+              </NotificationsProvider>
+            </AuthProvider>
+          </QueryParamProvider>
+        </ToastProvider>
       </Router>
     </GoogleOAuthProvider>
   </QueryClientProvider>

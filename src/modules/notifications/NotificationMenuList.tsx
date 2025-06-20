@@ -1,13 +1,14 @@
 import { useNotifications } from "../../hooks/notifications/useNotifications";
 import { ROUTES } from "../../routes/routes";
 import { Link } from "react-router";
+import { NotificationType } from "../../context/NotificationsProvider";
 
 import NotificationMenuListItem from "./NotificationsListItem";
 
 import { BellOff } from "lucide-react";
 
 interface NotificationMenuListProps {
-  activeTabIndex: 1 | 2;
+  activeTabIndex: NotificationType;
   toggleNotificationMenu: (bool: boolean) => void;
 }
 

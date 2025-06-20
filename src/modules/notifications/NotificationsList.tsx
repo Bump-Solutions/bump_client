@@ -1,6 +1,7 @@
 import { useInView } from "react-intersection-observer";
 import { useNotifications } from "../../hooks/notifications/useNotifications";
 import { useEffect } from "react";
+import { NotificationType } from "../../context/NotificationsProvider";
 
 import NotificationsListItem from "./NotificationsListItem";
 import Spinner from "../../components/Spinner";
@@ -8,7 +9,7 @@ import Spinner from "../../components/Spinner";
 import { BellOff } from "lucide-react";
 
 interface NotificationsListProps {
-  activeTabIndex: 1 | 2;
+  activeTabIndex: NotificationType;
 }
 
 const NotificationsList = ({ activeTabIndex }: NotificationsListProps) => {

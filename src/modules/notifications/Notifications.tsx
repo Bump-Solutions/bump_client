@@ -3,6 +3,7 @@ import { ENUM } from "../../utils/enum";
 import { useLocation } from "react-router";
 import { useTitle } from "react-use";
 import { useState } from "react";
+import { NotificationType } from "../../context/NotificationsProvider";
 
 import NotificationsHeader from "./NotificationsHeader";
 import NotificationsNav from "./NotificationsNav";
@@ -12,9 +13,9 @@ const Notifications = () => {
   useTitle(`Értesítések - ${ENUM.BRAND.NAME}`);
 
   const location = useLocation();
-  const type: 1 | 2 = location.state?.type || 1; // Default to 1 if not provided
+  const type: NotificationType = location.state?.type || 1; // Default to 1 if not provided
 
-  const [activeTabIndex, setActiveTabIndex] = useState<1 | 2>(type);
+  const [activeTabIndex, setActiveTabIndex] = useState<NotificationType>(type);
 
   return (
     <section className='notifications'>
