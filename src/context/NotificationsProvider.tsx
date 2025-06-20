@@ -150,7 +150,12 @@ const NotificationsProvider = ({ children }: NotificationsProviderProps) => {
       exact: true,
       refetchType: "all",
     });
-  }, [lastJsonMessage]);
+  }, [
+    lastJsonMessage,
+    auth?.accessToken,
+    auth?.user?.profilePicture,
+    queryClient,
+  ]);
 
   return (
     <NotificationsContext value={{ getTab, markAsRead }}>
