@@ -1,13 +1,15 @@
 import { Link } from "react-router";
 import { useNotifications } from "../../hooks/notifications/useNotifications";
 import { ROUTES } from "../../routes/routes";
+import { NotificationType } from "../../context/NotificationsProvider";
 
-import { Settings } from "lucide-react";
 import Tooltip from "../../components/Tooltip";
 
+import { Settings } from "lucide-react";
+
 interface NotificationsNavProps {
-  activeTabIndex: 1 | 2;
-  setActiveTabIndex: (index: 1 | 2) => void;
+  activeTabIndex: NotificationType;
+  setActiveTabIndex: (index: NotificationType) => void;
 }
 
 const NotificationsNav = ({

@@ -46,7 +46,7 @@ const Inbox = () => {
 
       {!isLoading && !isError && (
         <div className='inbox__content'>
-          {pages && pages[0].messages.length < 0 ? (
+          {pages && pages[0].messages.length > 0 ? (
             <InboxList
               pages={pages}
               fetchNextPage={fetchNextPage}

@@ -2,10 +2,11 @@ import { Settings } from "lucide-react";
 import { Link } from "react-router";
 import { ROUTES } from "../../routes/routes";
 import { useNotifications } from "../../hooks/notifications/useNotifications";
+import { NotificationType } from "../../context/NotificationsProvider";
 
 interface NotificationMenuNavProps {
-  activeTabIndex: 1 | 2;
-  setActiveTabIndex: (index: 1 | 2) => void;
+  activeTabIndex: NotificationType;
+  setActiveTabIndex: (index: NotificationType) => void;
 }
 
 const NotificationMenuNav = ({

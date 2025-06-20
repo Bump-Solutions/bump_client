@@ -1,11 +1,11 @@
 import { ROUTES } from "../../routes/routes";
-import { useMarkNotificationAsRead } from "../../hooks/notifications/useMarkNotificationAsRead";
 import { MouseEvent } from "react";
 import { useNavigate } from "react-router";
 import { NotificationModel } from "../../models/notificationModel";
 import { formatRelativeTime } from "../../utils/functions";
 
 import Image from "../../components/Image";
+import { useNotifications } from "../../hooks/notifications/useNotifications";
 
 interface NotificationsListItemProps {
   notification: NotificationModel;
@@ -20,7 +20,7 @@ const NotificationsListItem = ({
 }: NotificationsListItemProps) => {
   const navigate = useNavigate();
 
-  const markNotificationAsRead = useMarkNotificationAsRead();
+  const { markAsRead } = useNotifications();
 
   const renderContent = () => {
     const { updatedAt, type, sender, verb } = notification;
@@ -78,12 +78,12 @@ const NotificationsListItem = ({
     e.preventDefault();
     e.stopPropagation();
 
-    const { isRead, targetType, targetId } = notification;
+    const { id, isRead, targetType, targetId } = notification;
 
     if (!targetId) return;
 
     if (!isRead) {
-      markNotificationAsRead.mutateAsync(notification.id);
+      markAsRead(id);
     }
 
     if (toggleNotificationMenu) {
