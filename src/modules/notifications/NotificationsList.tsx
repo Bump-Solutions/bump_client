@@ -1,23 +1,17 @@
 import { useInView } from "react-intersection-observer";
-import { useNotifications } from "../../hooks/notifications/useNotifications";
-import { useEffect } from "react";
-import { NotificationType } from "../../context/NotificationsProvider";
+import { Fragment, useEffect } from "react";
+import { PaginatedListProps } from "../../types/ui";
+import { NotificationsPageModel } from "../../models/notificationModel";
 
 import NotificationsListItem from "./NotificationsListItem";
 import Spinner from "../../components/Spinner";
 
-import { BellOff } from "lucide-react";
-
-interface NotificationsListProps {
-  activeTabIndex: NotificationType;
-}
-
-const NotificationsList = ({ activeTabIndex }: NotificationsListProps) => {
+const NotificationsList = ({
+  pages,
+  fetchNextPage,
+  isFetchingNextPage,
+}: PaginatedListProps<NotificationsPageModel>) => {
   const { ref, inView } = useInView();
-
-  const { getTab } = useNotifications();
-  const { notifications, fetchNextPage, isFetchingNextPage } =
-    getTab(activeTabIndex);
 
   useEffect(() => {
     if (inView && !isFetchingNextPage) {
@@ -25,11 +19,15 @@ const NotificationsList = ({ activeTabIndex }: NotificationsListProps) => {
     }
   }, [fetchNextPage, inView]);
 
-  return notifications && notifications.length > 0 ? (
+  return (
     <>
       <ul className='notifications__list'>
-        {notifications.map((notification, idx) => (
-          <NotificationsListItem key={idx} notification={notification} />
+        {pages.map((page, index) => (
+          <Fragment key={index}>
+            {page.notifications.map((notification, idx) => (
+              <NotificationsListItem key={idx} notification={notification} />
+            ))}
+          </Fragment>
         ))}
       </ul>
 
@@ -41,18 +39,6 @@ const NotificationsList = ({ activeTabIndex }: NotificationsListProps) => {
         )}
       </div>
     </>
-  ) : (
-    <div className='notifications__list empty'>
-      <BellOff />
-      <div>
-        <h5>Nincsenek értesítések</h5>
-        <p>
-          {activeTabIndex === 1
-            ? "Az értesítések itt jelennek meg, amikor valaki kapcsolatba lép veled. Térj vissza később."
-            : "Az értesítések itt jelennek meg, amikor valaki reagál a termékeidre vagy a profilodra. Térj vissza később."}
-        </p>
-      </div>
-    </div>
   );
 };
 

@@ -1,5 +1,5 @@
 import { ROUTES } from "../../routes/routes";
-
+import { useGetProfileMeta } from "../../hooks/profile/useGetProfileMeta";
 import { useEffect } from "react";
 import { Link, NavLink, useNavigate } from "react-router";
 import { useAuth } from "../../hooks/auth/useAuth";
@@ -10,7 +10,6 @@ import Tooltip from "../../components/Tooltip";
 import Image from "../../components/Image";
 
 import { ArrowUpRight, Bell, ShoppingBag } from "lucide-react";
-import { useGetProfileMeta } from "../../hooks/profile/useGetProfileMeta";
 
 interface NavProfileMenuProps {
   toggleNotificationMenu: (bool: boolean) => void;
@@ -33,11 +32,7 @@ const NavProfileMenu = ({
     return Object.keys(cart).length;
   };
 
-  const {
-    data: meta,
-    isError,
-    error,
-  } = useGetProfileMeta([auth?.user?.profilePicture]);
+  const { data: meta, isError, error } = useGetProfileMeta();
 
   useEffect(() => {
     if (isError) {

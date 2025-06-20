@@ -1,3 +1,4 @@
+import { ENUM } from "../../utils/enum";
 import { UserModel } from "../../models/userModel";
 import { ApiError } from "../../types/api";
 import { QUERY_KEY } from "../../utils/queryKeys";
@@ -16,6 +17,7 @@ export const useGetUser = (
   return useQuery<UserModel, ApiError>({
     queryKey: [QUERY_KEY.getUser, ...dependencies],
     queryFn: ({ signal }) => getUser(signal, axiosPrivate, params.username),
+    staleTime: ENUM.GLOBALS.staleTime,
     retry: 1,
   });
 };

@@ -1,10 +1,15 @@
 import { motion } from "framer-motion";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useClickOutside } from "../../hooks/useClickOutside";
 import { NotificationType } from "../../context/NotificationsProvider";
+import { NotificationsPageModel } from "../../models/notificationModel";
+import { useListNotifications } from "../../hooks/notifications/useListNotifications";
 
 import NotificationMenuNav from "./NotificationMenuNav";
 import NotificationMenuList from "./NotificationMenuList";
+import Spinner from "../../components/Spinner";
+
+import { BellOff } from "lucide-react";
 
 interface NotificationMenuProps {
   toggleNotificationMenu: (bool: boolean) => void;
@@ -14,6 +19,7 @@ const NotificationMenu = ({
   toggleNotificationMenu,
 }: NotificationMenuProps) => {
   const [activeTabIndex, setActiveTabIndex] = useState<NotificationType>(1);
+  const [pages, setPages] = useState<NotificationsPageModel[] | null>(null);
 
   const ref = useRef<HTMLDivElement>(null);
 
@@ -21,6 +27,18 @@ const NotificationMenu = ({
     ref: ref,
     callback: () => toggleNotificationMenu(false),
   });
+
+  const { data, isLoading, isError } = useListNotifications([activeTabIndex], {
+    type: activeTabIndex,
+  });
+
+  useEffect(() => {
+    if (data?.pages) {
+      setPages(data.pages);
+    }
+  }, [data]);
+
+  const activeUnreadCount = data?.pages?.[0]?.unreadCount ?? 0;
 
   return (
     <motion.div
@@ -46,12 +64,44 @@ const NotificationMenu = ({
         <NotificationMenuNav
           activeTabIndex={activeTabIndex}
           setActiveTabIndex={setActiveTabIndex}
+          activeUnreadCount={activeUnreadCount}
         />
 
-        <NotificationMenuList
-          activeTabIndex={activeTabIndex}
-          toggleNotificationMenu={toggleNotificationMenu}
-        />
+        {isError && (
+          <h4 className='fc-red-500 ta-center py-3'>
+            Hiba történt az értesítések betöltése közben.
+          </h4>
+        )}
+
+        {isLoading && (
+          <div className='relative py-5'>
+            <Spinner />
+          </div>
+        )}
+
+        {pages && (
+          <>
+            {pages[0].notifications.length > 0 ? (
+              <NotificationMenuList
+                pages={pages}
+                activeTabIndex={activeTabIndex}
+                toggleNotificationMenu={toggleNotificationMenu}
+              />
+            ) : (
+              <div className='notification-menu__list empty'>
+                <BellOff />
+                <div>
+                  <h5>Nincsenek értesítések</h5>
+                  <p>
+                    {activeTabIndex === 1
+                      ? "Az értesítések itt jelennek meg, amikor valaki kapcsolatba lép veled. Térj vissza később."
+                      : "Az értesítések itt jelennek meg, amikor valaki reagál a termékeidre vagy a profilodra. Térj vissza később."}
+                  </p>
+                </div>
+              </div>
+            )}
+          </>
+        )}
       </motion.div>
     </motion.div>
   );

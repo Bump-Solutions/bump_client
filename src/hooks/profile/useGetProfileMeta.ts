@@ -1,3 +1,4 @@
+import { ENUM } from "../../utils/enum";
 import { useQuery } from "@tanstack/react-query";
 import { ProfileMetaModel } from "../../models/profileModel";
 import { useAxiosPrivate } from "../auth/useAxiosPrivate";
@@ -13,5 +14,6 @@ export const useGetProfileMeta = (dependencies: any[] = []) => {
     queryKey: [QUERY_KEY.getProfileMeta, ...dependencies],
     queryFn: ({ signal }) => getProfileMeta(signal, axiosPrivate),
     refetchOnWindowFocus: false,
+    staleTime: ENUM.GLOBALS.staleTime,
   });
 };

@@ -28,5 +28,6 @@ export const useListAvailableBrands = (
     initialPageParam: 1,
     getNextPageParam: (lastPage) => lastPage.next ?? undefined,
     enabled: params.isCatalogProduct,
+    staleTime: Infinity, // Static list from server
   });
 };

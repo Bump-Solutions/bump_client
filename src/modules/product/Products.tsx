@@ -45,7 +45,7 @@ const Products = () => {
   }
 
   return (
-    <main className='user-products__wrapper'>
+    <section className='user-products__wrapper'>
       {pages && (
         <>
           {pages[0].products.length > 0 ? (
@@ -91,7 +91,7 @@ const Products = () => {
           )}
         </>
       )}
-    </main>
+    </section>
   );
 };
 

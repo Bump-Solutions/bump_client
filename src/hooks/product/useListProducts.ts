@@ -25,7 +25,7 @@ export const useListProducts = (
         MAX_PRODUCTS_PER_PAGE,
         pageParam as number
       ),
-    enabled: !!params.uid,
+    enabled: Boolean(params.uid),
     initialPageParam: 1,
     getNextPageParam: (lastPage) => lastPage.next ?? undefined,
   });

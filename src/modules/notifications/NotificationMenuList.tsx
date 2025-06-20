@@ -1,13 +1,13 @@
-import { useNotifications } from "../../hooks/notifications/useNotifications";
 import { ROUTES } from "../../routes/routes";
 import { Link } from "react-router";
 import { NotificationType } from "../../context/NotificationsProvider";
+import { NotificationsPageModel } from "../../models/notificationModel";
 
 import NotificationMenuListItem from "./NotificationsListItem";
-
-import { BellOff } from "lucide-react";
+import { useMemo } from "react";
 
 interface NotificationMenuListProps {
+  pages: NotificationsPageModel[];
   activeTabIndex: NotificationType;
   toggleNotificationMenu: (bool: boolean) => void;
 }
@@ -15,13 +15,19 @@ interface NotificationMenuListProps {
 const LIMIT = 5;
 
 const NotificationMenuList = ({
+  pages,
   activeTabIndex,
   toggleNotificationMenu,
 }: NotificationMenuListProps) => {
-  const { getTab } = useNotifications();
-  const { notifications, count } = getTab(activeTabIndex);
+  const notifications = useMemo(() => {
+    return pages.flatMap((page) => page.notifications);
+  }, [pages]);
 
-  return notifications && notifications.length > 0 ? (
+  const count = useMemo(() => {
+    return pages[0].count;
+  }, [pages]);
+
+  return (
     <>
       <ul className='notification-menu__list'>
         {notifications.slice(0, LIMIT).map((notification, idx) => (
@@ -45,18 +51,6 @@ const NotificationMenuList = ({
         </div>
       )}
     </>
-  ) : (
-    <div className='notification-menu__list empty'>
-      <BellOff />
-      <div>
-        <h5>Nincsenek értesítések</h5>
-        <p>
-          {activeTabIndex === 1
-            ? "Az értesítések itt jelennek meg, amikor valaki kapcsolatba lép veled. Térj vissza később."
-            : "Az értesítések itt jelennek meg, amikor valaki reagál a termékeidre vagy a profilodra. Térj vissza később."}
-        </p>
-      </div>
-    </div>
   );
 };
 

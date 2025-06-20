@@ -1,19 +1,13 @@
 import { useEffect } from "react";
-import { useAuth } from "../../hooks/auth/useAuth";
 import { useGetProfileMeta } from "../../hooks/profile/useGetProfileMeta";
 import { useToast } from "../../hooks/useToast";
 
 import Back from "../../components/Back";
 
 const NotificationsHeader = () => {
-  const { auth } = useAuth();
   const { addToast } = useToast();
 
-  const {
-    data: meta,
-    isError,
-    error,
-  } = useGetProfileMeta([auth?.user?.profilePicture]);
+  const { data: meta, isError, error } = useGetProfileMeta();
 
   useEffect(() => {
     if (isError) {

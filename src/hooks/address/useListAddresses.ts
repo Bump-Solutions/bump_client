@@ -13,5 +13,6 @@ export const useListAddresses = (dependencies: any[] = []) => {
   return useQuery<AddressModel[], ApiError>({
     queryKey: [QUERY_KEY.listAddresses, ...dependencies],
     queryFn: ({ signal }) => listAddresses(signal, axiosPrivate),
+    staleTime: Infinity, // Keep data fresh indefinitely unless manually invalidated (e.g. Add, Modify, Delete operations)
   });
 };

@@ -5,6 +5,7 @@ import { useToast } from "../useToast";
 import { deleteProduct } from "../../services/productService";
 import { QUERY_KEY } from "../../utils/queryKeys";
 import { useProfile } from "../profile/useProfile";
+import { InventoryModel, ProductListModel } from "../../models/productModel";
 
 export const useDeleteProduct = (
   onSuccess?: (resp: ApiResponse, variables: number) => void,
@@ -22,6 +23,27 @@ export const useDeleteProduct = (
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEY.listProducts, user?.id],
       });
+
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEY.getProduct, variables],
+      });
+
+      queryClient.setQueryData([QUERY_KEY.listSavedProducts], (prev: any) => {
+        if (!prev) return prev;
+
+        return {
+          ...prev,
+          pages: prev.pages.map((page: InventoryModel) => {
+            return {
+              ...page,
+              products: page.products.filter(
+                (p: ProductListModel) => p.id !== variables
+              ),
+            };
+          }),
+        };
+      });
+
       if (onSuccess) {
         onSuccess(resp, variables);
       }
