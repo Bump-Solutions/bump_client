@@ -49,19 +49,18 @@ export interface ProductModel {
     size: string;
     state: number;
     gender: number;
-    onSale: boolean; // if the item is on sale
   }[]; // Array of items in the product
 
   user: {
     id: number;
     username: string;
-    first_name: string;
-    last_name: string;
-    phone_number: string | null;
+    firstName: string;
+    lastName: string;
+    phoneNumber: string | null;
     bio: string;
-    profile_picture: string | null;
-    profile_background_color: string | null;
-    profile_picture_color_palette: string | null;
+    profilePicture: string | null;
+    profileBackgroundColor: string | null;
+    profilePictureColorPalette: string | null;
   };
 
   saves: number;

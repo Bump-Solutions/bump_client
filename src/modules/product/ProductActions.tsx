@@ -1,4 +1,5 @@
 import { QUERY_KEY } from "../../utils/queryKeys";
+import { CartItemModel, SellerModel } from "../../models/cartModel";
 import { InventoryModel, ProductListModel } from "../../models/productModel";
 import { FacetProps } from "../../hooks/product/useFacetedSearch";
 import { useProduct } from "../../hooks/product/useProduct";
@@ -6,15 +7,27 @@ import { useSaveProduct } from "../../hooks/product/useSaveProduct";
 import { useUnsaveProduct } from "../../hooks/product/useUnsaveProduct";
 import { useQueryClient } from "@tanstack/react-query";
 import { MouseEvent } from "react";
+import { useCart } from "../../hooks/trade/useCart";
 
 import Button from "../../components/Button";
 import Tooltip from "../../components/Tooltip";
 
 import { Bookmark, Mail, ShoppingBag } from "lucide-react";
 
-const ProductActions = ({ quantity, filtered, filteredCount }: FacetProps) => {
+interface ProductActionsProps extends FacetProps {
+  discount: number | null;
+}
+
+const ProductActions = ({
+  quantity,
+  discount,
+  filtered,
+  filteredCount,
+  reset,
+}: ProductActionsProps) => {
   const queryClient = useQueryClient();
   const { product, setProduct } = useProduct();
+  const { addItem } = useCart();
 
   if (!product) return null;
 
@@ -121,6 +134,43 @@ const ProductActions = ({ quantity, filtered, filteredCount }: FacetProps) => {
     }
   };
 
+  const handleAddToCart = (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+
+    if (isDisabled) return;
+    if (!filtered || filtered.length === 0) return;
+
+    // Seller
+    const seller: SellerModel = {
+      id: product.user.id,
+      username: product.user.username,
+      profilePicture: product.user.profilePicture || null,
+    };
+
+    filtered.forEach((item) => {
+      const cartItem: CartItemModel = {
+        id: item.id,
+        label: [
+          product.product.brand,
+          product.product.model,
+          product.product.colorWay,
+        ].join(" "),
+        image: product.images[0],
+      };
+
+      addItem(seller, cartItem);
+    });
+
+    console.log("Add to cart clicked", {
+      quantity,
+      filtered,
+      filteredCount,
+      seller,
+    });
+
+    reset();
+  };
+
   return (
     <div className='product__actions'>
       <div className={`product__action--save ${product.saved ? "active" : ""}`}>
@@ -137,7 +187,11 @@ const ProductActions = ({ quantity, filtered, filteredCount }: FacetProps) => {
       </div>
 
       <div className='product__action--cart'>
-        <Button className='primary' text='Kosárba' disabled={isDisabled}>
+        <Button
+          className='primary'
+          text='Kosárba'
+          disabled={isDisabled}
+          onClick={handleAddToCart}>
           <ShoppingBag />
         </Button>
       </div>

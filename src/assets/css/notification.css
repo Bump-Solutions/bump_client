@@ -156,7 +156,7 @@
   height: 4rem;
   color: #ced4da;
 }
-.notifications .notifications__list.empty h5 {
+.notifications .notifications__list.empty h4 {
   font-size: 1.125rem;
   color: #212529;
   margin-bottom: 0.25rem;

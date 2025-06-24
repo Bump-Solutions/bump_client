@@ -74,7 +74,7 @@ const Notifications = () => {
             <div className='notifications__list empty'>
               <BellOff />
               <div>
-                <h5>Nincsenek értesítések</h5>
+                <h4>Nincsenek értesítések</h4>
                 <p>
                   {activeTabIndex === 1
                     ? "Az értesítések itt jelennek meg, amikor valaki kapcsolatba lép veled. Térj vissza később."

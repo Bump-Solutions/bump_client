@@ -11,6 +11,7 @@ export const useLogout = (): (() => Promise<void>) => {
   const handleLogout = async (): Promise<void> => {
     try {
       await logout();
+
       setAuth(null);
       queryClient.clear();
     } catch (error) {
