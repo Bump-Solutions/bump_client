@@ -23,7 +23,7 @@ const NavProfileMenu = ({
   const navigate = useNavigate();
 
   const { auth } = useAuth();
-  const { cartPackageCount } = useCart();
+  const { cartItemCount } = useCart();
 
   const { addToast } = useToast();
 
@@ -74,9 +74,9 @@ const NavProfileMenu = ({
         <Tooltip content='Kosár' showDelay={750} placement='bottom'>
           <div className='profile-menu__item no-hide'>
             <div onClick={() => navigate(ROUTES.CART)}>
-              {cartPackageCount > 0 && (
+              {cartItemCount > 0 && (
                 <span className='badge fw-600'>
-                  {cartPackageCount > 99 ? "99+" : cartPackageCount}
+                  {cartItemCount > 99 ? "99+" : cartItemCount}
                 </span>
               )}
 

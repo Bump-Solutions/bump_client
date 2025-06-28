@@ -8,11 +8,13 @@ import { useUnsaveProduct } from "../../hooks/product/useUnsaveProduct";
 import { useQueryClient } from "@tanstack/react-query";
 import { MouseEvent } from "react";
 import { useCart } from "../../hooks/trade/useCart";
+import { useToast } from "../../hooks/useToast";
 
 import Button from "../../components/Button";
 import Tooltip from "../../components/Tooltip";
 
 import { Bookmark, Mail, ShoppingBag } from "lucide-react";
+import StateButton from "../../components/StateButton";
 
 interface ProductActionsProps extends FacetProps {
   discount: number | null;
@@ -27,7 +29,9 @@ const ProductActions = ({
 }: ProductActionsProps) => {
   const queryClient = useQueryClient();
   const { product, setProduct } = useProduct();
-  const { addItem } = useCart();
+  const { cart, addItem } = useCart();
+
+  const { addToast } = useToast();
 
   if (!product) return null;
 
@@ -158,6 +162,13 @@ const ProductActions = ({
         image: product.images[0],
       };
 
+      /*
+      if (cart[seller.id].items.some((i) => i.id === cartItem.id)) {
+        addToast("info", `A termék már a kosárban van: ${cartItem.label}`);
+        return; // Item already exists in the cart for this seller
+      }
+      */
+
       addItem(seller, cartItem);
     });
 
@@ -169,6 +180,8 @@ const ProductActions = ({
     });
 
     reset();
+
+    return Promise.resolve();
   };
 
   return (
@@ -187,13 +200,13 @@ const ProductActions = ({
       </div>
 
       <div className='product__action--cart'>
-        <Button
+        <StateButton
           className='primary'
           text='Kosárba'
           disabled={isDisabled}
           onClick={handleAddToCart}>
           <ShoppingBag />
-        </Button>
+        </StateButton>
       </div>
 
       <div className='product__action--contact'>

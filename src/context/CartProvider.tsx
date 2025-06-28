@@ -39,6 +39,7 @@ interface CartContextType {
   removePackage: (sellerId: number) => void;
   clearCart: () => void;
   cartPackageCount: number;
+  cartItemCount: number;
 }
 
 export const CartContext = createContext<CartContextType | undefined>(
@@ -180,6 +181,14 @@ const CartProvider = ({ children }: CartProviderProps) => {
     return Object.keys(cart).length;
   }, [cart]);
 
+  const cartItemCount = useMemo(() => {
+    // Return the total number of items in the cart
+    return Object.values(cart).reduce(
+      (total, pkg) => total + pkg.items.length,
+      0
+    );
+  }, [cart]);
+
   if (!userId) {
     return <>{children}</>;
   }
@@ -193,6 +202,7 @@ const CartProvider = ({ children }: CartProviderProps) => {
         removePackage,
         clearCart,
         cartPackageCount,
+        cartItemCount,
       }}>
       {children}
     </CartContext>

@@ -8,13 +8,13 @@ import Back from "../../components/Back";
 const Cart = () => {
   useTitle(`Kosár - ${ENUM.BRAND.NAME}`);
 
-  const { cart, cartPackageCount } = useCart();
+  const { cart, cartItemCount } = useCart();
 
   console.log(cart);
 
   return (
     <section className='cart'>
-      {cartPackageCount > 0 ? (
+      {cartItemCount > 0 ? (
         <>
           <Back text='Vásárlás folytatása' className='link mb-1' />
         </>
