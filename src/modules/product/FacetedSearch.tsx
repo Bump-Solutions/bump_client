@@ -67,8 +67,11 @@ const FacetedSearch = ({
           <>
             <h4>
               Elérhető állapotok{" "}
+              <Link to={ROUTES.HOME} target='_blank' className='link blue p-0'>
+                - Tudj meg többet
+              </Link>
               {selectedSize && (
-                <span className='fc-light'>- EU {selectedSize}</span>
+                <span className='fc-light'> - EU {selectedSize}</span>
               )}
             </h4>
             <div className='chips__wrapper'>

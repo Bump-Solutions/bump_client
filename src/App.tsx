@@ -13,6 +13,7 @@ import Fallback from "./components/Fallback";
 const App = () => {
   const location = useLocation();
   const background = location.state && location.state.background;
+
   return (
     <Suspense fallback={<Fallback />}>
       {/* Main Routes */}

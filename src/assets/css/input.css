@@ -121,6 +121,7 @@
 }
 .input .stepper__wrapper.disabled {
   background-color: #e9ecef !important;
+  border: 1px solid #ced4da !important;
   cursor: not-allowed !important;
 }
 .input .stepper__wrapper.disabled .stepper__btn {
@@ -132,8 +133,8 @@
   color: #868e96 !important;
 }
 .input .stepper__wrapper.disabled:hover {
-  border: 1px solid #ced4da;
-  outline: none;
+  border: 1px solid #ced4da !important;
+  outline: none !important;
 }
 .input .stepper__wrapper:hover {
   border: 1px solid #0070e8;

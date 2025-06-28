@@ -5,11 +5,12 @@ import { MoveLeft } from "lucide-react";
 
 interface BackProps {
   to?: string;
+  text?: string;
   onClick?: () => void;
   className?: string;
 }
 
-const Back = ({ to, onClick, className = "link" }: BackProps) => {
+const Back = ({ to, text, onClick, className = "link" }: BackProps) => {
   const navigate = useNavigate();
 
   const handleClick = (e: MouseEvent) => {
@@ -23,7 +24,7 @@ const Back = ({ to, onClick, className = "link" }: BackProps) => {
 
   const content = (
     <>
-      <MoveLeft /> <span>Vissza</span>
+      <MoveLeft /> <span>{text ? text : "Vissza"}</span>
     </>
   );
 

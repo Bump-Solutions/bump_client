@@ -16,6 +16,7 @@ export interface FacetProps {
   setGender: (value: number) => void;
   setSize: (value: number) => void;
   setCondition: (value: number) => void;
+  reset: () => void;
 
   available: ProductModel["items"]; // All available items (state === 1)
   filtered: ProductModel["items"] | null; // Filtered items based on selected facets
@@ -118,6 +119,13 @@ export const useFacetedSearch = (): FacetProps | null => {
     setQuantity(1);
   };
 
+  const reset = () => {
+    setGender(null);
+    setSize(null);
+    setCondition(null);
+    setQuantity(1);
+  };
+
   return {
     quantity,
     genders,
@@ -132,6 +140,7 @@ export const useFacetedSearch = (): FacetProps | null => {
     setGender: handleSelectGender,
     setSize: handleSelectSize,
     setCondition: setCondition,
+    reset,
 
     available,
     filtered,

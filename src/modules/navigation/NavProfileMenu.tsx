@@ -1,6 +1,6 @@
 import { ROUTES } from "../../routes/routes";
 import { useGetProfileMeta } from "../../hooks/profile/useGetProfileMeta";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { Link, NavLink, useNavigate } from "react-router";
 import { useAuth } from "../../hooks/auth/useAuth";
 import { useToast } from "../../hooks/useToast";
@@ -23,14 +23,9 @@ const NavProfileMenu = ({
   const navigate = useNavigate();
 
   const { auth } = useAuth();
-  const { cart } = useCart();
+  const { cartItemCount } = useCart();
 
   const { addToast } = useToast();
-
-  const cartPackageCount = () => {
-    // Return the number of packages in the cart
-    return Object.keys(cart).length;
-  };
 
   const { data: meta, isError, error } = useGetProfileMeta();
 
@@ -79,9 +74,9 @@ const NavProfileMenu = ({
         <Tooltip content='Kosár' showDelay={750} placement='bottom'>
           <div className='profile-menu__item no-hide'>
             <div onClick={() => navigate(ROUTES.CART)}>
-              {cartPackageCount() > 0 && (
+              {cartItemCount > 0 && (
                 <span className='badge fw-600'>
-                  {cartPackageCount() > 99 ? "99+" : cartPackageCount()}
+                  {cartItemCount > 99 ? "99+" : cartItemCount}
                 </span>
               )}
 

@@ -1,6 +1,8 @@
 import { ENUM } from "../utils/enum";
 import { JSX, lazy, LazyExoticComponent, Suspense } from "react";
-import { Route } from "react-router";
+import { Outlet, Route } from "react-router";
+
+import CartProvider from "../context/CartProvider";
 
 import Fallback from "../components/Fallback";
 
@@ -33,6 +35,8 @@ const Product = lazy(() => import("../modules/product/Product"));
 const Notifications = lazy(
   () => import("../modules/notifications/Notifications")
 );
+
+const Cart = lazy(() => import("../modules/cart/Cart"));
 
 const Chat = lazy(() => import("../modules/chat/Chat"));
 
@@ -91,57 +95,71 @@ export const privateRoutes = () => {
     <>
       <Route element={<PersistLogin />}>
         <Route element={<RequireAuth allowedRoles={ENUM.AUTH.ROLES.All} />}>
-          {/* HOME */}
-          <Route path='/' element={<Main />}>
-            <Route index element={<Home />} />
+          {/* PROVIDERS FOR AUTHENTICATED USERS */}
+          <Route
+            element={
+              <CartProvider>
+                <Outlet />
+              </CartProvider>
+            }>
+            {/* HOME */}
+            <Route path='/' element={<Main />}>
+              <Route index element={<Home />} />
 
-            <Route element={<RequireAuth allowedRoles={ENUM.AUTH.ROLES.All} />}>
-              {/* PROFILE */}
               <Route
-                path='/profile/:uname'
+                element={<RequireAuth allowedRoles={ENUM.AUTH.ROLES.All} />}>
+                {/* PROFILE */}
+                <Route
+                  path='/profile/:uname'
+                  element={
+                    <ProfileProvider>{withSuspense(Profile)}</ProfileProvider>
+                  }>
+                  <Route index element={<Products />} />
+                  <Route path='products' element={<Products />} />
+                  <Route path='saved' element={<SavedProducts />} />
+                </Route>
+
+                {/* PRODUCT */}
+                <Route
+                  path='/product/:pid'
+                  element={withSuspense(ProductLayout)}>
+                  <Route index element={<Product />} />
+                </Route>
+
+                {/* NOTIFICATIONS */}
+                <Route
+                  path='/notifications'
+                  element={withSuspense(Notifications)}
+                />
+
+                {/* CART */}
+                <Route path='/cart' element={withSuspense(Cart)} />
+              </Route>
+
+              <Route
                 element={
-                  <ProfileProvider>{withSuspense(Profile)}</ProfileProvider>
+                  <RequireAuth allowedRoles={ENUM.AUTH.ROLES.Authenticated} />
                 }>
-                <Route index element={<Products />} />
-                <Route path='products' element={<Products />} />
-                <Route path='saved' element={<SavedProducts />} />
+                {/* SETTINGS */}
+                <Route path='/settings' element={withSuspense(Settings)}>
+                  <Route index element={<PersonalSettings />} />
+                  <Route path='personal' element={<PersonalSettings />} />
+                  <Route path='upload' element={<ProfilePictureSettings />} />
+                  <Route path='profile' element={<ProfileInfoSettings />} />
+                  <Route path='addresses' element={<AddressSettings />} />
+                  <Route path='change-password' element={<ChangePassword />} />
+                </Route>
               </Route>
 
-              {/* PRODUCT */}
-              <Route path='/product/:pid' element={withSuspense(ProductLayout)}>
-                <Route index element={<Product />} />
-              </Route>
-
-              {/* NOTIFICATIONS */}
               <Route
-                path='/notifications'
-                element={withSuspense(Notifications)}
-              />
-            </Route>
-
-            <Route
-              element={
-                <RequireAuth allowedRoles={ENUM.AUTH.ROLES.Authenticated} />
-              }>
-              {/* SETTINGS */}
-              <Route path='/settings' element={withSuspense(Settings)}>
-                <Route index element={<PersonalSettings />} />
-                <Route path='personal' element={<PersonalSettings />} />
-                <Route path='upload' element={<ProfilePictureSettings />} />
-                <Route path='profile' element={<ProfileInfoSettings />} />
-                <Route path='addresses' element={<AddressSettings />} />
-                <Route path='change-password' element={<ChangePassword />} />
-              </Route>
-            </Route>
-
-            <Route
-              element={
-                <RequireAuth allowedRoles={ENUM.AUTH.ROLES.Validated} />
-              }>
-              {/* MESSAGES */}
-              <Route path='/messages' element={withSuspense(Chat)}>
-                <Route index element={<Messages />} />
-                <Route path=':chat' element={<Messages />} />
+                element={
+                  <RequireAuth allowedRoles={ENUM.AUTH.ROLES.Validated} />
+                }>
+                {/* MESSAGES */}
+                <Route path='/messages' element={withSuspense(Chat)}>
+                  <Route index element={<Messages />} />
+                  <Route path=':chat' element={<Messages />} />
+                </Route>
               </Route>
             </Route>
           </Route>
@@ -170,37 +188,48 @@ export const modalRoutes = (background: Location) => {
       <Route element={<PersistLogin />}>
         <Route
           element={<RequireAuth allowedRoles={ENUM.AUTH.ROLES.Validated} />}>
-          {/* SELL */}
-          <Route
-            path='/sell'
-            element={
-              <SellProvider>
-                <Sell />
-              </SellProvider>
-            }
-          />
-        </Route>
-
-        <Route
-          element={
-            <RequireAuth allowedRoles={ENUM.AUTH.ROLES.Authenticated} />
-          }>
-          {/* FOLLOW */}
+          {/* PROVIDERS FOR AUTHENTICATED USERS */}
           <Route
             element={
-              <ProfileProvider>
-                <Follow background={background} />
-              </ProfileProvider>
+              <CartProvider>
+                <Outlet />
+              </CartProvider>
             }>
-            <Route path='/profile/:uname/followers' element={<Followers />} />
-            <Route path='/profile/:uname/followings' element={<Followings />} />
+            {/* SELL */}
+            <Route
+              path='/sell'
+              element={
+                <SellProvider>
+                  <Sell />
+                </SellProvider>
+              }
+            />
           </Route>
 
-          {/* SEARCH */}
-          <Route path='/search' element={<Search />} />
+          <Route
+            element={
+              <RequireAuth allowedRoles={ENUM.AUTH.ROLES.Authenticated} />
+            }>
+            {/* FOLLOW */}
+            <Route
+              element={
+                <ProfileProvider>
+                  <Follow background={background} />
+                </ProfileProvider>
+              }>
+              <Route path='/profile/:uname/followers' element={<Followers />} />
+              <Route
+                path='/profile/:uname/followings'
+                element={<Followings />}
+              />
+            </Route>
 
-          {/* REPORT */}
-          <Route path='/report/:type/:id' element={<Report />} />
+            {/* SEARCH */}
+            <Route path='/search' element={<Search />} />
+
+            {/* REPORT */}
+            <Route path='/report/:type/:id' element={<Report />} />
+          </Route>
         </Route>
       </Route>
     </>

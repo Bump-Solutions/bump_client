@@ -19,7 +19,6 @@ import ToastContainer from "./components/ToastContainer";
 
 import AuthProvider from "./context/AuthProvider";
 import NotificationsProvider from "./context/NotificationsProvider";
-import TradeProvider from "./context/TradeProvider";
 import ToastProvider from "./context/ToastProvider";
 import NavbarThemeProvider from "./context/NavbarThemeProvider";
 
@@ -40,14 +39,12 @@ createRoot(document.getElementById("root")).render(
           <QueryParamProvider adapter={ReactRouter6Adapter}>
             <AuthProvider>
               <NotificationsProvider>
-                <TradeProvider>
-                  <NavbarThemeProvider>
-                    <ToastContainer />
-                    <Routes>
-                      <Route path='/*' element={<App />} />
-                    </Routes>
-                  </NavbarThemeProvider>
-                </TradeProvider>
+                <NavbarThemeProvider>
+                  <ToastContainer />
+                  <Routes>
+                    <Route path='/*' element={<App />} />
+                  </Routes>
+                </NavbarThemeProvider>
               </NotificationsProvider>
             </AuthProvider>
           </QueryParamProvider>
