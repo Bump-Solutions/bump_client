@@ -3,7 +3,7 @@ import { useProfile } from "../../hooks/profile/useProfile";
 import { useListFollowings } from "../../hooks/user/useListFollowings";
 import { FollowingsPageModel } from "../../models/userModel";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import Spinner from "../../components/Spinner";
 import SearchBar from "./SearchBar";
@@ -14,7 +14,6 @@ const Followings = () => {
   useTitle(`@${user?.username} követései - Bump`);
 
   const [searchKeyDebounced, setSearchKeyDebounced] = useState("");
-  const [pages, setPages] = useState<FollowingsPageModel[] | null>(null);
 
   const { isLoading, isFetchingNextPage, isError, fetchNextPage, data } =
     useListFollowings([user!.id, searchKeyDebounced], {
@@ -22,11 +21,7 @@ const Followings = () => {
       searchKey: searchKeyDebounced,
     });
 
-  useEffect(() => {
-    if (data?.pages) {
-      setPages(data.pages);
-    }
-  }, [data]);
+  const pages: FollowingsPageModel[] = data?.pages || [];
 
   if (isError) {
     return (
@@ -46,7 +41,7 @@ const Followings = () => {
 
   return (
     <div className='modal__content'>
-      {pages && (
+      {pages.length > 0 && (
         <>
           <SearchBar
             searchKeyDebounced={searchKeyDebounced}

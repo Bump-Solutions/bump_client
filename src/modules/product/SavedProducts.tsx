@@ -1,5 +1,4 @@
 import "../../assets/css/product.css";
-import { useEffect, useState } from "react";
 import { InventoryModel } from "../../models/productModel";
 import { useListSavedProducts } from "../../hooks/product/useListSavedProducts";
 
@@ -9,16 +8,10 @@ import ProductList from "./ProductList";
 import { SearchX } from "lucide-react";
 
 const SavedProducts = () => {
-  const [pages, setPages] = useState<InventoryModel[] | null>(null);
-
   const { data, isLoading, isFetchingNextPage, isError, fetchNextPage } =
     useListSavedProducts();
 
-  useEffect(() => {
-    if (data?.pages) {
-      setPages(data.pages);
-    }
-  }, [data]);
+  const pages: InventoryModel[] = data?.pages || [];
 
   if (isError) {
     return (
@@ -38,7 +31,7 @@ const SavedProducts = () => {
 
   return (
     <main className='user-products__wrapper'>
-      {pages && (
+      {pages.length > 0 && (
         <>
           {pages[0].products.length > 0 ? (
             <ProductList

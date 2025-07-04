@@ -3,7 +3,6 @@ import { ROUTES } from "../../routes/routes";
 import { InventoryModel } from "../../models/productModel";
 import { Link, useLocation } from "react-router";
 import { useProfile } from "../../hooks/profile/useProfile";
-import { useEffect, useState } from "react";
 import { useListProducts } from "../../hooks/product/useListProducts";
 
 import Spinner from "../../components/Spinner";
@@ -15,18 +14,12 @@ const Products = () => {
   const location = useLocation();
   const { user, isOwnProfile } = useProfile();
 
-  const [pages, setPages] = useState<InventoryModel[] | null>(null);
-
   const { data, isLoading, isFetchingNextPage, isError, fetchNextPage } =
     useListProducts([user?.id], {
       uid: user?.id!,
     });
 
-  useEffect(() => {
-    if (data?.pages) {
-      setPages(data.pages);
-    }
-  }, [data]);
+  const pages: InventoryModel[] = data?.pages || [];
 
   if (isError) {
     return (
@@ -46,7 +39,7 @@ const Products = () => {
 
   return (
     <section className='user-products__wrapper'>
-      {pages && (
+      {pages.length > 0 && (
         <>
           {pages[0].products.length > 0 ? (
             <ProductList

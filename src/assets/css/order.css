@@ -1,0 +1,9 @@
+.orders {
+  position: relative;
+  padding: 2rem var(--container-x-padding);
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+}/*# sourceMappingURL=order.css.map */

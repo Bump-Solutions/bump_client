@@ -114,6 +114,12 @@ export const API = {
     MARK_NOTIFICATION_AS_READ: (id: number) =>
       `/api/v1/notifications/mark_notification_read/${id}`,
   },
+
+  ORDERS: {
+    LIST_ORDERS: (size: number, page: number) =>
+      `/api/v1/order/list_orders?page_size=${size}&page=${page}`,
+  },
+
   REPORT: {
     PRODUCT: "/api/v1/product/report_product",
     USER: "/api/v1/user/report_user",

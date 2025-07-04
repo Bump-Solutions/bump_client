@@ -151,7 +151,8 @@ const ProductActions = ({
       profilePicture: product.user.profilePicture || null,
     };
 
-    filtered.forEach((item) => {
+    const maxToAdd = Math.min(quantity, filtered.length);
+    filtered.slice(0, maxToAdd).forEach((item) => {
       const cartItem: CartItemModel = {
         id: item.id,
         label: [

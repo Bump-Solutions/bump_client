@@ -1,0 +1,11 @@
+@import "variables";
+@import "mixins";
+
+.dtable__wrapper {
+  position: relative;
+
+  .dtable__global-filter {
+    width: 100%;
+    padding: 0.25rem;
+  }
+}

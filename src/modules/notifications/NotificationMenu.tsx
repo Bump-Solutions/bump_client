@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useClickOutside } from "../../hooks/useClickOutside";
 import { NotificationType } from "../../context/NotificationsProvider";
 import { NotificationsPageModel } from "../../models/notificationModel";
@@ -19,7 +19,6 @@ const NotificationMenu = ({
   toggleNotificationMenu,
 }: NotificationMenuProps) => {
   const [activeTabIndex, setActiveTabIndex] = useState<NotificationType>(1);
-  const [pages, setPages] = useState<NotificationsPageModel[] | null>(null);
 
   const ref = useRef<HTMLDivElement>(null);
 
@@ -32,11 +31,7 @@ const NotificationMenu = ({
     type: activeTabIndex,
   });
 
-  useEffect(() => {
-    if (data?.pages) {
-      setPages(data.pages);
-    }
-  }, [data]);
+  const pages: NotificationsPageModel[] = data?.pages || [];
 
   const activeUnreadCount = data?.pages?.[0]?.unreadCount ?? 0;
 
@@ -79,7 +74,7 @@ const NotificationMenu = ({
           </div>
         )}
 
-        {pages && (
+        {pages.length > 0 && (
           <>
             {pages[0].notifications.length > 0 ? (
               <NotificationMenuList

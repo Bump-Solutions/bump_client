@@ -2,9 +2,9 @@ import { ROUTES } from "../../routes/routes";
 import { Link } from "react-router";
 import { NotificationType } from "../../context/NotificationsProvider";
 import { NotificationsPageModel } from "../../models/notificationModel";
+import { useMemo } from "react";
 
 import NotificationMenuListItem from "./NotificationsListItem";
-import { useMemo } from "react";
 
 interface NotificationMenuListProps {
   pages: NotificationsPageModel[];

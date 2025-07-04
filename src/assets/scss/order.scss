@@ -1,0 +1,12 @@
+@import "variables";
+@import "mixins";
+
+.orders {
+  position: relative;
+  padding: 2rem var(--container-x-padding);
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: $max-width-1100;
+  margin: 0 auto;
+}

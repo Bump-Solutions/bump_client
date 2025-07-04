@@ -31,6 +31,8 @@ export const ROUTES = {
 
   CART: "/cart",
 
+  ORDERS: "/orders",
+
   DISCOVER: "/discover",
   AUCTION: "/auction",
   NEWS: "/news",
