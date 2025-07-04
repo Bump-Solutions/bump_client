@@ -3,7 +3,7 @@ import { useProfile } from "../../hooks/profile/useProfile";
 import { useListFollowers } from "../../hooks/user/useListFollowers";
 
 import { useTitle } from "react-use";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import SearchBar from "./SearchBar";
 import Spinner from "../../components/Spinner";
@@ -14,7 +14,6 @@ const Followers = () => {
   useTitle(`@${user?.username} követői - Bump`);
 
   const [searchKeyDebounced, setSearchKeyDebounced] = useState<string>("");
-  const [pages, setPages] = useState<FollowersPageModel[] | null>(null);
 
   const { isLoading, isFetchingNextPage, isError, fetchNextPage, data } =
     useListFollowers([user!.id, searchKeyDebounced], {
@@ -22,11 +21,7 @@ const Followers = () => {
       searchKey: searchKeyDebounced,
     });
 
-  useEffect(() => {
-    if (data?.pages) {
-      setPages(data.pages);
-    }
-  }, [data]);
+  const pages: FollowersPageModel[] = data?.pages || [];
 
   if (isError) {
     return (
@@ -46,7 +41,7 @@ const Followers = () => {
 
   return (
     <div className='modal__content'>
-      {pages && (
+      {pages.length > 0 && (
         <>
           <SearchBar
             searchKeyDebounced={searchKeyDebounced}

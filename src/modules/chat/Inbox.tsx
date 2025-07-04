@@ -1,5 +1,5 @@
 import { InboxModel } from "../../models/chatModel";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useListChatGroups } from "../../hooks/chat/useListChatGroups";
 
 import InboxHeader from "./InboxHeader";
@@ -10,18 +10,13 @@ import { MessageSquareOff, SearchX } from "lucide-react";
 
 const Inbox = () => {
   const [searchKeyDebounced, setSearchKeyDebounced] = useState<string>("");
-  const [pages, setPages] = useState<InboxModel[] | null>(null);
 
   const { isLoading, isFetchingNextPage, isError, fetchNextPage, data } =
     useListChatGroups([searchKeyDebounced], {
       searchKey: searchKeyDebounced,
     });
 
-  useEffect(() => {
-    if (data?.pages) {
-      setPages(data.pages);
-    }
-  }, [data]);
+  const pages: InboxModel[] = data?.pages || [];
 
   return (
     <div className='inbox__panel'>
@@ -46,7 +41,7 @@ const Inbox = () => {
 
       {!isLoading && !isError && (
         <div className='inbox__content'>
-          {pages && pages[0].messages.length > 0 ? (
+          {pages.length > 0 && pages[0].messages.length > 0 ? (
             <InboxList
               pages={pages}
               fetchNextPage={fetchNextPage}

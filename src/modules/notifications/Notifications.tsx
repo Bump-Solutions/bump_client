@@ -2,7 +2,7 @@ import "../../assets/css/notification.css";
 import { ENUM } from "../../utils/enum";
 import { useLocation } from "react-router";
 import { useTitle } from "react-use";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { NotificationType } from "../../context/NotificationsProvider";
 import { NotificationsPageModel } from "../../models/notificationModel";
 import { useListNotifications } from "../../hooks/notifications/useListNotifications";
@@ -21,16 +21,11 @@ const Notifications = () => {
   const type: NotificationType = location.state?.type || 1; // Default to 1 if not provided
 
   const [activeTabIndex, setActiveTabIndex] = useState<NotificationType>(type);
-  const [pages, setPages] = useState<NotificationsPageModel[] | null>(null);
 
   const { data, isLoading, isFetchingNextPage, isError, fetchNextPage } =
     useListNotifications([activeTabIndex], { type: activeTabIndex });
 
-  useEffect(() => {
-    if (data?.pages) {
-      setPages(data.pages);
-    }
-  }, [data]);
+  const pages: NotificationsPageModel[] = data?.pages || [];
 
   const activeUnreadCount = data?.pages?.[0]?.unreadCount ?? 0;
 
@@ -52,7 +47,7 @@ const Notifications = () => {
 
   return (
     <section className='notifications'>
-      {pages && (
+      {pages.length > 0 && (
         <>
           {pages[0].notifications.length > 0 ? (
             <>

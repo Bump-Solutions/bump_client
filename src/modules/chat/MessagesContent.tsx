@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { useListMessages } from "../../hooks/chat/useListMessages";
 import { useLocation } from "react-router";
 import { MessagesPageModel } from "../../models/chatModel";
@@ -17,18 +16,12 @@ const MessagesContent = ({ chat }: MessagesContentProps) => {
     ? new Date(location.state.createdAt)
     : new Date();
 
-  const [pages, setPages] = useState<MessagesPageModel[] | null>(null);
-
   const { isLoading, isFetchingNextPage, isError, fetchNextPage, data } =
     useListMessages([chat], {
       chat,
     });
 
-  useEffect(() => {
-    if (data?.pages) {
-      setPages(data.pages);
-    }
-  }, [data]);
+  const pages: MessagesPageModel[] = data?.pages || [];
 
   if (isError) {
     return (
@@ -45,7 +38,7 @@ const MessagesContent = ({ chat }: MessagesContentProps) => {
   }
 
   return (
-    pages && (
+    pages.length > 0 && (
       <>
         {pages[0].messages.length > 0 ? (
           <MessagesList

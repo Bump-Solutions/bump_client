@@ -1,6 +1,6 @@
 import { ROUTES } from "../../routes/routes";
 import { Link } from "react-router";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect } from "react";
 import { useSearch } from "../../hooks/search/useSearch";
 import { useInView } from "react-intersection-observer";
 import {
@@ -21,11 +21,6 @@ interface ResultsProps {
 }
 
 const Results = ({ searchKey, setSearchKey }: ResultsProps) => {
-  const [pages, setPages] = useState<
-    SearchPageModel<UserSearchModel | ProductSearchModel>[] | null
-  >(null);
-  const [displayedSearchKey, setDisplayedSearchKey] = useState(searchKey);
-
   const isUserSearch = searchKey.startsWith("@");
 
   const { ref, inView } = useInView();
@@ -42,12 +37,8 @@ const Results = ({ searchKey, setSearchKey }: ResultsProps) => {
     delay: 250,
   });
 
-  useEffect(() => {
-    if (data?.pages) {
-      setPages(data.pages);
-      setDisplayedSearchKey(searchKey);
-    }
-  }, [data]);
+  const pages: SearchPageModel<UserSearchModel | ProductSearchModel>[] =
+    data?.pages || [];
 
   useEffect(() => {
     if (inView && !isFetchingNextPage) {
@@ -97,7 +88,7 @@ const Results = ({ searchKey, setSearchKey }: ResultsProps) => {
   }
 
   return (
-    pages && (
+    pages.length > 0 && (
       <section className='search__result'>
         {pages[0].search_result.length > 0 ? (
           <div className='result__list'>
@@ -107,7 +98,7 @@ const Results = ({ searchKey, setSearchKey }: ResultsProps) => {
                   <Search className='svg-20' />
                 </div>
                 <div className='result__text'>
-                  <span className='fw-700 truncate'>{displayedSearchKey}</span>
+                  <span className='fw-700 truncate'>{searchKey}</span>
                 </div>
               </li>
             </ul>
@@ -196,9 +187,7 @@ const Results = ({ searchKey, setSearchKey }: ResultsProps) => {
           </div>
         ) : (
           <div className='no-result'>
-            <h3>
-              Úgy tűnik, a(z) "{displayedSearchKey}" még nem szerepel nálunk
-            </h3>
+            <h3>Úgy tűnik, a(z) "{searchKey}" még nem szerepel nálunk</h3>
             <p>{noResultConfig.message}</p>
             <Button
               className='secondary fill md'

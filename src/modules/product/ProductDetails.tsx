@@ -48,8 +48,6 @@ const ProductDetails = () => {
 
   const discountValue = (product.badges.discount?.value as number) || null;
 
-  console.log(product);
-
   return (
     <article className='product__details'>
       <Badges badges={product.badges} initialToggle={true} showToggle={false} />

@@ -4,6 +4,7 @@ import "./assets/css/button.css";
 import "./assets/css/toast.css";
 import "./assets/css/tooltip.css";
 import "./assets/css/modal.css";
+import "./assets/css/dtable.css";
 
 import { createRoot } from "react-dom/client";
 import { BrowserRouter as Router, Routes, Route } from "react-router";

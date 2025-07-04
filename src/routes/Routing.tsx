@@ -38,6 +38,8 @@ const Notifications = lazy(
 
 const Cart = lazy(() => import("../modules/cart/Cart"));
 
+const Orders = lazy(() => import("../modules/order/Orders"));
+
 const Chat = lazy(() => import("../modules/chat/Chat"));
 
 const Error = lazy(() => import("../modules/error/Error"));
@@ -134,6 +136,9 @@ export const privateRoutes = () => {
 
                 {/* CART */}
                 <Route path='/cart' element={withSuspense(Cart)} />
+
+                {/* ORDERS */}
+                <Route path='/orders' element={withSuspense(Orders)} />
               </Route>
 
               <Route

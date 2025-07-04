@@ -16,6 +16,7 @@ import {
   ArrowUpRight,
   User,
   MessagesSquare,
+  Package,
 } from "lucide-react";
 
 type MenuAction = {
@@ -31,6 +32,12 @@ const ACTIONS = (auth: AuthModel): MenuAction[] => {
       icon: <MessagesSquare />,
       label: "Üzenetek",
       route: ROUTES.INBOX.ROOT,
+      class: "",
+    },
+    {
+      icon: <Package />,
+      label: "Rendelések",
+      route: ROUTES.ORDERS,
       class: "",
     },
     {
