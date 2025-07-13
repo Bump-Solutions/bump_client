@@ -135,21 +135,28 @@
   z-index: 10 !important;
   max-width: 12rem;
   border-radius: 2rem;
+  border: 1px solid #e9ecef;
   background-color: #e9ecef;
   padding: 0.375rem 1rem;
   cursor: text;
+  transition: border 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 .modal__wrapper .modal.sell .modal__content form.step-2 .details__wrapper.catalog .chips__wrapper .search-box svg {
   height: 1.25rem;
   width: 1.25rem;
-  color: #868e96;
+  color: #212529;
 }
 .modal__wrapper .modal.sell .modal__content form.step-2 .details__wrapper.catalog .chips__wrapper .search-box input {
   all: unset;
   position: relative;
   width: 100%;
   font-size: 1rem;
-  transition: border 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.modal__wrapper .modal.sell .modal__content form.step-2 .details__wrapper.catalog .chips__wrapper .search-box:focus-within {
+  border: 1px solid #868e96;
+}
+.modal__wrapper .modal.sell .modal__content form.step-2 .details__wrapper.catalog .chips__wrapper .search-box:focus-within input {
+  border: none !important;
 }
 .modal__wrapper .modal.sell .modal__content form.step-2 .details__wrapper.custom {
   display: flex;

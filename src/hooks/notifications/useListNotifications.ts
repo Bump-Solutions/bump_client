@@ -4,6 +4,7 @@ import { ApiError } from "../../types/api";
 import { QUERY_KEY } from "../../utils/queryKeys";
 import { listNotifications } from "../../services/notificationService";
 import { useAuth } from "../auth/useAuth";
+import { ENUM } from "../../utils/enum";
 
 const MAX_NOTIFICATIONS_PER_PAGE = 5;
 
@@ -27,9 +28,9 @@ export const useListNotifications = (
         pageParam as number
       ),
     enabled: Boolean(auth), // Only fetch if user is authenticated
-    staleTime: 1000 * 60 * 1, // 1 minute
     refetchOnWindowFocus: true,
     initialPageParam: 1,
     getNextPageParam: (lastPage) => lastPage.next ?? undefined,
+    staleTime: ENUM.GLOBALS.staleTime1,
   });
 };

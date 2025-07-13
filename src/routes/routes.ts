@@ -32,6 +32,7 @@ export const ROUTES = {
   CART: "/cart",
 
   ORDERS: "/orders",
+  ORDER: (id: number) => `/order/${id}`,
 
   DISCOVER: "/discover",
   AUCTION: "/auction",

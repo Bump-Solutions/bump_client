@@ -116,7 +116,7 @@ const SettingsNav = () => {
                       end
                       to={to}
                       state={{ from: location }}
-                      className='link'>
+                      className='link no-anim'>
                       {isMobile && subItem.icon}
                       {subItem.label}
                       {isMobile && <ChevronRight />}

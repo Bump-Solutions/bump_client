@@ -1,7 +1,7 @@
 import { AxiosInstance } from "axios";
-import { OrdersPageModel } from "../models/orderModel";
+import { OrderModel, OrdersPageModel } from "../models/orderModel";
 import { ApiResponse } from "../types/api";
-import { OrdersPageDTO } from "../dtos/OrderDTO";
+import { FetchedOrderDTO, OrdersPageDTO } from "../dtos/OrderDTO";
 import { API } from "../utils/api";
 import { fromOrderDTO } from "../mappers/orderMapper";
 
@@ -21,10 +21,22 @@ export const listOrders = async (
     data.next = page + 1;
   }
 
-  console.log("OrdersPageDTO", data);
-
   return {
     ...data,
     orders: data.orders.map(fromOrderDTO),
   };
+};
+
+export const getOrder = async (
+  signal: AbortSignal,
+  axiosPrivate: AxiosInstance,
+  orderId: number
+): Promise<OrderModel> => {
+  if (!orderId) throw new Error("Missing required parameter: orderId");
+
+  const response: ApiResponse = await axiosPrivate.get<{
+    message: FetchedOrderDTO;
+  }>(API.ORDERS.GET_ORDER(orderId), { signal });
+
+  return fromOrderDTO(response.data.message);
 };

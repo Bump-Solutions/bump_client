@@ -95,7 +95,8 @@ export const ENUM = {
   },
 
   GLOBALS: {
-    staleTime: 1000 * 60 * 5, // 5 minutes
+    staleTime1: 1000 * 60 * 1, // 1 minute
+    staleTime5: 1000 * 60 * 5, // 5 minutes
   },
 
   MEDIA_MOBILE: 900,

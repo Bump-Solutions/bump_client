@@ -4,6 +4,7 @@ import { useAxiosPrivate } from "../auth/useAxiosPrivate";
 import { QUERY_KEY } from "../../utils/queryKeys";
 import { listProducts } from "../../services/productService";
 import { UserModel } from "../../models/userModel";
+import { ENUM } from "../../utils/enum";
 
 const MAX_PRODUCTS_PER_PAGE = 20;
 
@@ -28,5 +29,6 @@ export const useListProducts = (
     enabled: Boolean(params.uid),
     initialPageParam: 1,
     getNextPageParam: (lastPage) => lastPage.next ?? undefined,
+    staleTime: ENUM.GLOBALS.staleTime5,
   });
 };

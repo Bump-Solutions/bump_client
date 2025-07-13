@@ -118,6 +118,7 @@ export const API = {
   ORDERS: {
     LIST_ORDERS: (size: number, page: number) =>
       `/api/v1/order/list_orders?page_size=${size}&page=${page}`,
+    GET_ORDER: (orderId: number) => `/api/v1/order/get_order/${orderId}`,
   },
 
   REPORT: {
