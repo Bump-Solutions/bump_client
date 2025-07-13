@@ -17,7 +17,7 @@ export const useGetUser = (
   return useQuery<UserModel, ApiError>({
     queryKey: [QUERY_KEY.getUser, ...dependencies],
     queryFn: ({ signal }) => getUser(signal, axiosPrivate, params.username),
-    staleTime: ENUM.GLOBALS.staleTime,
+    staleTime: ENUM.GLOBALS.staleTime5,
     retry: 1,
   });
 };

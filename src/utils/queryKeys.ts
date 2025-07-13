@@ -22,6 +22,9 @@ export const QUERY_KEY = {
   listCategories: "listCategories",
   listSizes: "listSizes",
 
+  // ORDER
+  listOrders: "listOrders",
+
   // CHAT
   listChatGroups: "listChatGroups",
   listMessages: "listMessages",

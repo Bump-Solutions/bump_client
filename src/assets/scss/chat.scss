@@ -51,13 +51,15 @@
           z-index: 10 !important;
           border-radius: $border-radius-2;
           background-color: color(gray, 200);
+          border: 1px solid color(gray, 200);
           padding: 0.375rem 1rem;
           cursor: text;
+          transition: border-color 0.2s $animation-cubic;
 
           svg {
             height: $fs-20;
             width: $fs-20;
-            color: color(gray, 600);
+            color: color(gray, 900);
           }
 
           input {
@@ -65,7 +67,14 @@
             position: relative;
             width: 100%;
             font-size: $fs-16;
-            transition: border 0.2s $animation-cubic;
+          }
+
+          &:focus-within {
+            border: 1px solid color(gray, 600);
+
+            input {
+              border: none !important;
+            }
           }
         }
 

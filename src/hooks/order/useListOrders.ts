@@ -1,22 +1,22 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { ApiError } from "../../types/api";
 import { useAxiosPrivate } from "../auth/useAxiosPrivate";
+import { ApiError } from "../../types/api";
 import { QUERY_KEY } from "../../utils/queryKeys";
-import { listSavedProducts } from "../../services/productService";
+import { listOrders } from "../../services/orderService";
 import { ENUM } from "../../utils/enum";
 
-const MAX_PRODUCTS_PER_PAGE = 20;
+const MAX_ORDERS_PER_PAGE = 20;
 
-export const useListSavedProducts = (dependencies: any[] = []) => {
+export const useListOrders = (dependencies: any[] = []) => {
   const axiosPrivate = useAxiosPrivate();
 
   return useInfiniteQuery<any, ApiError>({
-    queryKey: [QUERY_KEY.listSavedProducts, ...dependencies],
+    queryKey: [QUERY_KEY.listOrders, ...dependencies],
     queryFn: ({ signal, pageParam }) =>
-      listSavedProducts(
+      listOrders(
         signal,
         axiosPrivate,
-        MAX_PRODUCTS_PER_PAGE,
+        MAX_ORDERS_PER_PAGE,
         pageParam as number
       ),
     initialPageParam: 1,

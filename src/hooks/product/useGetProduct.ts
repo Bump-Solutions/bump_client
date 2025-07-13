@@ -16,6 +16,6 @@ export const useGetProduct = (
     queryKey: [QUERY_KEY.getProduct, ...dependencies],
     queryFn: ({ signal }) => getProduct(signal, axiosPrivate, params.pid),
     retry: 1,
-    staleTime: ENUM.GLOBALS.staleTime,
+    staleTime: ENUM.GLOBALS.staleTime5,
   });
 };

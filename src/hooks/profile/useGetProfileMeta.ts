@@ -14,6 +14,6 @@ export const useGetProfileMeta = (dependencies: any[] = []) => {
     queryKey: [QUERY_KEY.getProfileMeta, ...dependencies],
     queryFn: ({ signal }) => getProfileMeta(signal, axiosPrivate),
     refetchOnWindowFocus: false,
-    staleTime: ENUM.GLOBALS.staleTime,
+    staleTime: ENUM.GLOBALS.staleTime5,
   });
 };

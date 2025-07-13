@@ -49,7 +49,7 @@
             left: 3rem;
             height: $fs-20;
             width: $fs-20;
-            color: color(gray, 600);
+            color: color(gray, 900);
           }
 
           input {
@@ -58,9 +58,14 @@
             padding: 0.5rem 1rem;
             padding-left: 3rem;
             border-radius: $border-radius-2;
-            background-color: color(gray, 100);
+            border: 1px solid color(gray, 200);
+            background-color: color(gray, 200);
             font-size: $fs-16;
             transition: border 0.2s $animation-cubic;
+
+            &:focus {
+              border: 1px solid color(gray, 600);
+            }
           }
         }
 
@@ -219,9 +224,14 @@
               padding: 0.5rem 1rem;
               padding-left: 3rem;
               border-radius: $border-radius-2;
-              background-color: color(gray, 100);
+              border: 1px solid color(gray, 200);
+              background-color: color(gray, 200);
               font-size: $fs-16;
               transition: border 0.2s $animation-cubic;
+
+              &:focus {
+                border: 1px solid color(gray, 600);
+              }
             }
           }
 

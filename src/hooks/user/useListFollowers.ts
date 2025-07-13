@@ -33,6 +33,6 @@ export const useListFollowers = (
     initialPageParam: 1,
     getNextPageParam: (lastPage) => lastPage.next ?? undefined,
     enabled: Boolean(params.uid),
-    staleTime: ENUM.GLOBALS.staleTime,
+    staleTime: ENUM.GLOBALS.staleTime5,
   });
 };
