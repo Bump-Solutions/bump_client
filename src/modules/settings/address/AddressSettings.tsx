@@ -81,14 +81,12 @@ const AddressSettings = () => {
     error,
   } = useListAddresses();
 
-  useEffect(() => {
-    if (isError) {
-      addToast(
-        error?.response?.data.type || "error",
-        error?.response?.data.message
-      );
-    }
-  }, [isError]);
+  if (isError) {
+    addToast(
+      error?.response?.data.type || "error",
+      error?.response?.data.message
+    );
+  }
 
   useEffect(() => {
     if (addresses.length > 0) {

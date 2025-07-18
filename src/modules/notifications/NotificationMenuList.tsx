@@ -12,7 +12,7 @@ interface NotificationMenuListProps {
   toggleNotificationMenu: (bool: boolean) => void;
 }
 
-const LIMIT = 3;
+const LIMIT = 5;
 
 const NotificationMenuList = ({
   pages,

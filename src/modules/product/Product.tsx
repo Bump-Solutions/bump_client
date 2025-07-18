@@ -9,13 +9,11 @@ import Thumbnail from "./Thumbnail";
 import ProductDetails from "./ProductDetails";
 
 const Product = () => {
-  const { product, isLoading, isError } = useProduct();
+  const { product, isLoading } = useProduct();
 
   useTitle(`${product ? product.title : "Termék"} - Bump`);
 
   if (isLoading) return <Spinner />;
-
-  if (isError) return null;
 
   return (
     <section className='product'>

@@ -1,10 +1,9 @@
 import { ROUTES } from "../routes/routes";
 import { QUERY_KEY } from "../utils/queryKeys";
-import { ApiError } from "../types/api";
 import { UserModel } from "../models/userModel";
 
-import { createContext, ReactNode, useEffect, useMemo } from "react";
-import { useParams, useNavigate } from "react-router";
+import { createContext, ReactNode, useCallback, useMemo } from "react";
+import { useParams, Navigate } from "react-router";
 import { useQueryClient } from "@tanstack/react-query";
 
 import { useAuth } from "../hooks/auth/useAuth";
@@ -15,8 +14,6 @@ interface ProfileContextType {
   setUser: (data: Partial<UserModel>) => void;
   isOwnProfile: boolean;
   isLoading: boolean;
-  error?: ApiError | null;
-  isError: boolean;
 }
 
 export const ProfileContext = createContext<ProfileContextType | undefined>(
@@ -30,51 +27,56 @@ interface ProfileProviderProps {
 const ProfileProvider = ({ children }: ProfileProviderProps) => {
   const { auth } = useAuth();
   const { uname } = useParams();
-  const navigate = useNavigate();
   const queryClient = useQueryClient();
 
   const {
     data: user,
     isLoading,
     isError,
-    error,
   } = useGetUser([uname], { username: uname! });
 
-  useEffect(() => {
-    if (isError) {
-      navigate(ROUTES.NOTFOUND, {
-        replace: true,
-        state: {
+  const setUser = useCallback(
+    (data: Partial<UserModel>) => {
+      queryClient.setQueryData(
+        [QUERY_KEY.getUser, uname],
+        (prev: UserModel | undefined) => ({
+          ...prev,
+          ...data,
+        })
+      );
+    },
+    [queryClient, uname]
+  );
+
+  const isOwnProfile = auth?.user?.username === uname;
+
+  const contextValue = useMemo<ProfileContextType>(
+    () => ({
+      user,
+      setUser,
+      isOwnProfile,
+      isLoading,
+    }),
+    [user, setUser, isOwnProfile, isLoading]
+  );
+
+  if (isError) {
+    return (
+      <Navigate
+        to={ROUTES.NOTFOUND}
+        replace
+        state={{
           error: {
             code: 404,
             title: "Hibás felhasználónév",
             message: `Sajnáljuk, a(z) '${uname}' nevű felhasználó nem található. Megeshet, hogy elírás van a felhasználónévben, vagy a felhasználó törölve lett.`,
           },
-        },
-      });
-    }
-  }, [isError]);
-
-  const setUser = (data: Partial<UserModel>) => {
-    queryClient.setQueryData(
-      [QUERY_KEY.getUser, uname],
-      (prev: UserModel | undefined) => ({
-        ...prev,
-        ...data,
-      })
+        }}
+      />
     );
-  };
+  }
 
-  const isOwnProfile = useMemo(() => {
-    return auth?.user?.username === uname;
-  }, [auth?.user?.username, uname]);
-
-  return (
-    <ProfileContext
-      value={{ user, setUser, isOwnProfile, isLoading, error, isError }}>
-      {children}
-    </ProfileContext>
-  );
+  return <ProfileContext value={contextValue}>{children}</ProfileContext>;
 };
 
 export default ProfileProvider;

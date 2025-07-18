@@ -24,6 +24,7 @@ export const QUERY_KEY = {
 
   // ORDER
   listOrders: "listOrders",
+  getOrder: "getOrder",
 
   // CHAT
   listChatGroups: "listChatGroups",

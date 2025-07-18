@@ -10,11 +10,9 @@ import ProfileCard from "./card/ProfileCard";
 import ProfileTabs from "./ProfileTabs";
 
 const Profile = () => {
-  const { isLoading, isError } = useProfile();
+  const { isLoading } = useProfile();
 
-  if (isError) return null;
-
-  useNavbarTheme(isLoading || isError ? true : false);
+  useNavbarTheme(isLoading ? true : false);
 
   return isLoading ? (
     <Spinner />

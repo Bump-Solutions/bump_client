@@ -7,6 +7,18 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-width: $max-width-1100;
+  max-width: $max-width-900;
   margin: 0 auto;
+
+  .orders__header {
+    margin-bottom: 2rem;
+
+    h1 {
+      font-size: $fs-32;
+    }
+
+    p {
+      color: color(gray, 700);
+    }
+  }
 }

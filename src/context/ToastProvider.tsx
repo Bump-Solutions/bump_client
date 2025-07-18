@@ -1,8 +1,9 @@
+import cuid from "cuid";
 import { createContext, useReducer, useState, ReactNode } from "react";
 
 // Define the shape of a Toast
 interface Toast {
-  id: number;
+  id: string;
   type: string;
   message: string;
 }
@@ -15,19 +16,21 @@ interface ToastState {
 // Define action types and payloads
 type ToastAction =
   | { type: "ADD_TOAST"; payload: Toast }
-  | { type: "REMOVE_TOAST"; payload: number };
+  | { type: "REMOVE_TOAST"; payload: string };
 
 // Define the context type
 interface ToastContextType {
   toasts: Toast[];
   addToast: (type: string, message: string) => void;
-  removeToast: (id: number) => void;
+  removeToast: (id: string) => void;
 }
 
 // Define props for the provider
 interface ToastProviderProps {
   children: ReactNode;
 }
+
+const TIMER_DURATION = 1000 * 5; // 5 seconds
 
 // Initial state
 const INITIAL_STATE: ToastState = {
@@ -57,22 +60,22 @@ const toastReducer = (state: ToastState, action: ToastAction): ToastState => {
 const ToastProvider = ({ children }: ToastProviderProps) => {
   const [state, dispatch] = useReducer(toastReducer, INITIAL_STATE);
 
-  const [timers, setTimers] = useState<Record<number, number>>({});
+  const [timers, setTimers] = useState<Record<string, number>>({});
 
   const addToast = (type: string, message: string): void => {
     if (state.toasts.length < 5) {
-      const id = Date.now();
+      const id = cuid();
       dispatch({ type: "ADD_TOAST", payload: { id, type, message } });
 
       // Set a timer for this toast
       const timer = setTimeout(() => {
         removeToast(id);
-      }, 5000);
+      }, TIMER_DURATION);
       setTimers((prevTimers) => ({ ...prevTimers, [id]: timer }));
     }
   };
 
-  const removeToast = (id: number): void => {
+  const removeToast = (id: string): void => {
     dispatch({ type: "REMOVE_TOAST", payload: id });
 
     // Clear the timer
