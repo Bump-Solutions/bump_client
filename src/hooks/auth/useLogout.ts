@@ -15,7 +15,7 @@ export const useLogout = (): (() => Promise<void>) => {
       setAuth(null);
       queryClient.clear();
     } catch (error) {
-      throw new Error("Server error");
+      throw new Error(`Server error: ${error}`);
     }
   };
 

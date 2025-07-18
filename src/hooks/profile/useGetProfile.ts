@@ -13,5 +13,6 @@ export const useGetProfile = (dependencies: any[] = []) => {
     queryKey: [QUERY_KEY.getProfile, ...dependencies],
     queryFn: ({ signal }) => getProfile(signal, axiosPrivate),
     staleTime: ENUM.GLOBALS.staleTime5,
+    retry: 0,
   });
 };

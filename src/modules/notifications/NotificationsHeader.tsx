@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { useGetProfileMeta } from "../../hooks/profile/useGetProfileMeta";
 import { useToast } from "../../hooks/useToast";
 
@@ -9,14 +8,12 @@ const NotificationsHeader = () => {
 
   const { data: meta, isError, error } = useGetProfileMeta();
 
-  useEffect(() => {
-    if (isError) {
-      addToast(
-        error?.response?.data.type || "error",
-        error?.response?.data.message
-      );
-    }
-  }, [isError]);
+  if (isError) {
+    addToast(
+      error?.response?.data.type || "error",
+      error?.response?.data.message
+    );
+  }
 
   return (
     <>

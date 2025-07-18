@@ -1,6 +1,5 @@
 import { ROUTES } from "../../../routes/routes";
-import { useEffect } from "react";
-import { Link, useNavigate } from "react-router";
+import { Link } from "react-router";
 import { usePersonalSettings } from "../../../hooks/settings/usePersonalSettings";
 
 import Image from "../../../components/Image";
@@ -63,18 +62,9 @@ const SettingsBox = ({ title, edit, data }: SettingsBoxProps) => {
 };
 
 const PersonalSettings = () => {
-  const navigate = useNavigate();
-
-  const { data, isLoading, isError, error } = usePersonalSettings();
+  const { data, isLoading } = usePersonalSettings();
 
   const { addToast } = useToast();
-
-  useEffect(() => {
-    if (isError) {
-      addToast("error", error!);
-      navigate(-1);
-    }
-  }, [isError]);
 
   return (
     <div className='page__wrapper'>

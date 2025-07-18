@@ -15,6 +15,7 @@ export const useGetProduct = (
   return useQuery<ProductModel, ApiError>({
     queryKey: [QUERY_KEY.getProduct, ...dependencies],
     queryFn: ({ signal }) => getProduct(signal, axiosPrivate, params.pid),
+    enabled: Boolean(params.pid),
     retry: 1,
     staleTime: ENUM.GLOBALS.staleTime5,
   });
