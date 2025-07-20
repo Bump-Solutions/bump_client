@@ -3,7 +3,6 @@ import { ReportType } from "../../types/report";
 
 import { useMutation } from "@tanstack/react-query";
 import { useAxiosPrivate } from "../auth/useAxiosPrivate";
-import { useToast } from "../useToast";
 import { reportProduct, reportUser } from "../../services/reportService";
 
 interface ReportPayload {
@@ -18,7 +17,6 @@ export const useReport = (
   onError?: (error: ApiError, variables: ReportPayload) => void
 ) => {
   const axiosPrivate = useAxiosPrivate();
-  const { addToast } = useToast();
 
   return useMutation<ApiResponse, ApiError, ReportPayload>({
     mutationFn: (payload: ReportPayload) => {
@@ -41,11 +39,6 @@ export const useReport = (
     onError: (error, variables) => {
       if (onError) {
         onError(error, variables);
-      } else {
-        addToast(
-          error?.response?.data.type || "error",
-          error?.response?.data.message
-        );
       }
       return Promise.reject(error);
     },

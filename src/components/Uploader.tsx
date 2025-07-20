@@ -1,6 +1,6 @@
 import { FileUpload } from "../types/form";
 import { ChangeEvent, forwardRef, useImperativeHandle, useRef } from "react";
-import { useToast } from "../hooks/useToast";
+import { toast } from "sonner";
 import cuid from "cuid";
 
 export interface UploaderHandle {
@@ -17,8 +17,6 @@ interface UploaderProps {
 
 const Uploader = forwardRef<UploaderHandle, UploaderProps>(
   ({ onInputChange, accept = "", multiple = true, maxFiles, maxSize }, ref) => {
-    const { addToast } = useToast();
-
     const inputRef = useRef<HTMLInputElement>(null);
 
     useImperativeHandle(ref, () => ({
@@ -31,8 +29,7 @@ const Uploader = forwardRef<UploaderHandle, UploaderProps>(
       let files = event.target.files ? Array.from(event.target.files) : [];
 
       if (maxFiles !== undefined && files.length > maxFiles) {
-        addToast(
-          "error",
+        toast.error(
           `Maximum ${maxFiles} fájl tölthető fel. (Aktuális: ${files.length})`
         );
         files = files.slice(0, maxFiles);
@@ -41,8 +38,7 @@ const Uploader = forwardRef<UploaderHandle, UploaderProps>(
       if (maxSize !== undefined) {
         const overized = files.filter((f) => f.size > maxSize);
         if (overized.length > 0) {
-          addToast(
-            "error",
+          toast.error(
             `A fájlok mérete nem haladhatja meg a ${
               maxSize / 1024 / 1024
             } MB-ot.`

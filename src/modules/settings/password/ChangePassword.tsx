@@ -3,21 +3,19 @@ import { Errors } from "../../../types/form";
 import { FormEvent, useState } from "react";
 import { useAuth } from "../../../hooks/auth/useAuth";
 import { useDebounce } from "../../../hooks/useDebounce";
-import { useToast } from "../../../hooks/useToast";
+import { toast } from "sonner";
 
 import Input from "../../../components/Input";
 import StateButton from "../../../components/StateButton";
+import OtpInput from "../../../components/OtpInput";
 
 import { LockKeyhole, Send } from "lucide-react";
-import OtpInput from "../../../components/OtpInput";
 
 const ChangePassword = () => {
   const { auth } = useAuth();
   const [email, setEmail] = useState(auth?.user?.email || "");
 
   const [errors, setErrors] = useState<Errors>({});
-
-  const { addToast } = useToast();
 
   useDebounce(
     () => {
@@ -55,12 +53,12 @@ const ChangePassword = () => {
         }));
       });
 
-      addToast("error", "Kérjük töltsd ki a csillaggal jelölt mezőket!");
+      toast.error("Kérjük töltsd ki a csillaggal jelölt mezőket!");
       return Promise.reject("Empty inputs");
     }
 
     if (Object.values(errors).some((error) => error)) {
-      addToast("error", "Kérjük javítsd a hibás mezőket!");
+      toast.error("Kérjük javítsd a hibás mezőket!");
       return Promise.reject("Invalid fields");
     }
 

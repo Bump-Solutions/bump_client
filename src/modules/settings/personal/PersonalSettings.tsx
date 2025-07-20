@@ -6,7 +6,6 @@ import Image from "../../../components/Image";
 import Spinner from "../../../components/Spinner";
 
 import { CircleUser, Pencil } from "lucide-react";
-import { useToast } from "../../../hooks/useToast";
 
 interface InfoBoxProps {
   label: string;
@@ -63,8 +62,6 @@ const SettingsBox = ({ title, edit, data }: SettingsBoxProps) => {
 
 const PersonalSettings = () => {
   const { data, isLoading } = usePersonalSettings();
-
-  const { addToast } = useToast();
 
   return (
     <div className='page__wrapper'>

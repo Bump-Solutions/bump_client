@@ -1,9 +1,9 @@
 import { ROUTES } from "../../routes/routes";
 import { useNavigate } from "react-router";
 import { useAuth } from "../../hooks/auth/useAuth";
-import { useToast } from "../../hooks/useToast";
 import { useGoogleLogin } from "@react-oauth/google";
 import { useLoginWithGoogle } from "../../hooks/auth/useLoginWithGoogle";
+import { toast } from "sonner";
 
 import Button from "../../components/Button";
 
@@ -14,7 +14,6 @@ const SocialSignup = () => {
   const navigate = useNavigate();
 
   const { setAuth } = useAuth();
-  const { addToast } = useToast();
 
   const googleLoginMutation = useLoginWithGoogle((authModel, variables) => {
     setAuth(authModel);
@@ -23,14 +22,24 @@ const SocialSignup = () => {
 
   const handleGoogleLogin = useGoogleLogin({
     onSuccess: ({ code }) => {
-      googleLoginMutation.mutateAsync(code);
+      const loginPromise = googleLoginMutation.mutateAsync(code);
+
+      toast.promise(loginPromise, {
+        loading: "Bejelentkezés folyamatban…",
+        success: () => "Sikeresen bejelentkeztél!",
+        error: (err) =>
+          (err?.response?.data?.message as string) ||
+          "Hiba történt a Google-lal való bejelentkezés során.",
+      });
+
+      return loginPromise;
     },
     flow: "auth-code",
     ux_mode: "popup", // TODO: redirect
     // redirect_uri: `localhost:3000`,
     onError: (error) => {
       // console.log(error);
-      addToast("error", "Hiba történt a Google-lal való bejelentkezés során.");
+      toast.error("Hiba történt a Google-lal való bejelentkezés során.");
     },
   });
 

@@ -11,7 +11,7 @@ import {
 import { SignupModel } from "../../models/authModel";
 
 import { useDebounce } from "../../hooks/useDebounce";
-import { useToast } from "../../hooks/useToast";
+import { toast } from "sonner";
 
 import Input from "../../components/Input";
 import Phone from "../../components/Phone";
@@ -36,8 +36,6 @@ const PersonalForm = forwardRef<PersonalFormRef, PersonalFormProps>(
     { firstName, lastName, phoneNumber, gender, updateData, errors, setErrors },
     ref
   ) => {
-    const { addToast } = useToast();
-
     useImperativeHandle(ref, () => ({ isValid }));
 
     const isValid = () => {
@@ -55,13 +53,13 @@ const PersonalForm = forwardRef<PersonalFormRef, PersonalFormProps>(
           }));
         });
 
-        addToast("error", "Kérjük töltsd ki a csillaggal jelölt mezőket!");
+        toast.error("Kérjük töltsd ki a csillaggal jelölt mezőket!");
 
         return false;
       }
 
       if (Object.values(errors).some((x) => x !== "")) {
-        addToast("error", "Kérjük javítsd a hibás mezőket!");
+        toast.error("Kérjük javítsd a hibás mezőket!");
         return false;
       }
 

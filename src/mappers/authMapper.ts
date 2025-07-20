@@ -49,10 +49,10 @@ export function toSignupRequestDTO(model: SignupModel): SignupRequestDTO {
     email: model.email,
     username: model.username,
     password: model.password,
-    passwordConfirmation: model.passwordConfirmation,
-    firstName: model.firstName,
-    lastName: model.lastName,
-    phoneNumber: model.phoneNumber,
+    password_confirmation: model.passwordConfirmation,
+    first_name: model.firstName,
+    last_name: model.lastName,
+    phone_number: model.phoneNumber,
     gender: model.gender ? model.gender.value : null,
   };
 }

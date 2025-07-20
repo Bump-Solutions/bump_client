@@ -1,6 +1,6 @@
 import { FileUpload } from "../../types/form";
-import { useToast } from "../../hooks/useToast";
 import { Dispatch, SetStateAction, useRef } from "react";
+import { toast } from "sonner";
 
 import Uploader, { UploaderHandle } from "../../components/Uploader";
 import Tooltip from "../../components/Tooltip";
@@ -18,8 +18,6 @@ const MAX_SIZE = 5 * 1024 * 1024; // 5MB
 const ImageUpload = ({ setImages }: ImageUploadProps) => {
   const uploaderRef = useRef<UploaderHandle>(null);
 
-  const { addToast } = useToast();
-
   const handleFiles = (files: FileUpload[]) => {
     setImages((prev) => {
       const newFiles = files.filter((file) => {
@@ -27,8 +25,7 @@ const ImageUpload = ({ setImages }: ImageUploadProps) => {
       });
 
       if (prev.length + newFiles.length > MAX_FILES) {
-        addToast(
-          "error",
+        toast.error(
           `Maximum ${MAX_FILES} fájl tölthető fel. (Aktuális: ${
             prev.length + newFiles.length
           })`

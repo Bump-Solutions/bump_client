@@ -2,13 +2,13 @@ import { ENUM } from "../../utils/enum";
 import { ROUTES } from "../../routes/routes";
 import { REGEX } from "../../utils/regex";
 import { Errors } from "../../types/form";
+import { toast } from "sonner";
 
 import { useTitle } from "react-use";
 import { FormEvent, useState, useEffect } from "react";
 import { Link } from "react-router";
 import { BooleanParam, useQueryParam } from "use-query-params";
 
-import { useToast } from "../../hooks/useToast";
 import { useLogin } from "../../hooks/auth/useLogin";
 import { useDebounce } from "../../hooks/useDebounce";
 
@@ -35,8 +35,6 @@ const Login = () => {
   const [password, setPassword] = useState<string>("");
 
   const [errors, setErrors] = useState<Errors>({});
-
-  const { addToast } = useToast();
 
   const loginMutation = useLogin();
 
@@ -93,16 +91,26 @@ const Login = () => {
         }));
       });
 
-      addToast("error", "Kérjük töltsd ki a csillaggal jelölt mezőket!");
+      toast.error("Kérjük töltsd ki a csillaggal jelölt mezőket!");
       return Promise.reject("Empty inputs");
     }
 
     if (Object.values(errors).some((error) => error)) {
-      addToast("error", "Kérjük javítsd a hibás mezőket!");
+      toast.error("Kérjük javítsd a hibás mezőket!");
       return Promise.reject("Invalid fields");
     }
 
-    return loginMutation.mutateAsync({ email, password });
+    const loginPromise = loginMutation.mutateAsync({ email, password });
+
+    toast.promise(loginPromise, {
+      loading: "Bejelentkezés folyamatban…",
+      success: "Sikeresen bejelentkeztél!",
+      error: (err) =>
+        (err?.response?.data?.message as string) ||
+        "Hiba a bejelentkezés során.",
+    });
+
+    return loginPromise;
   };
 
   return (
