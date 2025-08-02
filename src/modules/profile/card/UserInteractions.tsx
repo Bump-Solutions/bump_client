@@ -76,7 +76,7 @@ const UserInteractions = () => {
 
     if (followMutation.isPending) return;
 
-    followMutation.mutateAsync(user?.id!);
+    return followMutation.mutateAsync(user?.id!);
   };
 
   const handleUnfollow = (e: MouseEvent<HTMLButtonElement>) => {
@@ -84,7 +84,7 @@ const UserInteractions = () => {
 
     if (unfollowMutation.isPending) return;
 
-    unfollowMutation.mutateAsync(user?.id!);
+    return unfollowMutation.mutateAsync(user?.id!);
   };
 
   const handleSendMessage = (e: MouseEvent<HTMLButtonElement>) => {
@@ -123,7 +123,7 @@ const UserInteractions = () => {
           <Button
             className='secondary red'
             text='Követés leállítása'
-            onClick={(e) => handleUnfollow(e)}
+            onClick={handleUnfollow}
             loading={unfollowMutation.isPending}>
             <UserX />
           </Button>
@@ -131,7 +131,7 @@ const UserInteractions = () => {
           <Button
             className='primary'
             text='Követés'
-            onClick={(e) => handleFollow(e)}
+            onClick={handleFollow}
             loading={followMutation.isPending}>
             <UserPlus />
           </Button>
@@ -142,7 +142,7 @@ const UserInteractions = () => {
         <Button
           className='secondary blue'
           text='Üzenet'
-          onClick={(e) => handleSendMessage(e)}
+          onClick={handleSendMessage}
           loading={createChatGroupMutation.isPending}>
           <Mail />
         </Button>

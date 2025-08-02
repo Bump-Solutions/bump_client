@@ -2,7 +2,7 @@ import { ReportType } from "../../types/report";
 import { Option, Errors } from "../../types/form";
 import { FormEvent, useState } from "react";
 import { useReport } from "../../hooks/report/useReport";
-import { useToast } from "../../hooks/useToast";
+import { toast } from "sonner";
 import { useNavigate } from "react-router";
 import { useDebounce } from "../../hooks/useDebounce";
 import { useMounted } from "../../hooks/useMounted";
@@ -84,11 +84,13 @@ const DESCRIPTIONS: Record<ReportType, string> = {
   user: "Fontos számunkra, hogy a sneaker közösség biztonságos és tisztességes maradjon. Ha ez a felhasználó megtévesztő adatokat ad meg, hamis terméket kínál vagy tisztességtelenül kereskedik, kérjük, jelentsd. Minden esetet bizalmasan kezelünk és kivizsgálunk.",
 };
 
+const LABELS: Record<ReportType, string> = {
+  product: "termék",
+  user: "felhasználó",
+};
+
 const INITIAL_DATA: Record<string, any> = {
-  rprt_reason: {
-    value: "",
-    label: "",
-  },
+  rprt_reason: null,
   rprt_description: "",
 };
 
@@ -100,7 +102,6 @@ const ReportForm = ({ type, id }: ReportFormProps) => {
 
   const [errors, setErrors] = useState<Errors>({});
   const isMounted = useMounted();
-  const { addToast } = useToast();
 
   fields.forEach((field) => {
     useDebounce(
@@ -158,21 +159,31 @@ const ReportForm = ({ type, id }: ReportFormProps) => {
           [input]: "A mező kitöltése kötelező.",
         }));
       });
-      addToast("error", "Kérjük töltsd ki a csillaggal jelölt mezőket!");
+      toast.error("Kérjük töltsd ki a csillaggal jelölt mezőket!");
       return Promise.reject("Empty inputs");
     }
 
     if (Object.values(errors).some((x) => x !== "")) {
-      addToast("error", "Kérjük javítsd a hibás mezőket!");
+      toast.error("Kérjük javítsd a hibás mezőket!");
       return Promise.reject("Invalid fields");
     }
 
-    return reportMutation.mutateAsync({
+    const reportPromise = reportMutation.mutateAsync({
       type,
       id: parseInt(id!),
       reason: formData.rprt_reason.value,
       description: formData.rprt_description,
     });
+
+    toast.promise(reportPromise, {
+      loading: "Jelentés folyamatban...",
+      success: "Jelentés elküldve.",
+      error: (err) =>
+        (err?.response?.data?.message as string) ||
+        `Hiba a ${LABELS[type]} jelentése közben.`,
+    });
+
+    return reportPromise;
   };
 
   return (

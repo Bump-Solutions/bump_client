@@ -173,7 +173,7 @@
 }
 .button.secondary.blue:hover, .button.secondary.blue:focus {
   color: #0066d3;
-  background-color: #cee4fb;
+  background-color: rgb(206.3888888889, 227.7777777778, 251.1111111111);
   border: 1px solid #8abdf4;
 }
 .button.secondary.red {
@@ -183,7 +183,7 @@
 }
 .button.secondary.red:hover, .button.secondary.red:focus {
   color: #ba0000;
-  background-color: #f6d1d1;
+  background-color: rgb(245.75, 208.75, 208.75);
   border: 1px solid #e88a8a;
 }
 .button.secondary.error {

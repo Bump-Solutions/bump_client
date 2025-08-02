@@ -3,6 +3,8 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useProfile } from "../../hooks/profile/useProfile";
 import { useUnfollow } from "../../hooks/user/useUnfollow";
 import { Dispatch, MouseEvent, SetStateAction } from "react";
+import { FollowerModel, FollowingModel } from "../../models/userModel";
+import { toast } from "sonner";
 
 import Modal from "../../components/Modal";
 import Button from "../../components/Button";
@@ -10,7 +12,8 @@ import StateButton from "../../components/StateButton";
 import Image from "../../components/Image";
 
 import { UserX } from "lucide-react";
-import { FollowerModel, FollowingModel } from "../../models/userModel";
+import { Link } from "react-router";
+import { ROUTES } from "../../routes/routes";
 
 interface ConfirmUnfollowProps {
   userToUnfollow: FollowerModel | FollowingModel | null;
@@ -67,7 +70,27 @@ const ConfirmUnfollow = ({
 
     if (unfollowMutation.isPending || !userToUnfollow) return;
 
-    return unfollowMutation.mutateAsync(userToUnfollow.userId);
+    const unfollowPromise = unfollowMutation.mutateAsync(userToUnfollow.userId);
+
+    toast.promise(unfollowPromise, {
+      loading: "Követés leállítása folyamatban...",
+      success: () => (
+        <span>
+          <Link
+            target='_blank'
+            className='link fc-green-600 underline fw-700'
+            to={
+              ROUTES.PROFILE(userToUnfollow.username).ROOT
+            }>{`@${userToUnfollow.username}`}</Link>{" "}
+          követése leállítva.
+        </span>
+      ),
+      error: (err) =>
+        (err?.response?.data?.message as string) ||
+        "Hiba a követés leállítása közben.",
+    });
+
+    return unfollowPromise;
   };
 
   return (

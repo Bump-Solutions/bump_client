@@ -2,7 +2,6 @@ import { useMutation } from "@tanstack/react-query";
 import { ApiError, ApiResponse } from "../../types/api";
 import { FileUpload } from "../../types/form";
 import { useAxiosPrivate } from "../auth/useAxiosPrivate";
-import { useToast } from "../useToast";
 import { uploadChatImages } from "../../services/chatService";
 
 interface UploadChatImagesVariables {
@@ -15,7 +14,6 @@ export const useUploadChatImages = (
   onError?: (error: ApiError, variables: UploadChatImagesVariables) => void
 ) => {
   const axiosPrivate = useAxiosPrivate();
-  const { addToast } = useToast();
 
   return useMutation<ApiResponse, ApiError, UploadChatImagesVariables>({
     mutationFn: (data: UploadChatImagesVariables) =>
@@ -28,11 +26,6 @@ export const useUploadChatImages = (
     onError: (error, variables) => {
       if (onError) {
         onError(error, variables);
-      } else {
-        addToast(
-          error?.response?.data.type || "error",
-          error?.response?.data.message
-        );
       }
       return Promise.reject(error);
     },

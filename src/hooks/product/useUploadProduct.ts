@@ -2,7 +2,6 @@ import { QUERY_KEY } from "../../utils/queryKeys";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ApiError, ApiResponse } from "../../types/api";
 import { useAxiosPrivate } from "../auth/useAxiosPrivate";
-import { useToast } from "../useToast";
 import { uploadProduct } from "../../services/productService";
 import { useAuth } from "../auth/useAuth";
 import { CreateProductModel } from "../../models/productModel";
@@ -15,7 +14,6 @@ export const useUploadProduct = (
 
   const queryClient = useQueryClient();
   const axiosPrivate = useAxiosPrivate();
-  const { addToast } = useToast();
 
   return useMutation<ApiResponse, ApiError, CreateProductModel>({
     mutationFn: (newProduct: CreateProductModel) =>
@@ -32,11 +30,6 @@ export const useUploadProduct = (
     onError: (error, variables) => {
       if (onError) {
         onError(error, variables);
-      } else {
-        addToast(
-          error?.response?.data.type || "error",
-          error?.response?.data.message
-        );
       }
       return Promise.reject(error);
     },

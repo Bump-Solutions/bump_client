@@ -2,6 +2,7 @@ import { AddressModel } from "../../../models/addressModel";
 import { MouseEvent } from "react";
 import { useDeleteAddress } from "../../../hooks/address/useDeleteAddress";
 import { useMounted } from "../../../hooks/useMounted";
+import { toast } from "sonner";
 
 import Button from "../../../components/Button";
 import StateButton from "../../../components/StateButton";
@@ -29,7 +30,17 @@ const Delete = ({ address, close }: DeleteProps) => {
 
     if (!address) return;
 
-    return deleteAddressMutation.mutateAsync(address.id);
+    const deletePromise = deleteAddressMutation.mutateAsync(address.id);
+
+    toast.promise(deletePromise, {
+      loading: "Cím törlése folyamatban...",
+      success: `A(z) '${address.name}' cím törölve.`,
+      error: (err) =>
+        (err?.response?.data?.message as string) ||
+        "Hiba a cím törlése közben.",
+    });
+
+    return deletePromise;
   };
 
   return (

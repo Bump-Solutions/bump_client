@@ -2,7 +2,7 @@ import { Outlet } from "react-router";
 import { useState, useEffect } from "react";
 
 import { useAuth } from "../../hooks/auth/useAuth";
-import { useToast } from "../../hooks/useToast";
+import { toast } from "sonner";
 import { useRefreshToken } from "../../hooks/auth/useRefreshToken";
 
 import Spinner from "../../components/Spinner";
@@ -13,16 +13,15 @@ const PersistLogin = () => {
   const { auth } = useAuth();
   const refresh = useRefreshToken();
 
-  const { addToast } = useToast();
-
   useEffect(() => {
     const verifyRefreshToken = async () => {
       try {
         await refresh();
       } catch (error: any) {
-        addToast(
-          error?.response?.data.type || "error",
-          error?.response?.data.message
+        console.error(error);
+        toast.error(
+          (error?.response?.data.message as string) ||
+            "Szerverhiba. Próbáld újra később."
         );
       } finally {
         setLoading(false);

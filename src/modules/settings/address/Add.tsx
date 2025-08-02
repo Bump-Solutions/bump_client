@@ -1,7 +1,7 @@
 import { REGEX } from "../../../utils/regex";
 import { FormEvent, useState } from "react";
 import { Errors } from "../../../types/form";
-import { useToast } from "../../../hooks/useToast";
+import { toast } from "sonner";
 import { useDebounce } from "../../../hooks/useDebounce";
 import { useAddAddress } from "../../../hooks/address/useAddAddress";
 import { useGetCurrentLocation } from "../../../hooks/address/useGetCurrentLocation";
@@ -32,7 +32,6 @@ const Add = ({ addresses, close }: AddProps) => {
   });
 
   const [errors, setErrors] = useState<Errors>({});
-  const { addToast } = useToast();
   const isMounted = useMounted();
 
   const { loading } = useGetCurrentLocation((resp) => {
@@ -118,7 +117,6 @@ const Add = ({ addresses, close }: AddProps) => {
     },
     (error) => {
       if (typeof error?.response?.data.message === "object") {
-        addToast("error", "Kérjük javítsd a hibás mezőket!");
         Object.entries(
           error.response!.data.message as Record<string, string[]>
         ).forEach(([field, messages]: [string, string[]]) => {
@@ -127,11 +125,6 @@ const Add = ({ addresses, close }: AddProps) => {
             [field]: messages[0],
           }));
         });
-      } else {
-        addToast(
-          error?.response?.data.type || "error",
-          error?.response?.data.message
-        );
       }
     }
   );
@@ -157,7 +150,7 @@ const Add = ({ addresses, close }: AddProps) => {
           [input]: "A mező kitöltése kötelező.",
         }));
       });
-      addToast("error", "Kérjük töltsd ki a csillaggal jelölt mezőket!");
+      toast.error("Kérjük töltsd ki a csillaggal jelölt mezőket!");
       return Promise.reject("Empty inputs");
     }
 
@@ -183,11 +176,21 @@ const Add = ({ addresses, close }: AddProps) => {
     }
 
     if (Object.values(errors).some((x) => x !== "")) {
-      addToast("error", "Kérjük javítsd a hibás mezőket!");
+      toast.error("Kérjük javítsd a hibás mezőket!");
       return Promise.reject("Invalid fields");
     }
 
-    return addAddressMutation.mutateAsync(newAddress);
+    const addPromise = addAddressMutation.mutateAsync(newAddress);
+
+    toast.promise(addPromise, {
+      loading: "Cím hozzáadása folyamatban...",
+      success: `A(z) '${newAddress.name}' cím létrehozva.`,
+      error: (err) =>
+        (err?.response?.data?.message as string) ||
+        "Hiba a cím hozzáadása során.",
+    });
+
+    return addPromise;
   };
 
   return loading ? (

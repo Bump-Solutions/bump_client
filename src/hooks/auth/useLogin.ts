@@ -6,7 +6,6 @@ import { useNavigate } from "react-router";
 import { useMutation } from "@tanstack/react-query";
 
 import { useAuth } from "./useAuth";
-import { useToast } from "../useToast";
 import { AuthModel } from "../../models/authModel";
 
 interface LoginArgs {
@@ -18,7 +17,6 @@ export const useLogin = () => {
   const navigate = useNavigate();
 
   const { setAuth } = useAuth();
-  const { addToast } = useToast();
 
   return useMutation<AuthModel, ApiError, LoginArgs>({
     mutationFn: ({ email, password }: LoginArgs) => login(email, password),
@@ -27,10 +25,6 @@ export const useLogin = () => {
       navigate(ROUTES.HOME, { replace: true });
     },
     onError: (error) => {
-      addToast(
-        error?.response?.data.type || "error",
-        error?.response?.data.message
-      );
       return Promise.reject(error);
     },
   });

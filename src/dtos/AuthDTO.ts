@@ -25,10 +25,10 @@ export interface SignupRequestDTO {
   username: string;
   email: string;
   password: string;
-  passwordConfirmation: string;
-  firstName: string;
-  lastName: string;
-  phoneNumber: string;
+  password_confirmation: string;
+  first_name: string;
+  last_name: string;
+  phone_number: string;
   gender: number | null;
 }
 

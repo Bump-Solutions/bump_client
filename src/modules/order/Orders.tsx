@@ -1,11 +1,12 @@
 import "../../assets/css/order.css";
 import { useTitle } from "react-use";
+import { Link } from "react-router";
 import { OrdersPageModel } from "../../models/orderModel";
 import { ENUM } from "../../utils/enum";
 import { useListOrders } from "../../hooks/order/useListOrders";
 
 import Spinner from "../../components/Spinner";
-import { Link } from "react-router";
+
 import { ArrowUpRight } from "lucide-react";
 
 const Orders = () => {

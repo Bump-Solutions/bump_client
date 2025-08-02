@@ -8,7 +8,7 @@ import {
   KeyboardEvent,
 } from "react";
 import { useToggle } from "../../hooks/useToggle";
-import { useToast } from "../../hooks/useToast";
+import { toast } from "sonner";
 import { useClickOutside } from "../../hooks/useClickOutside";
 import { useUploadChatImages } from "../../hooks/chat/useUploadChatImages";
 import { FileUpload } from "../../types/form";
@@ -49,8 +49,6 @@ const MessagesFooter = ({ chat, onSend }: MessagesFooterProps) => {
   const [isFocused, toggleFocus] = useToggle(false);
   const [isLoading, toggleLoading] = useToggle(false);
 
-  const { addToast } = useToast();
-
   useClickOutside({
     ref: wrapperRef,
     callback: () => toggleFocus(false),
@@ -88,7 +86,7 @@ const MessagesFooter = ({ chat, onSend }: MessagesFooterProps) => {
           .join(";;");
       }
     } catch (error) {
-      addToast("error", "Hiba történt a képek feltöltése során.");
+      toast.error("Hiba történt a képek feltöltése során.");
       return;
     }
 

@@ -10,6 +10,7 @@ import { useSaveProduct } from "../../hooks/product/useSaveProduct";
 import { useUnsaveProduct } from "../../hooks/product/useUnsaveProduct";
 import { useToggle } from "../../hooks/useToggle";
 import { useLongPress } from "react-use";
+import { toast } from "sonner";
 
 import { MouseEvent, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
@@ -220,7 +221,25 @@ const ProductListItem = ({ product }: ProductListItemProps) => {
 
     if (!isLiked) {
       if (likeMutation.isPending) return;
-      likeMutation.mutateAsync(pid);
+      const likePromise = likeMutation.mutateAsync(pid);
+
+      toast.promise(likePromise, {
+        loading: "Kedvelés...",
+        success: () => (
+          <span>
+            Kedveltél egy{" "}
+            <Link
+              target='_blank'
+              className='link fc-green-600 underline fw-700'
+              to={ROUTES.PRODUCT(pid).ROOT}>
+              terméket.
+            </Link>
+          </span>
+        ),
+        error: (err) =>
+          (err?.response?.data?.message as string) ||
+          "Hiba történt a termék kedvelése során.",
+      });
     } else {
       if (unlikeMutation.isPending) return;
       unlikeMutation.mutateAsync(pid);
@@ -236,7 +255,25 @@ const ProductListItem = ({ product }: ProductListItemProps) => {
 
     if (!isSaved) {
       if (saveMutation.isPending) return;
-      saveMutation.mutateAsync(pid);
+      const savePromise = saveMutation.mutateAsync(pid);
+
+      toast.promise(savePromise, {
+        loading: "Mentés...",
+        success: () => (
+          <span>
+            Elmentettél egy{" "}
+            <Link
+              target='_blank'
+              className='link fc-green-600 underline fw-700'
+              to={ROUTES.PRODUCT(pid).ROOT}>
+              terméket.
+            </Link>
+          </span>
+        ),
+        error: (err) =>
+          (err?.response?.data?.message as string) ||
+          "Hiba történt a termék mentése során.",
+      });
     } else {
       if (unsaveMutation.isPending) return;
       unsaveMutation.mutateAsync(pid);

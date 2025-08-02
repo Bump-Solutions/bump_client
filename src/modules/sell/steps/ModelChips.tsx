@@ -34,7 +34,7 @@ const ModelChips = () => {
   const selectedModel = data.product.model;
 
   useEffect(() => {
-    // Reset pages if brandchanges to null
+    // Reset pages if brand changes to null
     if (!selectedBrand) {
       setPages([]);
     }

@@ -1,15 +1,14 @@
 import "../../assets/css/multistepform.css";
 
-import { ROUTES } from "../../routes/routes";
 import { Errors } from "../../types/form";
 import { SignupModel } from "../../models/authModel";
 import { FormEvent, useRef, useState, Fragment } from "react";
-import { useNavigate } from "react-router";
+import { toast } from "sonner";
 
-import { useToast } from "../../hooks/useToast";
 import { useMultiStepForm } from "../../hooks/useMultiStepForm";
 import { ContactRound, User } from "lucide-react";
 import { useSignup } from "../../hooks/auth/useSignup";
+import { useLogin } from "../../hooks/auth/useLogin";
 
 import { Check, MoveLeft, MoveRight, ClipboardPen } from "lucide-react";
 
@@ -30,12 +29,8 @@ const INITIAL_DATA: SignupModel = {
 };
 
 const SignupForm = () => {
-  const navigate = useNavigate();
-
   const accountRef = useRef<{ isValid: () => boolean }>(null);
   const personalRef = useRef<{ isValid: () => boolean }>(null);
-
-  const { addToast } = useToast();
 
   const [data, setData] = useState<SignupModel>(INITIAL_DATA);
   const [errors, setErrors] = useState<Errors>({});
@@ -96,24 +91,27 @@ const SignupForm = () => {
     }
   };
 
+  const loginMutation = useLogin();
   const signupMutation = useSignup(
     (response) => {
       // console.log(response);
 
-      addToast("success", "Sikeres regisztráció. Kérjük jelentkezz be!");
+      loginMutation.mutateAsync({ email: data.email, password: data.password });
       setData(INITIAL_DATA);
-      navigate(ROUTES.LOGIN);
+      // navigate(ROUTES.LOGIN);
     },
     (error) => {
-      addToast("error", "Kérjük javítsd a hibás mezőket!");
-      Object.entries(
-        error.response!.data.message as Record<string, string[]>
-      ).forEach(([field, messages]: [string, string[]]) => {
-        setErrors((prev) => ({
-          ...prev,
-          [field]: messages[0],
-        }));
-      });
+      if (typeof error?.response?.data.message === "object") {
+        Object.entries(
+          error.response!.data.message as Record<string, string[]>
+        ).forEach(([field, messages]: [string, string[]]) => {
+          setErrors((prev) => ({
+            ...prev,
+            [field]: messages[0],
+          }));
+        });
+      }
+
       if (
         error?.response?.data.message.email ||
         error?.response?.data.message.username
@@ -134,10 +132,18 @@ const SignupForm = () => {
 
     const formattedData = {
       ...data,
-      gender: data.gender ? data.gender : null,
+      gender: data.gender ?? null,
     };
 
-    return signupMutation.mutateAsync(formattedData);
+    const signupPromise = signupMutation.mutateAsync(formattedData);
+
+    toast.promise(signupPromise, {
+      loading: "Regisztráció folyamatban...",
+      success: "Sikeres regisztráció. Bejelentkezés...",
+      error: "Kérjük javítsd a hibás mezőket!",
+    });
+
+    return signupPromise;
   };
 
   return (

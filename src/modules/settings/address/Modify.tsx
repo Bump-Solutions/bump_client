@@ -2,7 +2,7 @@ import { REGEX } from "../../../utils/regex";
 import { AddressModel } from "../../../models/addressModel";
 import { Errors } from "../../../types/form";
 import { FormEvent, useState } from "react";
-import { useToast } from "../../../hooks/useToast";
+import { toast } from "sonner";
 import { useDebounce } from "../../../hooks/useDebounce";
 import { useModifyAddress } from "../../../hooks/address/useModifyAddress";
 import { useMounted } from "../../../hooks/useMounted";
@@ -21,7 +21,6 @@ interface ModifyProps {
 }
 
 const Modify = ({ address, addresses, close }: ModifyProps) => {
-  const { addToast } = useToast();
   const isMounted = useMounted();
 
   const [newAddress, setNewAddress] = useState<AddressModel>({ ...address });
@@ -112,7 +111,6 @@ const Modify = ({ address, addresses, close }: ModifyProps) => {
     },
     (error) => {
       if (typeof error?.response?.data.message === "object") {
-        addToast("error", "Kérjük javítsd a hibás mezőket!");
         Object.entries(
           error.response!.data.message as Record<string, string[]>
         ).forEach(([field, messages]: [string, string[]]) => {
@@ -121,11 +119,6 @@ const Modify = ({ address, addresses, close }: ModifyProps) => {
             [field]: messages[0],
           }));
         });
-      } else {
-        addToast(
-          error?.response?.data.type || "error",
-          error?.response?.data.message
-        );
       }
     }
   );
@@ -154,7 +147,7 @@ const Modify = ({ address, addresses, close }: ModifyProps) => {
         }));
       });
 
-      addToast("error", "Kérjük töltsd ki a csillaggal jelölt mezőket!");
+      toast.error("Kérjük töltsd ki a csillaggal jelölt mezőket!");
       return Promise.reject("Empty inputs");
     }
 
@@ -182,11 +175,21 @@ const Modify = ({ address, addresses, close }: ModifyProps) => {
     }
 
     if (Object.values(errors).some((x) => x !== "")) {
-      addToast("error", "Kérjük javítsd a hibás mezőket!");
+      toast.error("Kérjük javítsd a hibás mezőket!");
       return Promise.reject("Invalid fields");
     }
 
-    return modifyAddressMutation.mutateAsync(newAddress);
+    const modifyPromise = modifyAddressMutation.mutateAsync(newAddress);
+
+    toast.promise(modifyPromise, {
+      loading: "Cím módosítása folyamatban...",
+      success: `A(z) '${newAddress.name}' cím módosítva.`,
+      error: (err) =>
+        (err?.response?.data?.message as string) ||
+        "Hiba a cím módosítása során.",
+    });
+
+    return modifyPromise;
   };
 
   return (

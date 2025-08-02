@@ -1,6 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { QUERY_KEY } from "../../utils/queryKeys";
-import { useToast } from "../useToast";
 import { useAxiosPrivate } from "../auth/useAxiosPrivate";
 import { uploadProfilePicture } from "../../services/profileService";
 import { ApiError, ApiResponse } from "../../types/api";
@@ -13,7 +12,6 @@ export const useUploadProfilePicture = (
   const axiosPrivate = useAxiosPrivate();
   const queryClient = useQueryClient();
   const { auth } = useAuth();
-  const { addToast } = useToast();
 
   return useMutation<ApiResponse, ApiError, any>({
     mutationFn: (file: File) => uploadProfilePicture(axiosPrivate, file),
@@ -36,11 +34,6 @@ export const useUploadProfilePicture = (
     onError: (error: ApiError, variables: any) => {
       if (onError) {
         onError(error, variables);
-      } else {
-        addToast(
-          error?.response?.data.type || "error",
-          error?.response?.data.message
-        );
       }
       return Promise.reject(error);
     },

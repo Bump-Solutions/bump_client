@@ -1,6 +1,7 @@
 import { ProductListModel } from "../../models/productModel";
 import { useDeleteProduct } from "../../hooks/product/useDeleteProduct";
 import { MouseEvent, useEffect, useState } from "react";
+import { toast } from "sonner";
 
 import Button from "../../components/Button";
 import Modal from "../../components/Modal";
@@ -37,7 +38,17 @@ const Delete = ({ product, isOpen, close }: DeleteProps) => {
 
     if (deleteProductMutation.isPending || !currentProduct) return;
 
-    return deleteProductMutation.mutateAsync(currentProduct.id);
+    const deletePromise = deleteProductMutation.mutateAsync(currentProduct.id);
+
+    toast.promise(deletePromise, {
+      loading: "Termék törlése folyamatban...",
+      success: `A(z) '${currentProduct.title}' termék törölve.`,
+      error: (err) =>
+        (err?.response?.data?.message as string) ||
+        "Hiba a termék törlése közben.",
+    });
+
+    return deletePromise;
   };
 
   if (!currentProduct) return null;

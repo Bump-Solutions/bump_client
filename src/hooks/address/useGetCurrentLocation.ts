@@ -1,7 +1,7 @@
 import { useGeolocation } from "react-use";
-import { useToast } from "../useToast";
 import { useEffect, useState } from "react";
 import { getAddressFromCoords } from "../../services/addressService";
+import { toast } from "sonner";
 
 export const useGetCurrentLocation = (
   onSuccess?: (resp: any) => void,
@@ -10,8 +10,6 @@ export const useGetCurrentLocation = (
   const geo = useGeolocation({ enableHighAccuracy: true });
 
   const [loading, isLoading] = useState(false);
-
-  const { addToast } = useToast();
 
   useEffect(() => {
     if (geo.latitude && geo.longitude) {
@@ -27,7 +25,7 @@ export const useGetCurrentLocation = (
           if (onError) {
             onError(error);
           } else {
-            addToast("error", "Nem sikerült meghatározni a címet.");
+            toast.error("Nem sikerült meghatározni a címet.");
           }
         })
         .finally(() => {

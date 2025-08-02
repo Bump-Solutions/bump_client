@@ -8,20 +8,28 @@ import "./assets/css/dtable.css";
 
 import { createRoot } from "react-dom/client";
 import { BrowserRouter as Router, Routes, Route } from "react-router";
+import { createPortal } from "react-dom";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 
 import { QueryParamProvider } from "use-query-params";
 import { ReactRouter6Adapter } from "use-query-params/adapters/react-router-6";
+import { Toaster } from "sonner";
 
 import App from "./App";
-import ToastContainer from "./components/ToastContainer";
 
 import AuthProvider from "./context/AuthProvider";
 import NotificationsProvider from "./context/NotificationsProvider";
-import ToastProvider from "./context/ToastProvider";
 import NavbarThemeProvider from "./context/NavbarThemeProvider";
+
+import {
+  CircleCheck,
+  Info,
+  Loader,
+  OctagonX,
+  TriangleAlert,
+} from "lucide-react";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -36,20 +44,45 @@ createRoot(document.getElementById("root")).render(
   <QueryClientProvider client={queryClient}>
     <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
       <Router>
-        <ToastProvider>
-          <QueryParamProvider adapter={ReactRouter6Adapter}>
-            <AuthProvider>
-              <NotificationsProvider>
-                <NavbarThemeProvider>
-                  <ToastContainer />
-                  <Routes>
-                    <Route path='/*' element={<App />} />
-                  </Routes>
-                </NavbarThemeProvider>
-              </NotificationsProvider>
-            </AuthProvider>
-          </QueryParamProvider>
-        </ToastProvider>
+        <QueryParamProvider adapter={ReactRouter6Adapter}>
+          <AuthProvider>
+            <NotificationsProvider>
+              <NavbarThemeProvider>
+                {createPortal(
+                  <Toaster
+                    position='bottom-right'
+                    className='toaster'
+                    theme='light'
+                    richColors
+                    icons={{
+                      success: <CircleCheck />,
+                      error: <OctagonX />,
+                      info: <Info />,
+                      warning: <TriangleAlert />,
+                      loading: <Loader />,
+                    }}
+                    toastOptions={{
+                      className: "toast",
+                      classNames: {
+                        success: "toast--success",
+                        error: "toast--error",
+                        info: "toast--info",
+                        warning: "toast--warning",
+                        loading: "toast--loading",
+                      },
+                    }}
+                    visibleToasts={5}
+                    duration={5000}
+                  />,
+                  document.body
+                )}
+                <Routes>
+                  <Route path='/*' element={<App />} />
+                </Routes>
+              </NavbarThemeProvider>
+            </NotificationsProvider>
+          </AuthProvider>
+        </QueryParamProvider>
       </Router>
     </GoogleOAuthProvider>
   </QueryClientProvider>

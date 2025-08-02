@@ -23,9 +23,7 @@ const NotificationMenuList = ({
     return pages.flatMap((page) => page.notifications);
   }, [pages]);
 
-  const count = useMemo(() => {
-    return pages[0].count;
-  }, [pages]);
+  const count = pages[0].count;
 
   return (
     <>

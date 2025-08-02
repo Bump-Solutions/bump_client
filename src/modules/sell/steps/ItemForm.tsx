@@ -2,7 +2,8 @@ import { ENUM } from "../../../utils/enum";
 import { Errors, Option } from "../../../types/form";
 import { useState } from "react";
 import { useSell } from "../../../hooks/product/useSell";
-import { useToast } from "../../../hooks/useToast";
+import { useDebounce } from "../../../hooks/useDebounce";
+import { toast } from "sonner";
 
 import Currency from "../../../components/Currency";
 import Select from "../../../components/Select";
@@ -10,7 +11,6 @@ import Button from "../../../components/Button";
 import Stepper from "../../../components/Stepper";
 
 import { CirclePlus } from "lucide-react";
-import { useDebounce } from "../../../hooks/useDebounce";
 
 interface FormItem {
   condition: Option<number> | null;
@@ -33,8 +33,6 @@ const ItemForm = () => {
   const [count, setCount] = useState<number>(1);
   const [formKey, setFormKey] = useState(0); // Kulcs a Select újrarendereléshez
   const [errors, setErrors] = useState<Errors>({});
-
-  const { addToast } = useToast();
 
   useDebounce(
     () => {
@@ -105,13 +103,13 @@ const ItemForm = () => {
         }));
       });
 
-      addToast("error", "Kérjük töltsd ki a csillaggal jelölt mezőket!");
+      toast.error("Kérjük töltsd ki a csillaggal jelölt mezőket!");
 
       return;
     }
 
     if (Object.values(errors).some((x) => x !== "")) {
-      addToast("error", "Kérjük javítsd a hibás mezőket!");
+      toast.error("Kérjük javítsd a hibás mezőket!");
       return;
     }
 

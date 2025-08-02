@@ -3,7 +3,6 @@ import { ApiError, ApiResponse } from "../../types/api";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAxiosPrivate } from "../auth/useAxiosPrivate";
-import { useToast } from "../useToast";
 import { modifyAddress } from "../../services/addressService";
 import { AddressModel } from "../../models/addressModel";
 
@@ -13,7 +12,6 @@ export const useModifyAddress = (
 ) => {
   const queryClient = useQueryClient();
   const axiosPrivate = useAxiosPrivate();
-  const { addToast } = useToast();
 
   return useMutation<ApiResponse, ApiError, AddressModel>({
     mutationFn: (address: AddressModel) => modifyAddress(axiosPrivate, address),
@@ -26,11 +24,6 @@ export const useModifyAddress = (
     onError: (error, variables) => {
       if (onError) {
         onError(error, variables);
-      } else {
-        addToast(
-          error?.response?.data.type || "error",
-          error?.response?.data.message
-        );
       }
       return Promise.reject(error);
     },

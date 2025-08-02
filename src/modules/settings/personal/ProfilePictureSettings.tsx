@@ -8,7 +8,7 @@ import { useUploadProfilePicture } from "../../../hooks/profile/useUploadProfile
 import { useNavigate, Link } from "react-router";
 import { useMounted } from "../../../hooks/useMounted";
 import { useAuth } from "../../../hooks/auth/useAuth";
-import { useToast } from "../../../hooks/useToast";
+import { toast } from "sonner";
 import {
   getImageDominantColor,
   getImageDominantColorAndPalette,
@@ -31,7 +31,6 @@ const ProfilePictureSettings = () => {
 
   const isMounted = useMounted();
   const { auth, setAuth } = useAuth();
-  const { addToast } = useToast();
 
   const onDrop = (acceptedFiles: File[]) => {
     setImages([]);
@@ -59,7 +58,7 @@ const ProfilePictureSettings = () => {
             setColorPreview(color);
           })
           .catch((error) => {
-            addToast("error", "Hiba történt a kép feldolgozása során.");
+            toast.error("Hiba történt a kép feldolgozása során.");
           });
       };
 
@@ -71,13 +70,13 @@ const ProfilePictureSettings = () => {
     const errorCode = fileRejections[0]?.errors[0]?.code;
     switch (errorCode) {
       case "file-too-large":
-        addToast("error", "A fájl mérete túl nagy. A megengedett méret 1MB.");
+        toast.error("A fájl mérete túl nagy. A megengedett méret 1MB.");
         break;
       case "file-invalid-type":
-        addToast("error", "Hibás fájl formátum.");
+        toast.error("Hibás fájl formátum.");
         break;
       default:
-        addToast("error", "Hiba történt a fájl feltöltése során.");
+        toast.error("Hiba történt a fájl feltöltése során.");
         break;
     }
   };
@@ -110,16 +109,15 @@ const ProfilePictureSettings = () => {
     e.preventDefault();
 
     if (images.length === 0) {
-      addToast("warning", "Először tölts fel egy képet a módosításhoz.");
+      toast.warning("Először tölts fel egy képet a módosításhoz.");
       return Promise.reject("No image uploaded");
     }
 
-    try {
+    const uploadPromise = (async () => {
       const { dominantColor, palette } = await getImageDominantColorAndPalette(
         URL.createObjectURL(images[0].file),
         12
       );
-
       const paletteString = palette.join(";");
 
       const data: Record<string, any> = {
@@ -132,11 +130,15 @@ const ProfilePictureSettings = () => {
       }
 
       await uploadProfilePictureMutation.mutateAsync(data);
-    } catch (error) {
-      console.error("Error uploading profile picture:", error);
-      addToast("error", "Hiba történt a kép feldolgozása során.");
-      return Promise.reject("Image error");
-    }
+    })();
+
+    toast.promise(uploadPromise, {
+      loading: "Kép feltöltése folyamatban…",
+      success: "Profilképed frissült.",
+      error: "Hiba történt a kép feldolgozása közben.",
+    });
+
+    return uploadPromise;
   };
 
   return (

@@ -1,5 +1,5 @@
 import {
-  formatTimestamp,
+  formatDate,
   isSameDay,
   isThisYear,
   now,
@@ -39,7 +39,7 @@ const MessageDateDivider = ({
   } else if (isThisYear(date, now())) {
     formattedDate = `${months[date.getMonth()]} ${date.getDate()}.`;
   } else {
-    formattedDate = formatTimestamp(date, "YYYY.MM.DD");
+    formattedDate = formatDate(date, "YYYY.MM.DD");
   }
 
   return (

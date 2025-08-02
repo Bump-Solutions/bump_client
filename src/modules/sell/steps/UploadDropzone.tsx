@@ -1,5 +1,5 @@
 import { FileUpload } from "../../../types/form";
-import { useToast } from "../../../hooks/useToast";
+import { toast } from "sonner";
 import { useSell } from "../../../hooks/product/useSell";
 
 import cuid from "cuid";
@@ -10,8 +10,6 @@ const MAX_FILES = 10;
 const MAX_SIZE = 10 * 1024 * 1024; // 10MB
 
 const UploadDropzone = () => {
-  const { addToast } = useToast();
-
   const { data, updateData, errors, setErrors } = useSell();
 
   const onDrop = (acceptedFiles: File[]) => {
@@ -21,7 +19,7 @@ const UploadDropzone = () => {
     }));
 
     if (acceptedFiles.length + data.images.length > 10) {
-      addToast("error", `Maximum ${MAX_FILES} fájl tölthető fel.`);
+      toast.error(`Maximum ${MAX_FILES} fájl tölthető fel.`);
       return;
     }
 
@@ -62,19 +60,18 @@ const UploadDropzone = () => {
   const onDropRejected = (filesRejections: any[]) => {
     switch (filesRejections[0].errors[0].code) {
       case "file-too-large":
-        addToast(
-          "error",
+        toast.error(
           `A fájl mérete nem haladhatja meg a ${MAX_SIZE / 1024 / 1024} MB-ot.`
         );
         break;
       case "file-invalid-type":
-        addToast("error", "Hibás fájl formátum.");
+        toast.error("Hibás fájl formátum.");
         break;
       case "too-many-files":
-        addToast("error", `Maximum ${MAX_FILES} kép tölthető fel.`);
+        toast.error(`Maximum ${MAX_FILES} kép tölthető fel.`);
         break;
       default:
-        addToast("error", "Hiba történt a fájl feltöltése során.");
+        toast.error("Hiba történt a fájl feltöltése során.");
         break;
     }
   };

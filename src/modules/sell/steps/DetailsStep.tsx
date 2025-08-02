@@ -1,7 +1,7 @@
 import { forwardRef, useImperativeHandle } from "react";
 import { useSell } from "../../../hooks/product/useSell";
-import { useToast } from "../../../hooks/useToast";
 import { useDebounce } from "../../../hooks/useDebounce";
+import { toast } from "sonner";
 
 import Input from "../../../components/Input";
 import TextArea from "../../../components/TextArea";
@@ -15,8 +15,6 @@ interface DetailsStepRef {
 }
 
 const DetailsStep = forwardRef<DetailsStepRef>(({}, ref) => {
-  const { addToast } = useToast();
-
   const { data, updateData, errors, setErrors } = useSell();
 
   useImperativeHandle(ref, () => ({ isValid }));
@@ -41,12 +39,12 @@ const DetailsStep = forwardRef<DetailsStepRef>(({}, ref) => {
         }));
       });
 
-      addToast("error", "Kérjük töltsd ki a csillaggal jelölt mezőket!");
+      toast.error("Kérjük töltsd ki a csillaggal jelölt mezőket!");
       return false;
     }
 
     if (Object.values(errors).some((x) => x !== "")) {
-      addToast("error", "Kérjük javítsd a hibás mezőket!");
+      toast.error("Kérjük javítsd a hibás mezőket!");
       return false;
     }
 

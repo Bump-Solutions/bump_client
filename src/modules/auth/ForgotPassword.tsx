@@ -4,7 +4,6 @@ import { Dispatch, FormEvent, SetStateAction, useState } from "react";
 
 import { motion } from "framer-motion";
 
-import { useToast } from "../../hooks/useToast";
 import { useDebounce } from "../../hooks/useDebounce";
 
 import Input from "../../components/Input";
@@ -20,8 +19,6 @@ interface ForgotPasswordProps {
 const ForgotPassword = ({ setShowForgotPassword }: ForgotPasswordProps) => {
   const [email, setEmail] = useState<string>("");
   const [errors, setErrors] = useState<Errors>({});
-
-  const { addToast } = useToast();
 
   useDebounce(
     () => {

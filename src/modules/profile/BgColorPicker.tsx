@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useSetProfileBackgroundColor } from "../../hooks/profile/useSetProfileBackgroundColor";
 import { ChromePicker, ColorResult } from "react-color";
+import { toast } from "sonner";
 
 import { useProfile } from "../../hooks/profile/useProfile";
 
@@ -72,7 +73,18 @@ const BgColorPicker = ({
   const handleSaveColor = async () => {
     if (!selectedColor) return;
 
-    return setProfileBackgroundColorMutation.mutateAsync(selectedColor);
+    const promise =
+      setProfileBackgroundColorMutation.mutateAsync(selectedColor);
+
+    toast.promise(promise, {
+      loading: "Háttérszín beállítása folyamatban...",
+      success: "Háttérszín módosítva.",
+      error: (err) =>
+        (err?.response?.data?.message as string) ||
+        "Hiba a háttérszín beállítása során.",
+    });
+
+    return promise;
   };
 
   return (

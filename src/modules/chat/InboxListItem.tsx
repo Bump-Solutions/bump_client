@@ -4,12 +4,7 @@ import { ChatGroupModel } from "../../models/chatModel";
 import { useEffect } from "react";
 import { NavLink } from "react-router";
 import { useLongPress } from "react-use";
-import {
-  formatTimestamp,
-  isThisYear,
-  isToday,
-  now,
-} from "../../utils/functions";
+import { formatDate, isThisYear, isToday, now } from "../../utils/functions";
 import { useToggle } from "../../hooks/useToggle";
 
 import Image from "../../components/Image";
@@ -48,10 +43,10 @@ const InboxListItem = ({ group }: InboxListItemProps) => {
   );
 
   const formattedTimestamp = isToday(referenceDate)
-    ? formatTimestamp(referenceDate, "hh:mm")
+    ? formatDate(referenceDate, "hh:mm")
     : isThisYear(referenceDate, now())
-    ? formatTimestamp(referenceDate, "MM.DD")
-    : formatTimestamp(referenceDate, "YYYY.MM.DD");
+    ? formatDate(referenceDate, "MM.DD")
+    : formatDate(referenceDate, "YYYY.MM.DD");
 
   const showUnread =
     !group?.lastMessage?.isRead && !group?.lastMessage?.ownMessage;

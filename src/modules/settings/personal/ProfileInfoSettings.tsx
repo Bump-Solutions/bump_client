@@ -22,6 +22,7 @@ import StateButton from "../../../components/StateButton";
 import Back from "../../../components/Back";
 
 import { Download } from "lucide-react";
+import { toast } from "sonner";
 
 const INITAL_DATA: Omit<ProfileModel, "profilePicture" | "profilePictureHash"> =
   {
@@ -53,7 +54,6 @@ const ProfileInfoSettings = () => {
   const isMounted = useMounted();
   const logout = useLogout();
   const { auth } = useAuth();
-  const { addToast } = useToast();
 
   useEffect(() => {
     if (data) {
@@ -162,12 +162,11 @@ const ProfileInfoSettings = () => {
     });
 
     // logout user if username changed
-
     setTimeout(() => {
       if (isMounted()) {
         if (newData.username !== auth?.user?.username) {
-          addToast("info", "Kijelentkezés: a felhasználónév megváltozott.");
           logout();
+          toast.info("Kijelentkezés: a felhasználónév megváltozott.");
         } else {
           navigate(ROUTES.SETTINGS.ROOT);
         }
@@ -197,16 +196,26 @@ const ProfileInfoSettings = () => {
         }));
       });
 
-      addToast("error", "Kérjük töltsd ki a csillaggal jelölt mezőket!");
+      toast.error("Kérjük töltsd ki a csillaggal jelölt mezőket!");
       return Promise.reject("Empty inputs");
     }
 
     if (Object.values(errors).some((error) => error)) {
-      addToast("error", "Kérjük javítsd a hibás mezőket!");
+      toast.error("Kérjük javítsd a hibás mezőket!");
       return Promise.reject("Invalid fields");
     }
 
-    return updateProfileMutation.mutateAsync(newData);
+    const updatePromise = updateProfileMutation.mutateAsync(newData);
+
+    toast.promise(updatePromise, {
+      loading: "Adatok mentése folyamatban...",
+      success: "Adatok mentve.",
+      error: (err) =>
+        (err?.response?.data?.message as string) ||
+        "Hiba az adatok mentése közben.",
+    });
+
+    return updatePromise;
   };
 
   return (

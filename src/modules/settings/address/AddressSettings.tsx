@@ -4,7 +4,7 @@ import { AddressModel } from "../../../models/addressModel";
 
 import { usePersonalSettings } from "../../../hooks/settings/usePersonalSettings";
 import { useListAddresses } from "../../../hooks/address/useListAddresses";
-import { useToast } from "../../../hooks/useToast";
+import { toast } from "sonner";
 
 import Spinner from "../../../components/Spinner";
 import Button from "../../../components/Button";
@@ -72,8 +72,6 @@ const AddressSettings = () => {
 
   const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
 
-  const { addToast } = useToast();
-
   const {
     data: addresses = [],
     isLoading,
@@ -82,10 +80,7 @@ const AddressSettings = () => {
   } = useListAddresses();
 
   if (isError) {
-    addToast(
-      error?.response?.data.type || "error",
-      error?.response?.data.message
-    );
+    toast.error(error?.response?.data.message);
   }
 
   useEffect(() => {
