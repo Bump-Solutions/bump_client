@@ -104,7 +104,7 @@ const Login = () => {
 
     toast.promise(loginPromise, {
       loading: "Bejelentkezés folyamatban…",
-      success: "Sikeresen bejelentkeztél!",
+      success: "Bejelentkeztél.",
       error: (err) =>
         (err?.response?.data?.message as string) ||
         "Hiba a bejelentkezés során.",

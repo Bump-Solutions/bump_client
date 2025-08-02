@@ -1,6 +1,6 @@
 import { API } from "../../../utils/api";
 import { forwardRef, useImperativeHandle } from "react";
-import { useToast } from "../../../hooks/useToast";
+import { toast } from "sonner";
 import { useSell } from "../../../hooks/product/useSell";
 import { Reorder } from "framer-motion";
 
@@ -14,8 +14,6 @@ interface UploadStepRef {
 }
 
 const UploadStep = forwardRef<UploadStepRef>(({}, ref) => {
-  const { addToast } = useToast();
-
   const { data, updateData, setErrors } = useSell();
 
   useImperativeHandle(ref, () => ({ isValid }));
@@ -27,7 +25,7 @@ const UploadStep = forwardRef<UploadStepRef>(({}, ref) => {
         images: "Legalább 3 képet fel kell töltened.",
       }));
 
-      addToast("error", "Kérjük javítsd a hibás mezőket!");
+      toast.error("Kérjük javítsd a hibás mezőket!");
       return false;
     }
 

@@ -139,7 +139,7 @@ const SignupForm = () => {
 
     toast.promise(signupPromise, {
       loading: "Regisztráció folyamatban...",
-      success: "Sikeres regisztráció! Bejelentkezés...",
+      success: "Sikeres regisztráció. Bejelentkezés...",
       error: "Kérjük javítsd a hibás mezőket!",
     });
 

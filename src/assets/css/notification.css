@@ -175,13 +175,13 @@
   transition: background-color 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 .notifications .notifications__list .notification__item.unread {
-  background-color: #fef9fb;
+  background-color: rgb(254.3909090909, 248.9090909091, 250.7363636364);
 }
 .notifications .notifications__list .notification__item:hover {
   background-color: #f1f3f5;
 }
 .notifications .notifications__list .notification__item:hover.unread {
-  background-color: #fdf0f4;
+  background-color: rgb(253.4636363636, 239.6363636364, 244.2454545455);
 }
 .notifications .notifications__list .notification__item:last-child {
   border-bottom: none;

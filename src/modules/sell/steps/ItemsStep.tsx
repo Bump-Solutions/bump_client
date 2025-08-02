@@ -1,5 +1,5 @@
 import { forwardRef, useImperativeHandle } from "react";
-import { useToast } from "../../../hooks/useToast";
+import { toast } from "sonner";
 import { useSell } from "../../../hooks/product/useSell";
 
 import ItemForm from "./ItemForm";
@@ -10,8 +10,6 @@ interface ItemsStepRef {
 }
 
 const ItemsStep = forwardRef<ItemsStepRef>(({}, ref) => {
-  const { addToast } = useToast();
-
   const { data, setErrors } = useSell();
 
   useImperativeHandle(ref, () => ({ isValid }));
@@ -22,7 +20,7 @@ const ItemsStep = forwardRef<ItemsStepRef>(({}, ref) => {
         ...prev,
         items: "A mező kitöltése kötelező.",
       }));
-      addToast("error", "Kérjük adj hozzá legalább egy tételt!");
+      toast.error("Kérjük adj hozzá legalább egy tételt!");
       return false;
     }
 

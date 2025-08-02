@@ -1,4 +1,6 @@
 import { QUERY_KEY } from "../../utils/queryKeys";
+import { ROUTES } from "../../routes/routes";
+import { useAuth } from "../../hooks/auth/useAuth";
 import { CartItemModel, SellerModel } from "../../models/cartModel";
 import { InventoryModel, ProductListModel } from "../../models/productModel";
 import { FacetProps } from "../../hooks/product/useFacetedSearch";
@@ -8,13 +10,14 @@ import { useUnsaveProduct } from "../../hooks/product/useUnsaveProduct";
 import { useQueryClient } from "@tanstack/react-query";
 import { MouseEvent } from "react";
 import { useCart } from "../../hooks/trade/useCart";
-import { useToast } from "../../hooks/useToast";
+import { toast } from "sonner";
 
 import Button from "../../components/Button";
+import StateButton from "../../components/StateButton";
 import Tooltip from "../../components/Tooltip";
 
 import { Bookmark, Mail, ShoppingBag } from "lucide-react";
-import StateButton from "../../components/StateButton";
+import { Link } from "react-router";
 
 interface ProductActionsProps extends FacetProps {
   discount: number | null;
@@ -27,11 +30,11 @@ const ProductActions = ({
   filteredCount,
   reset,
 }: ProductActionsProps) => {
+  const { auth } = useAuth();
+
   const queryClient = useQueryClient();
   const { product, setProduct } = useProduct();
   const { cart, addItem } = useCart();
-
-  const { addToast } = useToast();
 
   if (!product) return null;
 
@@ -131,7 +134,25 @@ const ProductActions = ({
 
     if (!isSaved) {
       if (saveMutation.isPending) return;
-      saveMutation.mutateAsync(pid);
+      const savePromise = saveMutation.mutateAsync(pid);
+
+      toast.promise(savePromise, {
+        loading: "Mentés...",
+        success: () => (
+          <span>
+            Elmentettél egy{" "}
+            <Link
+              target='_blank'
+              className='link fc-green-600 underline fw-700'
+              to={ROUTES.PROFILE(auth?.user?.username!).SAVED}>
+              terméket.
+            </Link>
+          </span>
+        ),
+        error: (err) =>
+          (err?.response?.data?.message as string) ||
+          "Hiba történt a termék mentése során.",
+      });
     } else {
       if (unsaveMutation.isPending) return;
       unsaveMutation.mutateAsync(pid);
@@ -163,12 +184,20 @@ const ProductActions = ({
         image: product.images[0],
       };
 
-      /*
+      // TODO: Group by product?
       if (cart[seller.id].items.some((i) => i.id === cartItem.id)) {
-        addToast("info", `A termék már a kosárban van: ${cartItem.label}`);
+        toast.info(
+          <span>
+            A termék már a kosárban van: {cartItem.label}.{" "}
+            <Link
+              to={ROUTES.CART}
+              className='link fc-blue-700 underline fw-700'>
+              Tovább a kosárra.
+            </Link>
+          </span>
+        );
         return; // Item already exists in the cart for this seller
       }
-      */
 
       addItem(seller, cartItem);
     });

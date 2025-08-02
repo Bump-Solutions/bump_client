@@ -38,7 +38,6 @@ const SearchBar = ({
         value={searchKey}
         ref={searchRef}
         placeholder='Keresés ...'
-        autoFocus
       />
     </div>
   );

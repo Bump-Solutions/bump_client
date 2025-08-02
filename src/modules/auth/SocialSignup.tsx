@@ -26,7 +26,7 @@ const SocialSignup = () => {
 
       toast.promise(loginPromise, {
         loading: "Bejelentkezés folyamatban…",
-        success: () => "Sikeresen bejelentkeztél!",
+        success: () => "Bejelentkeztél.",
         error: (err) =>
           (err?.response?.data?.message as string) ||
           "Hiba történt a Google-lal való bejelentkezés során.",

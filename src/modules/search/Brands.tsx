@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
 import { getRandomSubset } from "../../utils/functions";
 
 type Brand = {
@@ -28,12 +28,7 @@ interface BrandProps {
 }
 
 const Brands = ({ setSearchKey }: BrandProps) => {
-  const [brands, setBrands] = useState<Brand[]>([]);
-
-  useEffect(() => {
-    const selected = getRandomSubset(BRANDS, 8);
-    setBrands(selected);
-  }, []);
+  const brands = useMemo<Brand[]>(() => getRandomSubset(BRANDS, 8), []);
 
   return (
     <section className='search__brands'>

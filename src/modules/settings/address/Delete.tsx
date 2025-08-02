@@ -36,7 +36,8 @@ const Delete = ({ address, close }: DeleteProps) => {
       loading: "Cím törlése folyamatban...",
       success: `A(z) '${address.name}' cím törölve.`,
       error: (err) =>
-        (err?.response?.data?.message as string) || "Hiba a cím törlése során.",
+        (err?.response?.data?.message as string) ||
+        "Hiba a cím törlése közben.",
     });
 
     return deletePromise;

@@ -280,6 +280,18 @@ form {
   color: color(blue, 500) !important;
 }
 
+.fc-blue-700 {
+  color: color(blue, 700) !important;
+}
+
+.fc-green-500 {
+  color: color(green, 500) !important;
+}
+
+.fc-green-600 {
+  color: color(green, 600) !important;
+}
+
 .fc-yellow-500 {
   color: color(yellow, 500) !important;
 }
@@ -422,6 +434,10 @@ form {
 
 .no-border {
   border: none !important;
+}
+
+.underline {
+  text-decoration: underline !important;
 }
 
 .bg-gray-100 {

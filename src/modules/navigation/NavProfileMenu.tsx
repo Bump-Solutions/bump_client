@@ -1,9 +1,9 @@
 import { ROUTES } from "../../routes/routes";
 import { useGetProfileMeta } from "../../hooks/profile/useGetProfileMeta";
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 import { Link, NavLink, useNavigate } from "react-router";
 import { useAuth } from "../../hooks/auth/useAuth";
-import { useToast } from "../../hooks/useToast";
+import { toast } from "sonner";
 import { useCart } from "../../hooks/trade/useCart";
 
 import Tooltip from "../../components/Tooltip";
@@ -25,18 +25,11 @@ const NavProfileMenu = ({
   const { auth } = useAuth();
   const { cartItemCount } = useCart();
 
-  const { addToast } = useToast();
-
   const { data: meta, isError, error } = useGetProfileMeta();
 
-  useEffect(() => {
-    if (isError) {
-      addToast(
-        error?.response?.data.type || "error",
-        error?.response?.data.message
-      );
-    }
-  }, [isError]);
+  if (isError) {
+    toast.error(error?.response?.data.message);
+  }
 
   return (
     <div className='navbar__profile-menu'>

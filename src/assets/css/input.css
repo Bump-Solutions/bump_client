@@ -82,7 +82,7 @@
   border: 2px solid #0070e8;
   background-color: #fff;
 }
-.input .otp__wrapper .input__field:not(:-moz-placeholder-shown) {
+.input .otp__wrapper .input__field:not(:-moz-placeholder) {
   border: 1px solid #495057;
   background-color: #fff;
 }
@@ -90,7 +90,7 @@
   border: 1px solid #495057;
   background-color: #fff;
 }
-.input .otp__wrapper .input__field:not(:-moz-placeholder-shown):focus {
+.input .otp__wrapper .input__field:not(:-moz-placeholder):focus {
   border: 2px solid #0070e8;
   outline: 2px solid #e6f1fd;
 }
@@ -221,7 +221,7 @@
 .input .currency__wrapper .input__field::placeholder {
   color: #495057;
 }
-.input .currency__wrapper .input__field:not(:-moz-placeholder-shown) {
+.input .currency__wrapper .input__field:not(:-moz-placeholder) {
   border: 1px solid #212529;
   background-color: #fff;
 }
@@ -229,13 +229,13 @@
   border: 1px solid #212529;
   background-color: #fff;
 }
-.input .currency__wrapper .input__field:not(:-moz-placeholder-shown) ~ .input__svg {
+.input .currency__wrapper .input__field:not(:-moz-placeholder) ~ .input__svg {
   color: #212529;
 }
 .input .currency__wrapper .input__field:invalid ~ .input__svg, .input .currency__wrapper .input__field:not(:placeholder-shown) ~ .input__svg {
   color: #212529;
 }
-.input .currency__wrapper .input__field:not(:-moz-placeholder-shown):focus {
+.input .currency__wrapper .input__field:not(:-moz-placeholder):focus {
   border: 2px solid #0070e8;
   outline: 2px solid #e6f1fd;
 }
@@ -424,7 +424,7 @@
 .input .input__wrapper .input__field::placeholder {
   color: #495057;
 }
-.input .input__wrapper .input__field:not(:-moz-placeholder-shown) {
+.input .input__wrapper .input__field:not(:-moz-placeholder) {
   border: 1px solid #212529;
   background-color: #fff;
 }
@@ -432,13 +432,13 @@
   border: 1px solid #212529;
   background-color: #fff;
 }
-.input .input__wrapper .input__field:not(:-moz-placeholder-shown) ~ .input__svg {
+.input .input__wrapper .input__field:not(:-moz-placeholder) ~ .input__svg {
   color: #212529;
 }
 .input .input__wrapper .input__field:invalid ~ .input__svg, .input .input__wrapper .input__field:not(:placeholder-shown) ~ .input__svg {
   color: #212529;
 }
-.input .input__wrapper .input__field:not(:-moz-placeholder-shown):focus {
+.input .input__wrapper .input__field:not(:-moz-placeholder):focus {
   border: 2px solid #0070e8;
   outline: 2px solid #e6f1fd;
 }

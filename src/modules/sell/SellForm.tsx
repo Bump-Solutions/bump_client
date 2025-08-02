@@ -1,9 +1,12 @@
+import { ROUTES } from "../../routes/routes";
 import { useRef, MouseEvent } from "react";
 import { useMultiStepForm } from "../../hooks/useMultiStepForm";
 import { Link, useNavigate } from "react-router";
+import { useAuth } from "../../hooks/auth/useAuth";
 import { useSell } from "../../hooks/product/useSell";
 import { useMounted } from "../../hooks/useMounted";
 import { useUploadProduct } from "../../hooks/product/useUploadProduct";
+import { toast } from "sonner";
 
 import Button from "../../components/Button";
 import SelectStep from "./steps/SelectStep";
@@ -15,6 +18,8 @@ import StateButton from "../../components/StateButton";
 import { ArrowUpRight, MoveRight, Tag } from "lucide-react";
 
 const SellForm = () => {
+  const { auth } = useAuth();
+
   const navigate = useNavigate();
   const isMounted = useMounted();
 
@@ -122,7 +127,26 @@ const SellForm = () => {
 
     // console.log("submit", data);
 
-    return uploadProductMutation.mutateAsync(data);
+    const uploadPromise = uploadProductMutation.mutateAsync(data);
+
+    toast.promise(uploadPromise, {
+      loading: "Létrehozás folyamatban...",
+      success: (resp) => (
+        <span>
+          Termék létrehozva.{" "}
+          <Link
+            className='link fc-green-600 underline fw-700'
+            to={ROUTES.PROFILE(auth?.user?.username!).PRODUCTS}>
+            Megtekintheted itt.
+          </Link>
+        </span>
+      ),
+      error: (err) =>
+        (err?.response?.data?.message as string) ||
+        "Hiba a termék létrehozása során.",
+    });
+
+    return uploadPromise;
   };
 
   return (

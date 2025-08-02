@@ -1,18 +1,13 @@
 import { useGetProfileMeta } from "../../hooks/profile/useGetProfileMeta";
-import { useToast } from "../../hooks/useToast";
+import { toast } from "sonner";
 
 import Back from "../../components/Back";
 
 const NotificationsHeader = () => {
-  const { addToast } = useToast();
-
   const { data: meta, isError, error } = useGetProfileMeta();
 
   if (isError) {
-    addToast(
-      error?.response?.data.type || "error",
-      error?.response?.data.message
-    );
+    toast.error(error?.response?.data.message);
   }
 
   return (

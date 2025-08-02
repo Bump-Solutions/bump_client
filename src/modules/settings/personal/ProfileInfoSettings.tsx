@@ -162,7 +162,6 @@ const ProfileInfoSettings = () => {
     });
 
     // logout user if username changed
-
     setTimeout(() => {
       if (isMounted()) {
         if (newData.username !== auth?.user?.username) {

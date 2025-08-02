@@ -134,8 +134,8 @@ const ProfilePictureSettings = () => {
 
     toast.promise(uploadPromise, {
       loading: "Kép feltöltése folyamatban…",
-      success: "Profilképed sikeresen frissült!",
-      error: "Hiba történt a kép feldolgozása során.",
+      success: "Profilképed frissült.",
+      error: "Hiba történt a kép feldolgozása közben.",
     });
 
     return uploadPromise;

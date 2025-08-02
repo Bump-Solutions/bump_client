@@ -33,7 +33,7 @@
   border: 2px solid #0070e8;
   background-color: #fff;
 }
-.dtable__wrapper .dtable__header input:not(:-moz-placeholder-shown) {
+.dtable__wrapper .dtable__header input:not(:-moz-placeholder) {
   border: 1px solid #212529;
   background-color: #fff;
 }
@@ -41,7 +41,7 @@
   border: 1px solid #212529;
   background-color: #fff;
 }
-.dtable__wrapper .dtable__header input:not(:-moz-placeholder-shown):focus {
+.dtable__wrapper .dtable__header input:not(:-moz-placeholder):focus {
   border: 2px solid #0070e8;
   outline: 2px solid #e6f1fd;
 }

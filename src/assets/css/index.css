@@ -274,6 +274,18 @@ form .field__wrapper .input {
   color: #0070e8 !important;
 }
 
+.fc-blue-700 {
+  color: #0050a5 !important;
+}
+
+.fc-green-500 {
+  color: #00b341 !important;
+}
+
+.fc-green-600 {
+  color: #00a33b !important;
+}
+
 .fc-yellow-500 {
   color: #f59f00 !important;
 }
@@ -416,6 +428,10 @@ form .field__wrapper .input {
 
 .no-border {
   border: none !important;
+}
+
+.underline {
+  text-decoration: underline !important;
 }
 
 .bg-gray-100 {

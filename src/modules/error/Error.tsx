@@ -39,9 +39,7 @@ const Error = ({ code }: ErrorProps) => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const from =
-    (location?.state as { from?: { pathname: string } })?.from?.pathname ||
-    ROUTES.HOME;
+  // const from = (location?.state as { from?: { pathname: string } })?.from?.pathname || ROUTES.HOME;
 
   const error: ErrorObject = (location?.state as { error?: ErrorObject })
     ?.error ||

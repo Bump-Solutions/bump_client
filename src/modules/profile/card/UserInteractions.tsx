@@ -76,7 +76,7 @@ const UserInteractions = () => {
 
     if (followMutation.isPending) return;
 
-    followMutation.mutateAsync(user?.id!);
+    return followMutation.mutateAsync(user?.id!);
   };
 
   const handleUnfollow = (e: MouseEvent<HTMLButtonElement>) => {
@@ -84,7 +84,7 @@ const UserInteractions = () => {
 
     if (unfollowMutation.isPending) return;
 
-    unfollowMutation.mutateAsync(user?.id!);
+    return unfollowMutation.mutateAsync(user?.id!);
   };
 
   const handleSendMessage = (e: MouseEvent<HTMLButtonElement>) => {
