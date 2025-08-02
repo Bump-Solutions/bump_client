@@ -216,10 +216,8 @@ export const differenceInMinutes = (d1: Date, d2: Date): number => {
   return Math.abs(Math.floor(diff / (1000 * 60)));
 };
 
-// Formats a timestamp string into a specified format
-export const formatTimestamp = (timestamp: Date, format: string): string => {
-  const date = new Date(timestamp);
-
+// Formats a date into a specified format
+export const formatDate = (date: Date, format: string): string => {
   if (isNaN(date.getTime())) return ""; // Invalid date
 
   const pad = (num: number): string => String(num).padStart(2, "0");
@@ -262,10 +260,10 @@ export function formatRelativeTime(dateString: string): string {
   // Ha több mint 7 nap
   if (isThisYear(then, current)) {
     // Ugyanaz az év: MM.DD
-    return formatTimestamp(then, "MM.DD");
+    return formatDate(then, "MM.DD");
   } else {
     // Más év: YY.MM.DD
-    const full = formatTimestamp(then, "YYYY.MM.DD");
+    const full = formatDate(then, "YYYY.MM.DD");
     // csak az utolsó két jegy kell az évből
     return full.slice(2);
   }

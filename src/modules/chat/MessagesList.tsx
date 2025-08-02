@@ -7,7 +7,7 @@ import { UserModel } from "../../models/userModel";
 import { useToggle } from "../../hooks/useToggle";
 import {
   differenceInMinutes,
-  formatTimestamp,
+  formatDate,
   isSameDay,
   startOfDay,
 } from "../../utils/functions";
@@ -42,7 +42,7 @@ const groupMessages = (
     const createdAt = new Date(message.createdAt);
     const msgDay = startOfDay(createdAt);
     const isOwn = message.authorUsername === me;
-    const timestamp = formatTimestamp(createdAt, "hh:mm");
+    const timestamp = formatDate(createdAt, "hh:mm");
 
     // Ha új nap következik, akkor:
     // 1. lezárjuk az aktuális üzenetcsoportot (ha van)
