@@ -184,7 +184,7 @@ const Add = ({ addresses, close }: AddProps) => {
 
     toast.promise(addPromise, {
       loading: "Cím hozzáadása folyamatban...",
-      success: `A(z) '${newAddress.name}' cím létrehozva.`,
+      success: `A(z) "${newAddress.name}" cím létrehozva.`,
       error: (err) =>
         (err?.response?.data?.message as string) ||
         "Hiba a cím hozzáadása során.",

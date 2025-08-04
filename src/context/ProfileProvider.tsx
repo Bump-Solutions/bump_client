@@ -69,7 +69,7 @@ const ProfileProvider = ({ children }: ProfileProviderProps) => {
           error: {
             code: 404,
             title: "Hibás felhasználónév",
-            message: `Sajnáljuk, a(z) '${uname}' nevű felhasználó nem található. Megeshet, hogy elírás van a felhasználónévben, vagy a felhasználó törölve lett.`,
+            message: `Sajnáljuk, a(z) "${uname}" nevű felhasználó nem található. Megeshet, hogy elírás van a felhasználónévben, vagy a felhasználó törölve lett.`,
           },
         }}
       />

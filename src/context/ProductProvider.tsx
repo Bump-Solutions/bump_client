@@ -63,7 +63,7 @@ const ProductProvider = ({ children }: ProductProviderProps) => {
           error: {
             code: 404,
             title: "Hibás termékazonosító",
-            message: `Sajnáljuk, a(z) '${productId}' azonosítójú termék nem található. Megeshet, hogy elírás van az azonosítóban, vagy a termék törölve lett.`,
+            message: `Sajnáljuk, a(z) "${productId}" azonosítójú termék nem található. Megeshet, hogy elírás van az azonosítóban, vagy a termék törölve lett.`,
           },
         }}
       />

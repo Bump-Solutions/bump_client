@@ -183,7 +183,7 @@ const Modify = ({ address, addresses, close }: ModifyProps) => {
 
     toast.promise(modifyPromise, {
       loading: "Cím módosítása folyamatban...",
-      success: `A(z) '${newAddress.name}' cím módosítva.`,
+      success: `A(z) "${newAddress.name}" cím módosítva.`,
       error: (err) =>
         (err?.response?.data?.message as string) ||
         "Hiba a cím módosítása során.",
