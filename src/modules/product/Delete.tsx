@@ -42,7 +42,7 @@ const Delete = ({ product, isOpen, close }: DeleteProps) => {
 
     toast.promise(deletePromise, {
       loading: "Termék törlése folyamatban...",
-      success: `A(z) '${currentProduct.title}' termék törölve.`,
+      success: `A(z) "${currentProduct.title}" termék törölve.`,
       error: (err) =>
         (err?.response?.data?.message as string) ||
         "Hiba a termék törlése közben.",

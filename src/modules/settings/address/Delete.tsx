@@ -34,7 +34,7 @@ const Delete = ({ address, close }: DeleteProps) => {
 
     toast.promise(deletePromise, {
       loading: "Cím törlése folyamatban...",
-      success: `A(z) '${address.name}' cím törölve.`,
+      success: `A(z) "${address.name}" cím törölve.`,
       error: (err) =>
         (err?.response?.data?.message as string) ||
         "Hiba a cím törlése közben.",
