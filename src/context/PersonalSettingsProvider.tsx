@@ -3,7 +3,6 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useGetProfile } from "../hooks/profile/useGetProfile";
 import { QUERY_KEY } from "../utils/queryKeys";
 import { ProfileModel } from "../models/profileModel";
-import { useToast } from "../hooks/useToast";
 import { Navigate } from "react-router";
 import { ROUTES } from "../routes/routes";
 

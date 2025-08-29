@@ -14,3 +14,10 @@ export const CONDITION_LABELS: Record<number, string> = {
   5: "Beater",
   6: "Egyéb",
 };
+
+export const ORDER_ACTION_LABELS: Record<number, string> = {};
+
+export const ORDER_STATE_LABELS: Record<number, string> = {
+  0: "Elfogadásra vár", // ha letrehozom a rendelest, az eladonak meg kell erositenie azt
+  1: "",
+};
