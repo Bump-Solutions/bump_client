@@ -10,6 +10,7 @@ import { useUnsaveProduct } from "../../hooks/product/useUnsaveProduct";
 import { useQueryClient } from "@tanstack/react-query";
 import { MouseEvent } from "react";
 import { useCart } from "../../hooks/trade/useCart";
+import { Link } from "react-router";
 import { toast } from "sonner";
 
 import Button from "../../components/Button";
@@ -17,7 +18,6 @@ import StateButton from "../../components/StateButton";
 import Tooltip from "../../components/Tooltip";
 
 import { Bookmark, Mail, ShoppingBag } from "lucide-react";
-import { Link } from "react-router";
 
 interface ProductActionsProps extends FacetProps {
   discount: number | null;
@@ -174,6 +174,8 @@ const ProductActions = ({
 
     const maxToAdd = Math.min(quantity, filtered.length);
     filtered.slice(0, maxToAdd).forEach((item) => {
+      console.log(item);
+
       const cartItem: CartItemModel = {
         id: item.id,
         label: [
@@ -185,6 +187,7 @@ const ProductActions = ({
       };
 
       // TODO: Group by product?
+      /*
       if (cart[seller.id].items.some((i) => i.id === cartItem.id)) {
         toast.info(
           <span>
@@ -198,12 +201,14 @@ const ProductActions = ({
         );
         return; // Item already exists in the cart for this seller
       }
+      */
 
       addItem(seller, cartItem);
     });
 
     console.log("Add to cart clicked", {
       quantity,
+      product,
       filtered,
       filteredCount,
       seller,
