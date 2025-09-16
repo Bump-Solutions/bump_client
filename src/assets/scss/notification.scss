@@ -1,5 +1,7 @@
-@import "variables";
-@import "mixins";
+@use "sass:color";
+@use "variables" as *;
+@use "palette" as *;
+@use "mixins" as *;
 
 .notifications {
   position: relative;
@@ -205,14 +207,17 @@
       transition: background-color 0.2s $animation-cubic;
 
       &.unread {
-        background-color: lighten($color: color(pink, 50), $amount: 3%);
+        background-color: color.adjust($color: color(pink, 50), $lightness: 3%);
       }
 
       &:hover {
         background-color: color(gray, 100);
 
         &.unread {
-          background-color: lighten($color: color(pink, 50), $amount: 1%);
+          background-color: color.adjust(
+            $color: color(pink, 50),
+            $lightness: 1%
+          );
         }
       }
 

@@ -186,6 +186,7 @@
 }
 .chat .inbox__panel .inbox__content .inbox__list .inbox__item .inbox__menu-actions .action-list .action-list-item.btn {
   background-color: #212529;
+  border-radius: 2rem !important;
 }
 .chat .inbox__panel .inbox__content .inbox__list .inbox__item .inbox__menu-actions .action-list .action-list-item.btn a {
   color: #f1f3f5;

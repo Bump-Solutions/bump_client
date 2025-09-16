@@ -1,5 +1,7 @@
-@import "variables";
-@import "mixins";
+@use "sass:color";
+@use "variables" as *;
+@use "palette" as *;
+@use "mixins" as *;
 
 .button {
   all: unset;
@@ -200,7 +202,7 @@
       &:focus {
         @include cbb(
           color(blue, 600),
-          darken($color: color(blue, 50), $amount: 5),
+          color.adjust($color: color(blue, 50), $lightness: -5%),
           1px solid color(blue, 200)
         );
       }
@@ -213,7 +215,7 @@
       &:focus {
         @include cbb(
           color(red, 600),
-          darken($color: color(red, 50), $amount: 5),
+          color.adjust($color: color(red, 50), $lightness: -5%),
           1px solid color(red, 200)
         );
       }

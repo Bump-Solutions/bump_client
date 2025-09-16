@@ -1,4 +1,6 @@
-@import "variables";
+@use "variables" as *;
+@use "palette" as *;
+@use "mixins" as *;
 
 .settings {
   padding: 2rem var(--container-x-padding);

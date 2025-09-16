@@ -1,4 +1,6 @@
-@import "variables";
+@use "variables" as *;
+@use "palette" as *;
+@use "mixins" as *;
 
 .profile {
   position: relative;

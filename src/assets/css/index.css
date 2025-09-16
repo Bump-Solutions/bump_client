@@ -254,6 +254,14 @@ form .field__wrapper .input {
   color: #ced4da !important;
 }
 
+.fc-gray-700 {
+  color: #495057 !important;
+}
+
+.fc-gray-800 {
+  color: #343a40 !important;
+}
+
 .fc-red-200 {
   color: #e88a8a !important;
 }

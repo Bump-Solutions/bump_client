@@ -27,6 +27,8 @@ export const listOrders = async (
   };
 };
 
+export const createOrder = async (): Promise<void> => {};
+
 export const getOrder = async (
   signal: AbortSignal,
   axiosPrivate: AxiosInstance,

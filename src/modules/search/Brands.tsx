@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
+import { Dispatch, SetStateAction, useMemo } from "react";
 import { getRandomSubset } from "../../utils/functions";
 
 type Brand = {

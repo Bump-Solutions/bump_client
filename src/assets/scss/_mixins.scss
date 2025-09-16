@@ -1,5 +1,3 @@
-@import "variables";
-
 @mixin cbb($color: null, $background, $border) {
   @if $color {
     color: $color;

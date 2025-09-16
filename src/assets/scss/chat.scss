@@ -1,5 +1,6 @@
-@import "variables";
-@import "mixins";
+@use "variables" as *;
+@use "palette" as *;
+@use "mixins" as *;
 
 .border {
   position: relative;
@@ -215,6 +216,7 @@
 
                 &.btn {
                   background-color: color(gray, 900);
+                  border-radius: $border-radius-2 !important;
 
                   a {
                     color: color(gray, 100);

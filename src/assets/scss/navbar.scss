@@ -1,4 +1,6 @@
-@import "variables";
+@use "sass:color";
+@use "palette" as *;
+@use "variables" as *;
 
 .navbar {
   position: sticky;
@@ -516,14 +518,17 @@
       transition: background-color 0.2s $animation-cubic;
 
       &.unread {
-        background-color: lighten($color: color(pink, 50), $amount: 3%);
+        background-color: color.adjust($color: color(pink, 50), $lightness: 3%);
       }
 
       &:hover {
         background-color: color(gray, 100);
 
         &.unread {
-          background-color: lighten($color: color(pink, 50), $amount: 1%);
+          background-color: color.adjust(
+            $color: color(pink, 50),
+            $lightness: 1%
+          );
         }
       }
 

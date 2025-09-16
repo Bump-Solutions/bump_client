@@ -1,5 +1,7 @@
-@import "variables";
-@import "mixins";
+@use "sass:color";
+@use "variables" as *;
+@use "palette" as *;
+@use "mixins" as *;
 
 .image {
   position: relative;
@@ -79,7 +81,10 @@
     }
 
     &:hover {
-      background-color: lighten($color: $bg-dark-transparent, $amount: 5%);
+      background-color: color.adjust(
+        $color: $bg-dark-transparent,
+        $lightness: 5%
+      );
     }
   }
 
@@ -173,7 +178,10 @@
       background-color: rgba(0, 0, 0, 0.15);
 
       span {
-        background-color: lighten($color: $bg-dark-transparent, $amount: 5%);
+        background-color: color.adjust(
+          $color: $bg-dark-transparent,
+          $lightness: 5%
+        );
       }
     }
 
@@ -190,7 +198,10 @@
       transition: background-color 0.2s $animation-cubic;
 
       &:hover {
-        background-color: lighten($color: $bg-dark-transparent, $amount: 5%);
+        background-color: color.adjust(
+          $color: $bg-dark-transparent,
+          $lightness: 5%
+        );
       }
 
       svg {
