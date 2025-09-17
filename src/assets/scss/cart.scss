@@ -10,4 +10,14 @@
   width: 100%;
   max-width: $max-width-700;
   margin: 0 auto;
+
+  &.empty {
+    justify-content: center;
+    align-items: center;
+
+    h1 {
+      text-align: center;
+      margin-top: 4rem;
+    }
+  }
 }

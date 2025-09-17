@@ -60,10 +60,10 @@ const PriceTag = ({
 
       <div className='product__price__infobox'>
         <p>
-          Az itt feltüntetett ár <b className='fc-dark'>tájékoztató</b> jellegű.
-          A pontos végleges összegről érdeklődj az eladónál. <br />A tételek ára
-          a termék állapotától, méretétől és egyéb jellemzőitől függően
-          eltérhet.
+          Az itt feltüntetett ár <b className='fc-gray-900'>tájékoztató</b>{" "}
+          jellegű. A pontos végleges összegről érdeklődj az eladónál. <br />A
+          tételek ára a termék állapotától, méretétől és egyéb jellemzőitől
+          függően eltérhet.
         </p>
         <Link to={ROUTES.HOME} className='link black no-anim'>
           <Info /> Részletek

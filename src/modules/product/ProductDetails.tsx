@@ -55,7 +55,7 @@ const ProductDetails = () => {
       <h1 className='mb-0_5'>{LABEL}</h1>
       {product.description && (
         <p
-          className='fc-light ta-justify fs-16'
+          className='fc-gray-700 ta-justify fs-16'
           style={{ whiteSpace: "pre-line" }}>
           {product.description}
         </p>
@@ -69,7 +69,7 @@ const ProductDetails = () => {
             <h4>
               Darabszám{" "}
               {facets?.filteredCount > 0 && (
-                <span className='fc-light'>
+                <span className='fc-gray-600'>
                   - max {facets.filteredCount} db
                 </span>
               )}

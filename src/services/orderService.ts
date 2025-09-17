@@ -1,9 +1,14 @@
 import { AxiosInstance } from "axios";
-import { OrderModel, OrdersPageModel } from "../models/orderModel";
+import {
+  CreateOrderDTO,
+  CreateOrderModel,
+  OrderModel,
+  OrdersPageModel,
+} from "../models/orderModel";
 import { ApiResponse } from "../types/api";
 import { FetchedOrderDTO, OrdersPageDTO } from "../dtos/OrderDTO";
 import { API } from "../utils/api";
-import { fromOrderDTO } from "../mappers/orderMapper";
+import { fromOrderDTO, toCreateOrderDTO } from "../mappers/orderMapper";
 
 export const listOrders = async (
   signal: AbortSignal,
@@ -27,7 +32,19 @@ export const listOrders = async (
   };
 };
 
-export const createOrder = async (): Promise<void> => {};
+export const createOrder = async (
+  axiosPrivate: AxiosInstance,
+  newOrder: CreateOrderModel
+): Promise<ApiResponse> => {
+  const payload: CreateOrderDTO = toCreateOrderDTO(newOrder);
+  console.log("createOrder payload", payload);
+
+  return await axiosPrivate.post(API.ORDERS.CREATE_ORDER, payload);
+};
+
+export const confirmOrder = async (orderId: number): Promise<void> => {};
+
+export const cancelOrder = async (orderId: number): Promise<void> => {};
 
 export const getOrder = async (
   signal: AbortSignal,

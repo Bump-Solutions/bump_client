@@ -18,6 +18,8 @@ import StateButton from "../../components/StateButton";
 import Tooltip from "../../components/Tooltip";
 
 import { Bookmark, Mail, ShoppingBag } from "lucide-react";
+import { CreateOrderModel } from "../../models/orderModel";
+import { useCreateOrder } from "../../hooks/order/useCreateOrder";
 
 interface ProductActionsProps extends FacetProps {
   discount: number | null;
@@ -39,6 +41,8 @@ const ProductActions = ({
   if (!product) return null;
 
   const isDisabled = quantity < 1 || filteredCount === 0;
+
+  const createOrderMutation = useCreateOrder((response) => {});
 
   const saveMutation = useSaveProduct((response) => {
     setProduct({ saved: true, saves: product.saves + 1 });
@@ -219,6 +223,45 @@ const ProductActions = ({
     return Promise.resolve();
   };
 
+  const handleCreateOrder = (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+
+    if (createOrderMutation.isPending) return;
+    if (isDisabled) return;
+    if (!filtered || filtered.length === 0) return;
+
+    const sellerId = product.user.id;
+
+    const maxToAdd = Math.min(quantity, filtered.length);
+    const itemIds = filtered.slice(0, maxToAdd).map((item) => item.id);
+
+    const newOrder: CreateOrderModel = {
+      sellerId,
+      itemIds,
+    };
+
+    const createOrderPromise = createOrderMutation.mutateAsync(newOrder);
+
+    toast.promise(createOrderPromise, {
+      loading: "Rendelés létrehozása...",
+      success: (
+        <span>
+          A rendelés létrehozva. Rendelésed nyomon követheted{" "}
+          <Link to={ROUTES.ORDERS} target='_blank'>
+            itt
+          </Link>
+        </span>
+      ),
+      error: (err) =>
+        // (err?.response?.data?.message as string) ||
+        "Hiba a rendelés létrehozása során.",
+    });
+
+    reset();
+
+    return createOrderPromise;
+  };
+
   return (
     <div className='product__actions'>
       <div className={`product__action--save ${product.saved ? "active" : ""}`}>
@@ -245,12 +288,13 @@ const ProductActions = ({
       </div>
 
       <div className='product__action--contact'>
-        <Button
+        <StateButton
           className='secondary'
           text='Kapcsolatfelvétel'
-          disabled={isDisabled}>
+          disabled={isDisabled}
+          onClick={handleCreateOrder}>
           <Mail />
-        </Button>
+        </StateButton>
       </div>
     </div>
   );

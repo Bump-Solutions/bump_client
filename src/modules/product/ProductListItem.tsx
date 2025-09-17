@@ -332,7 +332,7 @@ const ProductListItem = ({ product }: ProductListItemProps) => {
             {product.images.length > 0 ? (
               <Carousel images={product.images} />
             ) : (
-              <Images className='svg-48 fc-light' />
+              <Images className='svg-48 fc-gray-600' />
             )}
           </div>
 

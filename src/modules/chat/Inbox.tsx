@@ -54,7 +54,7 @@ const Inbox = () => {
                   <SearchX className='svg-32 fc-gray-400' />
                   <div className='ta-center'>
                     <h4 className='fw-600 mb-0_25'>Nincs találat</h4>
-                    <p className='fc-light fs-14'>
+                    <p className='fc-gray-600 fs-14'>
                       Próbálkozz egy másik kifejezéssel.
                     </p>
                   </div>
@@ -64,7 +64,7 @@ const Inbox = () => {
                   <MessageSquareOff className='svg-32 fc-gray-400' />
                   <div className='ta-center'>
                     <h4 className='fw-600 mb-0_25'>Nincsenek üzeneteid</h4>
-                    <p className='fc-light fs-14'>
+                    <p className='fc-gray-600 fs-14'>
                       Az új üzenetek itt jelennek meg.
                     </p>
                   </div>

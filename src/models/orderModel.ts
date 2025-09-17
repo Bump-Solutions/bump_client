@@ -19,3 +19,13 @@ export interface OrdersPageModel {
   previous: string | null;
   count: number;
 }
+
+export interface CreateOrderModel {
+  sellerId: number;
+  itemIds: number[];
+}
+
+export interface CreateOrderDTO {
+  seller: number;
+  inventory_item_ids: number[];
+}

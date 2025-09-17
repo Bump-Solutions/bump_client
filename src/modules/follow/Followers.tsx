@@ -59,9 +59,9 @@ const Followers = () => {
           ) : (
             <>
               {searchKeyDebounced ? (
-                <p className='fc-light ta-center py-5'>Nincs találat.</p>
+                <p className='fc-gray-600 ta-center py-5'>Nincs találat.</p>
               ) : (
-                <p className='fc-light ta-center py-5'>
+                <p className='fc-gray-600 ta-center py-5'>
                   {user?.username} még nem rendelkezik követőkkel.
                 </p>
               )}

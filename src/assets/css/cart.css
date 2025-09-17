@@ -6,4 +6,12 @@
   width: 100%;
   max-width: 700px;
   margin: 0 auto;
+}
+.cart.empty {
+  justify-content: center;
+  align-items: center;
+}
+.cart.empty h1 {
+  text-align: center;
+  margin-top: 4rem;
 }/*# sourceMappingURL=cart.css.map */

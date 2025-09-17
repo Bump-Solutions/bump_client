@@ -57,7 +57,7 @@
   height: 2.5rem;
   padding: 0.5rem;
   border: none;
-  background: rgba(38, 38, 38, 0.9019607843);
+  background: rgba(38, 38, 38, 0.98);
   -webkit-backdrop-filter: blur(1.5rem);
           backdrop-filter: blur(1.5rem);
   color: #f8f9fa;
@@ -68,7 +68,7 @@
   width: 1.25rem;
 }
 .lightbox__wrapper .close:hover {
-  background-color: rgba(50.75, 50.75, 50.75, 0.9019607843);
+  background-color: rgba(50.75, 50.75, 50.75, 0.98);
 }
 .lightbox__wrapper .lightbox__content {
   display: flex;
@@ -149,7 +149,7 @@
   background-color: rgba(0, 0, 0, 0.15);
 }
 .lightbox__wrapper .lightbox__stepper:hover span {
-  background-color: rgba(50.75, 50.75, 50.75, 0.9019607843);
+  background-color: rgba(50.75, 50.75, 50.75, 0.98);
 }
 .lightbox__wrapper .lightbox__stepper span {
   display: flex;
@@ -158,13 +158,13 @@
   color: #f8f9fa;
   width: 2.5rem;
   height: 2.5rem;
-  background-color: rgba(38, 38, 38, 0.9019607843);
+  background-color: rgba(38, 38, 38, 0.98);
   border-radius: 50%;
   padding: 0.5rem;
   transition: background-color 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 .lightbox__wrapper .lightbox__stepper span:hover {
-  background-color: rgba(50.75, 50.75, 50.75, 0.9019607843);
+  background-color: rgba(50.75, 50.75, 50.75, 0.98);
 }
 .lightbox__wrapper .lightbox__stepper span svg {
   height: 1.25rem;

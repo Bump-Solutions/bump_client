@@ -102,7 +102,7 @@ const TextArea = ({
         }}>
         {error && <p className='error-msg'>{error}</p>}
         {maxLength && (
-          <p className='ta-right fc-light px-0' style={{ flex: 1 }}>
+          <p className='ta-right fc-gray-600 px-0' style={{ flex: 1 }}>
             {value.length} / {maxLength}
           </p>
         )}

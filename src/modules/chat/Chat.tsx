@@ -37,7 +37,7 @@ const Chat = () => {
             <MessageSquareDashed className='svg-64 fc-gray-400' />
             <div className='ta-center'>
               <h4 className='fw-600 mb-0_25 fs-18'>Nincs kiválasztva chat</h4>
-              <p className='fc-light fs-16'>
+              <p className='fc-gray-600 fs-16'>
                 Válassz az üzeneteid közül vagy indíts új beszélgetést.
               </p>
             </div>

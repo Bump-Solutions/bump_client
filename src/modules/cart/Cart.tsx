@@ -4,6 +4,9 @@ import { useCart } from "../../hooks/trade/useCart";
 import { ENUM } from "../../utils/enum";
 
 import Back from "../../components/Back";
+import Button from "../../components/Button";
+
+import { Globe } from "lucide-react";
 
 const Cart = () => {
   useTitle(`Kosár - ${ENUM.BRAND.NAME}`);
@@ -12,15 +15,16 @@ const Cart = () => {
 
   console.log(cart);
 
-  return (
+  return cartItemCount > 0 ? (
     <section className='cart'>
-      {cartItemCount > 0 ? (
-        <>
-          <Back text='Vásárlás folytatása' className='link mb-1' />
-        </>
-      ) : (
-        <div></div>
-      )}
+      <Back text='Vásárlás folytatása' className='link mb-1' />
+    </section>
+  ) : (
+    <section className='cart empty'>
+      <h1>A kosarad üres.</h1>
+      <Button className='primary' text='Böngéssz a Bumpon'>
+        <Globe />
+      </Button>
     </section>
   );
 };

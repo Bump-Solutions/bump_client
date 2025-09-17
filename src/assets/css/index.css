@@ -234,18 +234,6 @@ form .field__wrapper .input {
   vertical-align: middle !important;
 }
 
-.fc-light {
-  color: #868e96 !important;
-}
-
-.fc-medium {
-  color: #495057 !important;
-}
-
-.fc-dark {
-  color: #212529 !important;
-}
-
 .fc-dark-500 {
   color: #989898 !important;
 }
@@ -254,12 +242,20 @@ form .field__wrapper .input {
   color: #ced4da !important;
 }
 
+.fc-gray-600 {
+  color: #868e96 !important;
+}
+
 .fc-gray-700 {
   color: #495057 !important;
 }
 
 .fc-gray-800 {
   color: #343a40 !important;
+}
+
+.fc-gray-900 {
+  color: #212529 !important;
 }
 
 .fc-red-200 {

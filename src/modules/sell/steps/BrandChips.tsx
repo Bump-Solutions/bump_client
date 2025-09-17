@@ -91,7 +91,7 @@ const BrandChips = () => {
           *
         </span>
       </label>
-      <p className='fs-14 fc-light'>Válassz az alábbiak közül</p>
+      <p className='fs-14 fc-gray-600'>Válassz az alábbiak közül</p>
 
       {isError && (
         <h4 className='fc-red-500 ta-center py-2'>

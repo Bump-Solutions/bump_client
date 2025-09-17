@@ -40,7 +40,7 @@ const SavedProducts = () => {
               isFetchingNextPage={isFetchingNextPage}
             />
           ) : (
-            <p className='fc-light ta-center py-5'>
+            <p className='fc-gray-600 ta-center py-5'>
               <SearchX className='svg-64 mb-1' />
               <br />
               Még nem rendelkezel mentett termékekkel. <br />

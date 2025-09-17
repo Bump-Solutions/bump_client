@@ -118,7 +118,7 @@ const ColorwayChips = () => {
           *
         </span>
       </label>
-      <p className='fs-14 fc-light'>
+      <p className='fs-14 fc-gray-600'>
         {selectedBrand && selectedModel
           ? "Válassz az alábbiak közül"
           : "Először válassz márkát és modellt!"}

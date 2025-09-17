@@ -45,13 +45,13 @@ const SelectStep = forwardRef<SelectStepRef>(({}, ref) => {
         <div className='option__col--text'>
           <h5 className='fw-700 fs-14'>AJÁNLOTT</h5>
           <h3 className='fs-18 mt-0_25'>Katalógusból választok</h3>
-          <p className='fs-14 fc-medium mt-0_75'>
+          <p className='fs-14 fc-gray-700 mt-0_75'>
             Keresd meg a terméked márka, modell és színállás szerint, és töltsd
             fel gyorsan és könnyedén.
           </p>
         </div>
         <div className='option__col--img'>
-          <PackageSearch className='svg-64 fc-light' />
+          <PackageSearch className='svg-64 fc-gray-600' />
         </div>
       </article>
 
@@ -63,13 +63,13 @@ const SelectStep = forwardRef<SelectStepRef>(({}, ref) => {
         </div>
         <div className='option__col--text'>
           <h3>Saját adatokat adok meg</h3>
-          <p className='fs-14 fc-medium mt-0_5'>
+          <p className='fs-14 fc-gray-700 mt-0_5'>
             Te adod meg a termék adatait, amit később ellenőrzünk.
             <br />⏳ A termék az <b>ellenőrzésig</b> nem jelenik meg a profilon!
           </p>
         </div>
         <div className='option__col--img'>
-          <FileEdit className='svg-64 fc-light' />
+          <FileEdit className='svg-64 fc-gray-600' />
         </div>
       </article>
     </div>
