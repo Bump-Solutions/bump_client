@@ -21,6 +21,11 @@ import {
 import { useAuth } from "../hooks/auth/useAuth";
 import { clampDiscount, computeDiscounted } from "../utils/pricing";
 
+// Cart time-to-live (ms)
+const TTL = 48 * 60 * 60 * 1000; // 48 óra base
+// const TTL = 24 * 60 * 60 * 1000;
+// const TTL = 60 * 1000; // 1 perc teszteléshez
+
 // ------------------------------
 // Helpers: summary + pricing kalkuláció
 // ------------------------------
@@ -104,6 +109,10 @@ type CartAction =
     }
   | {
       type: "CLEAR_CART";
+    }
+  | {
+      type: "PURGE_EXPIRED";
+      payload: { now?: number };
     }
   | {
       type: "_REPLACE"; // hydrate/merge/reset
@@ -235,6 +244,27 @@ const cartReducer = (state: CartModel, action: CartAction): CartModel => {
       });
     }
 
+    case "PURGE_EXPIRED": {
+      const now = action.payload.now ?? Date.now();
+      const nextPackages: Record<number, CartPackageModel> = {};
+
+      for (const [sellerId, pkg] of Object.entries(state.packages)) {
+        const items = pkg.items.filter((item) => {
+          const t = Date.parse(item.addedAt);
+          return !Number.isNaN(t) && now - t <= TTL;
+        });
+
+        if (items.length) {
+          nextPackages[Number(sellerId)] = { ...pkg, items };
+        }
+      }
+
+      return withSummary({
+        ...state,
+        packages: nextPackages,
+      });
+    }
+
     default:
       return state;
   }
@@ -271,6 +301,21 @@ const CartProvider = ({ children }: CartProviderProps) => {
 
   // Memória állapot (derived summary-vel)
   const [cart, dispatch] = useReducer(cartReducer, emptyCart("HUF"));
+
+  // PURGE: lejárt tételek eltávolítása
+  useEffect(() => {
+    const handler = () => dispatch({ type: "PURGE_EXPIRED", payload: {} });
+    const onVisChange = () => {
+      if (document.visibilityState === "visible") handler();
+    };
+
+    document.addEventListener("visibilitychange", onVisChange);
+    handler(); // induláskor is
+
+    return () => {
+      document.removeEventListener("visibilitychange", onVisChange);
+    };
+  }, []);
 
   // HYDRATE: IndexedDB -> memória
   useEffect(() => {
