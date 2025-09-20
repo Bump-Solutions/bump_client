@@ -27,7 +27,7 @@ import { useCreateOrder } from "../../hooks/order/useCreateOrder";
 import { computeDiscounted } from "../../utils/pricing";
 
 interface ProductActionsProps extends FacetProps {
-  discount: number | undefined;
+  discount: number | null | undefined;
 }
 
 const ProductActions = ({
