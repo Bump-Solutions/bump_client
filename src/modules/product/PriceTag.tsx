@@ -12,7 +12,7 @@ import {
 import { Info } from "lucide-react";
 
 interface PriceTagProps extends FacetProps {
-  discount: number | undefined;
+  discount: number | null | undefined;
 }
 
 const PriceTag = ({
