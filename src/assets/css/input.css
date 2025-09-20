@@ -621,6 +621,7 @@
   height: 1.25rem;
   width: 1.25rem;
   color: #212529;
+  flex-shrink: 0;
 }
 .dropdown__menu .search-box input {
   all: unset;

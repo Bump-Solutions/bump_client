@@ -415,7 +415,7 @@
   height: 3rem;
   color: #ced4da;
 }
-.notification-menu .notification-menu__list.empty h5 {
+.notification-menu .notification-menu__list.empty h4 {
   font-size: 1rem;
   color: #212529;
   margin-bottom: 0.25rem;
@@ -569,6 +569,7 @@
 }
 .profile-menu__actions .action-list .action-list-item.btn {
   background-color: #212529;
+  border-radius: 2rem;
 }
 .profile-menu__actions .action-list .action-list-item.btn a {
   color: #f8f9fa;

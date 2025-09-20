@@ -2,6 +2,7 @@ export const ENUM = {
   BRAND: {
     NAME: "Bump",
     URL: "https://bumpmarket.hu",
+    WHERE: "Bumpon",
   },
 
   AUTH: {

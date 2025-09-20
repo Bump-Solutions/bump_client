@@ -1,11 +1,18 @@
+import { ROUTES } from "../../routes/routes";
 import { useMemo } from "react";
 import { FacetProps } from "../../hooks/product/useFacetedSearch";
 import { Link } from "react-router";
-import { ROUTES } from "../../routes/routes";
+import {
+  clampDiscount,
+  computeDiscounted,
+  formatMinorHU,
+  fromSuffix,
+} from "../../utils/pricing";
+
 import { Info } from "lucide-react";
 
 interface PriceTagProps extends FacetProps {
-  discount: number | null;
+  discount: number | undefined;
 }
 
 const PriceTag = ({
@@ -19,36 +26,47 @@ const PriceTag = ({
   const sourceItems = isFiltered ? filtered : available;
   if (!sourceItems || sourceItems.length === 0) return null;
 
-  // 1) rendezett raw és discounted árak
+  // 1) Nyers árak minor units-ben (HUF integer), rendezve növekvőbe
   const rawPrices = useMemo(
     () => sourceItems.map((i) => i.price).sort((a, b) => a - b),
     [sourceItems]
   );
   if (!rawPrices.length) return null;
 
-  const factor = discount && discount > 0 ? (100 - discount) / 100 : 1;
-  const discPrices = rawPrices.map((p) => Math.round(p * factor));
-  const fmt = (n: number) => n.toLocaleString();
+  // 2) Kedvezmény clampelve (1..100) és effektív árak ugyanazzal a formulával,
+  //    mint a CartProvider-ben → teljes konzisztencia (DRY).
+  const d = clampDiscount(discount ?? undefined);
+  const discPrices = useMemo(
+    () => rawPrices.map((p) => computeDiscounted(p, d)),
+    [rawPrices, d]
+  );
 
-  // 2) összegezzük az első N elemet (vagy az elsőt, ha quantity<=1)
+  // 3) Összegezzük az első N elemet (vagy csak az elsőt, ha quantity<=1)
   const count = Math.min(quantity, rawPrices.length);
-  const origVal = rawPrices.slice(0, count).reduce((s, p) => s + p, 0);
-  const discVal = discPrices.slice(0, count).reduce((s, p) => s + p, 0);
+  const origVal = useMemo(
+    () => rawPrices.slice(0, count).reduce((s, p) => s + p, 0),
+    [rawPrices, count]
+  );
+  const discVal = useMemo(
+    () => discPrices.slice(0, count).reduce((s, p) => s + p, 0),
+    [discPrices, count]
+  );
 
-  // 3) döntsük el a végződést:
+  // 4) egységes suffix döntés utilból
   //    - ha pontosan 1 elem van, mindig " Ft"
   //    - ha több elem, és nincs szűrés, akkor " Ft-tól"
   //    - különben " Ft"
-  const suffix =
-    quantity <= 1 && sourceItems.length > 1 && !isFiltered ? " Ft-tól" : " Ft";
+  const suffix = fromSuffix(
+    quantity <= 1 && sourceItems.length > 1 && !isFiltered
+  );
 
-  const origTitle = `${fmt(origVal)}${suffix}`;
-  const discTitle = `${fmt(discVal)}${suffix}`;
+  const origTitle = `${formatMinorHU(origVal)}${suffix}`;
+  const discTitle = `${formatMinorHU(discVal)}${suffix}`;
 
   return (
     <div className='product__price-tag'>
       <h3>
-        {discount && discount > 0 ? (
+        {d ? (
           <>
             <span className='discount'>{discTitle}</span>
             <span className='price__original'>{origTitle}</span>

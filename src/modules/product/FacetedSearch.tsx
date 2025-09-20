@@ -57,7 +57,7 @@ const FacetedSearch = ({
         ) : (
           <>
             <h4>Elérhető méretek</h4>
-            <p className='fc-gray-600 fs-14'>Válassz nemet a szűréshez ...</p>
+            <p className='fc-gray-600 fs-14'>Válassz nemet a szűréshez...</p>
           </>
         )}
       </div>
@@ -93,7 +93,7 @@ const FacetedSearch = ({
                 - Tudj meg többet
               </Link>
             </h4>
-            <p className='fc-gray-600 fs-14'>Válassz méretet a szűréshez ...</p>
+            <p className='fc-gray-600 fs-14'>Válassz méretet a szűréshez...</p>
           </>
         )}
       </div>

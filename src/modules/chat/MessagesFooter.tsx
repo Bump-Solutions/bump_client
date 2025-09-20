@@ -143,7 +143,7 @@ const MessagesFooter = ({ chat, onSend }: MessagesFooterProps) => {
         <div className='chat__message__input'>
           <textarea
             ref={textareaRef}
-            placeholder='Írj üzenetet ...'
+            placeholder='Írj üzenetet...'
             onFocus={() => toggleFocus(true)}
             onInput={adjustHeight}
             value={message}

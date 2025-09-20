@@ -27,6 +27,7 @@
 
       h1 {
         font-size: $fs-32;
+        white-space: nowrap;
       }
 
       .badge {
@@ -64,6 +65,7 @@
       display: flex;
       align-items: center;
       gap: 1rem;
+      border-bottom: 1px solid color(gray, 300);
 
       li {
         position: relative;
@@ -198,13 +200,21 @@
       padding: 1rem;
       padding-right: 3rem;
       border-bottom: 1px solid color(gray, 200);
-      border-radius: 0.125rem;
+      border-radius: 0;
       display: flex;
       align-items: flex-start;
       gap: 1rem;
       height: auto;
       cursor: pointer;
       transition: background-color 0.2s $animation-cubic;
+
+      &:first-child {
+        border-radius: $border-radius-0_25 $border-radius-0_25 0 0;
+      }
+
+      &:last-child {
+        border-radius: 0 0 $border-radius-0_25 $border-radius-0_25;
+      }
 
       &.unread {
         background-color: color.adjust($color: color(pink, 50), $lightness: 3%);

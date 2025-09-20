@@ -1,13 +1,14 @@
+import { ROUTES } from "../../routes/routes";
 import { useProduct } from "../../hooks/product/useProduct";
 import { useFacetedSearch } from "../../hooks/product/useFacetedSearch";
 import { Link } from "react-router";
+import { clampDiscount } from "../../utils/pricing";
 
 import Badges from "../../components/Badges";
 import FacetedSearch from "./FacetedSearch";
 import Stepper from "../../components/Stepper";
 import PriceTag from "./PriceTag";
 import ProductActions from "./ProductActions";
-import { ROUTES } from "../../routes/routes";
 
 /*
 const BADGES: BadgeCollection = {
@@ -46,7 +47,9 @@ const ProductDetails = () => {
     product.product.colorWay,
   ].join(" ");
 
-  const discountValue = (product.badges.discount?.value as number) || null;
+  const discountValue = clampDiscount(
+    product.badges.discount?.value as number | undefined
+  );
 
   return (
     <article className='product__details'>

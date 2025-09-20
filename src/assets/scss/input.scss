@@ -699,6 +699,7 @@
       height: $fs-20;
       width: $fs-20;
       color: color(gray, 900);
+      flex-shrink: 0;
     }
 
     input {

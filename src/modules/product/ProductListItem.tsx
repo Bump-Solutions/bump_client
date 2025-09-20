@@ -11,6 +11,7 @@ import { useUnsaveProduct } from "../../hooks/product/useUnsaveProduct";
 import { useToggle } from "../../hooks/useToggle";
 import { useLongPress } from "react-use";
 import { toast } from "sonner";
+import { buildListPriceLabels } from "../../utils/pricing";
 
 import { MouseEvent, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
@@ -368,18 +369,23 @@ const ProductListItem = ({ product }: ProductListItemProps) => {
             </div>
 
             <div className='item__price'>
-              {product.discountedPrice && (
-                <span className='discount'>
-                  {product.discountedPrice.toLocaleString()} Ft
-                  {product.itemsCount > 1 && "-tól"}
-                </span>
-              )}
-              <span className='price__original'>
-                {product.minPrice?.toLocaleString() ||
-                  product.price?.toLocaleString()}{" "}
-                Ft
-                {product.itemsCount > 1 && "-tól"}
-              </span>
+              {(() => {
+                const { origLabel, discLabel } = buildListPriceLabels({
+                  minPrice: product.minPrice ?? null,
+                  price: product.price ?? null,
+                  discountedMinPrice: product.discountedPrice ?? null, // ha a backend már adta
+                  // Ha a listában nincs percent, hagyd null-on — a util a discountedPrice-t fogja előnyben részesíteni.
+                  discountPercent: null,
+                  hasMultipleSizes: product.itemsCount > 1,
+                });
+
+                return (
+                  <>
+                    {discLabel && <span className='discount'>{discLabel}</span>}
+                    <span className='price__original'>{origLabel}</span>
+                  </>
+                );
+              })()}
             </div>
           </div>
         </Link>

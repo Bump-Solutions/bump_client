@@ -49,7 +49,7 @@ const Products = () => {
             />
           ) : isOwnProfile ? (
             <>
-              <div className='fc-gray-600 ta-center p-5 d-flex flex-column a-center gap-1 '>
+              <div className='fc-gray-600 ta-center p-5 d-flex flex-column a-center gap-1'>
                 <SearchX className='svg-64 fc-gray-400' />
                 <div className='ta-center'>
                   <h4 className='fw-600 mb-0_25 fs-18'>

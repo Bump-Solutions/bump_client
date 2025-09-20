@@ -134,7 +134,7 @@ const ItemForm = () => {
         value={item?.gender}
         label='Nem'
         options={ENUM.PRODUCT.GENDER_OPTIONS}
-        placeholder='Válassz az alábbiak közül ...'
+        placeholder='Válassz az alábbiak közül...'
         onChange={(option) => handleChangeSelect("gender", option)}
         error={errors.gender}
       />
@@ -146,7 +146,7 @@ const ItemForm = () => {
         value={item?.size}
         label='Méret'
         options={ENUM.PRODUCT.SIZE_OPTIONS}
-        placeholder='Válassz az alábbiak közül ...'
+        placeholder='Válassz az alábbiak közül...'
         onChange={(option) => handleChangeSelect("size", option)}
         error={errors.size}
       />
@@ -157,7 +157,7 @@ const ItemForm = () => {
         value={item?.condition}
         label='Állapot'
         options={ENUM.PRODUCT.CONDITION_OPTIONS}
-        placeholder='Válassz az alábbiak közül ...'
+        placeholder='Válassz az alábbiak közül...'
         onChange={(option) => handleChangeSelect("condition", option)}
         error={errors.condition}
       />

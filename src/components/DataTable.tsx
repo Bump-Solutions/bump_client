@@ -87,7 +87,7 @@ const DataTable = <T extends object>({
   // pageSizeOptions = [10, 20, 50, -1], // -1 jelenti az összes elem megjelenítését
   enableGlobalFilter = false,
   globalFilterColumns,
-  globalFilterPlaceholder = "Keresés ...",
+  globalFilterPlaceholder = "Keresés...",
   renderRowExpanded,
   enableRowSelection = false,
   enableHiding = false,

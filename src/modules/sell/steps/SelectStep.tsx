@@ -65,7 +65,8 @@ const SelectStep = forwardRef<SelectStepRef>(({}, ref) => {
           <h3>Saját adatokat adok meg</h3>
           <p className='fs-14 fc-gray-700 mt-0_5'>
             Te adod meg a termék adatait, amit később ellenőrzünk.
-            <br />⏳ A termék az <b>ellenőrzésig</b> nem jelenik meg a profilon!
+            <br />⏳ A termék az <b className='fc-gray-900'>ellenőrzésig</b> nem
+            jelenik meg a profilon!
           </p>
         </div>
         <div className='option__col--img'>

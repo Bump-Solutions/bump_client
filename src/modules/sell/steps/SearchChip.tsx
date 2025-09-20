@@ -37,7 +37,7 @@ const SearchChip = ({
         onChange={onSearch}
         value={searchKey}
         ref={searchRef}
-        placeholder='Keresés ...'
+        placeholder='Keresés...'
       />
     </div>
   );

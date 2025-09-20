@@ -238,7 +238,7 @@ const Select = ({
                   onChange={onSearch}
                   value={searchValue}
                   ref={searchRef}
-                  placeholder='Keresés a listában'
+                  placeholder='Keresés a listában...'
                 />
               </div>
             )}

@@ -35,7 +35,7 @@ const FIELDS: Record<ReportType, Field[]> = {
       name: "rprt_reason",
       label: "Jelentés oka",
       type: "select",
-      placeholder: "Válassz az alábbiak közül ...",
+      placeholder: "Válassz az alábbiak közül...",
       options: [
         {
           value: 0,
