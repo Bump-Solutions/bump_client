@@ -106,7 +106,7 @@ const FollowingListItem = ({ following }: FollowingListItemProps) => {
             className='username fs-18 link black'>
             {following.username}
           </Link>
-          <p className='fc-light fs-14 truncate'>{following.role}</p>
+          <p className='fc-gray-600 fs-14 truncate'>{following.role}</p>
         </div>
 
         {isOwnProfile ? (

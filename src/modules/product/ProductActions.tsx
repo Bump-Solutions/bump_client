@@ -1,7 +1,11 @@
 import { QUERY_KEY } from "../../utils/queryKeys";
 import { ROUTES } from "../../routes/routes";
 import { useAuth } from "../../hooks/auth/useAuth";
-import { CartItemModel, SellerModel } from "../../models/cartModel";
+import {
+  CartItemModel,
+  CatalogProductRefModel,
+  SellerModel,
+} from "../../models/cartModel";
 import { InventoryModel, ProductListModel } from "../../models/productModel";
 import { FacetProps } from "../../hooks/product/useFacetedSearch";
 import { useProduct } from "../../hooks/product/useProduct";
@@ -18,9 +22,12 @@ import StateButton from "../../components/StateButton";
 import Tooltip from "../../components/Tooltip";
 
 import { Bookmark, Mail, ShoppingBag } from "lucide-react";
+import { CreateOrderModel } from "../../models/orderModel";
+import { useCreateOrder } from "../../hooks/order/useCreateOrder";
+import { computeDiscounted } from "../../utils/pricing";
 
 interface ProductActionsProps extends FacetProps {
-  discount: number | null;
+  discount: number | undefined;
 }
 
 const ProductActions = ({
@@ -34,11 +41,13 @@ const ProductActions = ({
 
   const queryClient = useQueryClient();
   const { product, setProduct } = useProduct();
-  const { cart, addItem } = useCart();
+  const { addItem } = useCart();
 
   if (!product) return null;
 
   const isDisabled = quantity < 1 || filteredCount === 0;
+
+  const createOrderMutation = useCreateOrder((response) => {});
 
   const saveMutation = useSaveProduct((response) => {
     setProduct({ saved: true, saves: product.saves + 1 });
@@ -172,51 +181,97 @@ const ProductActions = ({
       profilePicture: product.user.profilePicture || null,
     };
 
+    const LABEL = [
+      product.product.brand,
+      product.product.model,
+      product.product.colorWay,
+    ].join(" ");
+
     const maxToAdd = Math.min(quantity, filtered.length);
+
     filtered.slice(0, maxToAdd).forEach((item) => {
-      console.log(item);
+      const baseAmount = item.price; // minor units (HUF)
+      const effectiveAmount = computeDiscounted(baseAmount, discount);
 
       const cartItem: CartItemModel = {
         id: item.id,
-        label: [
-          product.product.brand,
-          product.product.model,
-          product.product.colorWay,
-        ].join(" "),
-        image: product.images[0],
+        product: {
+          id: product.id,
+          title: LABEL,
+          brand: product.product.brand,
+          model: product.product.model,
+          colorWay: product.product.colorWay,
+          category: product.product.category,
+          colors: product.product.colors,
+          image: product.images[0],
+        } as CatalogProductRefModel, // minimal snapshot kell csak
+
+        size: item.size,
+        gender: item.gender,
+        condition: item.condition,
+
+        price: {
+          amount: baseAmount,
+          currency: "HUF",
+        },
+
+        // ÚJ: discount átadása + snapshotolt kedvezményes ár
+        ...(discount && {
+          discountPercent: discount,
+          discountedPrice: {
+            amount: effectiveAmount,
+            currency: "HUF",
+          },
+        }),
+
+        addedAt: new Date().toISOString(),
       };
 
-      // TODO: Group by product?
-      /*
-      if (cart[seller.id].items.some((i) => i.id === cartItem.id)) {
-        toast.info(
-          <span>
-            A termék már a kosárban van: {cartItem.label}.{" "}
-            <Link
-              to={ROUTES.CART}
-              className='link fc-blue-700 underline fw-700'>
-              Tovább a kosárra.
-            </Link>
-          </span>
-        );
-        return; // Item already exists in the cart for this seller
-      }
-      */
-
       addItem(seller, cartItem);
-    });
-
-    console.log("Add to cart clicked", {
-      quantity,
-      product,
-      filtered,
-      filteredCount,
-      seller,
     });
 
     reset();
 
     return Promise.resolve();
+  };
+
+  const handleCreateOrder = (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+
+    if (createOrderMutation.isPending) return;
+    if (isDisabled) return;
+    if (!filtered || filtered.length === 0) return;
+
+    const sellerId = product.user.id;
+
+    const maxToAdd = Math.min(quantity, filtered.length);
+    const itemIds = filtered.slice(0, maxToAdd).map((item) => item.id);
+
+    const newOrder: CreateOrderModel = {
+      sellerId,
+      itemIds,
+    };
+
+    const createOrderPromise = createOrderMutation.mutateAsync(newOrder);
+
+    toast.promise(createOrderPromise, {
+      loading: "Rendelés létrehozása...",
+      success: (
+        <span>
+          A rendelés létrehozva. Rendelésed nyomon követheted{" "}
+          <Link to={ROUTES.ORDERS} target='_blank'>
+            itt
+          </Link>
+        </span>
+      ),
+      error: (err) =>
+        // (err?.response?.data?.message as string) ||
+        "Hiba a rendelés létrehozása során.",
+    });
+
+    reset();
+
+    return createOrderPromise;
   };
 
   return (
@@ -245,12 +300,13 @@ const ProductActions = ({
       </div>
 
       <div className='product__action--contact'>
-        <Button
+        <StateButton
           className='secondary'
           text='Kapcsolatfelvétel'
-          disabled={isDisabled}>
+          disabled={isDisabled}
+          onClick={handleCreateOrder}>
           <Mail />
-        </Button>
+        </StateButton>
       </div>
     </div>
   );

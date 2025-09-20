@@ -1,5 +1,6 @@
-@import "variables";
-@import "mixins";
+@use "variables" as *;
+@use "palette" as *;
+@use "mixins" as *;
 
 .modal__wrapper {
   padding: 0 var(--container-x-padding);
@@ -175,6 +176,7 @@
                       height: $fs-20;
                       width: $fs-20;
                       color: color(gray, 900);
+                      flex-shrink: 0;
                     }
 
                     input {
@@ -567,6 +569,7 @@
                         height: $fs-20;
                         width: $fs-20;
                         color: color(gray, 600);
+                        flex-shrink: 0;
                       }
 
                       input {

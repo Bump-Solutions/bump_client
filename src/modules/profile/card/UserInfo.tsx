@@ -62,7 +62,7 @@ const UserInfo = () => {
       </div>
 
       <div className='user__info-block'>
-        <p className='fc-light fs-14'>
+        <p className='fc-gray-600 fs-14'>
           {isOwnProfile ? "Csatlakoztál:" : "Csatlakozott:"} {user?.joined}
         </p>
       </div>

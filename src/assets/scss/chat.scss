@@ -1,5 +1,6 @@
-@import "variables";
-@import "mixins";
+@use "variables" as *;
+@use "palette" as *;
+@use "mixins" as *;
 
 .border {
   position: relative;
@@ -38,7 +39,7 @@
 
         h1 {
           font-size: 1.375rem;
-          font-weight: 600;
+          font-weight: 700;
         }
 
         .search-box {
@@ -215,6 +216,7 @@
 
                 &.btn {
                   background-color: color(gray, 900);
+                  border-radius: $border-radius-2 !important;
 
                   a {
                     color: color(gray, 100);

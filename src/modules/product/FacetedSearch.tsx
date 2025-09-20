@@ -38,7 +38,7 @@ const FacetedSearch = ({
             <h4>
               Elérhető méretek{" "}
               {selectedGender && (
-                <span className='fc-light'>
+                <span className='fc-gray-600'>
                   - {GENDER_LABELS[selectedGender]}
                 </span>
               )}
@@ -57,7 +57,7 @@ const FacetedSearch = ({
         ) : (
           <>
             <h4>Elérhető méretek</h4>
-            <p className='fc-light fs-14'>Válassz nemet a szűréshez ...</p>
+            <p className='fc-gray-600 fs-14'>Válassz nemet a szűréshez...</p>
           </>
         )}
       </div>
@@ -71,7 +71,7 @@ const FacetedSearch = ({
                 - Tudj meg többet
               </Link>
               {selectedSize && (
-                <span className='fc-light'> - EU {selectedSize}</span>
+                <span className='fc-gray-600'> - EU {selectedSize}</span>
               )}
             </h4>
             <div className='chips__wrapper'>
@@ -93,7 +93,7 @@ const FacetedSearch = ({
                 - Tudj meg többet
               </Link>
             </h4>
-            <p className='fc-light fs-14'>Válassz méretet a szűréshez ...</p>
+            <p className='fc-gray-600 fs-14'>Válassz méretet a szűréshez...</p>
           </>
         )}
       </div>

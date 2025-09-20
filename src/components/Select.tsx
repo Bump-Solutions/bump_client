@@ -238,7 +238,7 @@ const Select = ({
                   onChange={onSearch}
                   value={searchValue}
                   ref={searchRef}
-                  placeholder='Keresés a listában'
+                  placeholder='Keresés a listában...'
                 />
               </div>
             )}
@@ -258,7 +258,7 @@ const Select = ({
                 }`}>
                 {option.label}
                 {option.description && (
-                  <p className='p-0 fs-14 fc-light'>{option.description}</p>
+                  <p className='p-0 fs-14 fc-gray-600'>{option.description}</p>
                 )}
               </div>
             ))}

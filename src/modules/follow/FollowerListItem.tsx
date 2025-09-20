@@ -167,7 +167,7 @@ const FollowerListItem = ({ follower }: FollowerListItemProps) => {
             </span>
           )}
 
-          <p className='fc-light fs-14 truncate'>{follower.role}</p>
+          <p className='fc-gray-600 fs-14 truncate'>{follower.role}</p>
         </div>
 
         {/* Gomb: ha saját profilon vagyunk, Eltávolítás */}

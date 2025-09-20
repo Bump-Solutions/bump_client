@@ -1,5 +1,6 @@
-@import "variables";
-@import "mixins";
+@use "variables" as *;
+@use "palette" as *;
+@use "mixins" as *;
 
 .user-products__wrapper {
   .products__list {
@@ -719,7 +720,7 @@
             margin-top: 0.25rem;
             background-color: color(gray, 50);
             padding: 0.75rem 1rem;
-            border-radius: $border-radius-0_5;
+            border-radius: $border-radius-1;
 
             .link {
               padding: 0;

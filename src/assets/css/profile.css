@@ -223,6 +223,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 2rem;
+  border-bottom: 1px solid #dee2e6;
 }
 .profile .profile__wrapper .profile__content .profile__tabs__wrapper .profile__tabs .profile__tab {
   cursor: pointer;

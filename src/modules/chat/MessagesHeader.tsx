@@ -32,7 +32,7 @@ const MessagesHeader = () => {
         />
         <div className='messages__header__details__info'>
           <h4>{partner.username}</h4>
-          {false && <div className='fc-light fs-14'>valami</div>}
+          {false && <div className='fc-gray-600 fs-14'>valami</div>}
         </div>
 
         <MoveRight />

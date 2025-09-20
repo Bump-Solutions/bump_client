@@ -86,7 +86,7 @@ const NotificationMenu = ({
               <div className='notification-menu__list empty'>
                 <BellOff />
                 <div>
-                  <h5>Nincsenek értesítések</h5>
+                  <h4 className='nh-fw-600'>Nincsenek értesítések</h4>
                   <p>
                     {activeTabIndex === 1
                       ? "Az értesítések itt jelennek meg, amikor valaki kapcsolatba lép veled. Térj vissza később."

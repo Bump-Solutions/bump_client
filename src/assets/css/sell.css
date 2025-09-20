@@ -145,6 +145,7 @@
   height: 1.25rem;
   width: 1.25rem;
   color: #212529;
+  flex-shrink: 0;
 }
 .modal__wrapper .modal.sell .modal__content form.step-2 .details__wrapper.catalog .chips__wrapper .search-box input {
   all: unset;
@@ -455,6 +456,7 @@
   height: 1.25rem;
   width: 1.25rem;
   color: #868e96;
+  flex-shrink: 0;
 }
 .drawer__wrapper .drawer.sell .drawer__content .modal__content form.step-2 .details__wrapper.catalog .chips__wrapper .search-box input {
   all: unset;

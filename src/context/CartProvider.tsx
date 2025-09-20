@@ -1,20 +1,94 @@
-import CryptoJS from "crypto-js";
 import {
   createContext,
   ReactNode,
   useEffect,
-  useMemo,
   useReducer,
+  useState,
 } from "react";
-import { useSessionStorage } from "react-use";
 import {
   CartItemModel,
   CartModel,
   CartPackageModel,
+  MoneyModel,
   SellerModel,
 } from "../models/cartModel";
+import {
+  emptyCart,
+  loadCart,
+  saveCart,
+  userCartKey,
+} from "../storage/cartStorage";
 import { useAuth } from "../hooks/auth/useAuth";
+import { clampDiscount, computeDiscounted } from "../utils/pricing";
 
+// ------------------------------
+// Helpers: summary + pricing kalkuláció
+// ------------------------------
+
+/** Visszaadja a tétel fizetendő árát (minor units) */
+function effectiveItemAmount(item: CartItemModel): number {
+  // 1) ha van snapshotolt discountedPrice, azt használd
+  if (item.discountedPrice?.amount != null) return item.discountedPrice.amount;
+
+  // 2) ha van discountPercent, számold
+  const discount = clampDiscount(item.discountPercent);
+  if (discount) {
+    // price * (100 - d) / 100, biztonságos kerekítéssel
+    return computeDiscounted(item.price.amount, discount);
+  }
+
+  // 3) különben az alapár
+  return item.price.amount;
+}
+
+function sumMoney(
+  amounts: number[],
+  currency: MoneyModel["currency"]
+): MoneyModel {
+  const total = amounts.reduce((acc, val) => acc + val, 0);
+  return { amount: total, currency };
+}
+
+function computeSummary(
+  packages: Record<number, CartPackageModel>,
+  currency: MoneyModel["currency"] = "HUF"
+): CartModel["summary"] {
+  const packagesCount = Object.keys(packages).length;
+  let itemsCount = 0;
+
+  const grossParts: number[] = [];
+  const effectiveParts: number[] = [];
+
+  Object.values(packages).forEach((pkg) => {
+    itemsCount += pkg.items.length;
+    for (const item of pkg.items) {
+      grossParts.push(item.price.amount);
+      effectiveParts.push(effectiveItemAmount(item));
+    }
+  });
+
+  const grossSubtotal = sumMoney(grossParts, currency);
+  const indicativeSubtotal = sumMoney(effectiveParts, currency);
+  const discountsTotal = {
+    amount: Math.max(0, grossSubtotal.amount - indicativeSubtotal.amount),
+    currency,
+  };
+
+  return {
+    packagesCount,
+    itemsCount,
+
+    grossSubtotal,
+    discountsTotal,
+    indicativeSubtotal,
+
+    computedAt: new Date().toISOString(),
+  };
+}
+
+// ------------------------------
+// Actions / Reducer
+// ------------------------------
 type CartAction =
   | {
       type: "ADD_ITEM";
@@ -30,16 +104,154 @@ type CartAction =
     }
   | {
       type: "CLEAR_CART";
+    }
+  | {
+      type: "_REPLACE"; // hydrate/merge/reset
+      payload: CartModel;
     };
 
+function withSummary(next: CartModel): CartModel {
+  return {
+    ...next,
+    summary: computeSummary(
+      next.packages,
+      next.summary.indicativeSubtotal.currency ?? "HUF"
+    ),
+  };
+}
+
+const cartReducer = (state: CartModel, action: CartAction): CartModel => {
+  switch (action.type) {
+    case "_REPLACE": {
+      const incoming = action.payload;
+      // alapvédelmek a struktúrára
+      const safe =
+        incoming && typeof incoming === "object"
+          ? incoming
+          : emptyCart(state.summary.indicativeSubtotal.currency);
+      return withSummary({
+        ...emptyCart(state.summary.indicativeSubtotal.currency),
+        ...safe,
+        version: 1,
+      });
+    }
+
+    case "ADD_ITEM": {
+      const { seller, item } = action.payload;
+      const sellerId = seller.id;
+      const prevPkg = state.packages[sellerId];
+
+      // már benne van?
+      if (prevPkg?.items.find((it) => it.id === item.id)) {
+        return state; // nincs változás
+      }
+
+      // snapshotolt kedvezményes ár beállítása, ha hiányzik
+      let nextItem = item;
+      if (item.discountPercent != null && item.discountedPrice == null) {
+        const discount = Math.max(
+          1,
+          Math.min(100, Math.floor(item.discountPercent))
+        );
+        const effective = computeDiscounted(item.price.amount, discount);
+
+        nextItem = {
+          ...item,
+          discountPercent: discount,
+          discountedPrice: { amount: effective, currency: item.price.currency },
+        };
+      }
+
+      const nextPackages: Record<number, CartPackageModel> = {
+        ...state.packages,
+      };
+
+      if (prevPkg) {
+        nextPackages[sellerId] = {
+          ...prevPkg,
+          items: [...prevPkg.items, nextItem],
+          lastUpdatedAt: new Date().toISOString(),
+        };
+      } else {
+        const newPackage: CartPackageModel = {
+          seller,
+          items: [nextItem],
+          lastUpdatedAt: new Date().toISOString(),
+        };
+        nextPackages[sellerId] = newPackage;
+      }
+
+      return withSummary({
+        ...state,
+        packages: nextPackages,
+      });
+    }
+
+    case "REMOVE_ITEM": {
+      const { sellerId, itemId } = action.payload;
+      const prevPkg = state.packages[sellerId];
+      if (!prevPkg) return state; // nincs ilyen csomag
+
+      const remaining = prevPkg.items.filter((item) => item.id !== itemId);
+
+      const nextPackages: Record<number, CartPackageModel> = {
+        ...state.packages,
+      };
+      if (remaining.length === 0) {
+        delete nextPackages[sellerId];
+      } else {
+        nextPackages[sellerId] = {
+          ...prevPkg,
+          items: remaining,
+          lastUpdatedAt: new Date().toISOString(),
+        };
+      }
+
+      return withSummary({
+        ...state,
+        packages: nextPackages,
+      });
+    }
+
+    case "REMOVE_PACKAGE": {
+      const { sellerId } = action.payload;
+      if (!state.packages[sellerId]) return state; // nincs ilyen csomag
+
+      const nextPackages: Record<number, CartPackageModel> = {
+        ...state.packages,
+      };
+      delete nextPackages[sellerId];
+
+      return withSummary({
+        ...state,
+        packages: nextPackages,
+      });
+    }
+
+    case "CLEAR_CART": {
+      return withSummary({
+        ...state,
+        packages: {},
+      });
+    }
+
+    default:
+      return state;
+  }
+};
+
+// ------------------------------
+// Context + Provider
+// ------------------------------
 interface CartContextType {
   cart: CartModel;
+
   addItem: (seller: SellerModel, item: CartItemModel) => void;
   removeItem: (sellerId: number, itemId: number) => void;
   removePackage: (sellerId: number) => void;
   clearCart: () => void;
-  cartPackageCount: number;
-  cartItemCount: number;
+
+  isHydrating: boolean;
 }
 
 export const CartContext = createContext<CartContextType | undefined>(
@@ -50,121 +262,43 @@ interface CartProviderProps {
   children: ReactNode;
 }
 
-const encryptCart = (cart: CartModel, key: string): string => {
-  // JSON → string → AES-kódolt Base64
-  return CryptoJS.AES.encrypt(JSON.stringify(cart), key).toString();
-};
-
-const decryptCart = (cipher: string, key: string): CartModel => {
-  // AES visszafejtés → UTF8 → JSON.parse
-  const bytes = CryptoJS.AES.decrypt(cipher, key);
-  const text = bytes.toString(CryptoJS.enc.Utf8);
-  return text ? JSON.parse(text) : {};
-};
-
-const cartReducer = (state: CartModel, action: CartAction): any => {
-  switch (action.type) {
-    case "ADD_ITEM": {
-      const { seller, item } = action.payload;
-      const sellerId = seller.id;
-
-      // Megnézzük, van-e már csomag erre az eladóra
-      const prevPackage = state[sellerId];
-      if (prevPackage) {
-        // Frissítjük a meglévőt: csak bővítjük az items tömböt
-        const exists = prevPackage.items.some((i) => i.id === item.id);
-        if (exists) {
-          // Ha már benne van az item, nem csinálunk semmit
-          return state;
-        }
-
-        return {
-          ...state,
-          [sellerId]: {
-            ...prevPackage,
-            items: [...prevPackage.items, item],
-          },
-        };
-      } else {
-        // Új csomagot hozunk létre az eladóhoz
-        const newPackage: CartPackageModel = {
-          // id: cuid(),
-          seller,
-          items: [item],
-        };
-        return {
-          ...state,
-          [sellerId]: newPackage,
-        };
-      }
-    }
-
-    case "REMOVE_ITEM": {
-      const { sellerId, itemId } = action.payload;
-
-      const prevPackage = state[sellerId];
-      if (!prevPackage) {
-        // Ha nincs ilyen csomag, nem csinálunk semmit
-        return state;
-      }
-
-      // Szűrjük ki a törölni kívánt item-et
-      const remainingItems = prevPackage.items.filter((i) => i.id !== itemId);
-      if (remainingItems.length === 0) {
-        // Ha az összes item törlődött, eltávolítjuk a csomagot
-        const { [sellerId]: _, ...rest } = state;
-        return rest;
-      } else {
-        // Ha maradtak item-ek, frissítjük a csomagot
-        return {
-          ...state,
-          [sellerId]: {
-            ...prevPackage,
-            items: remainingItems,
-          },
-        };
-      }
-    }
-
-    case "REMOVE_PACKAGE": {
-      const { sellerId } = action.payload;
-      // Töröljük az adott sellerId-hez tartozó bejegyzést
-      const { [sellerId]: _, ...rest } = state;
-      return rest;
-    }
-
-    case "CLEAR_CART":
-      return {};
-
-    default:
-      return state;
-  }
-};
-
 const CartProvider = ({ children }: CartProviderProps) => {
   const { auth } = useAuth();
   const userId = auth?.user?.id;
+  const key = userCartKey(userId);
 
-  // 1) Betöltés sessionStorage-ból
-  const storageKey = `CART__${userId}`;
-  const [storedCipher, setStoredCipher] = useSessionStorage<string | null>(
-    storageKey,
-    null
-  );
+  const [isHydrating, setIsHydrating] = useState(true);
 
-  // 2) Inicializáljuk a state-et:
-  const initCart = (cipher: string | null) =>
-    cipher ? decryptCart(cipher, String(userId)) : {};
-  const [cart, dispatch] = useReducer(cartReducer, storedCipher, initCart);
+  // Memória állapot (derived summary-vel)
+  const [cart, dispatch] = useReducer(cartReducer, emptyCart("HUF"));
 
-  // 3) Minden state változásnál frissítjük a storage-t
+  // HYDRATE: IndexedDB -> memória
   useEffect(() => {
-    if (userId) {
-      const cipher = encryptCart(cart, String(userId));
-      setStoredCipher(cipher);
-    }
-  }, [cart, userId, setStoredCipher]);
+    let cancelled = false;
 
+    // declare and call
+    (async () => {
+      setIsHydrating(true);
+
+      const fromDb = userId ? await loadCart(key) : null;
+      if (!cancelled && fromDb) {
+        dispatch({ type: "_REPLACE", payload: fromDb });
+      }
+      setIsHydrating(false);
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [userId, key]);
+
+  // PERSIST: memória -> IndexedDB
+  useEffect(() => {
+    if (!userId) return; // csak autentikált állapotban
+    saveCart(key, cart); // aszinkron; hiba esetén csendes
+  }, [cart, userId, key]);
+
+  // public API
   const addItem = (seller: SellerModel, item: CartItemModel) =>
     dispatch({ type: "ADD_ITEM", payload: { seller, item } });
 
@@ -176,20 +310,8 @@ const CartProvider = ({ children }: CartProviderProps) => {
 
   const clearCart = () => dispatch({ type: "CLEAR_CART" });
 
-  const cartPackageCount = useMemo(() => {
-    // Return the number of packages in the cart
-    return Object.keys(cart).length;
-  }, [cart]);
-
-  const cartItemCount = useMemo(() => {
-    // Return the total number of items in the cart
-    return Object.values(cart).reduce(
-      (total, pkg) => total + pkg.items.length,
-      0
-    );
-  }, [cart]);
-
   if (!userId) {
+    // nem autentikált állapotban csak továbbadjuk a children-t (vagy fallbacket adhatsz)
     return <>{children}</>;
   }
 
@@ -201,8 +323,7 @@ const CartProvider = ({ children }: CartProviderProps) => {
         removeItem,
         removePackage,
         clearCart,
-        cartPackageCount,
-        cartItemCount,
+        isHydrating,
       }}>
       {children}
     </CartContext>

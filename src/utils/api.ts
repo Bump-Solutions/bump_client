@@ -1,3 +1,5 @@
+import { isForInitializer } from "typescript";
+
 export const API = {
   // BASE_URL: "http://localhost:8100",
   // WS_BASE_URL: "ws://localhost:8100/ws",
@@ -119,6 +121,10 @@ export const API = {
     LIST_ORDERS: (size: number, page: number) =>
       `/api/v1/order/list_orders?page_size=${size}&page=${page}`,
     GET_ORDER: (orderId: number) => `/api/v1/order/get_order/${orderId}`,
+    CREATE_ORDER: "/api/v1/order/create_order",
+    CONFIRM_ORDER: (orderId: number) =>
+      `/api/v1/order/confirm_order/${orderId}`,
+    CANCEL_ORDER: (orderId: number) => `/api/v1/order/cancel_order/${orderId}`,
   },
 
   REPORT: {

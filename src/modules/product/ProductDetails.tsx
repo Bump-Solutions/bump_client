@@ -1,13 +1,14 @@
+import { ROUTES } from "../../routes/routes";
 import { useProduct } from "../../hooks/product/useProduct";
 import { useFacetedSearch } from "../../hooks/product/useFacetedSearch";
 import { Link } from "react-router";
+import { clampDiscount } from "../../utils/pricing";
 
 import Badges from "../../components/Badges";
 import FacetedSearch from "./FacetedSearch";
 import Stepper from "../../components/Stepper";
 import PriceTag from "./PriceTag";
 import ProductActions from "./ProductActions";
-import { ROUTES } from "../../routes/routes";
 
 /*
 const BADGES: BadgeCollection = {
@@ -46,7 +47,9 @@ const ProductDetails = () => {
     product.product.colorWay,
   ].join(" ");
 
-  const discountValue = (product.badges.discount?.value as number) || null;
+  const discountValue = clampDiscount(
+    product.badges.discount?.value as number | undefined
+  );
 
   return (
     <article className='product__details'>
@@ -55,7 +58,7 @@ const ProductDetails = () => {
       <h1 className='mb-0_5'>{LABEL}</h1>
       {product.description && (
         <p
-          className='fc-light ta-justify fs-16'
+          className='fc-gray-700 ta-justify fs-16'
           style={{ whiteSpace: "pre-line" }}>
           {product.description}
         </p>
@@ -69,7 +72,7 @@ const ProductDetails = () => {
             <h4>
               Darabszám{" "}
               {facets?.filteredCount > 0 && (
-                <span className='fc-light'>
+                <span className='fc-gray-600'>
                   - max {facets.filteredCount} db
                 </span>
               )}

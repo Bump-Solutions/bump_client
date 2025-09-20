@@ -99,7 +99,7 @@ const ModelChips = () => {
           *
         </span>
       </label>
-      <p className='fs-14 fc-light'>
+      <p className='fs-14 fc-gray-600'>
         {selectedBrand
           ? "Válassz az alábbiak közül"
           : "Először válassz márkát!"}

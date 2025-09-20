@@ -47,7 +47,7 @@ const InboxHeader = ({
             <input
               autoFocus
               className='form-control'
-              placeholder='Keresés az üzenetek között ...'
+              placeholder='Keresés az üzenetek között...'
               onChange={onSearch}
               value={searchKey}
               ref={searchRef}

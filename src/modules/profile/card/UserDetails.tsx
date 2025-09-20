@@ -11,9 +11,9 @@ const UserDetails = () => {
   return (
     <div className='user__details__wrapper'>
       <div className='user__details'>
-        <p className='fc-medium fs-15'>CONTRIBUTOR</p>
+        <p className='fc-gray-700 fs-15'>CONTRIBUTOR</p>
 
-        <p className='fc-medium fs-15 my-1'>
+        <p className='fc-gray-700 fs-15 my-1'>
           <MapPin className='va-middle' /> Szentes, Magyarország
         </p>
       </div>

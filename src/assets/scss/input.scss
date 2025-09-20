@@ -1,5 +1,6 @@
-@import "variables";
-@import "mixins";
+@use "variables" as *;
+@use "palette" as *;
+@use "mixins" as *;
 
 .input {
   margin: 0.5rem 0;
@@ -698,6 +699,7 @@
       height: $fs-20;
       width: $fs-20;
       color: color(gray, 900);
+      flex-shrink: 0;
     }
 
     input {

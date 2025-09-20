@@ -32,7 +32,7 @@ html {
   font-family: "Nunito Sans", sans-serif;
   font-feature-settings: normal;
   font-variation-settings: normal;
-  line-height: 1.5;
+  line-height: 1.4;
   font-size: 1rem;
   letter-spacing: -0.008em;
   font-weight: 500;
@@ -214,6 +214,10 @@ form .field__wrapper .input {
   align-items: center !important;
 }
 
+.j-center {
+  justify-content: center !important;
+}
+
 .ta-right {
   text-align: right !important;
 }
@@ -234,24 +238,28 @@ form .field__wrapper .input {
   vertical-align: middle !important;
 }
 
-.fc-light {
-  color: #868e96 !important;
-}
-
-.fc-medium {
-  color: #495057 !important;
-}
-
-.fc-dark {
-  color: #212529 !important;
-}
-
 .fc-dark-500 {
   color: #989898 !important;
 }
 
 .fc-gray-400 {
   color: #ced4da !important;
+}
+
+.fc-gray-600 {
+  color: #868e96 !important;
+}
+
+.fc-gray-700 {
+  color: #495057 !important;
+}
+
+.fc-gray-800 {
+  color: #343a40 !important;
+}
+
+.fc-gray-900 {
+  color: #212529 !important;
 }
 
 .fc-red-200 {
@@ -302,6 +310,10 @@ form .field__wrapper .input {
   padding-inline: 0.5rem !important;
 }
 
+.px-5 {
+  padding-inline: 5rem !important;
+}
+
 .py-0_25 {
   padding-block: 0.25rem !important;
 }
@@ -330,12 +342,20 @@ form .field__wrapper .input {
   padding-block: 5rem !important;
 }
 
+.pt-0 {
+  padding-top: 0 !important;
+}
+
 .pt-0_5 {
   padding-top: 0.5rem !important;
 }
 
 .pt-1_75 {
   padding-top: 1.75rem !important;
+}
+
+.pt-3 {
+  padding-top: 3rem !important;
 }
 
 .pb-0_5 {

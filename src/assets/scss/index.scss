@@ -1,5 +1,6 @@
-@import "variables";
-@import "mixins";
+@use "variables" as *;
+@use "palette" as *;
+@use "mixins" as *;
 
 @font-face {
   font-family: "BiggerDisplay";
@@ -39,7 +40,7 @@ html {
   font-family: $font-primary;
   font-feature-settings: normal;
   font-variation-settings: normal;
-  line-height: 1.5;
+  line-height: 1.4;
   font-size: $fs-16; // 16px
   letter-spacing: -0.008em;
   font-weight: 500;
@@ -220,6 +221,10 @@ form {
   align-items: center !important;
 }
 
+.j-center {
+  justify-content: center !important;
+}
+
 .ta-right {
   text-align: right !important;
 }
@@ -240,24 +245,28 @@ form {
   vertical-align: middle !important;
 }
 
-.fc-light {
-  color: color(gray, 600) !important;
-}
-
-.fc-medium {
-  color: color(gray, 700) !important;
-}
-
-.fc-dark {
-  color: color(gray, 900) !important;
-}
-
 .fc-dark-500 {
   color: color(dark, 500) !important;
 }
 
 .fc-gray-400 {
   color: color(gray, 400) !important;
+}
+
+.fc-gray-600 {
+  color: color(gray, 600) !important;
+}
+
+.fc-gray-700 {
+  color: color(gray, 700) !important;
+}
+
+.fc-gray-800 {
+  color: color(gray, 800) !important;
+}
+
+.fc-gray-900 {
+  color: color(gray, 900) !important;
 }
 
 .fc-red-200 {
@@ -308,6 +317,10 @@ form {
   padding-inline: 0.5rem !important;
 }
 
+.px-5 {
+  padding-inline: 5rem !important;
+}
+
 .py-0_25 {
   padding-block: 0.25rem !important;
 }
@@ -336,12 +349,20 @@ form {
   padding-block: 5rem !important;
 }
 
+.pt-0 {
+  padding-top: 0 !important;
+}
+
 .pt-0_5 {
   padding-top: 0.5rem !important;
 }
 
 .pt-1_75 {
   padding-top: 1.75rem !important;
+}
+
+.pt-3 {
+  padding-top: 3rem !important;
 }
 
 .pb-0_5 {

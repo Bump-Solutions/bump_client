@@ -57,7 +57,7 @@ const Followings = () => {
               isFetchingNextPage={isFetchingNextPage}
             />
           ) : (
-            <p className='fc-light ta-center py-5'>Nincs találat.</p>
+            <p className='fc-gray-600 ta-center py-5'>Nincs találat.</p>
           )}
         </>
       )}

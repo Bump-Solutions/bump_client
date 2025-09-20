@@ -154,7 +154,7 @@ const SellForm = () => {
       <h1 className='modal__title mb-0_5 fs-22'>
         {steps[currentStepIndex].label}
       </h1>
-      <p className='modal__description fc-light fs-16'>
+      <p className='modal__description fc-gray-600 fs-16'>
         {steps[currentStepIndex].description}
       </p>
 
@@ -165,7 +165,7 @@ const SellForm = () => {
       </div>
 
       <div className='modal__actions'>
-        <span className='fs-16 fc-light truncate'>
+        <span className='fs-16 fc-gray-600 truncate'>
           {currentStepIndex + 1} / {steps.length}
         </span>
 

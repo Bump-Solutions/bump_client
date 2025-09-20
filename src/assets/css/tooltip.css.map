@@ -1,1 +1,1 @@
-{"version":3,"sources":["../scss/tooltip.scss","../scss/_variables.scss","tooltip.css"],"names":[],"mappings":"AAGA;EACE,mBAAA;EACA,cAAA;EACA,oBAAA;EACA,qBCmMkB;EDlMlB,yBAAA;EACA,oBCsNM;EDrNN,gBAAA;EACA,gBC+Jc;ED9Jd,mBAAA;AEFF","file":"tooltip.css"}
+{"version":3,"sources":["../scss/tooltip.scss","../scss/_palette.scss","../scss/_variables.scss","tooltip.css"],"names":[],"mappings":"AAIA;EACE,mBAAA;EACA,cCCe;EDAf,oBAAA;EACA,qBEqCkB;EFpClB,yBAAA;EACA,oBEwDM;EFvDN,gBAAA;EACA,gBECc;EFAd,mBAAA;AGHF","file":"tooltip.css"}

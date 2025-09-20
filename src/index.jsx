@@ -76,6 +76,7 @@ createRoot(document.getElementById("root")).render(
                   />,
                   document.body
                 )}
+
                 <Routes>
                   <Route path='/*' element={<App />} />
                 </Routes>

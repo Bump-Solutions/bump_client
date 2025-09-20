@@ -52,12 +52,6 @@ const ACTIONS = (auth: AuthModel): MenuAction[] => {
       route: ROUTES.PROFILE(auth?.user?.username!).SAVED,
       class: "show-sm-only",
     },
-    {
-      icon: <Settings />,
-      label: "Beállítások",
-      route: ROUTES.SETTINGS.ROOT,
-      class: "",
-    },
   ];
 };
 
@@ -106,7 +100,7 @@ const ProfileMenuActions = ({ toggleProfileMenu }: ProfileMenuActionsProps) => {
             </Link>
           </li>
           <li>
-            <div className='truncate fs-14 fc-light px-0_5'>
+            <div className='truncate fs-14 fc-gray-600 px-0_5'>
               {auth?.user?.email}
             </div>
           </li>
@@ -133,6 +127,17 @@ const ProfileMenuActions = ({ toggleProfileMenu }: ProfileMenuActionsProps) => {
               </Link>
             </li>
           ))}
+        </ul>
+
+        <ul className='action-list'>
+          <li className='action-list-item'>
+            <Link
+              to={ROUTES.SETTINGS.ROOT}
+              onClick={() => toggleProfileMenu(false)}>
+              <Settings />
+              <span>Beállítások</span>
+            </Link>
+          </li>
         </ul>
 
         <ul className='action-list no-border'>

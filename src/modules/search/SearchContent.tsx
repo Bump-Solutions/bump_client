@@ -32,8 +32,8 @@ const SearchContent = () => {
             onChange={(e) => setSearchKey(e.target.value)}
             placeholder={
               isMobile
-                ? `Böngéssz a ${ENUM.BRAND.NAME}on ...`
-                : `Böngéssz sneakerek, márkák, @felhasználók között ...`
+                ? `Böngéssz a ${ENUM.BRAND.WHERE}...`
+                : `Böngéssz sneakerek, márkák, @felhasználók között...`
             }
           />
 
