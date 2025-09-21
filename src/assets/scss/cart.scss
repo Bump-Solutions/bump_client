@@ -46,6 +46,7 @@
   }
 
   .cart__header {
+    position: relative;
     align-self: start;
     grid-area: header;
     display: flex;
@@ -55,7 +56,7 @@
     margin-bottom: 1rem;
     border-bottom: 1px solid color(gray, 300);
 
-    div:not(.search-box) {
+    > div:not([class]) {
       display: flex;
       align-items: center;
       justify-content: start;
@@ -139,6 +140,112 @@
 
       &:hover {
         background-color: color(gray, 300);
+      }
+    }
+
+    .cart__menu-actions {
+      position: absolute;
+      top: 3.5rem;
+      right: 0;
+      width: 10rem;
+      max-height: 25vh;
+      overflow-y: auto;
+      background-color: $clr-white;
+      border-radius: $border-radius-1;
+      box-shadow: $box-shadow;
+      z-index: 110;
+      pointer-events: all !important;
+
+      .action-list {
+        padding: 0.5rem;
+        display: flex;
+        align-items: stretch;
+        flex-direction: column;
+        border-bottom: 1px solid color(gray, 300);
+
+        .action-list-item {
+          padding: 0.5rem 0.5rem;
+          font-size: $fs-14;
+          color: color(gray, 900);
+          cursor: pointer;
+          height: 2rem;
+          border-radius: 12px;
+          transition: background-color 0.2s $animation-cubic,
+            color 0.2s $animation-cubic;
+          display: flex;
+          align-items: center;
+          user-select: none;
+
+          &.show-sm-only {
+            display: none;
+          }
+
+          a,
+          div {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+
+            svg {
+              height: $fs-16;
+              width: $fs-16;
+            }
+          }
+
+          &:hover {
+            background-color: color(gray, 100);
+          }
+
+          &.red {
+            &:hover {
+              a,
+              div {
+                color: color(red, 500);
+              }
+
+              background-color: color(red, 50);
+            }
+          }
+
+          &.blue {
+            &:hover {
+              a,
+              div {
+                color: color(blue, 500);
+              }
+
+              background-color: color(blue, 50);
+            }
+          }
+
+          &.icon-end {
+            a,
+            div {
+              flex-direction: row-reverse;
+              justify-content: space-between;
+            }
+          }
+
+          &.btn {
+            background-color: color(gray, 900);
+
+            a {
+              color: color(gray, 100);
+              font-size: $fs-15;
+              justify-content: center;
+
+              svg {
+                height: $fs-16;
+                width: $fs-16;
+              }
+            }
+
+            &:hover {
+              background-color: color(gray, 800);
+            }
+          }
+        }
       }
     }
   }
