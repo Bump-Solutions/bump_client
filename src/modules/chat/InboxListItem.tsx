@@ -10,7 +10,7 @@ import { useToggle } from "../../hooks/useToggle";
 import Image from "../../components/Image";
 import InboxContextMenu from "./InboxContextMenu";
 
-import { Ellipsis } from "lucide-react";
+import { EllipsisVertical } from "lucide-react";
 
 interface InboxListItemProps {
   group: ChatGroupModel;
@@ -99,7 +99,7 @@ const InboxListItem = ({ group }: InboxListItemProps) => {
             e.stopPropagation();
             toggleContextMenu(true);
           }}>
-          <Ellipsis strokeWidth={3} />
+          <EllipsisVertical strokeWidth={3} />
         </span>
       </NavLink>
     </li>

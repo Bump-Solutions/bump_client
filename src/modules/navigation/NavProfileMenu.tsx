@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { Link, NavLink, useNavigate } from "react-router";
 import { useAuth } from "../../hooks/auth/useAuth";
 import { toast } from "sonner";
-import { useCart } from "../../hooks/trade/useCart";
+import { useCart } from "../../hooks/cart/useCart";
 
 import Tooltip from "../../components/Tooltip";
 import Image from "../../components/Image";

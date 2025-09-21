@@ -9,6 +9,8 @@ import {
   CartItemModel,
   CartModel,
   CartPackageModel,
+  CartProductModel,
+  CatalogProductRefModel,
   MoneyModel,
   SellerModel,
 } from "../models/cartModel";
@@ -58,19 +60,22 @@ function computeSummary(
   packages: Record<number, CartPackageModel>,
   currency: MoneyModel["currency"] = "HUF"
 ): CartModel["summary"] {
-  const packagesCount = Object.keys(packages).length;
   let itemsCount = 0;
+  let packagesCount = 0;
 
   const grossParts: number[] = [];
   const effectiveParts: number[] = [];
 
-  Object.values(packages).forEach((pkg) => {
-    itemsCount += pkg.items.length;
-    for (const item of pkg.items) {
-      grossParts.push(item.price.amount);
-      effectiveParts.push(effectiveItemAmount(item));
+  for (const pkg of Object.values(packages)) {
+    packagesCount++;
+    for (const prod of Object.values(pkg.products)) {
+      for (const item of prod.items) {
+        itemsCount++;
+        grossParts.push(item.price.amount);
+        effectiveParts.push(effectiveItemAmount(item));
+      }
     }
-  });
+  }
 
   const grossSubtotal = sumMoney(grossParts, currency);
   const indicativeSubtotal = sumMoney(effectiveParts, currency);
@@ -97,11 +102,19 @@ function computeSummary(
 type CartAction =
   | {
       type: "ADD_ITEM";
-      payload: { seller: SellerModel; item: CartItemModel };
+      payload: {
+        seller: SellerModel;
+        productRef: CatalogProductRefModel;
+        item: CartItemModel;
+      };
     }
   | {
       type: "REMOVE_ITEM";
-      payload: { sellerId: number; itemId: number };
+      payload: { sellerId: number; productId: number; itemId: number };
+    }
+  | {
+      type: "REMOVE_PRODUCT";
+      payload: { sellerId: number; productId: number };
     }
   | {
       type: "REMOVE_PACKAGE";
@@ -141,19 +154,14 @@ const cartReducer = (state: CartModel, action: CartAction): CartModel => {
       return withSummary({
         ...emptyCart(state.summary.indicativeSubtotal.currency),
         ...safe,
-        version: 1,
+        version: 2,
       });
     }
 
     case "ADD_ITEM": {
-      const { seller, item } = action.payload;
+      const { seller, productRef, item } = action.payload;
       const sellerId = seller.id;
-      const prevPkg = state.packages[sellerId];
-
-      // már benne van?
-      if (prevPkg?.items.find((it) => it.id === item.id)) {
-        return state; // nincs változás
-      }
+      const productId = productRef.id;
 
       // snapshotolt kedvezményes ár beállítása, ha hiányzik
       let nextItem = item;
@@ -174,21 +182,53 @@ const cartReducer = (state: CartModel, action: CartAction): CartModel => {
       const nextPackages: Record<number, CartPackageModel> = {
         ...state.packages,
       };
+      const prevPkg = state.packages[sellerId];
 
-      if (prevPkg) {
+      if (!prevPkg) {
         nextPackages[sellerId] = {
-          ...prevPkg,
-          items: [...prevPkg.items, nextItem],
+          seller,
+          products: {
+            [productId]: {
+              product: productRef,
+              items: [nextItem],
+              lastUpdatedAt: new Date().toISOString(),
+            },
+          },
           lastUpdatedAt: new Date().toISOString(),
         };
-      } else {
-        const newPackage: CartPackageModel = {
-          seller,
+
+        return withSummary({
+          ...state,
+          packages: nextPackages,
+        });
+      }
+
+      const products = { ...prevPkg.products };
+      const prevProd = prevPkg.products[productId];
+
+      if (!prevProd) {
+        products[productId] = {
+          product: productRef,
           items: [nextItem],
           lastUpdatedAt: new Date().toISOString(),
         };
-        nextPackages[sellerId] = newPackage;
+      } else {
+        // duplikát ellenőrzés az adott terméken belül
+        if (prevProd.items.find((it) => it.id === nextItem.id)) {
+          return state; // már benne van
+        }
+        products[productId] = {
+          ...prevProd,
+          items: [...prevProd.items, nextItem],
+          lastUpdatedAt: new Date().toISOString(),
+        };
       }
+
+      nextPackages[sellerId] = {
+        ...prevPkg,
+        products,
+        lastUpdatedAt: new Date().toISOString(),
+      };
 
       return withSummary({
         ...state,
@@ -197,21 +237,69 @@ const cartReducer = (state: CartModel, action: CartAction): CartModel => {
     }
 
     case "REMOVE_ITEM": {
-      const { sellerId, itemId } = action.payload;
+      const { sellerId, productId, itemId } = action.payload;
       const prevPkg = state.packages[sellerId];
       if (!prevPkg) return state; // nincs ilyen csomag
 
-      const remaining = prevPkg.items.filter((item) => item.id !== itemId);
+      const prevProd = prevPkg.products[productId];
+      if (!prevProd) return state;
+
+      const remaining = prevProd.items.filter((it) => it.id !== itemId);
 
       const nextPackages: Record<number, CartPackageModel> = {
         ...state.packages,
       };
+      const nextProducts: Record<number, CartProductModel> = {
+        ...prevPkg.products,
+      };
+
       if (remaining.length === 0) {
+        delete nextProducts[productId]; // nincs több item ennél a terméknél → töröljük a productot
+      } else {
+        nextProducts[productId] = {
+          ...prevProd,
+          items: remaining,
+          lastUpdatedAt: new Date().toISOString(),
+        };
+      }
+
+      if (Object.keys(nextProducts).length === 0) {
+        // nincs több product ennél az eladónál → töröljük a package-et
         delete nextPackages[sellerId];
       } else {
         nextPackages[sellerId] = {
           ...prevPkg,
-          items: remaining,
+          products: nextProducts,
+          lastUpdatedAt: new Date().toISOString(),
+        };
+      }
+
+      return withSummary({
+        ...state,
+        packages: nextPackages,
+      });
+    }
+
+    case "REMOVE_PRODUCT": {
+      const { sellerId, productId } = action.payload;
+      const prevPkg = state.packages[sellerId];
+      if (!prevPkg) return state; // nincs ilyen csomag
+
+      const nextPackages: Record<number, CartPackageModel> = {
+        ...state.packages,
+      };
+      const nextProducts: Record<number, CartProductModel> = {
+        ...prevPkg.products,
+      };
+      delete nextProducts[productId];
+
+      if (Object.keys(nextProducts).length === 0) {
+        // nincs több product ennél az eladónál → töröljük a package-et
+        delete nextPackages[sellerId];
+      } else {
+        nextPackages[sellerId] = {
+          ...prevPkg,
+          products: nextProducts,
           lastUpdatedAt: new Date().toISOString(),
         };
       }
@@ -248,14 +336,28 @@ const cartReducer = (state: CartModel, action: CartAction): CartModel => {
       const now = action.payload.now ?? Date.now();
       const nextPackages: Record<number, CartPackageModel> = {};
 
-      for (const [sellerId, pkg] of Object.entries(state.packages)) {
-        const items = pkg.items.filter((item) => {
-          const t = Date.parse(item.addedAt);
-          return !Number.isNaN(t) && now - t <= TTL;
-        });
+      for (const [sid, pkg] of Object.entries(state.packages)) {
+        const nextProducts: Record<number, CartProductModel> = {};
+        for (const [pid, prod] of Object.entries(pkg.products)) {
+          const freshItems = prod.items.filter((it) => {
+            const t = Date.parse(it.addedAt);
+            return !Number.isNaN(t) && now - t <= TTL;
+          });
+          if (freshItems.length) {
+            nextProducts[+pid] = {
+              ...prod,
+              items: freshItems,
+              lastUpdatedAt: new Date().toISOString(),
+            };
+          }
+        }
 
-        if (items.length) {
-          nextPackages[Number(sellerId)] = { ...pkg, items };
+        if (Object.keys(nextProducts).length) {
+          nextPackages[+sid] = {
+            ...pkg,
+            products: nextProducts,
+            lastUpdatedAt: new Date().toISOString(),
+          };
         }
       }
 
@@ -276,8 +378,13 @@ const cartReducer = (state: CartModel, action: CartAction): CartModel => {
 interface CartContextType {
   cart: CartModel;
 
-  addItem: (seller: SellerModel, item: CartItemModel) => void;
-  removeItem: (sellerId: number, itemId: number) => void;
+  addItem: (
+    seller: SellerModel,
+    productRef: CatalogProductRefModel,
+    item: CartItemModel
+  ) => void;
+  removeItem: (sellerId: number, productId: number, itemId: number) => void;
+  removeProduct: (sellerId: number, productId: number) => void;
   removePackage: (sellerId: number) => void;
   clearCart: () => void;
 
@@ -304,16 +411,16 @@ const CartProvider = ({ children }: CartProviderProps) => {
 
   // PURGE: lejárt tételek eltávolítása
   useEffect(() => {
-    const handler = () => dispatch({ type: "PURGE_EXPIRED", payload: {} });
-    const onVisChange = () => {
-      if (document.visibilityState === "visible") handler();
+    const run = () => dispatch({ type: "PURGE_EXPIRED", payload: {} });
+    const onVis = () => {
+      if (document.visibilityState === "visible") run();
     };
 
-    document.addEventListener("visibilitychange", onVisChange);
-    handler(); // induláskor is
+    document.addEventListener("visibilitychange", onVis);
+    run(); // induláskor is
 
     return () => {
-      document.removeEventListener("visibilitychange", onVisChange);
+      document.removeEventListener("visibilitychange", onVis);
     };
   }, []);
 
@@ -344,11 +451,17 @@ const CartProvider = ({ children }: CartProviderProps) => {
   }, [cart, userId, key]);
 
   // public API
-  const addItem = (seller: SellerModel, item: CartItemModel) =>
-    dispatch({ type: "ADD_ITEM", payload: { seller, item } });
+  const addItem = (
+    seller: SellerModel,
+    productRef: CatalogProductRefModel,
+    item: CartItemModel
+  ) => dispatch({ type: "ADD_ITEM", payload: { seller, productRef, item } });
 
-  const removeItem = (sellerId: number, itemId: number) =>
-    dispatch({ type: "REMOVE_ITEM", payload: { sellerId, itemId } });
+  const removeItem = (sellerId: number, productId: number, itemId: number) =>
+    dispatch({ type: "REMOVE_ITEM", payload: { sellerId, productId, itemId } });
+
+  const removeProduct = (sellerId: number, productId: number) =>
+    dispatch({ type: "REMOVE_PRODUCT", payload: { sellerId, productId } });
 
   const removePackage = (sellerId: number) =>
     dispatch({ type: "REMOVE_PACKAGE", payload: { sellerId } });
@@ -366,6 +479,7 @@ const CartProvider = ({ children }: CartProviderProps) => {
         cart,
         addItem,
         removeItem,
+        removeProduct,
         removePackage,
         clearCart,
         isHydrating,

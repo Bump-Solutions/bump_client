@@ -21,3 +21,10 @@ export const ORDER_STATE_LABELS: Record<number, string> = {
   0: "Elfogadásra vár", // ha letrehozom a rendelest, az eladonak meg kell erositenie azt
   1: "",
 };
+
+export const CURRENCY_LABELS: Record<string, string> = {
+  HUF: "Ft",
+  EUR: "€",
+  USD: "$",
+  // ...
+};

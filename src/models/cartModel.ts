@@ -37,13 +37,11 @@ export type CartItemState =
 /** 1–100 közötti egész százalék (pl. 10 = -10%) */
 export type DiscountPercent = number; // runtime-ban validáld (1..100)
 
+// --- Line item (egy konkrét termék-ITEM, nincs quantity) ---------------------
 /** Egy KOSÁR-tétel = egy konkrét termék-item (nincs quantity) */
 export interface CartItemModel {
   /** A PRODUCT ITEM azonosítója (nem a katalógus terméké) */
   id: number;
-
-  /** A szülő termék minimális metája (kép, brand/model, stb.) */
-  product: CatalogProductRefModel;
 
   /** Item-specifikus attribútumok */
   size: string; // pl. "42 EU"
@@ -63,10 +61,17 @@ export interface CartItemModel {
   addedAt: string; // ISO
 }
 
+// --- Termékszint a kosárban --------------------------------------------------
+export interface CartProductModel {
+  product: CatalogProductRefModel;
+  items: CartItemModel[]; // snapshot (egy helyen!)
+  lastUpdatedAt?: string; // az adott termékhez tartozó tételek
+}
+
 /** Egy eladó „csomagja”: az adott eladó összes tétele a kosárban */
 export interface CartPackageModel {
   seller: SellerModel;
-  items: CartItemModel[]; // renderkor groupBy(product.id)
+  products: Record<number, CartProductModel>;
   lastUpdatedAt?: string; // ISO idő (cache/tracking)
 }
 
@@ -94,5 +99,5 @@ export interface CartSummaryModel {
 export type CartModel = {
   packages: Record<number, CartPackageModel>;
   summary: CartSummaryModel;
-  version?: 1;
+  version?: 2;
 };
