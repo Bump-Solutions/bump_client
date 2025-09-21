@@ -1,5 +1,6 @@
-import localforage from "localforage";
 import { CartModel, MoneyModel } from "../models/cartModel";
+import localforage from "localforage";
+import cuid from "cuid";
 
 // -- localForage init (IndexedDB wrapper) ------------------------------------
 localforage.config({
@@ -11,7 +12,7 @@ localforage.config({
 
 // -- Helpers -----------------------------------------------------------------
 export const userCartKey = (userId?: number | string | null): string =>
-  `CART_${userId ?? "ANON"}`;
+  `CART_${userId ?? cuid()}`; // vendég: generált azonosító
 
 export const emptyCart = (
   currency: MoneyModel["currency"] = "HUF"
@@ -20,10 +21,12 @@ export const emptyCart = (
   summary: {
     packagesCount: 0,
     itemsCount: 0,
+    grossSubtotal: { amount: 0, currency },
+    discountsTotal: { amount: 0, currency },
     indicativeSubtotal: { amount: 0, currency },
     computedAt: new Date().toISOString(),
   },
-  version: 1,
+  version: 2,
 });
 
 // -- CRUD --------------------------------------------------------------------

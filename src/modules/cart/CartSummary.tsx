@@ -1,5 +1,8 @@
-import { useCart } from "../../hooks/trade/useCart";
-
+import { CURRENCY_LABELS } from "../../utils/mappers";
+import { formatMinorHU } from "../../utils/pricing";
+import { useCart } from "../../hooks/cart/useCart";
+import { Link } from "react-router";
+import { ROUTES } from "../../routes/routes";
 interface CartSummaryNote {
   type: "info" | "success" | "warning" | "error";
   title: string;
@@ -23,17 +26,66 @@ const NOTES: CartSummaryNote[] = [
 
 const CartSummary = () => {
   const { cart } = useCart();
+  const { grossSubtotal, discountsTotal, indicativeSubtotal, itemsCount } =
+    cart.summary;
 
   return (
     <article className='cart__summary'>
       <h1>Összegzés</h1>
 
       {NOTES.map((note, index) => (
-        <div key={index} className={`note ${note.type}`}>
+        <blockquote key={index} className={`note ${note.type}`}>
           <strong>{note.title}</strong>
           <p>{note.message}</p>
-        </div>
+        </blockquote>
       ))}
+
+      <div className='rows'>
+        <div className='row'>
+          <span>{itemsCount} tétel</span>
+        </div>
+
+        <div className='row'>
+          <span>Részösszeg (kedvezmény nélkül)</span>
+          <span>
+            {formatMinorHU(grossSubtotal.amount)}{" "}
+            {CURRENCY_LABELS[grossSubtotal.currency]}
+          </span>
+        </div>
+
+        <div className='row discount'>
+          <span>Kedvezmények</span>
+          <span>
+            − {formatMinorHU(discountsTotal.amount)}{" "}
+            {CURRENCY_LABELS[discountsTotal.currency]}
+          </span>
+        </div>
+
+        <div className='row'>
+          <span>Szállítási költség</span>
+          <span>egyeztetendő</span>
+        </div>
+
+        <hr className='divider soft' />
+
+        <div className='row total'>
+          <span>
+            Tájékoztató végösszeg <br />
+          </span>
+          <span>
+            {formatMinorHU(indicativeSubtotal.amount)}{" "}
+            {CURRENCY_LABELS[indicativeSubtotal.currency]}
+          </span>
+        </div>
+
+        <div className='row small'>
+          <span>(bruttó)</span>
+        </div>
+      </div>
+
+      <Link to={ROUTES.HOME} className='link mx-auto'>
+        Vásárlás folytatása
+      </Link>
     </article>
   );
 };

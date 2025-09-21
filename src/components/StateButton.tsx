@@ -22,7 +22,7 @@ const IconOverlay = ({ Icon, visible, spin }: IconOverlayProps) => {
             y: 0,
             opacity: 1,
           }}
-          transition={{ duration: 0.25, ease: [0.5, 0.46, 0.45, 0.94] }}
+          transition={{ duration: 0.2, ease: [0.5, 0.46, 0.45, 0.94] }}
           exit={{
             y: 12,
             opacity: 0,

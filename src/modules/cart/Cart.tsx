@@ -2,8 +2,9 @@ import "../../assets/css/cart.css";
 import { Link } from "react-router";
 import { ROUTES } from "../../routes/routes";
 import { useTitle } from "react-use";
-import { useCart } from "../../hooks/trade/useCart";
+import { useCart } from "../../hooks/cart/useCart";
 import { ENUM } from "../../utils/enum";
+import { useState } from "react";
 
 import CartHeader from "./CartHeader";
 import CartContent from "./CartContent";
@@ -17,18 +18,20 @@ const Cart = () => {
 
   const { cart } = useCart();
 
+  const [searchKey, setSearchKey] = useState<string>("");
+
   return cart.summary.itemsCount > 0 ? (
     <section className='cart'>
       <Back to={ROUTES.HOME} text='Vásárlás folytatása' className='link mb-1' />
 
-      <CartHeader />
-      <CartContent />
+      <CartHeader searchKey={searchKey} setSearchKey={setSearchKey} />
+      <CartContent searchKey={searchKey} />
       <CartSummary />
     </section>
   ) : (
     <section className='cart empty'>
       <Back text='Vissza' className='link mb-1' />
-      <CartHeader />
+      <CartHeader searchKey={searchKey} setSearchKey={setSearchKey} />
 
       <div className='fc-gray-600 ta-center pt-3 px-5 pb-5 d-flex flex-column a-center gap-1'>
         <div className='ta-center'>

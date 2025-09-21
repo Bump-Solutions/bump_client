@@ -13,7 +13,7 @@ import { useSaveProduct } from "../../hooks/product/useSaveProduct";
 import { useUnsaveProduct } from "../../hooks/product/useUnsaveProduct";
 import { useQueryClient } from "@tanstack/react-query";
 import { MouseEvent } from "react";
-import { useCart } from "../../hooks/trade/useCart";
+import { useCart } from "../../hooks/cart/useCart";
 import { Link } from "react-router";
 import { toast } from "sonner";
 
@@ -187,6 +187,17 @@ const ProductActions = ({
       product.product.colorWay,
     ].join(" ");
 
+    const productSnapshot: CatalogProductRefModel = {
+      id: product.id,
+      title: LABEL,
+      brand: product.product.brand,
+      model: product.product.model,
+      colorWay: product.product.colorWay,
+      category: product.product.category,
+      colors: product.product.colors,
+      image: product.images[0],
+    };
+
     const maxToAdd = Math.min(quantity, filtered.length);
 
     filtered.slice(0, maxToAdd).forEach((item) => {
@@ -195,16 +206,6 @@ const ProductActions = ({
 
       const cartItem: CartItemModel = {
         id: item.id,
-        product: {
-          id: product.id,
-          title: LABEL,
-          brand: product.product.brand,
-          model: product.product.model,
-          colorWay: product.product.colorWay,
-          category: product.product.category,
-          colors: product.product.colors,
-          image: product.images[0],
-        } as CatalogProductRefModel, // minimal snapshot kell csak
 
         size: item.size,
         gender: item.gender,
@@ -227,7 +228,7 @@ const ProductActions = ({
         addedAt: new Date().toISOString(),
       };
 
-      addItem(seller, cartItem);
+      addItem(seller, productSnapshot, cartItem);
     });
 
     reset();
