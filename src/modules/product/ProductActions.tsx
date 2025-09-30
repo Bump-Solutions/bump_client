@@ -260,8 +260,11 @@ const ProductActions = ({
       success: (
         <span>
           A rendelés létrehozva. Rendelésed nyomon követheted{" "}
-          <Link to={ROUTES.ORDERS} target='_blank'>
-            itt
+          <Link
+            to={ROUTES.ORDERS}
+            target='_blank'
+            className='link fc-green-600 underline fw-700'>
+            itt.
           </Link>
         </span>
       ),

@@ -56,6 +56,12 @@ a {
   color: #343a40;
 }
 
+mark {
+  color: inherit;
+  text-decoration: inherit;
+  font-weight: inherit;
+}
+
 .fallback {
   position: relative;
   height: 100vh;

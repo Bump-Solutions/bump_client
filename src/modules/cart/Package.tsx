@@ -2,9 +2,10 @@ import { ROUTES } from "../../routes/routes";
 import { Link } from "react-router";
 import { AnimatePresence, motion } from "framer-motion";
 import { CartPackageModel, CartProductModel } from "../../models/cartModel";
-import { highlightTextParts } from "../../utils/highlight";
+import { HighlightIndex } from "../../utils/highlight";
 
 import Image from "../../components/Image";
+import Highlighted from "../../components/Highlighted";
 import PackageProduct from "./PackageProduct";
 
 import { ChevronDown, ChevronUp } from "lucide-react";
@@ -14,7 +15,7 @@ interface PackageProps {
   expanded: boolean;
   onToggle: () => void;
   subtotal: number;
-  highlightIndex?: Record<number, Record<string, [number, number][]>>; // itemId -> FieldMatches
+  highlightIndex?: HighlightIndex;
 }
 
 const Package = ({
@@ -28,12 +29,8 @@ const Package = ({
   const btnId = `pkg-btn-${sid}`;
   const panelId = `pkg-panel-${sid}`;
 
-  const firstProduct = Object.values(pkg.products)[0];
-  const firstItem = firstProduct?.items[0];
-
-  const sellerRanges = firstItem
-    ? highlightIndex?.[firstItem.id]?.["sellerUsername"]
-    : undefined;
+  const sellerRanges =
+    highlightIndex?.perSeller?.[pkg.seller.id]?.sellerUsername;
 
   return (
     <li className={`pkg ${expanded ? "open" : ""}`}>
@@ -57,7 +54,7 @@ const Package = ({
                 className='link black'
                 target='_blank'
                 onClick={(e) => e.stopPropagation()}>
-                {highlightTextParts(pkg.seller.username, sellerRanges)}
+                <Highlighted text={pkg.seller.username} ranges={sellerRanges} />
               </Link>
               <span className='small'>
                 {Object.keys(pkg.products).length} termék,{" "}
