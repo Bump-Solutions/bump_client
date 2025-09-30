@@ -65,6 +65,12 @@ a {
   color: $clr-font;
 }
 
+mark {
+  color: inherit;
+  text-decoration: inherit;
+  font-weight: inherit;
+}
+
 .fallback {
   position: relative;
   height: 100vh;

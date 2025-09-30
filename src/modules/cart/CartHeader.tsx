@@ -54,15 +54,17 @@ const CartHeader = ({ searchKey, setSearchKey }: CartHeaderProps) => {
             ref={searchRef}
           />
         </div>
-        <span
-          className='cart-actions'
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            toggleContextMenu(true);
-          }}>
-          <EllipsisVertical strokeWidth={3} />
-        </span>
+        {cart.summary.itemsCount > 0 && (
+          <span
+            className='cart-actions'
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              toggleContextMenu(true);
+            }}>
+            <EllipsisVertical strokeWidth={3} />
+          </span>
+        )}
       </div>
 
       {isContextMenuOpen && (

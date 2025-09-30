@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { HighlightIndex } from "../../utils/highlight";
 import { CartItemModel, CartPackageModel } from "../../models/cartModel";
 
 import Package from "./Package";
@@ -8,7 +9,7 @@ import { ChevronsDown, ChevronsUp } from "lucide-react";
 
 interface PackageListProps {
   filteredPackages: Record<number, CartPackageModel>;
-  highlightIndex?: Record<number, Record<string, [number, number][]>>; // itemId -> FieldMatches
+  highlightIndex?: HighlightIndex;
 }
 
 const effective = (it: CartItemModel) =>

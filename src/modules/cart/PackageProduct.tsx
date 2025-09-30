@@ -1,12 +1,18 @@
+import Image from "../../components/Image";
 import { CartProductModel } from "../../models/cartModel";
+import { HighlightIndex } from "../../utils/highlight";
 
 interface PackageProductProps {
   product: CartProductModel;
-  highlightIndex?: Record<number, Record<string, [number, number][]>>; // itemId -> FieldMatches
+  highlightIndex?: HighlightIndex;
 }
 
 const PackageProduct = ({ product, highlightIndex }: PackageProductProps) => {
-  return <section key={product.product.id}></section>;
+  return (
+    <section className='pkg__product'>
+      <Image src={product.product.image} alt={product.product.title} />
+    </section>
+  );
 };
 
 export default PackageProduct;

@@ -3,6 +3,8 @@ import { useCart } from "./useCart";
 import { CartPackageModel, CartProductModel } from "../../models/cartModel";
 import Fuse, { IFuseOptions } from "fuse.js";
 
+import { Range, FieldMatches, HighlightIndex } from "../../utils/highlight";
+
 type Doc = {
   sellerId: number;
   sellerUsername: string;
@@ -15,11 +17,7 @@ type Doc = {
   itemId: number;
 };
 
-type Range = [number, number];
-type FieldMatches = Record<string, Range[]>; // pl. { productTitle: [[0,2],[10,14]], brand: [[0,1]] }
-type HighlightIndex = Record<number, FieldMatches>; // itemId -> FieldMatches
-
-const options: IFuseOptions<Doc> = {
+const fuseOptions: IFuseOptions<Doc> = {
   includeScore: true,
   includeMatches: true, // UI highlight
   threshold: 0.3, // 0.0=szigorú .. 1.0=megengedő; 0.2–0.35 általában jó
@@ -70,11 +68,12 @@ export function useCartSearch(query: string) {
     return out;
   }, [cart.packages]);
 
+  // 2) Fuse index
   const fuse = useMemo(() => {
-    return new Fuse(docs, options);
+    return new Fuse(docs, fuseOptions);
   }, [docs]);
 
-  // 2) keresés + highlightIndex építés
+  // 3) Keresés + highlight index 3 szinten (seller/product/item)
   const { filteredPackages, highlightIndex } = useMemo(() => {
     const q = query.trim();
     const hits = q
@@ -84,35 +83,72 @@ export function useCartSearch(query: string) {
     // itemId -> field -> ranges
     const hi: HighlightIndex = {};
 
-    // sellerId -> productId -> itemId set
-    const map = new Map<number, Map<number, Set<number>>>();
+    // Eredmény-szűréshez: sellerId -> productId -> itemId set
+    const allowMap = new Map<number, Map<number, Set<number>>>();
+
+    // Highlight index
+    const perSeller: Record<number, FieldMatches> = {};
+    const perProduct: Record<number, FieldMatches> = {};
+    const perItem: Record<number, FieldMatches> = {};
+
     for (const r of hits) {
       const d = r.item;
-      if (!map.has(d.sellerId)) map.set(d.sellerId, new Map());
-      const perSeller = map.get(d.sellerId)!;
-      if (!perSeller.has(d.productId)) perSeller.set(d.productId, new Set());
-      perSeller.get(d.productId)!.add(d.itemId);
 
-      // highlight gyűjtése
+      // --- engedély mátrix a visszaépítéshez
+      if (!allowMap.has(d.sellerId)) allowMap.set(d.sellerId, new Map());
+      const perSellerAllow = allowMap.get(d.sellerId)!;
+      if (!perSellerAllow.has(d.productId))
+        perSellerAllow.set(d.productId, new Set());
+      perSellerAllow.get(d.productId)!.add(d.itemId);
+
+      // --- highlight tartományok
       if (r.matches && r.matches.length) {
         for (const m of r.matches) {
-          // m.key pl. "productTitle", m.indices pl. [[0,2],[10,14]]
-          if (!hi[d.itemId]) hi[d.itemId] = {};
-          const arr = (hi[d.itemId][m.key] ??= []);
-          // összeolvasztás opcionális, itt csak betoljuk
-          for (const pair of m.indices) arr.push(pair as Range);
+          const key = m.key as keyof Doc; // pl. "productTitle"
+          const indices = (m.indices || []) as Range[];
+
+          switch (key) {
+            case "sellerUsername": {
+              const f = (perSeller[d.sellerId] ??= {});
+              const arr = (f.sellerUsername ??= []);
+              indices.forEach((rg) => arr.push(rg));
+              break;
+            }
+
+            case "productTitle":
+            case "brand":
+            case "model":
+            case "colorWay": {
+              const f = (perProduct[d.productId] ??= {});
+              const arr = (f[key] ??= []);
+              indices.forEach((rg) => arr.push(rg));
+              break;
+            }
+
+            case "size": {
+              const f = (perItem[d.itemId] ??= {});
+              const arr = (f.size ??= []);
+              indices.forEach((rg) => arr.push(rg));
+              break;
+            }
+
+            default:
+              break;
+          }
         }
       }
     }
 
-    // visszaépítés: seller->product->filtered items
+    // 4) Visszaépítés a szűrt struktúrára
     const next: Record<number, CartPackageModel> = {};
+
     for (const [sidStr, pkg] of Object.entries(cart.packages)) {
       const sid = Number(sidStr);
-      const allowProducts = map.get(sid);
+      const allowProducts = allowMap.get(sid);
       if (!allowProducts) continue;
 
       const nextProducts: Record<number, CartProductModel> = {};
+
       for (const [pidStr, prod] of Object.entries(pkg.products)) {
         const pid = Number(pidStr);
         const allowItems = allowProducts.get(pid);
@@ -122,13 +158,20 @@ export function useCartSearch(query: string) {
         if (items.length) nextProducts[pid] = { ...prod, items };
       }
 
-      if (Object.keys(nextProducts).length)
+      if (Object.keys(nextProducts).length) {
         next[sid] = { ...pkg, products: nextProducts };
+      }
     }
+
+    const highlightIndex: HighlightIndex = {
+      perSeller,
+      perProduct,
+      perItem,
+    };
 
     return {
       filteredPackages: Object.keys(next).length ? next : cart.packages,
-      highlightIndex: hi,
+      highlightIndex,
     };
   }, [fuse, docs, query, cart.packages]);
 
