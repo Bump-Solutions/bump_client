@@ -1,5 +1,9 @@
+import { useParams } from "react-router";
+
 const Order = () => {
-  return <div></div>;
+  const { uuid } = useParams<{ uuid: string }>();
+
+  return <div>{uuid}</div>;
 };
 
 export default Order;

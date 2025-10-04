@@ -1,16 +1,23 @@
 export type OrderState = number;
 
+export type OrderAction = "cancel" | "confirm" | "complete" | "pay";
+
 export interface OrderModel {
   id: number;
+  uuid: string;
+
   state: OrderState;
+  validActions: OrderAction[];
+
+  isSeller: boolean;
+  party: {
+    id: number;
+    username: string;
+    profilePicture: string | null;
+  };
+
   createdAt: string;
   expiresAt: string;
-  sellerUsername: string;
-  buyerUsername: string;
-  products: {
-    id: number;
-    title: string;
-  }[];
 }
 
 export interface OrdersPageModel {
@@ -23,9 +30,4 @@ export interface OrdersPageModel {
 export interface CreateOrderModel {
   sellerId: number;
   itemIds: number[];
-}
-
-export interface CreateOrderDTO {
-  seller: number;
-  inventory_item_ids: number[];
 }

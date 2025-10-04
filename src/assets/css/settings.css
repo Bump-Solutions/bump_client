@@ -243,7 +243,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border: 1px dashed #ced4da;
+  border: 1px dashed #868e96;
   background-color: #f8f9fa;
 }
 .settings .page__wrapper .form-box .address__wrapper article.add:hover {

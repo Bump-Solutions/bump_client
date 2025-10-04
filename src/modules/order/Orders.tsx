@@ -1,22 +1,34 @@
 import "../../assets/css/order.css";
 import { useTitle } from "react-use";
+import { Link } from "react-router";
+import { ROUTES } from "../../routes/routes";
+import { useAxiosPrivate } from "../../hooks/auth/useAxiosPrivate";
 
-import { OrdersPageModel } from "../../models/orderModel";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { listOrdersQueryOptions } from "../../utils/queryOptions";
+import { useEffect, useState } from "react";
 import { ENUM } from "../../utils/enum";
-import { useListOrders } from "../../hooks/order/useListOrders";
 
 import Spinner from "../../components/Spinner";
 import OrdersHeader from "./OrdersHeader";
+import OrdersDataTable from "../../datatables/OrdersDataTable";
+
+import { MessageCircleQuestion, PackageOpen } from "lucide-react";
 
 const Orders = () => {
   useTitle(`Rendelések - ${ENUM.BRAND.NAME}`);
 
-  const { data, isLoading, isFetchingNextPage, isError, fetchNextPage } =
-    useListOrders();
+  const axiosPrivate = useAxiosPrivate();
 
-  const pages: OrdersPageModel[] = data?.pages || [];
+  const [page, setPage] = useState<number>(1);
+  const { data, isLoading, isError, refetch } = useQuery(
+    listOrdersQueryOptions(axiosPrivate, page)
+  );
 
-  console.log("Orders data:", data);
+  const queryClient = useQueryClient();
+  useEffect(() => {
+    queryClient.prefetchQuery(listOrdersQueryOptions(axiosPrivate, page + 1));
+  }, [page]);
 
   if (isError) {
     return (
@@ -36,16 +48,28 @@ const Orders = () => {
 
   return (
     <section className='orders'>
-      {pages.length > 0 && (
+      {data && data.orders.length > 0 ? (
         <>
-          {pages[0].orders.length > 0 ? (
-            <>
-              <OrdersHeader />
-            </>
-          ) : (
-            <></>
-          )}
+          <OrdersHeader />
+
+          <OrdersDataTable data={data} />
         </>
+      ) : (
+        <div className='orders__list empty'>
+          <PackageOpen className='svg-64 fc-gray-400' />
+          <div>
+            <h4>Nincsenek rendelések</h4>
+            <p>
+              Amikor létrejön egy új rendelés, láthatod az állapotát, és elérsz
+              minden fontos információt. Kattints a lenti gombra és tudj meg
+              mindent a rendelés menetéről!
+            </p>
+          </div>
+          <Link to={ROUTES.HOME} className='button primary w-fc mx-auto'>
+            <MessageCircleQuestion />
+            Hogyan működik a rendelés?
+          </Link>
+        </div>
       )}
     </section>
   );

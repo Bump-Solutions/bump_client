@@ -1,12 +1,15 @@
 import { AxiosInstance } from "axios";
 import {
-  CreateOrderDTO,
   CreateOrderModel,
   OrderModel,
   OrdersPageModel,
 } from "../models/orderModel";
 import { ApiResponse } from "../types/api";
-import { FetchedOrderDTO, OrdersPageDTO } from "../dtos/OrderDTO";
+import {
+  CreateOrderDTO,
+  FetchedOrderDTO,
+  OrdersPageDTO,
+} from "../dtos/OrderDTO";
 import { API } from "../utils/api";
 import { fromOrderDTO, toCreateOrderDTO } from "../mappers/orderMapper";
 
