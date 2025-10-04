@@ -5,21 +5,49 @@
 .orders {
   position: relative;
   padding: 2rem var(--container-x-padding);
-  display: flex;
-  flex-direction: column;
   width: 100%;
-  max-width: $max-width-900;
+  max-width: $max-width-1100;
   margin: 0 auto;
 
   .orders__header {
-    margin-bottom: 2rem;
+    position: relative;
 
     h1 {
       font-size: $fs-32;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid color(gray, 300);
     }
+  }
 
-    p {
-      color: color(gray, 700);
+  .orders__list {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+
+    &.empty {
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+      padding: 3rem;
+      text-align: center;
+      color: color(gray, 600);
+      font-size: $fs-16;
+
+      h4 {
+        font-size: $fs-18;
+        color: color(gray, 900);
+        margin-bottom: 0.25rem;
+      }
+
+      p {
+        max-width: $max-width-500;
+        margin: 0 auto;
+      }
     }
+  }
+
+  /* Custom DataTable styles */
+  .dtable__wrapper.dt-orders .dtable {
+    box-shadow: none;
   }
 }

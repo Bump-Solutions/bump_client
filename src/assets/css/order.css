@@ -1,18 +1,42 @@
 .orders {
   position: relative;
   padding: 2rem var(--container-x-padding);
-  display: flex;
-  flex-direction: column;
   width: 100%;
-  max-width: 900px;
+  max-width: 1100px;
   margin: 0 auto;
+  /* Custom DataTable styles */
 }
 .orders .orders__header {
-  margin-bottom: 2rem;
+  position: relative;
 }
 .orders .orders__header h1 {
   font-size: 2rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid #dee2e6;
 }
-.orders .orders__header p {
-  color: #495057;
+.orders .orders__list {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+}
+.orders .orders__list.empty {
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  padding: 3rem;
+  text-align: center;
+  color: #868e96;
+  font-size: 1rem;
+}
+.orders .orders__list.empty h4 {
+  font-size: 1.125rem;
+  color: #212529;
+  margin-bottom: 0.25rem;
+}
+.orders .orders__list.empty p {
+  max-width: 500px;
+  margin: 0 auto;
+}
+.orders .dtable__wrapper.dt-orders .dtable {
+  box-shadow: none;
 }/*# sourceMappingURL=order.css.map */

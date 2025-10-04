@@ -1,6 +1,5 @@
 import { ROUTES } from "../../routes/routes";
 import { useGetProfileMeta } from "../../hooks/profile/useGetProfileMeta";
-import { useEffect } from "react";
 import { Link, NavLink, useNavigate } from "react-router";
 import { useAuth } from "../../hooks/auth/useAuth";
 import { toast } from "sonner";
@@ -49,7 +48,7 @@ const NavProfileMenu = ({
           </Link>
         </div>
 
-        <Tooltip content='Értesítések' showDelay={750} placement='bottom'>
+        <Tooltip content='Értesítések' showDelay={250} placement='bottom'>
           <div className='profile-menu__item no-hide '>
             <div onClick={() => toggleNotificationMenu(true)}>
               {!!meta?.unreadNotifications && meta.unreadNotifications > 0 && (
@@ -64,7 +63,7 @@ const NavProfileMenu = ({
           </div>
         </Tooltip>
 
-        <Tooltip content='Kosár' showDelay={750} placement='bottom'>
+        <Tooltip content='Kosár' showDelay={250} placement='bottom'>
           <div className='profile-menu__item no-hide'>
             <div onClick={() => navigate(ROUTES.CART)}>
               {cart.summary.itemsCount > 0 && (
@@ -80,7 +79,7 @@ const NavProfileMenu = ({
           </div>
         </Tooltip>
 
-        <Tooltip content='Profil' showDelay={750} placement='bottom'>
+        <Tooltip content='Profil' showDelay={250} placement='bottom'>
           <button
             type='button'
             onClick={() => toggleProfileMenu(true)}

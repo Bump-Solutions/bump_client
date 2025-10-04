@@ -268,3 +268,8 @@ export function formatRelativeTime(dateString: string): string {
     return full.slice(2);
   }
 }
+
+// Displays a shortened version of a UUID (first 8 characters, uppercase, prefixed with #)
+export const displayUuid = (uuid: string) => {
+  return `#${uuid.slice(0, 8).toLocaleUpperCase()}`;
+};

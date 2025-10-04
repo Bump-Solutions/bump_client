@@ -5,6 +5,40 @@
   grid-auto-flow: row dense;
   gap: 2rem;
 }
+.user-products__wrapper .products__list .dummy {
+  position: relative;
+  cursor: pointer;
+  aspect-ratio: 1/1;
+}
+.user-products__wrapper .products__list .dummy a {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1px dashed #868e96;
+  background-color: #f8f9fa;
+  border-radius: 1rem;
+  transition: border 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.user-products__wrapper .products__list .dummy a:hover {
+  border: 1px solid #868e96;
+}
+.user-products__wrapper .products__list .dummy a h4 {
+  font-size: 1rem;
+  text-align: center;
+  white-space: nowrap;
+}
+.user-products__wrapper .products__list .dummy a svg {
+  height: 1.75rem;
+  width: 1.75rem;
+  margin-bottom: 0.5rem;
+}
+.user-products__wrapper .products__list .dummy a svg,
+.user-products__wrapper .products__list .dummy a h4 {
+  color: #868e96;
+}
 .user-products__wrapper .products__list .product__item {
   position: relative;
   cursor: pointer;

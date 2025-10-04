@@ -53,13 +53,15 @@ const CartSummary = () => {
           </span>
         </div>
 
-        <div className='row discount'>
-          <span>Kedvezmények</span>
-          <span>
-            − {formatMinorHU(discountsTotal.amount)}{" "}
-            {CURRENCY_LABELS[discountsTotal.currency]}
-          </span>
-        </div>
+        {discountsTotal.amount > 0 && (
+          <div className='row discount'>
+            <span>Kedvezmények</span>
+            <span>
+              − {formatMinorHU(discountsTotal.amount)}{" "}
+              {CURRENCY_LABELS[discountsTotal.currency]}
+            </span>
+          </div>
+        )}
 
         <div className='row'>
           <span>Szállítási költség</span>

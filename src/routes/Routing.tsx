@@ -141,7 +141,7 @@ export const privateRoutes = () => {
 
                 {/* ORDERS */}
                 <Route path='/orders' element={withSuspense(Orders)} />
-                <Route path='/order/:id' element={withSuspense(OrderLayout)}>
+                <Route path='/order/:uuid' element={withSuspense(OrderLayout)}>
                   <Route index element={<Order />} />
                 </Route>
               </Route>

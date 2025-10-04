@@ -80,9 +80,6 @@ export function useCartSearch(query: string) {
       ? fuse.search(q)
       : docs.map((d) => ({ item: d, matches: [] as any[] }));
 
-    // itemId -> field -> ranges
-    const hi: HighlightIndex = {};
-
     // Eredmény-szűréshez: sellerId -> productId -> itemId set
     const allowMap = new Map<number, Map<number, Set<number>>>();
 
