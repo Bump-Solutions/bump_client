@@ -17,6 +17,8 @@ import {
   User,
   MessagesSquare,
   Package,
+  HandCoins,
+  ChartNoAxesCombined,
 } from "lucide-react";
 
 type MenuAction = {
@@ -35,12 +37,6 @@ const ACTIONS = (auth: AuthModel): MenuAction[] => {
       class: "",
     },
     {
-      icon: <Package />,
-      label: "Rendelések",
-      route: ROUTES.ORDERS,
-      class: "",
-    },
-    {
       icon: <User />,
       label: "Bump profilom",
       route: ROUTES.PROFILE(auth?.user?.username!).ROOT,
@@ -51,6 +47,29 @@ const ACTIONS = (auth: AuthModel): MenuAction[] => {
       label: "Mentett",
       route: ROUTES.PROFILE(auth?.user?.username!).SAVED,
       class: "show-sm-only",
+    },
+  ];
+};
+
+const DASHBOARD = (auth: AuthModel): MenuAction[] => {
+  return [
+    {
+      icon: <Package />,
+      label: "Rendelések",
+      route: ROUTES.ORDERS,
+      class: "",
+    },
+    {
+      icon: <HandCoins />,
+      label: "Kifizetések",
+      route: ROUTES.HOME,
+      class: "",
+    },
+    {
+      icon: <ChartNoAxesCombined />,
+      label: "Statisztikák",
+      route: ROUTES.HOME,
+      class: "",
     },
   ];
 };
@@ -120,6 +139,18 @@ const ProfileMenuActions = ({ toggleProfileMenu }: ProfileMenuActionsProps) => {
 
         <ul className='action-list'>
           {ACTIONS(auth!).map((action, index) => (
+            <li key={index} className={`action-list-item ${action.class}`}>
+              <Link onClick={() => toggleProfileMenu(false)} to={action.route}>
+                {action.icon}
+                <span>{action.label}</span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+
+        {/* Vezérlőpult */}
+        <ul className='action-list'>
+          {DASHBOARD(auth!).map((action, index) => (
             <li key={index} className={`action-list-item ${action.class}`}>
               <Link onClick={() => toggleProfileMenu(false)} to={action.route}>
                 {action.icon}
