@@ -49,7 +49,7 @@ const Orders = () => {
 
   return (
     <section className='orders'>
-      {data && data.orders.length < 0 ? (
+      {data && data.orders.length > 0 ? (
         <>
           <OrdersHeader />
 
