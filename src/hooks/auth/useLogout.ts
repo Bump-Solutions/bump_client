@@ -16,7 +16,7 @@ export const useLogout = (): (() => Promise<void>) => {
         queryClient.clear();
       })(),
       {
-        loading: "Kijelentkezés…",
+        loading: "Kijelentkezés...",
         success: "Kijelentkeztél.",
       }
     );

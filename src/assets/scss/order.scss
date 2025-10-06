@@ -23,27 +23,6 @@
     display: flex;
     flex-direction: column;
     padding: 0;
-
-    &.empty {
-      justify-content: center;
-      align-items: center;
-      gap: 1rem;
-      padding: 3rem;
-      text-align: center;
-      color: color(gray, 600);
-      font-size: $fs-16;
-
-      h4 {
-        font-size: $fs-18;
-        color: color(gray, 900);
-        margin-bottom: 0.25rem;
-      }
-
-      p {
-        max-width: $max-width-500;
-        margin: 0 auto;
-      }
-    }
   }
 
   /* Custom DataTable styles */

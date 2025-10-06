@@ -14,6 +14,7 @@ import OrdersHeader from "./OrdersHeader";
 import OrdersDataTable from "../../datatables/OrdersDataTable";
 
 import { MessageCircleQuestion, PackageOpen } from "lucide-react";
+import Empty from "../../components/Empty";
 
 const Orders = () => {
   useTitle(`Rendelések - ${ENUM.BRAND.NAME}`);
@@ -48,28 +49,24 @@ const Orders = () => {
 
   return (
     <section className='orders'>
-      {data && data.orders.length > 0 ? (
+      {data && data.orders.length < 0 ? (
         <>
           <OrdersHeader />
 
           <OrdersDataTable data={data} />
         </>
       ) : (
-        <div className='orders__list empty'>
-          <PackageOpen className='svg-64 fc-gray-400' />
-          <div>
-            <h4>Nincsenek rendelések</h4>
-            <p>
-              Amikor létrejön egy új rendelés, láthatod az állapotát, és elérsz
+        <Empty
+          icon={<PackageOpen className='svg-40' />}
+          title='Nincsenek rendelések'
+          description='Amikor létrejön egy új rendelés, láthatod az állapotát, és elérsz
               minden fontos információt. Kattints a lenti gombra és tudj meg
-              mindent a rendelés menetéről!
-            </p>
-          </div>
-          <Link to={ROUTES.HOME} className='button primary w-fc mx-auto'>
+              mindent a rendelés menetéről!'>
+          <Link to={ROUTES.HOME} className='button primary w-fc mx-auto fw-600'>
             <MessageCircleQuestion />
             Hogyan működik a rendelés?
           </Link>
-        </div>
+        </Empty>
       )}
     </section>
   );

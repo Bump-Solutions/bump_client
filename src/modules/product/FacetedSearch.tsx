@@ -4,6 +4,7 @@ import { FacetProps } from "../../hooks/product/useFacetedSearch";
 import { CONDITION_LABELS, GENDER_LABELS } from "../../utils/mappers";
 
 import Chip from "../../components/Chip";
+import { ArrowUpRight } from "lucide-react";
 
 const FacetedSearch = ({
   genders,
@@ -68,7 +69,7 @@ const FacetedSearch = ({
             <h4>
               Elérhető állapotok{" "}
               <Link to={ROUTES.HOME} target='_blank' className='link blue p-0'>
-                - Tudj meg többet
+                - Tudj meg többet <ArrowUpRight />
               </Link>
               {selectedSize && (
                 <span className='fc-gray-600'> - EU {selectedSize}</span>
@@ -90,7 +91,7 @@ const FacetedSearch = ({
             <h4>
               Elérhető állapotok{" "}
               <Link to={ROUTES.HOME} target='_blank' className='link blue p-0'>
-                - Tudj meg többet
+                - Tudj meg többet <ArrowUpRight />
               </Link>
             </h4>
             <p className='fc-gray-600 fs-14'>Válassz méretet a szűréshez...</p>

@@ -38,7 +38,7 @@ export interface ProductModel {
     brand: string;
     model: string;
     colorWay: string;
-    category: string;
+    category: number;
     colors: string; // Comma separated colors
   }; // Catalog product
 

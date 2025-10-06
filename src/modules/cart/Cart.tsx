@@ -6,21 +6,31 @@ import { useCart } from "../../hooks/cart/useCart";
 import { ENUM } from "../../utils/enum";
 import { useState } from "react";
 
+import Spinner from "../../components/Spinner";
 import CartHeader from "./CartHeader";
 import CartContent from "./CartContent";
 import CartSummary from "./CartSummary";
 import Back from "../../components/Back";
+import Empty from "../../components/Empty";
 
-import { Globe } from "lucide-react";
+import { ArrowUpRight, Globe } from "lucide-react";
 
 const Cart = () => {
   useTitle(`Kosár - ${ENUM.BRAND.NAME}`);
 
-  const { cart } = useCart();
+  const { cart, isLoading } = useCart();
 
   const [searchKey, setSearchKey] = useState<string>("");
 
-  return cart.summary.itemsCount > 0 ? (
+  if (isLoading) {
+    return (
+      <div className='relative py-5'>
+        <Spinner />
+      </div>
+    );
+  }
+
+  return cart && cart.summary.itemsCount > 0 ? (
     <section className='cart'>
       <Back to={ROUTES.HOME} text='Vásárlás folytatása' className='link mb-1' />
 
@@ -33,19 +43,21 @@ const Cart = () => {
       <Back text='Vissza' className='link mb-1' />
       <CartHeader searchKey={searchKey} setSearchKey={setSearchKey} />
 
-      <div className='fc-gray-600 ta-center pt-3 px-5 pb-5 d-flex flex-column a-center gap-1'>
-        <div className='ta-center'>
-          <h4 className='fw-600 mb-0_25 fs-18'>A kosarad üres</h4>
-          <p className='fc-gray-600 fs-16'>
-            Válogass több eladótól, kombináld a tételeket, és hozd létre a saját
-            termékcsomagjaidat.
-          </p>
-        </div>
-        <Link to={ROUTES.HOME} className='button primary w-fc mx-auto'>
+      <Empty
+        title='A kosarad üres'
+        description='Válogass több eladótól, kombináld a tételeket, és hozd létre a saját
+            termékcsomagjaidat.'>
+        <Link to={ROUTES.HOME} className='button primary w-fc mx-auto mb-1_5'>
           <Globe />
           Böngéssz a {ENUM.BRAND.WHERE}
         </Link>
-      </div>
+        <Link
+          to={ROUTES.HOME}
+          target='_blank'
+          className='link blue no-anim fw-600'>
+          Tudj meg többet <ArrowUpRight />
+        </Link>
+      </Empty>
     </section>
   );
 };

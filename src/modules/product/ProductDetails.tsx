@@ -88,9 +88,9 @@ const ProductDetails = () => {
 
           <PriceTag discount={discountValue} {...facets} />
 
-          <ProductActions discount={discountValue} {...facets} />
+          <ProductActions {...facets} />
 
-          <Link to={ROUTES.HOME} className='link ml-auto py-0_5 fs-14'>
+          <Link to={ROUTES.HOME} className='link ml-auto py-0_5 fs-14 fw-600'>
             Hogyan működik?
           </Link>
         </>

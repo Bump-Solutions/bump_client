@@ -8,7 +8,8 @@ import { useListProducts } from "../../hooks/product/useListProducts";
 import Spinner from "../../components/Spinner";
 import ProductList from "./ProductList";
 
-import { SearchX, Tag } from "lucide-react";
+import { ArrowUpRight, SearchX, Tag } from "lucide-react";
+import Empty from "../../components/Empty";
 
 const Products = () => {
   const location = useLocation();
@@ -48,39 +49,31 @@ const Products = () => {
               isFetchingNextPage={isFetchingNextPage}
             />
           ) : isOwnProfile ? (
-            <>
-              <div className='fc-gray-600 ta-center p-5 d-flex flex-column a-center gap-1'>
-                <SearchX className='svg-64 fc-gray-400' />
-                <div className='ta-center'>
-                  <h4 className='fw-600 mb-0_25 fs-18'>
-                    Még nem hírdettél meg terméket.{" "}
-                  </h4>
-                  <p className='fc-gray-600 fs-16'>
-                    Kattints a gombra és töltsd fel első termékedet.
-                  </p>
-                </div>
-                <Link
-                  to={ROUTES.SELL}
-                  state={{ background: location }}
-                  className='button primary w-fc mx-auto'>
-                  <Tag />
-                  Add el most!
-                </Link>
-              </div>
-            </>
+            <Empty
+              icon={<SearchX className='svg-32' />}
+              title='Még nem hírdettél meg terméket'
+              description='Kattints a gombra és töltsd fel első termékedet most!'>
+              <Link
+                to={ROUTES.SELL}
+                state={{ background: location }}
+                className='button primary w-fc mx-auto mb-1_5'>
+                <Tag />
+                Add el most!
+              </Link>
+              <Link
+                to={ROUTES.HOME}
+                target='_blank'
+                className='link blue no-anim fw-600'>
+                Tudj meg többet <ArrowUpRight />
+              </Link>
+            </Empty>
           ) : (
-            <div className='fc-gray-600 ta-center p-5'>
-              <SearchX className='svg-64 fc-gray-400' />
-              <div className='ta-center'>
-                <h4 className='fw-600 mb-0_25 fs-18'>
-                  {user?.username} még nem rendelkezik termékekkel.
-                </h4>
-                <p className='fc-gray-600 fs-16'>
-                  Kattints az értesítések gombra, hogy értesülj a legújabb
-                  termékekről.
-                </p>
-              </div>
-            </div>
+            <Empty
+              icon={<SearchX className='svg-32' />}
+              title={`${user?.username} még nem rendelkezik termékekkel`}
+              description='Kattints az értesítések gombra, hogy értesülj a legújabb
+                  termékekről.'
+            />
           )}
         </>
       )}

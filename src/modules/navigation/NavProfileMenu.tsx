@@ -66,7 +66,7 @@ const NavProfileMenu = ({
         <Tooltip content='Kosár' showDelay={250} placement='bottom'>
           <div className='profile-menu__item no-hide'>
             <div onClick={() => navigate(ROUTES.CART)}>
-              {cart.summary.itemsCount > 0 && (
+              {cart && cart.summary.itemsCount > 0 && (
                 <span className='badge fw-600'>
                   {cart.summary.itemsCount > 99
                     ? "99+"

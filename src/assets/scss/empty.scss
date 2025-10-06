@@ -1,0 +1,43 @@
+@use "variables" as *;
+@use "palette" as *;
+@use "mixins" as *;
+
+div.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  max-width: $max-width-800;
+  margin: 0 auto;
+
+  color: color(gray, 600);
+  text-align: center;
+  padding: 5rem;
+
+  .empty__media {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-color: color(gray, 100);
+    border-radius: $border-radius-1;
+    padding: 0.5rem;
+
+    svg {
+      color: color(gray, 900);
+    }
+  }
+
+  h4 {
+    color: color(gray, 900);
+    font-size: $fs-18;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+  }
+
+  p {
+    color: color(gray, 600) !important;
+    max-width: $max-width-500;
+    font-size: $fs-16;
+  }
+}

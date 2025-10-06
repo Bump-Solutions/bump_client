@@ -1,4 +1,3 @@
-import "../assets/css/image.css";
 import { API } from "../utils/api";
 import { ImgHTMLAttributes, useState, MouseEvent } from "react";
 

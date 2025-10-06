@@ -5,6 +5,8 @@ import "./assets/css/toast.css";
 import "./assets/css/tooltip.css";
 import "./assets/css/modal.css";
 import "./assets/css/dtable.css";
+import "./assets/css/image.css";
+import "./assets/css/empty.css";
 
 import { createRoot } from "react-dom/client";
 import { BrowserRouter as Router, Routes, Route } from "react-router";
