@@ -8,6 +8,8 @@ interface PackageProductProps {
 }
 
 const PackageProduct = ({ product, highlightIndex }: PackageProductProps) => {
+  console.log("product:", product);
+
   return (
     <section className='pkg__product'>
       <Image src={product.image} alt={product.title} />

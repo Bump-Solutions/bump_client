@@ -1,7 +1,11 @@
 import { createContext, ReactNode, useMemo } from "react";
 import { useGetCart } from "../hooks/cart/useGetCart";
 import { CartModel } from "../models/cartModel";
-import { useAddItems, useClearCart } from "../hooks/cart/useCartMutations";
+import {
+  useAddItems,
+  useClearCart,
+  useRemovePackage,
+} from "../hooks/cart/useCartMutations";
 
 interface CartContextType {
   cart: CartModel | undefined;
@@ -9,6 +13,7 @@ interface CartContextType {
 
   actions?: {
     addItems: ReturnType<typeof useAddItems>;
+    removePackage: ReturnType<typeof useRemovePackage>;
     clearCart: ReturnType<typeof useClearCart>;
   };
 }
@@ -24,17 +29,16 @@ interface CartProviderProps {
 const CartProvider = ({ children }: CartProviderProps) => {
   const { data: cart, isLoading, isError, error } = useGetCart([]);
 
-  console.log("CART DATA:", cart, isLoading, isError, error);
-
   // Mutations
-  const add = useAddItems();
-  const clear = useClearCart();
+  const addItems = useAddItems();
+  const removePackage = useRemovePackage();
+  const clearCart = useClearCart();
 
   const contextValue = useMemo<CartContextType>(() => {
     let out: CartContextType = {
       cart,
       isLoading,
-      actions: { addItems: add, clearCart: clear },
+      actions: { addItems, removePackage, clearCart },
     };
 
     if (isError) {

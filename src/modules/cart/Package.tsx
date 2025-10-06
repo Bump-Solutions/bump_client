@@ -7,6 +7,7 @@ import { HighlightIndex } from "../../utils/highlight";
 import Image from "../../components/Image";
 import Highlighted from "../../components/Highlighted";
 import PackageProduct from "./PackageProduct";
+import PackageActions from "./PackageActions";
 
 import { ChevronDown, ChevronUp } from "lucide-react";
 
@@ -14,17 +15,10 @@ interface PackageProps {
   pkg: CartPackageModel;
   expanded: boolean;
   onToggle: () => void;
-  subtotal: number;
   highlightIndex?: HighlightIndex;
 }
 
-const Package = ({
-  pkg,
-  expanded,
-  onToggle,
-  subtotal,
-  highlightIndex,
-}: PackageProps) => {
+const Package = ({ pkg, expanded, onToggle, highlightIndex }: PackageProps) => {
   const sid = pkg.seller.id;
   const btnId = `pkg-btn-${sid}`;
   const panelId = `pkg-panel-${sid}`;
@@ -45,7 +39,6 @@ const Package = ({
             <Image
               src={pkg.seller.profilePicture!}
               alt={pkg.seller.username.slice(0, 2)}
-              placeholderColor='#212529'
             />
 
             <div>
@@ -57,12 +50,8 @@ const Package = ({
                 <Highlighted text={pkg.seller.username} ranges={sellerRanges} />
               </Link>
               <span className='small'>
-                {Object.keys(pkg.products).length} termék,{" "}
-                {Object.values(pkg.products).reduce(
-                  (acc, p) => acc + p.items.length,
-                  0
-                )}{" "}
-                tétel
+                {pkg.products.length} termék,{" "}
+                {pkg.products.reduce((acc, p) => acc + p.items.length, 0)} tétel
               </span>
             </div>
           </div>
@@ -92,15 +81,16 @@ const Package = ({
             }}
             style={{ overflow: "hidden" }}
             layout>
-            {Object.values(pkg.products).map((prod: CartProductModel) => (
-              <PackageProduct
-                key={prod.id}
-                product={prod}
-                highlightIndex={highlightIndex}
-              />
+            {pkg.products.map((prod: CartProductModel) => (
+              <>
+                <PackageProduct
+                  key={prod.id}
+                  product={prod}
+                  highlightIndex={highlightIndex}
+                />
+                <PackageActions key={`actions-${prod.id}`} product={prod} />
+              </>
             ))}
-
-            {/* Csomag actions, pl: Kapcsolatfelvétel, Törlés ... */}
           </motion.div>
         )}
       </AnimatePresence>

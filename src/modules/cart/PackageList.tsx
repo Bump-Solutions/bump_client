@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { HighlightIndex } from "../../utils/highlight";
-import { CartItemModel, CartPackageModel } from "../../models/cartModel";
+import { CartPackageModel } from "../../models/cartModel";
 
 import Package from "./Package";
 import Button from "../../components/Button";
@@ -8,20 +8,9 @@ import Button from "../../components/Button";
 import { ChevronsDown, ChevronsUp } from "lucide-react";
 
 interface PackageListProps {
-  filteredPackages: Record<number, CartPackageModel>;
+  filteredPackages: CartPackageModel[];
   highlightIndex?: HighlightIndex;
 }
-
-const effective = (it: CartItemModel) =>
-  it.discountedPrice?.amount ?? it.price.amount;
-
-const sellerSubtotal = (pkg: CartPackageModel) => {
-  let sum = 0;
-  for (const prod of Object.values(pkg.products)) {
-    for (const it of prod.items) sum += effective(it);
-  }
-  return sum;
-};
 
 const PackageList = ({
   filteredPackages,
@@ -30,7 +19,7 @@ const PackageList = ({
   // render input: package-ek rendezve seller név szerint (opcionális)
   const packages = useMemo(
     () =>
-      Object.values(filteredPackages).sort((a, b) =>
+      [...filteredPackages].sort((a, b) =>
         a.seller.username.localeCompare(b.seller.username, "hu")
       ),
     [filteredPackages]
@@ -50,8 +39,6 @@ const PackageList = ({
 
   const expandAll = () => setOpen(new Set(allIds));
   const collapseAll = () => setOpen(new Set());
-
-  console.log("packages:", packages);
 
   return (
     <>
@@ -81,7 +68,6 @@ const PackageList = ({
               pkg={pkg}
               expanded={open.has(sid)}
               onToggle={() => toggle(sid)}
-              subtotal={sellerSubtotal(pkg)}
               highlightIndex={highlightIndex}
             />
           );

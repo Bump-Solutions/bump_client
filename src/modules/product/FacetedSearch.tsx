@@ -68,7 +68,10 @@ const FacetedSearch = ({
           <>
             <h4>
               Elérhető állapotok{" "}
-              <Link to={ROUTES.HOME} target='_blank' className='link blue p-0'>
+              <Link
+                to={ROUTES.HOME}
+                target='_blank'
+                className='link blue p-0 no-anim'>
                 - Tudj meg többet <ArrowUpRight />
               </Link>
               {selectedSize && (
@@ -90,7 +93,10 @@ const FacetedSearch = ({
           <>
             <h4>
               Elérhető állapotok{" "}
-              <Link to={ROUTES.HOME} target='_blank' className='link blue p-0'>
+              <Link
+                to={ROUTES.HOME}
+                target='_blank'
+                className='link blue p-0 no-anim'>
                 - Tudj meg többet <ArrowUpRight />
               </Link>
             </h4>
