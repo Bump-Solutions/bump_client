@@ -25,7 +25,7 @@ const SocialSignup = () => {
       const loginPromise = googleLoginMutation.mutateAsync(code);
 
       toast.promise(loginPromise, {
-        loading: "Bejelentkezés folyamatban…",
+        loading: "Bejelentkezés folyamatban...",
         success: () => "Bejelentkeztél.",
         error: (err) =>
           (err?.response?.data?.message as string) ||

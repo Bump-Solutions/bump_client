@@ -1,12 +1,14 @@
 import "../../assets/css/chat.css";
+import { ROUTES } from "../../routes/routes";
 import { ENUM } from "../../utils/enum";
 import { useTitle } from "react-use";
-import { Outlet, useParams } from "react-router";
+import { Link, Outlet, useParams } from "react-router";
 import { useMediaQuery } from "react-responsive";
 
 import Inbox from "./Inbox";
+import Empty from "../../components/Empty";
 
-import { MessageSquareDashed } from "lucide-react";
+import { MessageSquarePlus, MessageSquareDashed } from "lucide-react";
 
 const Chat = () => {
   useTitle(`Üzenetek - ${ENUM.BRAND.NAME}`);
@@ -34,13 +36,17 @@ const Chat = () => {
           <Outlet key={chat} context={{ chat }} />
         ) : (
           <div className='messages__panel no-selection'>
-            <MessageSquareDashed className='svg-64 fc-gray-400' />
-            <div className='ta-center'>
-              <h4 className='fw-600 mb-0_25 fs-18'>Nincs kiválasztva chat</h4>
-              <p className='fc-gray-600 fs-16'>
-                Válassz az üzeneteid közül vagy indíts új beszélgetést.
-              </p>
-            </div>
+            <Empty
+              icon={<MessageSquareDashed className='svg-40' />}
+              title='Nincs kiválasztva chat'
+              description='Válassz az üzeneteid közül vagy indíts új beszélgetést.'>
+              <Link
+                to={ROUTES.HOME}
+                className='button primary w-fc mx-auto fw-600'>
+                <MessageSquarePlus />
+                Új üzenet indítása
+              </Link>
+            </Empty>
           </div>
         )}
       </section>

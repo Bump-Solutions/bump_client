@@ -61,4 +61,5 @@ export const ROUTES = {
 
   UNAUTHORIZED: "/unauthorized",
   NOTFOUND: "/not-found",
+  SERVERERROR: "/server-error",
 };

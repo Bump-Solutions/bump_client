@@ -182,7 +182,18 @@ export const API = {
       u("notifications/mark_notification_read", id),
   },
 
-  CART: {},
+  CART: {
+    GET_CART: u("order/cart/list"),
+    ADD_ITEMS: u("order/cart/add"),
+
+    REMOVE_ITEM: (itemId: number) => u("order/cart/remove_item", itemId),
+    REMOVE_PRODUCT: (productId: number) =>
+      u("order/cart/remove_product", productId),
+    REMOVE_PACKAGE: (sellerId: number) =>
+      u("order/cart/remove_package", sellerId),
+
+    CLEAR: u("order/cart/clear"),
+  },
 
   ORDERS: {
     LIST_ORDERS: (size: number, page: number) =>

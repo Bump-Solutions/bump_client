@@ -303,12 +303,9 @@
   flex-direction: column;
 }
 .chat .messages__panel.no-selection {
-  padding: 2rem;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 1rem;
 }
 .chat .messages__panel .messages__header {
   position: relative;

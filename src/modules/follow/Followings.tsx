@@ -8,6 +8,7 @@ import { useState } from "react";
 import Spinner from "../../components/Spinner";
 import SearchBar from "./SearchBar";
 import FollowingList from "./FollowingList";
+import Empty from "../../components/Empty";
 
 const Followings = () => {
   const { user } = useProfile();
@@ -57,7 +58,15 @@ const Followings = () => {
               isFetchingNextPage={isFetchingNextPage}
             />
           ) : (
-            <p className='fc-gray-600 ta-center py-5'>Nincs találat.</p>
+            <>
+              {searchKeyDebounced ? (
+                <p className='fc-gray-600 ta-center py-5'>Nincs találat.</p>
+              ) : (
+                <p className='fc-gray-600 ta-center py-5'>
+                  {user?.username} még nem rendelkezik követésekkel.
+                </p>
+              )}
+            </>
           )}
         </>
       )}

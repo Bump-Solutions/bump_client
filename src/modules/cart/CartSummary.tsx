@@ -26,6 +26,8 @@ const NOTES: CartSummaryNote[] = [
 
 const CartSummary = () => {
   const { cart } = useCart();
+  if (!cart) return null;
+
   const { grossSubtotal, discountsTotal, indicativeSubtotal, itemsCount } =
     cart.summary;
 

@@ -6,6 +6,7 @@ import Spinner from "../../components/Spinner";
 import ProductList from "./ProductList";
 
 import { SearchX } from "lucide-react";
+import Empty from "../../components/Empty";
 
 const SavedProducts = () => {
   const { data, isLoading, isFetchingNextPage, isError, fetchNextPage } =
@@ -40,12 +41,13 @@ const SavedProducts = () => {
               isFetchingNextPage={isFetchingNextPage}
             />
           ) : (
-            <p className='fc-gray-600 ta-center py-5'>
-              <SearchX className='svg-64 mb-1' />
-              <br />
-              Még nem rendelkezel mentett termékekkel. <br />
-              Ha tetszik egy termék, mentsd el, hogy később visszatalálj rá.
-            </p>
+            <>
+              <Empty
+                icon={<SearchX className='svg-32' />}
+                title='Még nem rendelkezel mentett termékekkel'
+                description='Ha tetszik egy termék, mentsd el, hogy később visszatalálj rá.'
+              />
+            </>
           )}
         </>
       )}

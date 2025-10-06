@@ -11,6 +11,7 @@ import NotificationsHeader from "./NotificationsHeader";
 import NotificationsNav from "./NotificationsNav";
 import NotificationsList from "./NotificationsList";
 import Spinner from "../../components/Spinner";
+import Empty from "../../components/Empty";
 
 import { BellOff } from "lucide-react";
 
@@ -66,17 +67,15 @@ const Notifications = () => {
               />
             </>
           ) : (
-            <div className='notifications__list empty'>
-              <BellOff />
-              <div>
-                <h4>Nincsenek értesítések</h4>
-                <p>
-                  {activeTabIndex === 1
-                    ? "Az értesítések itt jelennek meg, amikor valaki kapcsolatba lép veled. Térj vissza később."
-                    : "Az értesítések itt jelennek meg, amikor valaki reagál a termékeidre vagy a profilodra. Térj vissza később."}
-                </p>
-              </div>
-            </div>
+            <Empty
+              icon={<BellOff className='svg-40' />}
+              title='Nincsenek értesítések'
+              description={
+                activeTabIndex === 1
+                  ? "Az értesítések itt jelennek meg, amikor valaki kapcsolatba lép veled. Térj vissza később."
+                  : "Az értesítések itt jelennek meg, amikor valaki reagál a termékeidre vagy a profilodra. Térj vissza később."
+              }
+            />
           )}
         </>
       )}

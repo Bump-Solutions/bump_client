@@ -1,11 +1,6 @@
 import { QUERY_KEY } from "../../utils/queryKeys";
 import { ROUTES } from "../../routes/routes";
 import { useAuth } from "../../hooks/auth/useAuth";
-import {
-  CartItemModel,
-  CatalogProductRefModel,
-  SellerModel,
-} from "../../models/cartModel";
 import { InventoryModel, ProductListModel } from "../../models/productModel";
 import { FacetProps } from "../../hooks/product/useFacetedSearch";
 import { useProduct } from "../../hooks/product/useProduct";
@@ -24,24 +19,18 @@ import Tooltip from "../../components/Tooltip";
 import { Bookmark, Mail, ShoppingBag } from "lucide-react";
 import { CreateOrderModel } from "../../models/orderModel";
 import { useCreateOrder } from "../../hooks/order/useCreateOrder";
-import { computeDiscounted } from "../../utils/pricing";
-
-interface ProductActionsProps extends FacetProps {
-  discount: number | null | undefined;
-}
 
 const ProductActions = ({
   quantity,
-  discount,
   filtered,
   filteredCount,
   reset,
-}: ProductActionsProps) => {
+}: FacetProps) => {
   const { auth } = useAuth();
 
   const queryClient = useQueryClient();
   const { product, setProduct } = useProduct();
-  const { addItem } = useCart();
+  const { actions } = useCart();
 
   if (!product) return null;
 
@@ -171,69 +160,33 @@ const ProductActions = ({
   const handleAddToCart = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
+    if (!actions) return;
+    if (actions.addItems.isPending) return;
     if (isDisabled) return;
     if (!filtered || filtered.length === 0) return;
 
-    // Seller
-    const seller: SellerModel = {
-      id: product.user.id,
-      username: product.user.username,
-      profilePicture: product.user.profilePicture || null,
-    };
-
-    const LABEL = [
-      product.product.brand,
-      product.product.model,
-      product.product.colorWay,
-    ].join(" ");
-
-    const productSnapshot: CatalogProductRefModel = {
-      id: product.id,
-      title: LABEL,
-      brand: product.product.brand,
-      model: product.product.model,
-      colorWay: product.product.colorWay,
-      category: product.product.category,
-      colors: product.product.colors,
-      image: product.images[0],
-    };
-
     const maxToAdd = Math.min(quantity, filtered.length);
 
-    filtered.slice(0, maxToAdd).forEach((item) => {
-      const baseAmount = item.price; // minor units (HUF)
-      const effectiveAmount = computeDiscounted(baseAmount, discount);
+    const addPromise = actions.addItems.mutateAsync(
+      filtered.slice(0, maxToAdd).map((item) => item.id)
+    );
 
-      const cartItem: CartItemModel = {
-        id: item.id,
-
-        size: item.size,
-        gender: item.gender,
-        condition: item.condition,
-
-        price: {
-          amount: baseAmount,
-          currency: "HUF",
-        },
-
-        // ÚJ: discount átadása + snapshotolt kedvezményes ár
-        ...(discount && {
-          discountPercent: discount,
-          discountedPrice: {
-            amount: effectiveAmount,
-            currency: "HUF",
-          },
-        }),
-
-        addedAt: new Date().toISOString(),
-      };
-
-      addItem(seller, productSnapshot, cartItem);
+    toast.promise(addPromise, {
+      loading: "Kosárba helyezés...",
+      success: (
+        <span>
+          A tétel bekerült a kosaradba. A kosarad megtekintheted{" "}
+          <Link to={ROUTES.CART} className='link fc-green-600 underline fw-700'>
+            itt.
+          </Link>
+        </span>
+      ),
+      error: (err) => "Hiba a termék kosárba helyezése során.",
     });
 
     reset();
 
-    return Promise.resolve();
+    return addPromise;
   };
 
   const handleCreateOrder = (e: MouseEvent<HTMLButtonElement>) => {

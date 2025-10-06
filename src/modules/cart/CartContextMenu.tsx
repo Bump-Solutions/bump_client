@@ -1,7 +1,8 @@
-import { useRef } from "react";
+import { useRef, MouseEvent } from "react";
 import { useCart } from "../../hooks/cart/useCart";
 import { motion } from "framer-motion";
 import { useClickOutside } from "../../hooks/useClickOutside";
+import { toast } from "sonner";
 
 import { ArrowUpRight } from "lucide-react";
 
@@ -10,7 +11,7 @@ interface CartContextMenuProps {
 }
 
 const CartContextMenu = ({ toggleContextMenu }: CartContextMenuProps) => {
-  const { cart, clearCart } = useCart();
+  const { actions } = useCart();
 
   const ref = useRef<HTMLDivElement>(null);
 
@@ -18,6 +19,24 @@ const CartContextMenu = ({ toggleContextMenu }: CartContextMenuProps) => {
     ref: ref,
     callback: () => toggleContextMenu(false),
   });
+
+  const handleClearCart = (e: MouseEvent<HTMLDivElement>) => {
+    e.preventDefault();
+
+    if (!actions) return;
+    if (actions.clearCart.isPending) return;
+
+    const clearPromise = actions.clearCart.mutateAsync();
+
+    toast.promise(clearPromise, {
+      loading: "Kosár ürítése folyamatban...",
+      success: "A kosarad kiürült.",
+      error: (err) => "Hiba a kosár ürítése során.",
+    });
+
+    toggleContextMenu(false);
+    return clearPromise;
+  };
 
   return (
     <motion.div
@@ -41,12 +60,7 @@ const CartContextMenu = ({ toggleContextMenu }: CartContextMenuProps) => {
 
       <ul className='action-list no-border'>
         <li className='action-list-item red '>
-          <div
-            onClick={(e) => {
-              e.preventDefault();
-              clearCart();
-              toggleContextMenu(false);
-            }}>
+          <div onClick={handleClearCart}>
             <span>Kosár ürítése</span>
           </div>
         </li>

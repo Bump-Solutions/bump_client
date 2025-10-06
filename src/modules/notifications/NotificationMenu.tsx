@@ -8,6 +8,7 @@ import { useListNotifications } from "../../hooks/notifications/useListNotificat
 import NotificationMenuNav from "./NotificationMenuNav";
 import NotificationMenuList from "./NotificationMenuList";
 import Spinner from "../../components/Spinner";
+import Empty from "../../components/Empty";
 
 import { BellOff } from "lucide-react";
 
@@ -83,17 +84,15 @@ const NotificationMenu = ({
                 toggleNotificationMenu={toggleNotificationMenu}
               />
             ) : (
-              <div className='notification-menu__list empty'>
-                <BellOff />
-                <div>
-                  <h4 className='nh-fw-600'>Nincsenek értesítések</h4>
-                  <p>
-                    {activeTabIndex === 1
-                      ? "Az értesítések itt jelennek meg, amikor valaki kapcsolatba lép veled. Térj vissza később."
-                      : "Az értesítések itt jelennek meg, amikor valaki reagál a termékeidre vagy a profilodra. Térj vissza később."}
-                  </p>
-                </div>
-              </div>
+              <Empty
+                icon={<BellOff className='svg-32' />}
+                title='Nincsenek értesítések'
+                description={
+                  activeTabIndex === 1
+                    ? "Az értesítések itt jelennek meg, amikor valaki kapcsolatba lép veled. Térj vissza később."
+                    : "Az értesítések itt jelennek meg, amikor valaki reagál a termékeidre vagy a profilodra. Térj vissza később."
+                }
+              />
             )}
           </>
         )}

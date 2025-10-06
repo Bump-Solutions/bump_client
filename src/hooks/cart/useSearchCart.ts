@@ -34,28 +34,20 @@ const fuseOptions: IFuseOptions<Doc> = {
 export function useCartSearch(query: string) {
   const { cart } = useCart();
 
-  // Ha a kosár üres, nincs mit keresni
-  const hasPackages = Object.keys(cart.packages).length > 0;
-  if (!hasPackages)
-    return {
-      filteredPackages: cart.packages,
-      highlightIndex: {} as HighlightIndex,
-    };
-
-  // 1) Flatten: minden tételhez csatoljuk a keresendő mezőket
+  // 1) Flatten (mindig lefut, nincs korai return → Hooks OK)
   const docs = useMemo<Doc[]>(() => {
+    if (!cart?.packages?.length) return [];
     const out: Doc[] = [];
-    for (const pkg of Object.values(cart.packages)) {
+    for (const pkg of cart.packages) {
       const s = pkg.seller;
-      for (const [pid, prod] of Object.entries(pkg.products)) {
-        const productId = Number(pid);
+      for (const prod of pkg.products) {
         const p = prod.product;
         for (const it of prod.items) {
           out.push({
             sellerId: s.id,
             sellerUsername: s.username,
-            productId,
-            productTitle: p.title,
+            productId: prod.id,
+            productTitle: prod.title,
             brand: p.brand,
             model: p.model,
             colorWay: p.colorWay,
@@ -68,19 +60,17 @@ export function useCartSearch(query: string) {
     return out;
   }, [cart.packages]);
 
-  // 2) Fuse index
-  const fuse = useMemo(() => {
-    return new Fuse(docs, fuseOptions);
-  }, [docs]);
+  // 2) Fuse index (cache-elve useMemo-val)
+  const fuse = useMemo(() => new Fuse(docs, fuseOptions), [docs]);
 
-  // 3) Keresés + highlight index 3 szinten (seller/product/item)
+  // 3) Keresés + highlight indexek + visszaépítés TÖMBÖKKEL
   const { filteredPackages, highlightIndex } = useMemo(() => {
     const q = query.trim();
     const hits = q
       ? fuse.search(q)
       : docs.map((d) => ({ item: d, matches: [] as any[] }));
 
-    // Eredmény-szűréshez: sellerId -> productId -> itemId set
+    // Engedély mátrix: sellerId -> productId -> itemIds
     const allowMap = new Map<number, Map<number, Set<number>>>();
 
     // Highlight index
@@ -92,13 +82,21 @@ export function useCartSearch(query: string) {
       const d = r.item;
 
       // --- engedély mátrix a visszaépítéshez
-      if (!allowMap.has(d.sellerId)) allowMap.set(d.sellerId, new Map());
-      const perSellerAllow = allowMap.get(d.sellerId)!;
-      if (!perSellerAllow.has(d.productId))
-        perSellerAllow.set(d.productId, new Set());
-      perSellerAllow.get(d.productId)!.add(d.itemId);
+      let perSellerAllow = allowMap.get(d.sellerId)!;
+      if (!perSellerAllow) {
+        perSellerAllow = new Map();
+        allowMap.set(d.sellerId, perSellerAllow);
+      }
 
-      // --- highlight tartományok
+      let perProductAllow = perSellerAllow.get(d.productId);
+      if (!perProductAllow) {
+        perProductAllow = new Set();
+        perSellerAllow.set(d.productId, perProductAllow);
+      }
+      perProductAllow.add(d.itemId);
+
+      // highlight tartományok (Fuse includeMatches → indices)
+      // https://www.fusejs.io/api/options.html#includeMatches
       if (r.matches && r.matches.length) {
         for (const m of r.matches) {
           const key = m.key as keyof Doc; // pl. "productTitle"
@@ -137,37 +135,36 @@ export function useCartSearch(query: string) {
     }
 
     // 4) Visszaépítés a szűrt struktúrára
-    const next: Record<number, CartPackageModel> = {};
+    let nextPackages: CartPackageModel[] = [];
+    if (allowMap.size && cart.packages?.length) {
+      nextPackages = cart.packages
+        .map<CartPackageModel | null>((pkg) => {
+          const perSellerAllow = allowMap.get(pkg.seller.id);
+          if (!perSellerAllow) return null;
 
-    for (const [sidStr, pkg] of Object.entries(cart.packages)) {
-      const sid = Number(sidStr);
-      const allowProducts = allowMap.get(sid);
-      if (!allowProducts) continue;
+          const nextProducts: CartProductModel[] = pkg.products
+            .map<CartProductModel | null>((prod) => {
+              const allowedItemIds = perSellerAllow.get(prod.id);
+              if (!allowedItemIds) return null;
 
-      const nextProducts: Record<number, CartProductModel> = {};
+              const items = prod.items.filter((it) =>
+                allowedItemIds.has(it.id)
+              );
+              return items.length ? { ...prod, items } : null;
+            })
+            .filter(Boolean) as CartProductModel[];
 
-      for (const [pidStr, prod] of Object.entries(pkg.products)) {
-        const pid = Number(pidStr);
-        const allowItems = allowProducts.get(pid);
-        if (!allowItems) continue;
-
-        const items = prod.items.filter((it) => allowItems.has(it.id));
-        if (items.length) nextProducts[pid] = { ...prod, items };
-      }
-
-      if (Object.keys(nextProducts).length) {
-        next[sid] = { ...pkg, products: nextProducts };
-      }
+          return nextProducts.length
+            ? { ...pkg, products: nextProducts }
+            : null;
+        })
+        .filter(Boolean) as CartPackageModel[];
     }
 
-    const highlightIndex: HighlightIndex = {
-      perSeller,
-      perProduct,
-      perItem,
-    };
+    const highlightIndex: HighlightIndex = { perSeller, perProduct, perItem };
 
     return {
-      filteredPackages: Object.keys(next).length ? next : cart.packages,
+      filteredPackages: nextPackages.length ? nextPackages : cart.packages,
       highlightIndex,
     };
   }, [fuse, docs, query, cart.packages]);

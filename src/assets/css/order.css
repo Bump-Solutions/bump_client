@@ -19,24 +19,6 @@
   flex-direction: column;
   padding: 0;
 }
-.orders .orders__list.empty {
-  justify-content: center;
-  align-items: center;
-  gap: 1rem;
-  padding: 3rem;
-  text-align: center;
-  color: #868e96;
-  font-size: 1rem;
-}
-.orders .orders__list.empty h4 {
-  font-size: 1.125rem;
-  color: #212529;
-  margin-bottom: 0.25rem;
-}
-.orders .orders__list.empty p {
-  max-width: 500px;
-  margin: 0 auto;
-}
 .orders .dtable__wrapper.dt-orders .dtable {
   box-shadow: none;
 }/*# sourceMappingURL=order.css.map */

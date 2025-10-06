@@ -24,11 +24,7 @@
 }
 .cart.empty .cart__header {
   width: 100%;
-  margin-bottom: 2rem;
-}
-.cart.empty h4 {
-  text-align: center;
-  color: #212529;
+  margin-bottom: 0;
 }
 .cart a.link {
   grid-area: back;

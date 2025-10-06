@@ -22,6 +22,9 @@ export const QUERY_KEY = {
   listCategories: "listCategories",
   listSizes: "listSizes",
 
+  // CART
+  getCart: "getCart",
+
   // ORDER
   listOrders: "listOrders",
   getOrder: "getOrder",

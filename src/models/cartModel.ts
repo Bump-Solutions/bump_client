@@ -14,14 +14,11 @@ export interface MoneyModel {
 
 /** Katalógus/termék snapshot – kép és általános meta a termékszinthez */
 export interface CatalogProductRefModel {
-  id: number; // pl. "Nike Air Force 1 Triple White" katalógus ID
-  title: string; // megjelenítéshez
   brand: string; // pl. "Nike"
   model: string; // pl. "Air Force 1"
   colorWay: string; // pl. "Triple White"
-  category: string; // pl. "sneaker"
+  category: number; // pl. "sneaker"
   colors: string; // Comma separated colors
-  image: string; // termék borítókép (a tételeknek nincs saját képük)
 }
 
 /** Tétel állapot (szinkron után UI-jelzésekhez) */
@@ -52,27 +49,27 @@ export interface CartItemModel {
   price: MoneyModel;
 
   /** Opcionális kedvezmény (%) – amikor kosárba kerül, már ismert */
+  hasDiscount: boolean;
   discountPercent?: DiscountPercent; // 1..100
   discountedPrice?: MoneyModel;
 
   state?: CartItemState; // TODO
-
-  /** Mikor került a kosárba (rendezés/infó) */
-  addedAt: string; // ISO
 }
 
 // --- Termékszint a kosárban --------------------------------------------------
 export interface CartProductModel {
+  id: number;
+  title: string; // pl. "Nike Air Force 1 '07 LV8"
+  image: string; // snapshot
+
   product: CatalogProductRefModel;
   items: CartItemModel[]; // snapshot (egy helyen!)
-  lastUpdatedAt?: string; // az adott termékhez tartozó tételek
 }
 
 /** Egy eladó „csomagja”: az adott eladó összes tétele a kosárban */
 export interface CartPackageModel {
   seller: SellerModel;
-  products: Record<number, CartProductModel>;
-  lastUpdatedAt?: string; // ISO idő (cache/tracking)
+  products: CartProductModel[];
 }
 
 // --- Összegző (csak aggregált adatok) ---------------------------------------
@@ -89,15 +86,12 @@ export interface CartSummaryModel {
 
   /** Tájékoztató végösszeg = Σ discounted (line item szint) */
   indicativeSubtotal: MoneyModel;
-
-  computedAt: string; // ISO idő (cache/tracking)
 }
 
 // --- Teljes kosár ------------------------------------------------------------
 
 /** sellerId -> package. A termék alatti tételek a nézetben (selector) csoportosítva jelennek meg. */
 export type CartModel = {
-  packages: Record<number, CartPackageModel>;
+  packages: CartPackageModel[];
   summary: CartSummaryModel;
-  version?: 2;
 };
