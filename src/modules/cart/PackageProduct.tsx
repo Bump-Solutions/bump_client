@@ -10,7 +10,7 @@ interface PackageProductProps {
 const PackageProduct = ({ product, highlightIndex }: PackageProductProps) => {
   return (
     <section className='pkg__product'>
-      <Image src={product.product.image} alt={product.product.title} />
+      <Image src={product.image} alt={product.title} />
     </section>
   );
 };

@@ -94,7 +94,7 @@ const Package = ({
             layout>
             {Object.values(pkg.products).map((prod: CartProductModel) => (
               <PackageProduct
-                key={prod.product.id}
+                key={prod.id}
                 product={prod}
                 highlightIndex={highlightIndex}
               />

@@ -31,6 +31,8 @@ const CartHeader = ({ searchKey, setSearchKey }: CartHeaderProps) => {
     };
   }, [isContextMenuOpen]);
 
+  if (!cart) return null;
+
   return (
     <header className='cart__header'>
       <div>
