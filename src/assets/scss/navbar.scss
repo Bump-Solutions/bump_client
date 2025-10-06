@@ -702,6 +702,65 @@
           background-color: color(gray, 800);
         }
       }
+
+      &.theme-selector {
+        cursor: default;
+        justify-content: space-between;
+
+        &:hover {
+          background-color: transparent;
+        }
+
+        div {
+          flex: 0;
+          position: relative;
+          user-select: none;
+          position: relative;
+          padding: 0.25rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.125rem;
+          width: fit-content;
+          height: 2.25rem;
+          isolation: isolate;
+          border-radius: 9999px;
+          background-color: color(gray, 200);
+
+          span {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: stretch;
+
+            button {
+              all: unset;
+              cursor: pointer;
+              font-weight: 600;
+              font-size: $fs-14;
+              line-height: 20px;
+              padding: 0.25rem;
+              border-radius: 9999px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              color: color(gray, 600);
+              transition: color 0.2s $animation-cubic,
+                background-color 0.2s $animation-cubic;
+
+              &.active {
+                background-color: $clr-white;
+                box-shadow: $box-shadow;
+                color: color(gray, 900);
+              }
+
+              svg {
+                width: $fs-20;
+                height: $fs-20;
+              }
+            }
+          }
+        }
+      }
     }
   }
 }

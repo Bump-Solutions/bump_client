@@ -9,6 +9,8 @@ import { useAuth } from "../../hooks/auth/useAuth";
 import { useLogout } from "../../hooks/auth/useLogout";
 import { useClickOutside } from "../../hooks/useClickOutside";
 
+import ThemeSelector from "./ThemeSelector";
+
 import {
   Tag,
   Bookmark,
@@ -168,6 +170,13 @@ const ProfileMenuActions = ({ toggleProfileMenu }: ProfileMenuActionsProps) => {
               <Settings />
               <span>Beállítások</span>
             </Link>
+          </li>
+        </ul>
+
+        <ul className='action-list'>
+          <li className='action-list-item theme-selector'>
+            <span>Megjelenés</span>
+            <ThemeSelector />
           </li>
         </ul>
 
