@@ -64,19 +64,22 @@ export interface CartProductModel {
 
   product: CatalogProductRefModel;
   items: CartItemModel[]; // snapshot (egy helyen!)
+
+  summary: CartSummaryModel;
 }
 
 /** Egy eladó „csomagja”: az adott eladó összes tétele a kosárban */
 export interface CartPackageModel {
   seller: SellerModel;
   products: CartProductModel[];
+  summary: CartSummaryModel;
 }
 
 // --- Összegző (csak aggregált adatok) ---------------------------------------
 
 export interface CartSummaryModel {
-  packagesCount: number; // hány eladó/csomag
-  itemsCount: number; // tételek darabszáma (Σ quantity)
+  // packagesCount: number; // hány eladó/csomag
+  // itemsCount: number; // tételek darabszáma (Σ quantity)
 
   /** Részösszeg KEDVEZMÉNY NÉLKÜL = Σ item.price.amount */
   grossSubtotal: MoneyModel;
@@ -93,5 +96,4 @@ export interface CartSummaryModel {
 /** sellerId -> package. A termék alatti tételek a nézetben (selector) csoportosítva jelennek meg. */
 export type CartModel = {
   packages: CartPackageModel[];
-  summary: CartSummaryModel;
 };

@@ -31,30 +31,33 @@ const CartHeader = ({ searchKey, setSearchKey }: CartHeaderProps) => {
     };
   }, [isContextMenuOpen]);
 
+  if (!cart) return null;
+
   return (
     <header className='cart__header'>
       <div>
         <h1>A Te kosarad</h1>
-        {cart.summary.itemsCount > 0 && (
-          <span className='badge fw-600'>{cart.summary.itemsCount} tétel</span>
+        {cart.packages.length > 0 && (
+          <span className='badge fw-600'>{cart.packages.length} csomag</span>
         )}
       </div>
-      <div>
-        <div
-          className='search-box'
-          role='search'
-          onClick={() => searchRef.current?.focus()}>
-          <Search aria-hidden='true' />
-          <input
-            type='search'
-            className='form-control'
-            placeholder='Keresés...'
-            value={deferredSearchKey}
-            onChange={(e) => setSearchKey(e.target.value)}
-            ref={searchRef}
-          />
-        </div>
-        {cart.summary.itemsCount > 0 && (
+
+      {cart.packages.length > 0 && (
+        <div>
+          <div
+            className='search-box'
+            role='search'
+            onClick={() => searchRef.current?.focus()}>
+            <Search aria-hidden='true' />
+            <input
+              type='search'
+              className='form-control'
+              placeholder='Keresés a kosárban...'
+              value={deferredSearchKey}
+              onChange={(e) => setSearchKey(e.target.value)}
+              ref={searchRef}
+            />
+          </div>
           <span
             className='cart-actions'
             onClick={(e) => {
@@ -64,8 +67,8 @@ const CartHeader = ({ searchKey, setSearchKey }: CartHeaderProps) => {
             }}>
             <EllipsisVertical strokeWidth={3} />
           </span>
-        )}
-      </div>
+        </div>
+      )}
 
       {isContextMenuOpen && (
         <AnimatePresence mode='wait'>

@@ -29,6 +29,8 @@ export interface CartProductDTO {
   image: string;
 
   items: CartItemDTO[];
+
+  summary: CartSummaryDTO;
 }
 
 export interface CartPackageDTO {
@@ -37,11 +39,12 @@ export interface CartPackageDTO {
   profile_picture: string | null; // Seller profile picture URL
 
   inventories: CartProductDTO[]; // List of products in this package
+
+  summary: CartSummaryDTO;
 }
 
 export interface CartSummaryDTO {
-  packages_count: number;
-  items_count: number;
+  // items_count: number;
 
   gross_total: number; // Total price before discount
   total_discount_value: number; // Total discount value
@@ -50,5 +53,4 @@ export interface CartSummaryDTO {
 
 export interface CartDTO {
   packages: CartPackageDTO[];
-  summary: CartSummaryDTO;
 }

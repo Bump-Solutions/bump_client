@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ApiError, ApiResponse } from "../../types/api";
 import { useAxiosPrivate } from "../auth/useAxiosPrivate";
-import { addItems, clearCart } from "../../services/cartService";
+import { addItems, clearCart, removePackage } from "../../services/cartService";
 import { QUERY_KEY } from "../../utils/queryKeys";
 import { CartModel } from "../../models/cartModel";
 
@@ -9,10 +9,7 @@ type MutationCtx = {
   prev?: CartModel;
 };
 
-export const useAddItems = (
-  onSuccess?: (resp: ApiResponse, variables: number[]) => void,
-  onError?: (error: ApiError, variables: number[]) => void
-) => {
+export const useAddItems = () => {
   const axiosPrivate = useAxiosPrivate();
   const queryClient = useQueryClient();
 
@@ -20,14 +17,13 @@ export const useAddItems = (
     mutationFn: (itemIds: number[]) => addItems(axiosPrivate, itemIds),
 
     onMutate: async (variables) => {
-      console.log("Adding to cart (optimistic):", variables);
-
       await queryClient.cancelQueries({
         queryKey: [QUERY_KEY.getCart],
       });
 
       const prev = queryClient.getQueryData<CartModel>([QUERY_KEY.getCart]);
 
+      /* 
       if (prev) {
         queryClient.setQueryData([QUERY_KEY.getCart], {
           ...prev,
@@ -37,6 +33,7 @@ export const useAddItems = (
           },
         });
       }
+        */
 
       return { prev };
     },
@@ -45,17 +42,54 @@ export const useAddItems = (
       if (context?.prev) {
         queryClient.setQueryData([QUERY_KEY.getCart], context.prev);
       }
-      if (onError) {
-        onError(error, variables);
-      }
+
       return Promise.reject(error);
     },
 
-    onSuccess: (resp, variables) => {
-      if (onSuccess) {
-        onSuccess(resp, variables);
-      }
+    // onSuccess: (resp, variables) => {},
+
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEY.getCart],
+      });
     },
+  });
+};
+
+export const useRemovePackage = () => {
+  const axiosPrivate = useAxiosPrivate();
+  const queryClient = useQueryClient();
+
+  return useMutation<ApiResponse, ApiError, number, MutationCtx>({
+    mutationFn: (sellerId: number) => removePackage(axiosPrivate, sellerId),
+
+    onMutate: async (sellerId) => {
+      await queryClient.cancelQueries({
+        queryKey: [QUERY_KEY.getCart],
+      });
+
+      const prev = queryClient.getQueryData<CartModel>([QUERY_KEY.getCart]);
+      if (!prev) return { prev };
+
+      const next = prev.packages.filter((pkg) => pkg.seller.id !== sellerId);
+
+      queryClient.setQueryData([QUERY_KEY.getCart], {
+        ...prev,
+        packages: next,
+      });
+
+      return { prev };
+    },
+
+    onError: (error, variables, context) => {
+      if (context?.prev) {
+        queryClient.setQueryData([QUERY_KEY.getCart], context.prev);
+      }
+
+      return Promise.reject(error);
+    },
+
+    // onSuccess: (resp, variables) => {},
 
     onSettled: () => {
       queryClient.invalidateQueries({
@@ -83,15 +117,6 @@ export const useClearCart = () => {
       // az üres kosár Model:
       const EMPTY: CartModel = {
         packages: [],
-
-        summary: {
-          packagesCount: 0,
-          itemsCount: 0,
-
-          grossSubtotal: { amount: 0, currency: "HUF" },
-          discountsTotal: { amount: 0, currency: "HUF" },
-          indicativeSubtotal: { amount: 0, currency: "HUF" },
-        },
       };
 
       queryClient.setQueryData([QUERY_KEY.getCart], EMPTY);
