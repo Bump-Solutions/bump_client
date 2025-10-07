@@ -59,6 +59,7 @@ const mapProductDTO = (dto: CartProductDTO): CartProductModel => ({
   image: dto.image,
   product: mapCatalogProductRefDTO(dto.product),
   items: dto.items.map(mapItemDTO),
+  summary: mapSummaryDTO(dto.summary),
 });
 
 const mapSellerDTO = (dto: CartPackageDTO): SellerModel => ({
@@ -70,11 +71,12 @@ const mapSellerDTO = (dto: CartPackageDTO): SellerModel => ({
 const mapPackageDTO = (dto: CartPackageDTO): CartPackageModel => ({
   seller: mapSellerDTO(dto),
   products: dto.inventories.map(mapProductDTO),
+  summary: mapSummaryDTO(dto.summary),
 });
 
 const mapSummaryDTO = (dto: CartSummaryDTO): CartSummaryModel => ({
-  packagesCount: dto.packages_count,
-  itemsCount: dto.items_count,
+  // packagesCount: dto.packages_count,
+  // itemsCount: dto.items_count,
 
   grossSubtotal: money(dto.gross_total),
   discountsTotal: money(dto.total_discount_value),
@@ -83,6 +85,4 @@ const mapSummaryDTO = (dto: CartSummaryDTO): CartSummaryModel => ({
 
 export const fromCartDTO = (dto: CartDTO): CartModel => ({
   packages: dto.packages.map(mapPackageDTO),
-
-  summary: mapSummaryDTO(dto.summary),
 });

@@ -1,50 +1,45 @@
-import { CURRENCY_LABELS } from "../../utils/mappers";
-import { formatMinorHU } from "../../utils/pricing";
-import { useCart } from "../../hooks/cart/useCart";
-import { Link } from "react-router";
 import { ROUTES } from "../../routes/routes";
-interface CartSummaryNote {
-  type: "info" | "success" | "warning" | "error";
-  title: string;
-  message: string;
+import { CURRENCY_LABELS } from "../../utils/mappers";
+import { Link } from "react-router";
+import { CartPackageModel } from "../../models/cartModel";
+import { useCart } from "../../hooks/cart/useCart";
+import { formatMinorHU } from "../../utils/pricing";
+
+import StateButton from "../../components/StateButton";
+
+import { Send } from "lucide-react";
+
+interface PackageSummaryProps {
+  pkg: CartPackageModel;
 }
 
-const NOTES: CartSummaryNote[] = [
-  {
-    type: "info",
-    title: "Hogyan működik a kosár? 🛒",
-    message:
-      "Itt látod az eladónként létrehozott termékcsomagjaidat. A vásárlás eladónként, közvetlen kapcsolatfelvétellel történik.",
-  },
-  {
-    type: "success",
-    title: "Tipp: 💡",
-    message:
-      "A végösszeg tájékoztató; a szállítás és az árak eladónként egyeztetendők.",
-  },
-];
+const PackageSummary = ({ pkg }: PackageSummaryProps) => {
+  const { grossSubtotal, discountsTotal, indicativeSubtotal } = pkg.summary;
 
-const CartSummary = () => {
-  const { cart } = useCart();
-  if (!cart) return null;
-
-  const { grossSubtotal, discountsTotal, indicativeSubtotal, itemsCount } =
-    cart.summary;
+  const handleCreateOrder = () => {
+    return Promise.resolve();
+  };
 
   return (
-    <article className='cart__summary'>
-      <h1>Összegzés</h1>
-
-      {NOTES.map((note, index) => (
-        <blockquote key={index} className={`note ${note.type}`}>
-          <strong>{note.title}</strong>
-          <p>{note.message}</p>
-        </blockquote>
-      ))}
+    <article className='package__summary'>
+      <h1>
+        Összegzés -{" "}
+        <Link
+          to={ROUTES.PROFILE(pkg.seller.username).ROOT}
+          className='link blue italic mb-0 fw-600'>
+          @{pkg.seller.username}
+        </Link>
+      </h1>
 
       <div className='rows'>
         <div className='row'>
-          <span>{itemsCount} tétel</span>
+          <span>
+            {pkg.products.reduce(
+              (acc, product) => acc + product.items.length,
+              0
+            )}{" "}
+            tétel
+          </span>
         </div>
 
         <div className='row'>
@@ -87,11 +82,18 @@ const CartSummary = () => {
         </div>
       </div>
 
-      <Link to={ROUTES.HOME} className='link mx-auto'>
+      <StateButton
+        className='primary mx-auto w-full'
+        text='Üzenet az eladónak'
+        onClick={handleCreateOrder}>
+        <Send />
+      </StateButton>
+
+      <Link to={ROUTES.HOME} className='link d-block mx-auto mt-1 fs-16'>
         Vásárlás folytatása
       </Link>
     </article>
   );
 };
 
-export default CartSummary;
+export default PackageSummary;

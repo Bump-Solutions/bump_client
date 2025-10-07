@@ -1,17 +1,17 @@
 import "../../assets/css/cart.css";
-import { Link } from "react-router";
-import { ROUTES } from "../../routes/routes";
-import { useTitle } from "react-use";
-import { useCart } from "../../hooks/cart/useCart";
 import { ENUM } from "../../utils/enum";
+import { ROUTES } from "../../routes/routes";
 import { useState } from "react";
+import { useCart } from "../../hooks/cart/useCart";
+import { useTitle } from "react-use";
+
+import { Link } from "react-router";
 
 import Spinner from "../../components/Spinner";
-import CartHeader from "./CartHeader";
-import CartContent from "./CartContent";
-import CartSummary from "./CartSummary";
 import Back from "../../components/Back";
 import Empty from "../../components/Empty";
+import CartHeader from "./CartHeader";
+import CartContent from "./CartContent";
 
 import { ArrowUpRight, Globe } from "lucide-react";
 
@@ -30,13 +30,12 @@ const Cart = () => {
     );
   }
 
-  return cart && cart.summary.itemsCount > 0 ? (
+  return cart && cart.packages.length > 0 ? (
     <section className='cart'>
       <Back to={ROUTES.HOME} text='Vásárlás folytatása' className='link mb-1' />
-
       <CartHeader searchKey={searchKey} setSearchKey={setSearchKey} />
+
       <CartContent searchKey={searchKey} />
-      <CartSummary />
     </section>
   ) : (
     <section className='cart empty'>

@@ -11,6 +11,8 @@ interface CartContextType {
   cart: CartModel | undefined;
   isLoading: boolean;
 
+  itemsCount: number;
+
   actions?: {
     addItems: ReturnType<typeof useAddItems>;
     removePackage: ReturnType<typeof useRemovePackage>;
@@ -38,13 +40,28 @@ const CartProvider = ({ children }: CartProviderProps) => {
     let out: CartContextType = {
       cart,
       isLoading,
+
+      itemsCount: cart
+        ? cart.packages.reduce((sum, pkg) => {
+            return (
+              sum +
+              pkg.products.reduce((pSum, prod) => pSum + prod.items.length, 0)
+            );
+          }, 0)
+        : 0,
+
       actions: { addItems, removePackage, clearCart },
     };
 
     if (isError) {
       // Prevent blocking the entire app if cart fetch fails
       console.error("Failed to fetch cart:", error);
-      out = { cart: undefined, isLoading: false, actions: undefined };
+      out = {
+        cart: undefined,
+        isLoading: false,
+        itemsCount: 0,
+        actions: undefined,
+      };
     }
 
     return out;

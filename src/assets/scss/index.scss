@@ -207,6 +207,10 @@ form {
   max-width: 90%;
 }
 
+.d-block {
+  display: block !important;
+}
+
 .d-flex {
   display: flex !important;
 }
@@ -249,6 +253,10 @@ form {
 
 .va-middle {
   vertical-align: middle !important;
+}
+
+.italic {
+  font-style: italic !important;
 }
 
 .fc-dark-500 {
@@ -501,6 +509,14 @@ form {
 
 .mw-400 {
   max-width: 400px !important;
+}
+
+.mw-600 {
+  max-width: 600px !important;
+}
+
+.mw-800 {
+  max-width: 800px !important;
 }
 
 .transition-clr {

@@ -33,6 +33,7 @@ const fuseOptions: IFuseOptions<Doc> = {
 
 export function useCartSearch(query: string) {
   const { cart } = useCart();
+  if (!cart) return { filteredPackages: [], highlightIndex: {} };
 
   // 1) Flatten (mindig lefut, nincs korai return → Hooks OK)
   const docs = useMemo<Doc[]>(() => {
