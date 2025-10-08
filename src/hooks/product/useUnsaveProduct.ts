@@ -11,7 +11,7 @@ import { QUERY_KEY } from "../../utils/queryKeys";
 
 type UnsaveProductVariables = {
   product: ProductModel | ProductListModel;
-  userId: number; // TODO: get from product owner, currently productListModel doesn't have ownerId
+  userId: number;
 };
 
 type UnsaveProductCtx = {

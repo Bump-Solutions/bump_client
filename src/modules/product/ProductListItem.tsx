@@ -72,7 +72,7 @@ const ProductListItem = ({ product }: ProductListItemProps) => {
       if (likeMutation.isPending) return;
       const likePromise = likeMutation.mutateAsync({
         product,
-        ownerId: product.userId, // TODO
+        ownerId: product.userId,
       });
 
       toast.promise(likePromise, {

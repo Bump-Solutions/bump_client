@@ -11,7 +11,7 @@ import { QUERY_KEY } from "../../utils/queryKeys";
 
 type UnlikeProductVariables = {
   product: ProductModel | ProductListModel;
-  ownerId: number; // TODO: get from product owner, currently productListModel doesn't have ownerId
+  ownerId: number;
 };
 
 type UnlikeProductCtx = {
