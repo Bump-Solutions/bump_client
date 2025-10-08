@@ -18,8 +18,7 @@ const PackageSummary = () => {
 
     const itemIds = pkg.products.flatMap((p) => p.items.map((i) => i.id));
     if (itemIds.length === 0) {
-      Promise.reject("No items in the package");
-      return;
+      return Promise.reject("No items in the package");
     }
 
     return Promise.resolve();

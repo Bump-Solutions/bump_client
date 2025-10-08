@@ -11,7 +11,6 @@ export const useSignup = (
   return useMutation<ApiResponse, ApiError, SignupModel>({
     mutationFn: (data: SignupModel) => signup(data),
     onSuccess: (resp, variables) => {
-      // TODO: ...args?
       if (onSuccess) {
         onSuccess(resp, variables);
       }
