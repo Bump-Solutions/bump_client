@@ -1,3 +1,5 @@
+import { useMemo } from "react";
+import { PackageContext } from "../../context/PackageProvider";
 import { CartPackageModel } from "../../models/cartModel";
 import { HighlightIndex } from "../../utils/highlight";
 
@@ -9,12 +11,19 @@ interface PackageProps {
 }
 
 const Package = ({ pkg, highlightIndex }: PackageProps) => {
-  return (
-    <li className='package__wrapper'>
-      <div className='package'></div>
+  const contextValue = useMemo(
+    () => ({ pkg, highlightIndex }),
+    [pkg, highlightIndex]
+  );
 
-      <PackageSummary pkg={pkg} />
-    </li>
+  return (
+    <PackageContext.Provider value={contextValue}>
+      <li className='package__wrapper'>
+        <div className='package'></div>
+
+        <PackageSummary />
+      </li>
+    </PackageContext.Provider>
   );
 };
 

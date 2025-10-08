@@ -34,6 +34,7 @@ export function fromListProductDTO(dto: ListProductDTO): ProductListModel {
     badges: dto.badges,
     itemsCount: dto.items_count,
     ownProduct: dto.own_product,
+    userId: dto.user_id,
   };
 }
 
