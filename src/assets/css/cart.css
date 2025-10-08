@@ -235,7 +235,7 @@
 }
 .cart .cart__content .package__list .package__wrapper .package {
   flex: 1 1 66%;
-  padding: 5rem;
+  padding: 1rem;
   border: 1px solid #dee2e6;
   border-radius: 1rem;
   height: -moz-fit-content;

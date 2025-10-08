@@ -25,6 +25,7 @@ export interface ProductListModel {
   badges: BadgeCollection;
   itemsCount: number; // the number of items in the product
   ownProduct: boolean; // if the authenticated user is the owner of this product
+  userId: number;
 }
 
 export interface ProductModel {

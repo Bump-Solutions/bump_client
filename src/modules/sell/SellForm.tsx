@@ -127,7 +127,9 @@ const SellForm = () => {
 
     // console.log("submit", data);
 
-    const uploadPromise = uploadProductMutation.mutateAsync(data);
+    const uploadPromise = uploadProductMutation.mutateAsync({
+      newProduct: data,
+    });
 
     toast.promise(uploadPromise, {
       loading: "Létrehozás folyamatban...",
@@ -141,9 +143,7 @@ const SellForm = () => {
           </Link>
         </span>
       ),
-      error: (err) =>
-        (err?.response?.data?.message as string) ||
-        "Hiba a termék létrehozása során.",
+      error: (err) => "Hiba a termék létrehozása során.",
     });
 
     return uploadPromise;
@@ -187,7 +187,7 @@ const SellForm = () => {
               type='button'
               text='Eladás'
               className='primary mt-0 mb-0'
-              onClick={(e) => handleFormSubmit(e)}>
+              onClick={handleFormSubmit}>
               <Tag />
             </StateButton>
           ) : (
@@ -195,7 +195,7 @@ const SellForm = () => {
               type='button'
               text='Folytatás'
               className={`tertiary icon--reverse `}
-              onClick={(e) => next(e)}>
+              onClick={next}>
               <MoveRight />
             </Button>
           )}

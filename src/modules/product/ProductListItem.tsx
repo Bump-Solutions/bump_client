@@ -1,8 +1,6 @@
 import { ROUTES } from "../../routes/routes";
 import { AnimatePresence } from "framer-motion";
-import { useQueryClient } from "@tanstack/react-query";
-import { QUERY_KEY } from "../../utils/queryKeys";
-import { InventoryModel, ProductListModel } from "../../models/productModel";
+import { ProductListModel } from "../../models/productModel";
 import { useProfile } from "../../hooks/profile/useProfile";
 import { useLikeProduct } from "../../hooks/product/useLikeProduct";
 import { useUnlikeProduct } from "../../hooks/product/useUnlikeProduct";
@@ -37,8 +35,7 @@ const ProductListItem = ({ product }: ProductListItemProps) => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { user, isOwnProfile } = useProfile();
-  const queryClient = useQueryClient();
+  const { isOwnProfile } = useProfile();
 
   const [isContextMenuOpen, toggleContextMenu] = useToggle(false);
   const [isDeleteOpen, toggleDelete] = useToggle(false);
@@ -62,167 +59,21 @@ const ProductListItem = ({ product }: ProductListItemProps) => {
     delay: 500,
   });
 
-  const likeMutation = useLikeProduct((response, productId) => {
-    queryClient.setQueriesData(
-      {
-        predicate(query) {
-          const key = query.queryKey[0];
-          switch (key) {
-            case QUERY_KEY.listProducts:
-              return query.queryKey[1] === user?.id;
-            case QUERY_KEY.listSavedProducts:
-              return true;
-            default:
-              return false;
-          }
-        },
-      },
-      (prev: any) => {
-        if (!prev) return prev;
-        return {
-          ...prev,
-          pages: prev.pages.map((page: InventoryModel) => ({
-            ...page,
-            products: page.products.map((product: ProductListModel) => {
-              if (product.id === productId) {
-                return {
-                  ...product,
-                  liked: true,
-                  likes: product.likes + 1,
-                };
-              }
-              return product;
-            }),
-          })),
-        };
-      }
-    );
-  });
+  const likeMutation = useLikeProduct();
+  const unlikeMutation = useUnlikeProduct();
 
-  const unlikeMutation = useUnlikeProduct((response, productId) => {
-    queryClient.setQueriesData(
-      {
-        predicate(query) {
-          const key = query.queryKey[0];
-          switch (key) {
-            case QUERY_KEY.listProducts:
-              return query.queryKey[1] === user?.id;
-            case QUERY_KEY.listSavedProducts:
-              return true;
-            default:
-              return false;
-          }
-        },
-      },
-      (prev: any) => {
-        if (!prev) return prev;
-        return {
-          ...prev,
-          pages: prev.pages.map((page: InventoryModel) => ({
-            ...page,
-            products: page.products.map((product: ProductListModel) => {
-              if (product.id === productId) {
-                return {
-                  ...product,
-                  liked: false,
-                  likes: product.likes - 1,
-                };
-              }
-              return product;
-            }),
-          })),
-        };
-      }
-    );
-  });
+  const saveMutation = useSaveProduct();
+  const unsaveMutation = useUnsaveProduct();
 
-  const saveMutation = useSaveProduct((response, productId) => {
-    queryClient.setQueryData(
-      [QUERY_KEY.listProducts, user?.id],
-      (prev: any) => {
-        if (!prev) return prev;
-        return {
-          ...prev,
-          pages: prev.pages.map((page: InventoryModel) => ({
-            ...page,
-            products: page.products.map((product: ProductListModel) => {
-              if (product.id === productId) {
-                return {
-                  ...product,
-                  saved: true,
-                  saves: product.saves + 1,
-                };
-              }
-              return product;
-            }),
-          })),
-        };
-      }
-    );
-
-    queryClient.setQueryData([QUERY_KEY.listSavedProducts], (prev: any) => {
-      if (!prev) return prev;
-      return {
-        ...prev,
-        pages: prev.pages.map((page: InventoryModel) => ({
-          ...page,
-          products: [
-            { ...product, saved: true, saves: product.saves + 1 },
-            ...page.products,
-          ],
-        })),
-      };
-    });
-  });
-
-  const unsaveMutation = useUnsaveProduct((response, productId) => {
-    queryClient.setQueryData(
-      [QUERY_KEY.listProducts, user?.id],
-      (prev: any) => {
-        if (!prev) return prev;
-        return {
-          ...prev,
-          pages: prev.pages.map((page: InventoryModel) => ({
-            ...page,
-            products: page.products.map((product: ProductListModel) => {
-              if (product.id === productId) {
-                return {
-                  ...product,
-                  saved: false,
-                  saves: product.saves - 1,
-                };
-              }
-              return product;
-            }),
-          })),
-        };
-      }
-    );
-
-    queryClient.setQueryData([QUERY_KEY.listSavedProducts], (prev: any) => {
-      if (!prev) return prev;
-      return {
-        ...prev,
-        pages: prev.pages.map((page: InventoryModel) => ({
-          ...page,
-          products: page.products.filter(
-            (product: ProductListModel) => product.id !== productId
-          ),
-        })),
-      };
-    });
-  });
-
-  const handleLike = (
-    e: MouseEvent<HTMLSpanElement>,
-    pid: number,
-    isLiked: boolean
-  ) => {
+  const handleLike = (e: MouseEvent<HTMLSpanElement>) => {
     e.preventDefault();
 
-    if (!isLiked) {
+    if (!product.liked) {
       if (likeMutation.isPending) return;
-      const likePromise = likeMutation.mutateAsync(pid);
+      const likePromise = likeMutation.mutateAsync({
+        product,
+        ownerId: product.userId, // TODO
+      });
 
       toast.promise(likePromise, {
         loading: "Kedvelés...",
@@ -232,31 +83,28 @@ const ProductListItem = ({ product }: ProductListItemProps) => {
             <Link
               target='_blank'
               className='link fc-green-600 underline fw-700'
-              to={ROUTES.PRODUCT(pid).ROOT}>
+              to={ROUTES.PRODUCT(product.id).ROOT}>
               terméket.
             </Link>
           </span>
         ),
-        error: (err) =>
-          (err?.response?.data?.message as string) ||
-          "Hiba történt a termék kedvelése során.",
+        error: (err) => "Hiba történt a termék kedvelése során.",
       });
     } else {
       if (unlikeMutation.isPending) return;
-      unlikeMutation.mutateAsync(pid);
+      unlikeMutation.mutateAsync({ product, ownerId: product.userId });
     }
   };
 
-  const handleSave = (
-    e: MouseEvent<HTMLSpanElement>,
-    pid: number,
-    isSaved: boolean
-  ) => {
+  const handleSave = (e: MouseEvent<HTMLSpanElement>) => {
     e.preventDefault();
 
-    if (!isSaved) {
+    if (!product.saved) {
       if (saveMutation.isPending) return;
-      const savePromise = saveMutation.mutateAsync(pid);
+      const savePromise = saveMutation.mutateAsync({
+        product,
+        ownerId: product.userId,
+      });
 
       toast.promise(savePromise, {
         loading: "Mentés...",
@@ -266,18 +114,16 @@ const ProductListItem = ({ product }: ProductListItemProps) => {
             <Link
               target='_blank'
               className='link fc-green-600 underline fw-700'
-              to={ROUTES.PRODUCT(pid).ROOT}>
+              to={ROUTES.PRODUCT(product.id).ROOT}>
               terméket.
             </Link>
           </span>
         ),
-        error: (err) =>
-          (err?.response?.data?.message as string) ||
-          "Hiba történt a termék mentése során.",
+        error: (err) => "Hiba történt a termék mentése során.",
       });
     } else {
       if (unsaveMutation.isPending) return;
-      unsaveMutation.mutateAsync(pid);
+      unsaveMutation.mutateAsync({ product, userId: product.userId });
     }
   };
 
@@ -342,7 +188,7 @@ const ProductListItem = ({ product }: ProductListItemProps) => {
               <h3>{product.title}</h3>
 
               <span
-                onClick={(e) => handleLike(e, product.id, product.liked)}
+                onClick={handleLike}
                 className={`${product.liked ? "liked" : ""}`}>
                 <Heart className='svg-18' />
                 {product.likes >= 1000
@@ -351,7 +197,7 @@ const ProductListItem = ({ product }: ProductListItemProps) => {
               </span>
 
               <span
-                onClick={(e) => handleSave(e, product.id, product.saved)}
+                onClick={handleSave}
                 className={`${product.saved ? "saved" : ""}`}>
                 <Bookmark className='svg-18' />
                 {product.saves >= 1000

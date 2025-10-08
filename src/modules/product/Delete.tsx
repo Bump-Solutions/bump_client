@@ -38,14 +38,12 @@ const Delete = ({ product, isOpen, close }: DeleteProps) => {
 
     if (deleteProductMutation.isPending || !currentProduct) return;
 
-    const deletePromise = deleteProductMutation.mutateAsync(currentProduct.id);
+    const deletePromise = deleteProductMutation.mutateAsync({ product });
 
     toast.promise(deletePromise, {
       loading: "Termék törlése folyamatban...",
       success: `A(z) "${currentProduct.title}" termék törölve.`,
-      error: (err) =>
-        (err?.response?.data?.message as string) ||
-        "Hiba a termék törlése közben.",
+      error: (err) => "Hiba a termék törlése közben.",
     });
 
     return deletePromise;

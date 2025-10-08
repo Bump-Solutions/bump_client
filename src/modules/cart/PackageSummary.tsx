@@ -1,22 +1,27 @@
 import { ROUTES } from "../../routes/routes";
 import { CURRENCY_LABELS } from "../../utils/mappers";
+import { MouseEvent } from "react";
 import { Link } from "react-router";
-import { CartPackageModel } from "../../models/cartModel";
-import { useCart } from "../../hooks/cart/useCart";
 import { formatMinorHU } from "../../utils/pricing";
 
 import StateButton from "../../components/StateButton";
 
 import { Send } from "lucide-react";
+import { usePackage } from "../../hooks/cart/usePackage";
 
-interface PackageSummaryProps {
-  pkg: CartPackageModel;
-}
-
-const PackageSummary = ({ pkg }: PackageSummaryProps) => {
+const PackageSummary = () => {
+  const { pkg } = usePackage();
   const { grossSubtotal, discountsTotal, indicativeSubtotal } = pkg.summary;
 
-  const handleCreateOrder = () => {
+  const handleCreateOrder = (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+
+    const itemIds = pkg.products.flatMap((p) => p.items.map((i) => i.id));
+    if (itemIds.length === 0) {
+      Promise.reject("No items in the package");
+      return;
+    }
+
     return Promise.resolve();
   };
 
@@ -89,8 +94,10 @@ const PackageSummary = ({ pkg }: PackageSummaryProps) => {
         <Send />
       </StateButton>
 
-      <Link to={ROUTES.HOME} className='link d-block mx-auto mt-1 fs-16'>
-        Vásárlás folytatása
+      <Link
+        to={ROUTES.PROFILE(pkg.seller.username).PRODUCTS}
+        className='link d-block mx-auto mt-1 fs-16'>
+        Még több termék
       </Link>
     </article>
   );

@@ -26,6 +26,8 @@ export interface ListProductDTO {
   badges: BadgeCollection;
   items_count: number; // the number of items in the product
   own_product: boolean; // if the authenticated user is the owner of this product
+
+  user_id: number;
 }
 
 // A backend “GET /product/:pid válaszában érkező termék adatok. (single product)
@@ -40,7 +42,7 @@ export interface FetchedProductDTO {
     brand: string;
     model: string;
     color_way: string;
-    category: string;
+    category: number;
     colors: string; // Comma separated colors
   }; // Catalog product
 

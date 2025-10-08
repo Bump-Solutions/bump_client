@@ -1,7 +1,12 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ApiError, ApiResponse } from "../../types/api";
 import { useAxiosPrivate } from "../auth/useAxiosPrivate";
-import { addItems, clearCart, removePackage } from "../../services/cartService";
+import {
+  addItems,
+  clearCart,
+  removeItem,
+  removePackage,
+} from "../../services/cartService";
 import { QUERY_KEY } from "../../utils/queryKeys";
 import { CartModel } from "../../models/cartModel";
 
@@ -34,6 +39,55 @@ export const useAddItems = () => {
         });
       }
         */
+
+      return { prev };
+    },
+
+    onError: (error, variables, context) => {
+      if (context?.prev) {
+        queryClient.setQueryData([QUERY_KEY.getCart], context.prev);
+      }
+
+      return Promise.reject(error);
+    },
+
+    // onSuccess: (resp, variables) => {},
+
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEY.getCart],
+      });
+    },
+  });
+};
+
+export const useRemoveItem = () => {
+  const axiosPrivate = useAxiosPrivate();
+  const queryClient = useQueryClient();
+
+  return useMutation<ApiResponse, ApiError, number, MutationCtx>({
+    mutationFn: (itemId: number) => removeItem(axiosPrivate, itemId),
+
+    onMutate: async (itemId) => {
+      await queryClient.cancelQueries({
+        queryKey: [QUERY_KEY.getCart],
+      });
+
+      const prev = queryClient.getQueryData<CartModel>([QUERY_KEY.getCart]);
+      if (!prev) return { prev };
+
+      const next = prev.packages.map((pkg) => ({
+        ...pkg,
+        products: pkg.products.map((prod) => ({
+          ...prod,
+          items: prod.items.filter((item) => item.id !== itemId),
+        })),
+      }));
+
+      queryClient.setQueryData([QUERY_KEY.getCart], {
+        ...prev,
+        packages: next,
+      });
 
       return { prev };
     },
@@ -129,6 +183,7 @@ export const useClearCart = () => {
       if (context?.prev) {
         queryClient.setQueryData([QUERY_KEY.getCart], context.prev);
       }
+
       return Promise.reject(error);
     },
 

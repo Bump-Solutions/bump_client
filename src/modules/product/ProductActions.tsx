@@ -1,12 +1,9 @@
-import { QUERY_KEY } from "../../utils/queryKeys";
 import { ROUTES } from "../../routes/routes";
 import { useAuth } from "../../hooks/auth/useAuth";
-import { InventoryModel, ProductListModel } from "../../models/productModel";
 import { FacetProps } from "../../hooks/product/useFacetedSearch";
 import { useProduct } from "../../hooks/product/useProduct";
 import { useSaveProduct } from "../../hooks/product/useSaveProduct";
 import { useUnsaveProduct } from "../../hooks/product/useUnsaveProduct";
-import { useQueryClient } from "@tanstack/react-query";
 import { MouseEvent } from "react";
 import { useCart } from "../../hooks/cart/useCart";
 import { Link } from "react-router";
@@ -16,7 +13,7 @@ import Button from "../../components/Button";
 import StateButton from "../../components/StateButton";
 import Tooltip from "../../components/Tooltip";
 
-import { Bookmark, Mail, ShoppingBag } from "lucide-react";
+import { Bookmark, Send, ShoppingBag } from "lucide-react";
 import { CreateOrderModel } from "../../models/orderModel";
 import { useCreateOrder } from "../../hooks/order/useCreateOrder";
 
@@ -28,7 +25,6 @@ const ProductActions = ({
 }: FacetProps) => {
   const { auth } = useAuth();
 
-  const queryClient = useQueryClient();
   const { product, setProduct } = useProduct();
   const { actions } = useCart();
 
@@ -40,99 +36,21 @@ const ProductActions = ({
 
   const saveMutation = useSaveProduct((response) => {
     setProduct({ saved: true, saves: product.saves + 1 });
-
-    queryClient.setQueryData(
-      [QUERY_KEY.listProducts, product.user.id],
-      (prev: any) => {
-        if (!prev) return prev;
-
-        return {
-          ...prev,
-          pages: prev.pages.map((page: InventoryModel) => ({
-            ...page,
-            products: page.products.map((p: ProductListModel) => {
-              if (p.id === product.id) {
-                return {
-                  ...p,
-                  saved: true,
-                  saves: p.saves + 1,
-                };
-              }
-              return p;
-            }),
-          })),
-        };
-      }
-    );
-
-    queryClient.setQueryData([QUERY_KEY.listSavedProducts], (prev: any) => {
-      if (!prev) return prev;
-
-      return {
-        ...prev,
-        pages: prev.pages.map((page: InventoryModel) => ({
-          ...page,
-          products: [
-            { ...product, saved: true, saves: product.saves + 1 },
-            ...page.products,
-          ],
-        })),
-      };
-    });
   });
 
   const unsaveMutation = useUnsaveProduct((response) => {
     setProduct({ saved: false, saves: product.saves - 1 });
-
-    queryClient.setQueryData(
-      [QUERY_KEY.listProducts, product?.user.id],
-      (prev: any) => {
-        if (!prev) return prev;
-
-        return {
-          ...prev,
-          pages: prev.pages.map((page: InventoryModel) => ({
-            ...page,
-            products: page.products.map((p: ProductListModel) => {
-              if (p.id === product?.id) {
-                return {
-                  ...p,
-                  saved: false,
-                  saves: p.saves - 1,
-                };
-              }
-              return p;
-            }),
-          })),
-        };
-      }
-    );
-
-    queryClient.setQueryData([QUERY_KEY.listSavedProducts], (prev: any) => {
-      if (!prev) return prev;
-
-      return {
-        ...prev,
-        pages: prev.pages.map((page: InventoryModel) => ({
-          ...page,
-          products: page.products.filter(
-            (p: ProductListModel) => p.id !== product.id
-          ),
-        })),
-      };
-    });
   });
 
-  const handleSave = (
-    e: MouseEvent<HTMLButtonElement>,
-    pid: number,
-    isSaved: boolean
-  ) => {
+  const handleSave = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
-    if (!isSaved) {
+    if (!product.saved) {
       if (saveMutation.isPending) return;
-      const savePromise = saveMutation.mutateAsync(pid);
+      const savePromise = saveMutation.mutateAsync({
+        product,
+        ownerId: product.user.id,
+      });
 
       toast.promise(savePromise, {
         loading: "Mentés...",
@@ -153,7 +71,7 @@ const ProductActions = ({
       });
     } else {
       if (unsaveMutation.isPending) return;
-      unsaveMutation.mutateAsync(pid);
+      unsaveMutation.mutateAsync({ product, userId: product.user.id });
     }
   };
 
@@ -238,9 +156,7 @@ const ProductActions = ({
           content={product.saved ? "Mentve" : "Mentés"}
           showDelay={750}
           placement='top'>
-          <Button
-            className='secondary'
-            onClick={(e) => handleSave(e, product.id, product.saved)}>
+          <Button className='secondary' onClick={handleSave}>
             <Bookmark />
           </Button>
         </Tooltip>
@@ -259,10 +175,10 @@ const ProductActions = ({
       <div className='product__action--contact'>
         <StateButton
           className='secondary'
-          text='Kapcsolatfelvétel'
+          text='Üzenet az eladónak'
           disabled={isDisabled}
           onClick={handleCreateOrder}>
-          <Mail />
+          <Send />
         </StateButton>
       </div>
     </div>
