@@ -30,6 +30,8 @@ export const useCreateOrder = (
     mutationFn: ({ newOrder }) => createOrder(axiosPrivate, newOrder),
 
     onMutate: async ({ newOrder }) => {
+      // TODO: consider also invalidating orders list query
+
       await Promise.all([
         queryClient.cancelQueries({
           queryKey: [QUERY_KEY.getCart],
