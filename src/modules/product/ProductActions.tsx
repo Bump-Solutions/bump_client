@@ -110,9 +110,9 @@ const ProductActions = ({
   const handleCreateOrder = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
-    if (createOrderMutation.isPending) return;
-    if (isDisabled) return;
-    if (!filtered || filtered.length === 0) return;
+    if (createOrderMutation.isPending) return Promise.reject();
+    if (isDisabled) return Promise.reject();
+    if (!filtered || filtered.length === 0) return Promise.reject();
 
     const sellerId = product.user.id;
 
@@ -120,11 +120,12 @@ const ProductActions = ({
     const itemIds = filtered.slice(0, maxToAdd).map((item) => item.id);
 
     const newOrder: CreateOrderModel = {
+      source: "product",
       sellerId,
       itemIds,
     };
 
-    const createOrderPromise = createOrderMutation.mutateAsync(newOrder);
+    const createOrderPromise = createOrderMutation.mutateAsync({ newOrder });
 
     toast.promise(createOrderPromise, {
       loading: "Rendelés létrehozása...",

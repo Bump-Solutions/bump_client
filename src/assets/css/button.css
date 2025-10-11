@@ -199,9 +199,9 @@
   pointer-events: none;
 }
 .button.secondary.loading {
-  color: #657084;
-  background-color: #f0f1f3;
-  border: 1px solid #b8bdc6;
+  color: #adb5bd;
+  background-color: #f8f9fa;
+  border: 1px solid #e9ecef;
   pointer-events: none;
 }
 .button.secondary.icon--reverse {

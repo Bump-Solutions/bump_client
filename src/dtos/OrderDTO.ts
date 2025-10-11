@@ -29,5 +29,5 @@ export interface OrdersPageDTO {
 
 export interface CreateOrderDTO {
   seller: number;
-  inventory_item_ids: number[];
+  inventory_item_ids?: number[];
 }
