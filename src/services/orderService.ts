@@ -39,8 +39,9 @@ export const createOrder = async (
   axiosPrivate: AxiosInstance,
   newOrder: CreateOrderModel
 ): Promise<ApiResponse> => {
+  if (!newOrder) throw new Error("Missing required parameter: newOrder");
+
   const payload: CreateOrderDTO = toCreateOrderDTO(newOrder);
-  console.log("createOrder payload", payload);
 
   return await axiosPrivate.post(API.ORDERS.CREATE_ORDER, payload);
 };

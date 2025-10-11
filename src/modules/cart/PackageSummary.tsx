@@ -3,25 +3,53 @@ import { CURRENCY_LABELS } from "../../utils/mappers";
 import { MouseEvent } from "react";
 import { Link } from "react-router";
 import { formatMinorHU } from "../../utils/pricing";
+import { usePackage } from "../../hooks/cart/usePackage";
+import { CreateOrderModel } from "../../models/orderModel";
+import { toast } from "sonner";
+import { useCreateOrder } from "../../hooks/order/useCreateOrder";
 
 import StateButton from "../../components/StateButton";
 
 import { Send } from "lucide-react";
-import { usePackage } from "../../hooks/cart/usePackage";
 
 const PackageSummary = () => {
   const { pkg } = usePackage();
   const { grossSubtotal, discountsTotal, indicativeSubtotal } = pkg.summary;
 
+  const createOrderMutation = useCreateOrder((response) => {});
+
   const handleCreateOrder = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
-    const itemIds = pkg.products.flatMap((p) => p.items.map((i) => i.id));
-    if (itemIds.length === 0) {
-      return Promise.reject("No items in the package");
-    }
+    if (createOrderMutation.isPending) return Promise.reject();
+    if (!pkg) return Promise.reject();
 
-    return Promise.resolve();
+    const newOrder: CreateOrderModel = {
+      source: "cart",
+      sellerId: pkg.seller.id,
+    };
+
+    const createOrderPromise = createOrderMutation.mutateAsync({ newOrder });
+
+    toast.promise(createOrderPromise, {
+      loading: "Rendelés létrehozása...",
+      success: (
+        <span>
+          A rendelés létrehozva. Rendelésed nyomon követheted{" "}
+          <Link
+            to={ROUTES.ORDERS}
+            target='_blank'
+            className='link fc-green-600 underline fw-700'>
+            itt.
+          </Link>
+        </span>
+      ),
+      error: (err) =>
+        // (err?.response?.data?.message as string) ||
+        "Hiba a rendelés létrehozása során.",
+    });
+
+    return createOrderPromise;
   };
 
   return (
@@ -89,6 +117,7 @@ const PackageSummary = () => {
       <StateButton
         className='primary mx-auto w-full'
         text='Üzenet az eladónak'
+        disabled={createOrderMutation.isPending}
         onClick={handleCreateOrder}>
         <Send />
       </StateButton>

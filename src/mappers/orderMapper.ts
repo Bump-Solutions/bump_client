@@ -22,8 +22,17 @@ export function fromOrderDTO(dto: FetchedOrderDTO): OrderModel {
 }
 
 export function toCreateOrderDTO(newOrder: CreateOrderModel): CreateOrderDTO {
-  return {
-    seller: newOrder.sellerId,
-    inventory_item_ids: newOrder.itemIds,
-  };
+  switch (newOrder.source) {
+    case "cart":
+      return {
+        seller: newOrder.sellerId,
+      };
+
+    // case "product":
+    default:
+      return {
+        seller: newOrder.sellerId,
+        inventory_item_ids: newOrder.itemIds,
+      };
+  }
 }

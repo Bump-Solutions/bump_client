@@ -27,7 +27,16 @@ export interface OrdersPageModel {
   count: number;
 }
 
-export interface CreateOrderModel {
+export type CreateOrderFromProduct = {
+  source: "product";
   sellerId: number;
   itemIds: number[];
-}
+};
+
+export type CreateOrderFromCart = {
+  source: "cart";
+  sellerId: number;
+  itemIds?: never;
+};
+
+export type CreateOrderModel = CreateOrderFromProduct | CreateOrderFromCart;
