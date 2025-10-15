@@ -25,6 +25,7 @@ export interface OrdersPageModel {
   next: number | null;
   previous: string | null;
   count: number;
+  totalPages: number;
 }
 
 export type CreateOrderFromProduct = {

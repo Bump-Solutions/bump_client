@@ -63,7 +63,12 @@ const UserInfo = () => {
 
       <div className='user__info-block'>
         <p className='fc-gray-600 fs-14'>
-          {isOwnProfile ? "Csatlakoztál:" : "Csatlakozott:"} {user?.joined}
+          {isOwnProfile ? "Csatlakoztál:" : "Csatlakozott:"}{" "}
+          {user?.joined && (
+            <time dateTime={new Date(user.joined).toISOString()}>
+              {new Date(user.joined).toLocaleDateString()}
+            </time>
+          )}
         </p>
       </div>
     </div>

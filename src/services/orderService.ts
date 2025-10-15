@@ -11,7 +11,11 @@ import {
   OrdersPageDTO,
 } from "../dtos/OrderDTO";
 import { API } from "../utils/api";
-import { fromOrderDTO, toCreateOrderDTO } from "../mappers/orderMapper";
+import {
+  fromOrdersPageDTO,
+  fromOrderDTO,
+  toCreateOrderDTO,
+} from "../mappers/orderMapper";
 
 export const listOrders = async (
   signal: AbortSignal,
@@ -29,10 +33,7 @@ export const listOrders = async (
     data.next = page + 1;
   }
 
-  return {
-    ...data,
-    orders: data.orders.map(fromOrderDTO),
-  };
+  return fromOrdersPageDTO(data);
 };
 
 export const createOrder = async (

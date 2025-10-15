@@ -25,6 +25,7 @@ export interface OrdersPageDTO {
   next: number | null;
   previous: string | null;
   count: number;
+  total_pages: number;
 }
 
 export interface CreateOrderDTO {

@@ -10,11 +10,14 @@ import { useEffect, useState } from "react";
 import { ENUM } from "../../utils/enum";
 
 import Spinner from "../../components/Spinner";
+import Button from "../../components/Button";
 import OrdersHeader from "./OrdersHeader";
 import OrdersDataTable from "../../datatables/OrdersDataTable";
-
-import { MessageCircleQuestion, PackageOpen } from "lucide-react";
 import Empty from "../../components/Empty";
+
+import { MessageCircleQuestion, PackageOpen, RotateCcw } from "lucide-react";
+
+const DEFAULT_PAGE_SIZE = 10;
 
 const Orders = () => {
   useTitle(`Rendelések - ${ENUM.BRAND.NAME}`);
@@ -22,20 +25,34 @@ const Orders = () => {
   const axiosPrivate = useAxiosPrivate();
 
   const [page, setPage] = useState<number>(1);
-  const { data, isLoading, isError, refetch } = useQuery(
-    listOrdersQueryOptions(axiosPrivate, page)
-  );
+  const [pageSize, setPageSize] = useState<number>(DEFAULT_PAGE_SIZE);
 
   const queryClient = useQueryClient();
+
+  const { data, isLoading, isError, refetch } = useQuery(
+    listOrdersQueryOptions(axiosPrivate, page, pageSize)
+  );
+
   useEffect(() => {
-    queryClient.prefetchQuery(listOrdersQueryOptions(axiosPrivate, page + 1));
+    if (data?.next) {
+      queryClient.prefetchQuery(
+        listOrdersQueryOptions(axiosPrivate, page + 1, pageSize)
+      );
+    }
   }, [page]);
 
   if (isError) {
     return (
-      <h4 className='fc-red-500 ta-center py-5'>
-        Hiba történt a rendelések betöltése közben.
-      </h4>
+      <div className='relative py-5'>
+        <h4 className='fc-red-500 ta-center mb-1'>
+          Hiba történt a rendelések betöltése közben.
+          <br />
+        </h4>
+        <Button className='secondary mx-auto' onClick={() => refetch()}>
+          <RotateCcw />
+          Próbáld újra
+        </Button>
+      </div>
     );
   }
 
@@ -53,7 +70,15 @@ const Orders = () => {
         <>
           <OrdersHeader />
 
-          <OrdersDataTable data={data} />
+          <OrdersDataTable
+            data={data}
+            pageSize={pageSize}
+            pageIndex0={page - 1} // API -> UI normalizáció
+            onPageChange={(nextIndex0: number, nextSize: number) => {
+              setPage(nextIndex0 + 1); // UI -> API normalizáció
+              setPageSize(nextSize);
+            }}
+          />
         </>
       ) : (
         <Empty

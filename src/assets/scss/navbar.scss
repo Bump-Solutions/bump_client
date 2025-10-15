@@ -724,7 +724,7 @@
           width: fit-content;
           height: 2.25rem;
           isolation: isolate;
-          border-radius: 9999px;
+          border-radius: $border-radius-pill;
           background-color: color(gray, 200);
 
           span {
@@ -739,7 +739,7 @@
               font-size: $fs-14;
               line-height: 20px;
               padding: 0.25rem;
-              border-radius: 9999px;
+              border-radius: $border-radius-pill;
               display: flex;
               align-items: center;
               justify-content: center;

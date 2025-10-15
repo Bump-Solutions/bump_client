@@ -10,7 +10,7 @@ import {
   formatDate,
   isSameDay,
   startOfDay,
-} from "../../utils/functions";
+} from "../../utils/time";
 import { useLocation } from "react-router";
 import { useInView } from "react-intersection-observer";
 import { useAuth } from "../../hooks/auth/useAuth";

@@ -135,11 +135,11 @@ const SellForm = () => {
       loading: "Létrehozás folyamatban...",
       success: (resp) => (
         <span>
-          Termék létrehozva.{" "}
+          Termék létrehozva. Megtekintheted{" "}
           <Link
             className='link fc-green-600 underline fw-700'
             to={ROUTES.PROFILE(auth?.user?.username!).PRODUCTS}>
-            Megtekintheted itt.
+            itt.
           </Link>
         </span>
       ),

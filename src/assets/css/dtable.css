@@ -11,6 +11,7 @@
 }
 .dtable__wrapper .dtable__header input {
   all: unset;
+  position: relative;
   box-sizing: border-box;
   font-size: 0.875rem;
   padding: 0.25rem 1rem;
@@ -175,10 +176,14 @@
   background-color: #dee2e6;
 }
 .dtable__wrapper .dtable tbody tr {
+  background-color: transparent;
   transition: background-color 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
-.dtable__wrapper .dtable tbody tr:hover {
+.dtable__wrapper .dtable tbody tr:nth-child(even) {
   background-color: #f8f9fa;
+}
+.dtable__wrapper .dtable tbody tr:hover {
+  background-color: #f1f3f5;
 }
 .dtable__wrapper .dtable tbody tr td {
   padding: 0.5rem;
@@ -261,4 +266,150 @@
 .dtable__wrapper .dtable tfoot tr td:first-child input[type=checkbox]:active,
 .dtable__wrapper .dtable tfoot tr td:first-child input[type=checkbox]:hover {
   accent-color: #549ff0;
+}
+.dtable__wrapper .dtable__pagination {
+  display: flex;
+  padding: 1rem 0;
+  font-size: 0.875rem;
+}
+.dtable__wrapper .dtable__pagination.hasborder {
+  border-top: 1px solid #ced4da;
+}
+.dtable__wrapper .dtable__pagination .pager {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.dtable__wrapper .dtable__pagination .pager .pager__total {
+  font-size: 0.875rem;
+  margin-right: 1rem;
+  white-space: nowrap;
+}
+.dtable__wrapper .dtable__pagination .pager .pager__nav {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.dtable__wrapper .dtable__pagination .pager .pager__nav button {
+  all: unset;
+  box-sizing: border-box;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  height: 2rem !important;
+  width: 2rem !important;
+  font-size: 0.875rem;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+  border: 1px solid #ced4da;
+  transition: border-color 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94), background-color 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94), color 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.dtable__wrapper .dtable__pagination .pager .pager__nav button:hover {
+  border-color: #868e96;
+}
+.dtable__wrapper .dtable__pagination .pager .pager__nav button:disabled {
+  cursor: not-allowed;
+  background-color: #f8f9fa;
+  border-color: #dee2e6;
+  color: #adb5bd;
+}
+.dtable__wrapper .dtable__pagination .pager .pager__nav button svg {
+  width: 1rem;
+  height: 1rem;
+}
+.dtable__wrapper .dtable__pagination .pager .pager__nav button.is-active {
+  background-color: #e6f1fd;
+  border-color: #b0d3f8;
+  color: #0066d3;
+}
+.dtable__wrapper .dtable__pagination .pager .pager__nav .pager__ellipsis {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  height: 2rem;
+  width: 2rem;
+  font-size: 0.875rem;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+}
+.dtable__wrapper .dtable__pagination .pager .pager__goto {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.dtable__wrapper .dtable__pagination .pager .pager__goto input {
+  all: unset;
+  -moz-appearance: textfield;
+  box-sizing: border-box;
+  font-size: 0.875rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.5rem;
+  outline: none;
+  background-color: #f8f9fa;
+  border: 1px solid #ced4da;
+  width: 3rem;
+  height: 2rem;
+  text-align: center;
+}
+.dtable__wrapper .dtable__pagination .pager .pager__goto input::-moz-placeholder {
+  color: #868e96;
+}
+.dtable__wrapper .dtable__pagination .pager .pager__goto input::placeholder {
+  color: #868e96;
+}
+.dtable__wrapper .dtable__pagination .pager .pager__goto input:focus {
+  border: 2px solid #0070e8;
+  background-color: #fff;
+}
+.dtable__wrapper .dtable__pagination .pager .pager__goto input:not(:-moz-placeholder) {
+  border: 1px solid #212529;
+  background-color: #fff;
+}
+.dtable__wrapper .dtable__pagination .pager .pager__goto input:not(:placeholder-shown) {
+  border: 1px solid #212529;
+  background-color: #fff;
+}
+.dtable__wrapper .dtable__pagination .pager .pager__goto input:not(:-moz-placeholder):focus {
+  border: 2px solid #0070e8;
+  outline: 2px solid #e6f1fd;
+}
+.dtable__wrapper .dtable__pagination .pager .pager__goto input:not(:placeholder-shown):focus {
+  border: 2px solid #0070e8;
+  outline: 2px solid #e6f1fd;
+}
+.dtable__wrapper .dtable__pagination .pager .pager__goto input::-webkit-inner-spin-button, .dtable__wrapper .dtable__pagination .pager .pager__goto input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.dtable__wrapper .dtable__pagination .pager .pager__goto button {
+  all: unset;
+  box-sizing: border-box;
+  cursor: pointer;
+  color: #212529;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  height: 2rem !important;
+  width: -moz-fit-content !important;
+  width: fit-content !important;
+  font-size: 0.875rem;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+  font-weight: 700;
+  transition: color 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.dtable__wrapper .dtable__pagination .pager .pager__goto button:hover {
+  color: #868e96;
 }/*# sourceMappingURL=dtable.css.map */
