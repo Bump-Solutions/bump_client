@@ -4,6 +4,7 @@ import { CartPackageModel } from "../../models/cartModel";
 import { HighlightIndex } from "../../utils/highlight";
 
 import PackageSummary from "./PackageSummary";
+import PackageHeader from "./PackageHeader";
 
 interface PackageProps {
   pkg: CartPackageModel;
@@ -19,7 +20,9 @@ const Package = ({ pkg, highlightIndex }: PackageProps) => {
   return (
     <PackageContext.Provider value={contextValue}>
       <li className='package__wrapper'>
-        <div className='package'></div>
+        <div className='package'>
+          <PackageHeader />
+        </div>
 
         <PackageSummary />
       </li>

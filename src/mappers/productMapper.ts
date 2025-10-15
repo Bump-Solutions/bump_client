@@ -125,7 +125,7 @@ export function toCreateProductDTO(
       gender: item.gender?.value!,
       size: item.size?.value!,
       price: item.price!,
-      state: 1,
+      state: 0, // 0 - available
     })),
 
     county: 1, // TODO: Replace with actual county ID

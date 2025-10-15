@@ -208,6 +208,10 @@ form .field__wrapper .input {
   display: flex !important;
 }
 
+.d-inline-flex {
+  display: inline-flex !important;
+}
+
 .flex-column {
   flex-direction: column !important;
 }
@@ -312,6 +316,18 @@ form .field__wrapper .input {
   color: #f59f00 !important;
 }
 
+.fc-yellow-600 {
+  color: #df9100 !important;
+}
+
+.fc-orange-500 {
+  color: #fd7e14 !important;
+}
+
+.fc-pink-500 {
+  color: #e63774 !important;
+}
+
 .px-0_125 {
   padding-inline: 0.125rem !important;
 }
@@ -414,6 +430,10 @@ form .field__wrapper .input {
 
 .ml-0_5 {
   margin-left: 0.5rem !important;
+}
+
+.ml-1 {
+  margin-left: 1rem !important;
 }
 
 .mr-0 {
@@ -867,6 +887,10 @@ form .field__wrapper .input {
 
 .gap-0 {
   gap: 0rem !important;
+}
+
+.gap-0_25 {
+  gap: 0.25rem !important;
 }
 
 .gap-0_5 {

@@ -4,7 +4,7 @@ import { ChatGroupModel } from "../../models/chatModel";
 import { useEffect } from "react";
 import { NavLink } from "react-router";
 import { useLongPress } from "react-use";
-import { formatDate, isThisYear, isToday, now } from "../../utils/functions";
+import { formatDate, isThisYear, isToday, now } from "../../utils/time";
 import { useToggle } from "../../hooks/useToggle";
 
 import Image from "../../components/Image";

@@ -15,7 +15,14 @@ import {
 } from "@tanstack/react-table";
 import { useClickOutside } from "../hooks/useClickOutside";
 import { AnimatePresence, motion, Variants } from "framer-motion";
-import { Fragment, ReactNode, useEffect, useRef, useState } from "react";
+import {
+  Fragment,
+  ReactNode,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 
 import {
   ArrowDown,
@@ -23,9 +30,65 @@ import {
   ArrowUp,
   Check,
   ChevronDown,
+  ChevronLeft,
+  ChevronRight,
   ChevronUp,
   CornerDownRight,
+  Ellipsis,
+  MoveRight,
 } from "lucide-react";
+
+type PagerItem = number | "start-ellipsis" | "end-ellipsis";
+
+function range(start: number, end: number) {
+  return Array.from({ length: end - start + 1 }, (_, i) => start + i);
+}
+
+function buildPagerItems(
+  page: number, // 0-based current
+  totalPages: number, // total pages
+  siblingCount = 1, // hány szomszéd látszik
+  boundaryCount = 1 // hány kezdő/záró látszik
+): PagerItem[] {
+  const last = totalPages - 1; // 0-based utolsó index
+
+  // 1) Kevés oldal -> minden szám, ellipszis nélkül
+  const maxButtons = boundaryCount * 2 + siblingCount * 2 + 3; // first..last + current + 2 ellipszis
+  if (totalPages <= maxButtons) return range(0, last);
+
+  // 2) Kezdő és záró blokkok
+  const startPages = range(0, boundaryCount - 1);
+  const endPages = range(Math.max(totalPages - boundaryCount, 0), last);
+
+  // 3) Középső "siblings" ablak (MUI-féle clamp)
+  const siblingsStart = Math.max(
+    boundaryCount,
+    Math.min(
+      page - siblingCount,
+      totalPages - boundaryCount - siblingCount * 2 - 1
+    )
+  );
+  const siblingsEnd = Math.min(
+    totalPages - boundaryCount - 1,
+    Math.max(page + siblingCount, boundaryCount + siblingCount * 2)
+  );
+
+  const items: PagerItem[] = [...startPages];
+
+  // 4) Kezdő ellipszis, ha kell
+  if (siblingsStart > boundaryCount) items.push("start-ellipsis");
+
+  // 5) Középső számok
+  items.push(...range(siblingsStart, siblingsEnd));
+
+  // 6) Záró ellipszis, ha kell
+  if (siblingsEnd < totalPages - boundaryCount - 1) items.push("end-ellipsis");
+
+  // 7) Záró blokkok
+  items.push(...endPages);
+
+  return items;
+}
 
 interface DataTableProps<T extends object> {
   /** Adatsorozat a megjelenítéshez (kliens oldali mód) */
@@ -33,10 +96,19 @@ interface DataTableProps<T extends object> {
   /** Oszlopdefiníciók TanStack Table formátumban */
   columns: ColumnDef<T, any>[];
 
-  /** Kezdeti elemszám oldalanként (default: 10) */
-  initialPageSize?: number;
-  /** Választható elemszám opciók oldalanként */
-  // pageSizeOptions?: number[];
+  /** Szerver oldali lapozás */
+  manualPagination: true;
+  /** Összes oldal száma VAGY (alternatívaként) összes sor száma */
+  pageCount?: number;
+  rowCount?: number;
+
+  /** Jelzés a szülőnek: pageIndex (0-based), pageSize */
+  pageIndex0: number;
+  pageSize: number;
+  onPageChange: (pi0: number, ps: number) => void;
+
+  /** Később bővíthető: lapméret választó */
+  pageSizeOptions?: number[];
 
   /** Globális keresőmező engedélyezése */
   enableGlobalFilter?: boolean;
@@ -83,8 +155,15 @@ const dropdownVariants: Variants = {
 const DataTable = <T extends object>({
   data,
   columns,
-  initialPageSize = 10,
-  // pageSizeOptions = [10, 20, 50, -1], // -1 jelenti az összes elem megjelenítését
+
+  manualPagination,
+  pageCount,
+  rowCount,
+  pageSize,
+  pageIndex0,
+  onPageChange,
+  // pageSizeOptions = [], // [10, 20, 50, -1], // -1 jelenti az összes elem megjelenítését
+
   enableGlobalFilter = false,
   globalFilterColumns,
   globalFilterPlaceholder = "Keresés...",
@@ -104,8 +183,8 @@ const DataTable = <T extends object>({
 
   const [sorting, setSorting] = useState<SortingState>([]);
   const [pagination, setPagination] = useState<PaginationState>({
-    pageIndex: 0,
-    pageSize: initialPageSize,
+    pageIndex: pageIndex0,
+    pageSize: pageSize,
   });
   const [expanded, setExpanded] = useState<ExpandedState>({});
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
@@ -124,6 +203,15 @@ const DataTable = <T extends object>({
     };
   }, [showColumnMenu]);
 
+  // ha a szülő megváltoztatja, szinkronizáljuk
+  useEffect(() => {
+    setPagination((prev) =>
+      prev.pageIndex !== pageIndex0 || prev.pageSize !== pageSize
+        ? { pageIndex: pageIndex0, pageSize }
+        : prev
+    );
+  }, [pageIndex0, pageSize]);
+
   useClickOutside({
     ref: menuRef,
     callback: () => {
@@ -131,34 +219,11 @@ const DataTable = <T extends object>({
     },
   });
 
-  // ---------- Oszlopok módosítása globális szűréshez ----------
-  const mappedColumns = columns.map((column) => {
-    if (enableGlobalFilter) {
-      // Kiterjesztjük ColumDef típust, hogy elérjük az accessorKey-et is
-      const columnDef = column as ColumnDef<T, any> & {
-        accessorKey?: string;
-      };
-      // Meghatározzuk az oszlop azonosítóját (id vagy accessorKey)
-      const columnId = column.id ?? columnDef.accessorKey;
-      if (!columnId) return column;
-
-      // Ellenőrizzük, hogy ez az oszlop engedélyezett-e a globális szűrésben
-      const allow =
-        !globalFilterColumns ||
-        globalFilterColumns.includes(columnId as keyof T);
-      return {
-        ...column,
-        enableGlobalFilter: allow,
-      };
-    }
-    return column;
-  });
-
   // ---------- Sor kiválasztás és expand oszlop hozzáadása ----------
-  const tableColumns: ColumnDef<T, any>[] = [];
+  const displayColumns: ColumnDef<T, any>[] = [];
 
   if (enableRowSelection) {
-    tableColumns.push({
+    displayColumns.push({
       id: "selection",
       header: ({ table }) => (
         <input
@@ -187,7 +252,7 @@ const DataTable = <T extends object>({
   }
 
   if (renderRowExpanded) {
-    tableColumns.push({
+    displayColumns.push({
       id: "expander",
       header: () => null,
       cell: ({ row }) =>
@@ -204,7 +269,9 @@ const DataTable = <T extends object>({
     });
   }
 
-  tableColumns.push(...mappedColumns);
+  const tableColumns = useMemo<ColumnDef<T, any>[]>(() => {
+    return [...displayColumns, ...columns];
+  }, [displayColumns.length, columns]);
 
   // ---------- useReactTable inicializálás ----------
   const table = useReactTable({
@@ -223,12 +290,20 @@ const DataTable = <T extends object>({
       columnVisibility,
     },
 
-    enableGlobalFilter,
+    getColumnCanGlobalFilter: (column) =>
+      !!enableGlobalFilter &&
+      (!globalFilterColumns ||
+        globalFilterColumns.includes(column.id as keyof T)),
+
     enableRowSelection,
     enableHiding,
     enableExpanding: Boolean(renderRowExpanded),
 
     getRowCanExpand: () => Boolean(renderRowExpanded),
+
+    manualPagination: manualPagination,
+    pageCount: pageCount,
+    autoResetPageIndex: false,
 
     onGlobalFilterChange: setGlobalFilter,
     onSortingChange: setSorting,
@@ -243,6 +318,17 @@ const DataTable = <T extends object>({
     getPaginationRowModel: getPaginationRowModel(),
     getExpandedRowModel: getExpandedRowModel(),
   });
+
+  // amikor a belső pagination változik, jelezzük a szülőnek
+  useEffect(() => {
+    onPageChange(pagination.pageIndex, pagination.pageSize);
+  }, [pagination.pageIndex, pagination.pageSize, onPageChange]);
+
+  const totalPages = pageCount || table.getPageCount() || 1;
+  const pageIndex = table.getState().pagination.pageIndex;
+  const canPrev = pageIndex > 0;
+  const canNext = pageIndex + 1 < totalPages;
+  const items = buildPagerItems(pageIndex, totalPages, 1, 1);
 
   return (
     <div id={tableId} className={`dtable__wrapper ${className}`}>
@@ -371,7 +457,7 @@ const DataTable = <T extends object>({
                   table.getHeaderGroups()[0]?.headers.length ||
                   tableColumns.length
                 }
-                className='empty'>
+                className='empty ta-center'>
                 Nincs megjeleníthető adat.
               </td>
             </tr>
@@ -419,6 +505,77 @@ const DataTable = <T extends object>({
           </tfoot>
         )}
       </table>
+
+      <div className={`dtable__pagination ${!footerVisible && "hasborder"}`}>
+        <nav className='pager' aria-label='Táblázat lapozás'>
+          {rowCount && (
+            <div className='pager__total'>{rowCount} sor összesen</div>
+          )}
+
+          <div className='pager__nav'>
+            <button
+              type='button'
+              onClick={() => table.previousPage()}
+              disabled={!canPrev}
+              aria-label='Előző oldal'>
+              <ChevronLeft />
+            </button>
+
+            {items.map((it, idx) =>
+              typeof it === "number" ? (
+                <button
+                  key={idx}
+                  type='button'
+                  className={it === pageIndex ? "is-active" : ""}
+                  aria-current={it === pageIndex ? "page" : undefined}
+                  onClick={() => table.setPageIndex(it)}>
+                  {it + 1}
+                </button>
+              ) : (
+                <span key={idx} className='pager__ellipsis' aria-hidden='true'>
+                  <Ellipsis />
+                </span>
+              )
+            )}
+
+            <button
+              type='button'
+              onClick={() => table.nextPage()}
+              disabled={!canNext}
+              aria-label='Következő oldal'>
+              <ChevronRight />
+            </button>
+          </div>
+
+          <form
+            className='pager__goto'
+            onSubmit={(e) => {
+              e.preventDefault();
+              const fd = new FormData(e.currentTarget as HTMLFormElement);
+              const n = Number(fd.get("p"));
+              if (!Number.isNaN(n) && n >= 1 && n <= totalPages) {
+                table.setPageIndex(n - 1);
+              }
+            }}>
+            <label className='sr-only' htmlFor='goto-page'>
+              Ugrás oldalra
+            </label>
+            <input
+              id='goto-page'
+              placeholder={String(totalPages)}
+              name='p'
+              type='number'
+              min={1}
+              max={totalPages}
+              defaultValue={pageIndex + 1}
+              disabled={totalPages === 1}
+            />
+            <button type='submit' title='Ugrás'>
+              Ugrás
+            </button>
+          </form>
+        </nav>
+      </div>
     </div>
   );
 };

@@ -1,5 +1,23 @@
-import { FetchedOrderDTO, CreateOrderDTO } from "../dtos/OrderDTO";
-import { CreateOrderModel, OrderModel } from "../models/orderModel";
+import {
+  FetchedOrderDTO,
+  CreateOrderDTO,
+  OrdersPageDTO,
+} from "../dtos/OrderDTO";
+import {
+  CreateOrderModel,
+  OrderModel,
+  OrdersPageModel,
+} from "../models/orderModel";
+
+export function fromOrdersPageDTO(dto: OrdersPageDTO): OrdersPageModel {
+  return {
+    orders: dto.orders.map(fromOrderDTO),
+    next: dto.next,
+    previous: dto.previous,
+    count: dto.count,
+    totalPages: dto.total_pages,
+  };
+}
 
 export function fromOrderDTO(dto: FetchedOrderDTO): OrderModel {
   return {

@@ -4,7 +4,7 @@ import {
   isThisYear,
   now,
   yesterday,
-} from "../../utils/functions";
+} from "../../utils/time";
 
 interface MessageDateDividerProps {
   date: Date;

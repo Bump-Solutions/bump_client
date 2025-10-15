@@ -3,7 +3,7 @@ import { MouseEvent } from "react";
 import { useNavigate } from "react-router";
 import { useNotifications } from "../../hooks/notifications/useNotifications";
 import { NotificationModel } from "../../models/notificationModel";
-import { formatRelativeTime } from "../../utils/functions";
+import { formatRelativeTime } from "../../utils/time";
 
 import Image from "../../components/Image";
 

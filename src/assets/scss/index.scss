@@ -215,6 +215,10 @@ form {
   display: flex !important;
 }
 
+.d-inline-flex {
+  display: inline-flex !important;
+}
+
 .flex-column {
   flex-direction: column !important;
 }
@@ -319,6 +323,18 @@ form {
   color: color(yellow, 500) !important;
 }
 
+.fc-yellow-600 {
+  color: color(yellow, 600) !important;
+}
+
+.fc-orange-500 {
+  color: color(orange, 500) !important;
+}
+
+.fc-pink-500 {
+  color: color(pink, 500) !important;
+}
+
 .px-0_125 {
   padding-inline: 0.125rem !important;
 }
@@ -421,6 +437,10 @@ form {
 
 .ml-0_5 {
   margin-left: 0.5rem !important;
+}
+
+.ml-1 {
+  margin-left: 1rem !important;
 }
 
 .mr-0 {

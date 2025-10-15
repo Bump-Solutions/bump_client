@@ -50,6 +50,7 @@ $border-radius-1: 1rem;
 $border-radius-1_5: 1.5rem;
 $border-radius-2: 2rem;
 $border-radius-50: 50%;
+$border-radius-pill: 9999px;
 
 // FONTS
 //$font-display: 'BiggerDisplay';
@@ -196,6 +197,7 @@ $paddings: (
 
 $gaps: (
   0: 0rem,
+  0_25: 0.25rem,
   0_5: 0.5rem,
   1: 1rem,
   1_5: 1.5rem,

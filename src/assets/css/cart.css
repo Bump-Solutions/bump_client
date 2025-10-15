@@ -235,11 +235,16 @@
 }
 .cart .cart__content .package__list .package__wrapper .package {
   flex: 1 1 66%;
-  padding: 1rem;
   border: 1px solid #dee2e6;
   border-radius: 1rem;
   height: -moz-fit-content;
   height: fit-content;
+}
+.cart .cart__content .package__list .package__wrapper .package .package__header {
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 .cart .cart__content .package__list .package__wrapper .package__summary {
   flex: 1 1 33%;

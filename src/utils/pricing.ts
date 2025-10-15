@@ -1,3 +1,19 @@
+export const formatPrice = (price?: number | string): string | undefined => {
+  if (price == null) return undefined;
+
+  // Convert price to string and remove all spaces
+  let cleanPrice = price.toString().replace(/\s+/g, "");
+
+  // Remove leading zeros
+  cleanPrice = cleanPrice.replace(/^0+/, "");
+
+  // Format the number with dots as thousand separators
+  cleanPrice = cleanPrice.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+
+  // Ensure the output has two decimal places
+  return `${cleanPrice},00`;
+};
+
 /** 1..100 közé szorít, egészre kerekít */
 export const clampDiscount = (d?: number | null): number | undefined => {
   return typeof d === "number"

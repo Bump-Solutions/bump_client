@@ -31,7 +31,8 @@ export const useFacetedSearch = (): FacetProps | null => {
   if (!product) return null;
 
   const items = product.items || [];
-  const available = useMemo(() => items.filter((i) => i.state === 1), [items]);
+  console.log("Product items:", items);
+  const available = useMemo(() => items.filter((i) => i.state === 0), [items]); // 0 - available
   if (available.length === 0) return null;
 
   const [quantity, setQuantity] = useState<number>(1);

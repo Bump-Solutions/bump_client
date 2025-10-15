@@ -45,7 +45,7 @@ export const useCreateOrder = (
 
       const prevCart = queryClient.getQueryData<CartModel>([QUERY_KEY.getCart]);
 
-      // 1) If hooks is called from cart, remove package by sellerId
+      // 1) If hook is called from cart, remove package by sellerId
       switch (newOrder.source) {
         case "cart":
           queryClient.setQueryData(
@@ -63,32 +63,7 @@ export const useCreateOrder = (
 
           break;
 
-        case "product":
-          // Remove items from the seller's package if found
-          queryClient.setQueryData(
-            [QUERY_KEY.getCart],
-            (old: CartModel | undefined) => {
-              if (!old) return old;
-
-              const updatedPackages = old.packages.map((pkg) => {
-                if (pkg.seller.id !== newOrder.sellerId) return pkg;
-
-                const updatedProducts = pkg.products.map((product) => {
-                  const filteredItems = product.items.filter(
-                    (item) => !newOrder.itemIds.includes(item.id)
-                  );
-
-                  return { ...product, items: filteredItems };
-                });
-
-                return { ...pkg, products: updatedProducts };
-              });
-
-              return { ...old, packages: updatedPackages };
-            }
-          );
-
-          break;
+        // case "product": just invalidate the cart query onSettled
 
         default:
           return { prevCart };
@@ -125,6 +100,12 @@ export const useCreateOrder = (
     },
 
     onSuccess: (resp, variables) => {
+      if (onSuccess) {
+        onSuccess(resp, variables);
+      }
+    },
+
+    onSettled: () => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEY.getCart],
         refetchType: "active",
@@ -134,10 +115,6 @@ export const useCreateOrder = (
         queryKey: [QUERY_KEY.listOrders],
         refetchType: "active",
       });
-
-      if (onSuccess) {
-        onSuccess(resp, variables);
-      }
     },
   });
 };
