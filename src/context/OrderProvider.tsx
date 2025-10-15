@@ -5,6 +5,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useGetOrder } from "../hooks/order/useGetOrder";
 import { QUERY_KEY } from "../utils/queryKeys";
 import { ROUTES } from "../routes/routes";
+import { displayUuid } from "../utils/functions";
 
 interface OrderContextType {
   order: OrderModel | undefined;
@@ -21,27 +22,24 @@ interface OrderProviderProps {
 }
 
 const OrderProvider = ({ children }: OrderProviderProps) => {
-  const { id } = useParams();
-  const orderId = Number(id);
+  const { uuid } = useParams();
+  if (!uuid) return null;
+
   const queryClient = useQueryClient();
 
-  const {
-    data: order,
-    isLoading,
-    isError,
-  } = useGetOrder([orderId], { orderId });
+  const { data: order, isLoading, isError } = useGetOrder([uuid], { uuid });
 
   const setOrder = useCallback(
     (data: Partial<OrderModel>) => {
       queryClient.setQueryData(
-        [QUERY_KEY.getOrder, orderId],
+        [QUERY_KEY.getOrder, uuid],
         (prev: OrderModel | undefined) => ({
           ...prev,
           ...data,
         })
       );
     },
-    [queryClient, orderId]
+    [queryClient, uuid]
   );
 
   const contextValue = useMemo<OrderContextType>(
@@ -62,7 +60,9 @@ const OrderProvider = ({ children }: OrderProviderProps) => {
           error: {
             code: 404,
             title: "Hibás rendelésazonosító",
-            message: `Sajnáljuk, a(z) "${orderId}" azonosítójú rendelés nem található. Megeshet, hogy elírás van az azonosítóban, vagy a rendelés törölve lett.`,
+            message: `Sajnáljuk, a(z) "${displayUuid(
+              uuid
+            )}" azonosítójú rendelés nem található. Megeshet, hogy elírás van az azonosítóban, vagy a rendelés törölve lett.`,
           },
         }}
       />

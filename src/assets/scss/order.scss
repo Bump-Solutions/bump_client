@@ -44,6 +44,7 @@
         th {
           &.th-createdAt,
           &.th-expiresAt,
+          &.th-totalPrice,
           &.th-state {
             text-align: center;
           }
@@ -174,6 +175,12 @@
             }
           }
 
+          // Total Price
+          &.td-totalPrice {
+            font-weight: 700;
+            text-align: center;
+          }
+
           // Status
           &.td-state {
             text-align: center;
@@ -226,4 +233,12 @@
       }
     }
   }
+}
+
+.order {
+  position: relative;
+  padding: 2rem var(--container-x-padding);
+  width: 100%;
+  max-width: $max-width-900;
+  margin: 0 auto;
 }

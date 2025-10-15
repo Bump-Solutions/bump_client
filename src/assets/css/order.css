@@ -30,7 +30,7 @@
 .orders .dtable__wrapper.dt-orders .dtable tbody tr td:first-child {
   text-align: left;
 }
-.orders .dtable__wrapper.dt-orders .dtable thead tr th.th-createdAt, .orders .dtable__wrapper.dt-orders .dtable thead tr th.th-expiresAt, .orders .dtable__wrapper.dt-orders .dtable thead tr th.th-state {
+.orders .dtable__wrapper.dt-orders .dtable thead tr th.th-createdAt, .orders .dtable__wrapper.dt-orders .dtable thead tr th.th-expiresAt, .orders .dtable__wrapper.dt-orders .dtable thead tr th.th-totalPrice, .orders .dtable__wrapper.dt-orders .dtable thead tr th.th-state {
   text-align: center;
 }
 .orders .dtable__wrapper.dt-orders .dtable thead tr th.th-action {
@@ -135,6 +135,10 @@
   transform: translateY(-50%);
   border-radius: 50%;
 }
+.orders .dtable__wrapper.dt-orders .dtable tbody tr td.td-totalPrice {
+  font-weight: 700;
+  text-align: center;
+}
 .orders .dtable__wrapper.dt-orders .dtable tbody tr td.td-state {
   text-align: center;
 }
@@ -173,4 +177,12 @@
 .orders .dtable__wrapper.dt-orders .dtable tbody tr td.td-action a.button {
   display: inline-flex;
   background-color: #fff;
+}
+
+.order {
+  position: relative;
+  padding: 2rem var(--container-x-padding);
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
 }/*# sourceMappingURL=order.css.map */

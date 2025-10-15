@@ -8,14 +8,14 @@ import { ENUM } from "../../utils/enum";
 
 export const useGetOrder = (
   dependencies: any[] = [],
-  params: { orderId: number }
+  params: { uuid: string }
 ) => {
   const axiosPrivate = useAxiosPrivate();
 
   return useQuery<OrderModel, ApiError>({
     queryKey: [QUERY_KEY.getOrder, ...dependencies],
-    queryFn: ({ signal }) => getOrder(signal, axiosPrivate, params.orderId),
-    enabled: Boolean(params.orderId),
+    queryFn: ({ signal }) => getOrder(signal, axiosPrivate, params.uuid),
+    enabled: Boolean(params.uuid),
     retry: 1,
     staleTime: ENUM.GLOBALS.staleTime5,
   });

@@ -1,6 +1,6 @@
 import { Link } from "react-router";
 
-import { ArrowUpRight, Gem } from "lucide-react";
+import { ArrowUpRight, User } from "lucide-react";
 
 const OrdersHeader = () => {
   return (
@@ -18,7 +18,7 @@ const OrdersHeader = () => {
       </p>
       <p className='fc-gray-700 mb-2'>
         <b>Figyelem!</b> Ha egy sorban a zöld &nbsp;
-        <Gem className='fc-green-500' />
+        <User className='fc-green-500' />
         &nbsp; ikon látható, akkor <i>te vagy az eladó.</i>
       </p>
     </header>

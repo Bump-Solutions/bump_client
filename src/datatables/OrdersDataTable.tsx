@@ -12,7 +12,7 @@ import DataTable from "../components/DataTable";
 import Image from "../components/Image";
 import Tooltip from "../components/Tooltip";
 
-import { EllipsisVertical, Gem } from "lucide-react";
+import { EllipsisVertical, User } from "lucide-react";
 
 interface RemainingTimeCellProps {
   expiresAt: string;
@@ -162,7 +162,7 @@ const OrdersDataTable = ({
                 content='Te vagy az eladó'
                 showDelay={250}
                 placement='top'>
-                <Gem className='svg-16 fc-green-500' />
+                <User className='svg-16 fc-green-500' />
               </Tooltip>
             )}
           </Link>
@@ -206,6 +206,15 @@ const OrdersDataTable = ({
             {ORDER_STATE_LABELS[state]}
           </span>
         );
+      },
+    },
+    {
+      accessorKey: "totalPrice",
+      header: "Végösszeg",
+      enableSorting: true,
+      cell: ({ getValue }) => {
+        const price = "99 999"; //getValue<number>();
+        return <span>{price.toLocaleString()} Ft</span>;
       },
     },
     {
