@@ -17,12 +17,10 @@ const Product = () => {
 
   return (
     <section className='product'>
-      <div className='product__wrapper'>
-        <Back />
-        <div className='product__content'>
-          <Thumbnail />
-          <ProductDetails />
-        </div>
+      <Back text='Vissza' />
+      <div className='product__content'>
+        <Thumbnail />
+        <ProductDetails />
       </div>
     </section>
   );

@@ -12,7 +12,7 @@ import DataTable from "../components/DataTable";
 import Image from "../components/Image";
 import Tooltip from "../components/Tooltip";
 
-import { EllipsisVertical, Gem } from "lucide-react";
+import { EllipsisVertical, User } from "lucide-react";
 
 interface RemainingTimeCellProps {
   expiresAt: string;
@@ -95,7 +95,6 @@ const OrdersDataTable = ({
   onPageChange,
 }: OrdersDataTableProps) => {
   const orders = data.orders;
-  console.log(data);
 
   const columns: ColumnDef<OrderModel, any>[] = [
     {
@@ -103,6 +102,7 @@ const OrdersDataTable = ({
       accessorFn: (row) => displayUuid(row.uuid), // a globális szűréshez
       header: "Rendelés #",
       enableSorting: false,
+      enableHiding: false,
       cell: ({ row, getValue }) => {
         const uuid = row.original.uuid;
         const pretty = getValue<string>();
@@ -162,7 +162,7 @@ const OrdersDataTable = ({
                 content='Te vagy az eladó'
                 showDelay={250}
                 placement='top'>
-                <Gem className='svg-16 fc-green-500' />
+                <User className='svg-16 fc-green-500' />
               </Tooltip>
             )}
           </Link>
@@ -173,6 +173,7 @@ const OrdersDataTable = ({
       accessorKey: "expiresAt",
       header: "Lejár",
       enableSorting: true,
+      enableHiding: false,
       cell: ({ row }) => {
         const expiresAt = row.original.expiresAt;
         const hasTodo = row.original.validActions.length > 0;
@@ -208,8 +209,18 @@ const OrdersDataTable = ({
       },
     },
     {
+      accessorKey: "totalPrice",
+      header: "Végösszeg",
+      enableSorting: true,
+      cell: ({ getValue }) => {
+        const price = "99 999"; //getValue<number>();
+        return <span>{price.toLocaleString()} Ft</span>;
+      },
+    },
+    {
       accessorKey: "action",
       header: "Részletek",
+      enableHiding: false,
       cell: ({ row }) => (
         <Link
           to={ROUTES.ORDER(row.original.uuid)}
@@ -236,6 +247,8 @@ const OrdersDataTable = ({
       enableGlobalFilter
       globalFilterColumns={["uuid", "party", "createdAt"]}
       globalFilterPlaceholder='Keresés: rendelés #, partner, létrehozva...'
+      // Hiding
+      enableHiding
       className='dt-orders'
       footerVisible={false}
     />

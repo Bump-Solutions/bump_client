@@ -42,13 +42,14 @@
     thead {
       tr {
         th {
-          &:nth-child(2),
-          &:nth-child(4),
-          &:nth-child(5) {
+          &.th-createdAt,
+          &.th-expiresAt,
+          &.th-totalPrice,
+          &.th-state {
             text-align: center;
           }
 
-          &:nth-child(6) {
+          &.th-action {
             text-align: right !important;
           }
         }
@@ -119,7 +120,7 @@
           }
 
           // CreatedAt
-          &:nth-child(2) {
+          &.td-createdAt {
             text-align: center;
 
             div {
@@ -152,7 +153,7 @@
           }
 
           // ExpiresAt
-          &:nth-child(4) {
+          &.td-expiresAt {
             font-weight: 600;
             text-align: center;
 
@@ -174,8 +175,14 @@
             }
           }
 
+          // Total Price
+          &.td-totalPrice {
+            font-weight: 700;
+            text-align: center;
+          }
+
           // Status
-          &:nth-child(5) {
+          &.td-state {
             text-align: center;
 
             .badge {
@@ -214,7 +221,7 @@
             }
           }
 
-          &:nth-child(6) {
+          &.td-action {
             text-align: right !important;
 
             a.button {
@@ -226,4 +233,12 @@
       }
     }
   }
+}
+
+.order {
+  position: relative;
+  padding: 2rem var(--container-x-padding);
+  width: 100%;
+  max-width: $max-width-900;
+  margin: 0 auto;
 }

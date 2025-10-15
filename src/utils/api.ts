@@ -198,7 +198,7 @@ export const API = {
   ORDERS: {
     LIST_ORDERS: (size: number, page: number) =>
       q(u("order/list_orders"), { page_size: size, page }),
-    GET_ORDER: (orderId: number) => u("order/get_order", orderId),
+    GET_ORDER: (uuid: string) => u("order/get_order", uuid),
     CREATE_ORDER: u("order/create_order"),
     CONFIRM_ORDER: (orderId: number) => u("order/confirm_order", orderId),
     CANCEL_ORDER: (orderId: number) => u("order/cancel_order", orderId),

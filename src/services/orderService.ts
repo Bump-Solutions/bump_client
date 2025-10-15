@@ -54,13 +54,13 @@ export const cancelOrder = async (orderId: number): Promise<void> => {};
 export const getOrder = async (
   signal: AbortSignal,
   axiosPrivate: AxiosInstance,
-  orderId: number
+  uuid: string
 ): Promise<OrderModel> => {
-  if (!orderId) throw new Error("Missing required parameter: orderId");
+  if (!uuid) throw new Error("Missing required parameter: uuid");
 
   const response: ApiResponse = await axiosPrivate.get<{
     message: FetchedOrderDTO;
-  }>(API.ORDERS.GET_ORDER(orderId), { signal });
+  }>(API.ORDERS.GET_ORDER(uuid), { signal });
 
   return fromOrderDTO(response.data.message);
 };
