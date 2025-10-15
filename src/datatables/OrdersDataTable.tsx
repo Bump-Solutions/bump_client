@@ -95,7 +95,6 @@ const OrdersDataTable = ({
   onPageChange,
 }: OrdersDataTableProps) => {
   const orders = data.orders;
-  console.log(data);
 
   const columns: ColumnDef<OrderModel, any>[] = [
     {
@@ -103,6 +102,7 @@ const OrdersDataTable = ({
       accessorFn: (row) => displayUuid(row.uuid), // a globális szűréshez
       header: "Rendelés #",
       enableSorting: false,
+      enableHiding: false,
       cell: ({ row, getValue }) => {
         const uuid = row.original.uuid;
         const pretty = getValue<string>();
@@ -173,6 +173,7 @@ const OrdersDataTable = ({
       accessorKey: "expiresAt",
       header: "Lejár",
       enableSorting: true,
+      enableHiding: false,
       cell: ({ row }) => {
         const expiresAt = row.original.expiresAt;
         const hasTodo = row.original.validActions.length > 0;
@@ -210,6 +211,7 @@ const OrdersDataTable = ({
     {
       accessorKey: "action",
       header: "Részletek",
+      enableHiding: false,
       cell: ({ row }) => (
         <Link
           to={ROUTES.ORDER(row.original.uuid)}
@@ -236,6 +238,8 @@ const OrdersDataTable = ({
       enableGlobalFilter
       globalFilterColumns={["uuid", "party", "createdAt"]}
       globalFilterPlaceholder='Keresés: rendelés #, partner, létrehozva...'
+      // Hiding
+      enableHiding
       className='dt-orders'
       footerVisible={false}
     />

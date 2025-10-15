@@ -395,7 +395,10 @@ const DataTable = <T extends object>({
                 const sortState = header.column.getIsSorted(); // 'asc' | 'desc' | false
 
                 return (
-                  <th key={header.id} colSpan={header.colSpan}>
+                  <th
+                    key={header.id}
+                    colSpan={header.colSpan}
+                    className={`th-${header.column.id}`}>
                     {canSort ? (
                       <button
                         type='button'
@@ -432,7 +435,7 @@ const DataTable = <T extends object>({
               <Fragment key={row.id}>
                 <tr>
                   {row.getVisibleCells().map((cell) => (
-                    <td key={cell.id}>
+                    <td key={cell.id} className={`td-${cell.column.id}`}>
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
