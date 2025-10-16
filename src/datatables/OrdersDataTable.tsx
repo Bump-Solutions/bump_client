@@ -1,6 +1,6 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { Link } from "react-router";
-import { OrderModel, OrdersPageModel } from "../models/orderModel";
+import { OrderListModel, OrdersPageModel } from "../models/orderModel";
 import { ROUTES } from "../routes/routes";
 import { displayUuid } from "../utils/functions";
 import { isToday, MS, pad } from "../utils/time";
@@ -96,7 +96,7 @@ const OrdersDataTable = ({
 }: OrdersDataTableProps) => {
   const orders = data.orders;
 
-  const columns: ColumnDef<OrderModel, any>[] = [
+  const columns: ColumnDef<OrderListModel, any>[] = [
     {
       id: "uuid",
       accessorFn: (row) => displayUuid(row.uuid), // a globális szűréshez
