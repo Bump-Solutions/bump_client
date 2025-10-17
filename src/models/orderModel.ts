@@ -2,6 +2,24 @@ export type OrderState = number;
 
 export type OrderAction = "cancel" | "confirm" | "complete" | "pay";
 
+export interface OrderListModel {
+  id: number;
+  uuid: string;
+
+  state: OrderState;
+  validActions: OrderAction[];
+
+  isSeller: boolean;
+  party: {
+    id: number;
+    username: string;
+    profilePicture: string | null;
+  };
+
+  createdAt: string;
+  expiresAt: string;
+}
+
 export interface OrderModel {
   id: number;
   uuid: string;
@@ -21,7 +39,7 @@ export interface OrderModel {
 }
 
 export interface OrdersPageModel {
-  orders: OrderModel[];
+  orders: OrderListModel[];
   next: number | null;
   previous: string | null;
   count: number;

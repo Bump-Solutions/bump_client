@@ -1,16 +1,4 @@
-import {
-  createContext,
-  ReactNode,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
-import { useListNotifications } from "../hooks/notifications/useListNotifications";
-import {
-  NotificationModel,
-  NotificationsPageModel,
-} from "../models/notificationModel";
+import { createContext, ReactNode, useCallback, useEffect } from "react";
 import { useMarkNotificationAsRead } from "../hooks/notifications/useMarkNotificationAsRead";
 import { ApiResponse } from "../types/api";
 import { useAuth } from "../hooks/auth/useAuth";

@@ -2,20 +2,42 @@ import {
   FetchedOrderDTO,
   CreateOrderDTO,
   OrdersPageDTO,
+  ListOrderDTO,
 } from "../dtos/OrderDTO";
 import {
   CreateOrderModel,
+  OrderListModel,
   OrderModel,
   OrdersPageModel,
 } from "../models/orderModel";
 
 export function fromOrdersPageDTO(dto: OrdersPageDTO): OrdersPageModel {
   return {
-    orders: dto.orders.map(fromOrderDTO),
+    orders: dto.orders.map(fromListOrderDTO),
     next: dto.next,
     previous: dto.previous,
     count: dto.count,
     totalPages: dto.total_pages,
+  };
+}
+
+export function fromListOrderDTO(dto: ListOrderDTO): OrderListModel {
+  return {
+    id: dto.id,
+    uuid: dto.uuid,
+
+    state: dto.state,
+    validActions: dto.valid_actions,
+
+    isSeller: dto.is_seller,
+    party: {
+      id: dto.party.id,
+      username: dto.party.username,
+      profilePicture: dto.party.profile_picture,
+    },
+
+    createdAt: dto.created_at,
+    expiresAt: dto.expires_at,
   };
 }
 
