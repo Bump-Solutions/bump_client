@@ -160,7 +160,7 @@
     }
 
     &:disabled {
-      @include cbb(null, color(gray, 200), 1px solid color(gray, 400));
+      @include cbb(null, color(gray, 100), 1px solid transparent);
       pointer-events: none;
 
       .spinner {
@@ -236,11 +236,7 @@
     }
 
     &.loading {
-      @include cbb(
-        color(gray, 500),
-        color(gray, 50),
-        1px solid color(gray, 200)
-      );
+      @include cbb(color(gray, 500), color(gray, 50), 1px solid transparent);
       pointer-events: none;
     }
 
