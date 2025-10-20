@@ -141,8 +141,8 @@
   background-color: #f8f9fa;
 }
 .button.secondary:disabled {
-  background-color: #e9ecef;
-  border: 1px solid #ced4da;
+  background-color: #f1f3f5;
+  border: 1px solid transparent;
   pointer-events: none;
 }
 .button.secondary:disabled .spinner {
@@ -201,7 +201,7 @@
 .button.secondary.loading {
   color: #adb5bd;
   background-color: #f8f9fa;
-  border: 1px solid #e9ecef;
+  border: 1px solid transparent;
   pointer-events: none;
 }
 .button.secondary.icon--reverse {

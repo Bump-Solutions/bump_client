@@ -60,13 +60,12 @@
             padding: 0.5rem 1rem;
             padding-left: 3rem;
             border-radius: $border-radius-2;
-            border: 1px solid color(gray, 200);
-            background-color: color(gray, 200);
+            border: 2px solid transparent;
+            background-color: color(gray, 100);
             font-size: $fs-16;
-            transition: border 0.2s $animation-cubic;
 
             &:focus {
-              border: 1px solid color(gray, 600);
+              border: 2px solid color(blue, 500);
             }
           }
         }
@@ -227,13 +226,12 @@
               padding: 0.5rem 1rem;
               padding-left: 3rem;
               border-radius: $border-radius-2;
-              border: 1px solid color(gray, 200);
-              background-color: color(gray, 200);
+              border: 2px solid transparent;
+              background-color: color(gray, 100);
               font-size: $fs-16;
-              transition: border 0.2s $animation-cubic;
 
               &:focus {
-                border: 1px solid color(gray, 600);
+                border: 2px solid color(blue, 500);
               }
             }
           }

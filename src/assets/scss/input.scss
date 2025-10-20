@@ -137,13 +137,14 @@
     width: fit-content;
     height: $input-height;
     border-radius: $border-radius-1;
-    background-color: color(gray, 50);
-    border: 1px solid color(gray, 400);
+    background-color: color(gray, 100);
+    border: 1px solid transparent;
+    overflow: hidden;
 
     &.disabled {
-      background-color: color(gray, 200) !important;
-      border: 1px solid color(gray, 400) !important;
-      cursor: not-allowed !important;
+      background-color: color(gray, 200);
+      color: color(gray, 600);
+      cursor: not-allowed;
 
       .stepper__btn {
         cursor: not-allowed !important;
@@ -156,7 +157,7 @@
       }
 
       &:hover {
-        border: 1px solid color(gray, 400) !important;
+        border: 1px solid transparent;
         outline: none !important;
       }
     }
@@ -183,6 +184,10 @@
         width: $fs-18;
         height: $fs-18;
       }
+
+      &:active {
+        background-color: color(gray, 200);
+      }
     }
 
     input {
@@ -199,9 +204,6 @@
     }
 
     &.focused {
-      border: 1px solid color(gray, 900);
-      background-color: $clr-white;
-
       &:hover {
         border: 1px solid color(blue, 500);
         outline: 1px solid color(blue, 500);
@@ -233,12 +235,13 @@
       padding: 0 4rem 0 1.25rem;
       outline: none;
       font-size: $fs-16;
-      background-color: color(gray, 50);
-      border: 1px solid color(gray, 400);
+      background-color: color(gray, 100) !important;
+      border: 1px solid color(gray, 900);
       border-radius: $border-radius-1;
 
       &:disabled {
         background-color: color(gray, 200);
+        color: color(gray, 600);
         cursor: not-allowed;
       }
 
@@ -252,13 +255,13 @@
       }
 
       &::placeholder {
-        color: color(gray, 700);
+        color: color(gray, 600);
       }
 
       &:invalid,
       &:not(:placeholder-shown) {
-        border: 1px solid color(gray, 900);
-        background-color: $clr-white;
+        border-color: transparent;
+        background-color: color(gray, 100);
 
         & ~ .input__svg {
           color: $clr-font-headline;
@@ -276,18 +279,33 @@
 
         &:focus {
           border: 2px solid color(red, 500);
-          outline: 2px solid color(red, 100);
+          outline: 2px solid color(red, 50);
         }
       }
 
       &:-webkit-autofill,
-      &:-webkit-autofill:hover,
-      &:-webkit-autofill:focus {
+      &:-webkit-autofill:hover {
         -webkit-text-fill-color: $clr-font-headline;
-        -webkit-box-shadow: 0 0 0px 1000px $clr-white inset;
+        -webkit-box-shadow: 0 0 0px 1000px color(gray, 100) inset;
+        outline: none;
+        border: none;
 
         &.error {
           -webkit-box-shadow: 0 0 0px 1000px color(red, 50) inset;
+          border: 2px solid color(red, 500);
+        }
+      }
+
+      &:-webkit-autofill:focus {
+        -webkit-text-fill-color: $clr-font-headline;
+        -webkit-box-shadow: 0 0 0px 1000px color(gray, 100) inset;
+        outline: 2px solid color(blue, 50);
+        border: 2px solid color(blue, 500);
+
+        &.error {
+          -webkit-box-shadow: 0 0 0px 1000px color(red, 50) inset;
+          outline: 2px solid color(red, 50);
+          border: 2px solid color(red, 500);
         }
       }
     }
@@ -303,8 +321,8 @@
       @include flex(row, space-between, center);
       padding: 1rem;
       padding-left: 1.25rem;
-      background-color: color(gray, 50);
-      border: 1px solid color(gray, 400);
+      background-color: color(gray, 100);
+      border: 1px solid transparent;
       border-radius: $border-radius-1;
       cursor: pointer;
       height: $input-height;
@@ -332,9 +350,6 @@
       }
 
       &.toggled {
-        background-color: $clr-white;
-        border: 1px solid color(gray, 900);
-
         &:hover {
           border: 1px solid color(blue, 500);
           outline: 1px solid color(blue, 500);
@@ -434,8 +449,8 @@
       padding: 0 3rem 0 1.25rem;
       outline: none;
       font-size: $fs-16;
-      background-color: color(gray, 50);
-      border: 1px solid color(gray, 400);
+      background-color: color(gray, 100) !important;
+      border: 1px solid color(gray, 900);
       border-radius: $border-radius-1;
 
       &.textarea {
@@ -454,6 +469,7 @@
 
       &:disabled {
         background-color: color(gray, 200);
+        color: color(gray, 600);
         cursor: not-allowed;
       }
 
@@ -467,13 +483,14 @@
       }
 
       &::placeholder {
-        color: color(gray, 700);
+        color: color(gray, 600);
+        font-family: $font-primary;
       }
 
       &:invalid,
       &:not(:placeholder-shown) {
-        border: 1px solid color(gray, 900);
-        background-color: $clr-white;
+        border-color: transparent;
+        background-color: color(gray, 100);
 
         & ~ .input__svg {
           color: $clr-font-headline;
@@ -491,18 +508,33 @@
 
         &:focus {
           border: 2px solid color(red, 500);
-          outline: 2px solid color(red, 100);
+          outline: 2px solid color(red, 50);
         }
       }
 
       &:-webkit-autofill,
-      &:-webkit-autofill:hover,
-      &:-webkit-autofill:focus {
+      &:-webkit-autofill:hover {
         -webkit-text-fill-color: $clr-font-headline;
-        -webkit-box-shadow: 0 0 0px 1000px $clr-white inset;
+        -webkit-box-shadow: 0 0 0px 1000px color(gray, 100) inset;
+        outline: none;
+        border: none;
 
         &.error {
           -webkit-box-shadow: 0 0 0px 1000px color(red, 50) inset;
+          border: 2px solid color(red, 500);
+        }
+      }
+
+      &:-webkit-autofill:focus {
+        -webkit-text-fill-color: $clr-font-headline;
+        -webkit-box-shadow: 0 0 0px 1000px color(gray, 100) inset;
+        outline: 2px solid color(blue, 50);
+        border: 2px solid color(blue, 500);
+
+        &.error {
+          -webkit-box-shadow: 0 0 0px 1000px color(red, 50) inset;
+          outline: 2px solid color(red, 50);
+          border: 2px solid color(red, 500);
         }
       }
     }
@@ -575,8 +607,8 @@
 
     .dropdown__input {
       border-radius: $border-radius-1;
-      background-color: color(gray, 50);
-      border: 1px solid color(gray, 400);
+      background-color: color(gray, 100);
+      border: 1px solid transparent;
       padding: 0.75rem 1.325rem 0.75rem 1.25rem;
       @include flex(row, space-between, center);
       min-height: $input-height;
@@ -584,12 +616,12 @@
 
       &.focused {
         border: 2px solid color(blue, 500);
-        background-color: $clr-white;
+        background-color: color(gray, 100);
       }
 
       &.filled {
-        border: 1px solid color(gray, 900);
-        background-color: $clr-white;
+        border: 1px solid transparent;
+        background-color: color(gray, 100);
         padding-block: 0.5rem;
 
         &.focused {
@@ -634,14 +666,14 @@
             align-items: center;
             padding: 0.25rem 0.5rem 0.25rem 0.75rem;
             border-radius: 12px;
-            background-color: color(gray, 100);
+            background-color: color(gray, 200);
             color: color(gray, 700);
             font-size: $fs-16;
             transition: all 0.2s $animation-cubic;
             gap: 0.5rem;
 
             &:hover {
-              background-color: color(gray, 200);
+              background-color: color(gray, 300);
               color: color(gray, 900);
             }
 
@@ -698,7 +730,7 @@
       left: 1.25rem;
       height: $fs-20;
       width: $fs-20;
-      color: color(gray, 900);
+      color: color(gray, 700);
       flex-shrink: 0;
     }
 
@@ -728,11 +760,11 @@
     }
 
     &.selected {
-      background-color: color(gray, 50);
+      background-color: color(gray, 100);
       color: $clr-font;
 
       &:hover {
-        background-color: color(gray, 100);
+        background-color: color(gray, 200);
       }
     }
   }
@@ -740,12 +772,12 @@
   &.multi {
     .dropdown__item {
       &.selected {
-        background-color: color(gray, 50);
+        background-color: color(gray, 100);
         color: $clr-font;
       }
 
       &.selected:hover {
-        background-color: color(gray, 100);
+        background-color: color(gray, 200);
         color: $clr-font;
       }
     }
@@ -753,7 +785,7 @@
 }
 
 .dropzone {
-  border: 1px dashed color(gray, 600);
+  border: 1px dashed color(gray, 700);
   border-radius: $border-radius-1;
   padding: 4rem 2rem;
   margin: 0.5rem 0;
@@ -826,7 +858,7 @@ input[type="number"] {
   justify-content: center;
   padding: 0.5rem 1rem;
   border-radius: $border-radius-2;
-  background-color: color(gray, 200);
+  background-color: color(gray, 100);
   color: color(gray, 700);
   line-height: 1.25;
   cursor: pointer;

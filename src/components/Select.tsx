@@ -54,7 +54,7 @@ const Select = ({
     ? (selectedValue as Option[]).length > 0
     : Boolean(selectedValue);
 
-  const { x, y, refs, strategy, update, context } = useFloating({
+  const { x, y, refs, strategy } = useFloating({
     middleware: [offset(4), flip(), shift({ padding: 8 })],
     whileElementsMounted: autoUpdate,
   });
@@ -68,16 +68,19 @@ const Select = ({
 
   useEffect(() => {
     const handler = (event: MouseEvent) => {
+      const target = event.target as Node;
+
       if (
-        inputRef.current &&
-        !inputRef.current.contains(event.target as Node)
+        (inputRef.current && inputRef.current.contains(target)) ||
+        (searchRef.current && searchRef.current.contains(target))
       ) {
-        setShowMenu(false);
+        return; // a komponensen belül kattintottunk -> ne zárjuk
       }
+
+      setShowMenu(false);
     };
 
     window.addEventListener("click", handler);
-
     return () => {
       window.removeEventListener("click", handler);
     };
@@ -156,6 +159,7 @@ const Select = ({
   };
 
   const onSearch = (e: ChangeEvent<HTMLInputElement>) => {
+    e.stopPropagation();
     setSearchValue(e.target.value);
   };
 
