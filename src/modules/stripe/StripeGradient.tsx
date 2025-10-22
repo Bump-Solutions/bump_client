@@ -44,7 +44,6 @@ const StripeGradient = () => {
       } else {
         // 2) Ellenkező esetben állítsd a belső "conf.playing" flaget
         if (gradient.conf) gradient.conf.playing = true;
-        console.log("Gradient animation flag set to playing");
       }
     } else {
       if (typeof gradient.pause === "function") {
