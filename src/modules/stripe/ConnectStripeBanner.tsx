@@ -1,6 +1,6 @@
 import "../../assets/css/stripe.css";
 import { ROUTES } from "../../routes/routes";
-import { useAuth } from "../../hooks/auth/useAuth";
+import { useAuthWithMeta } from "../../hooks/auth/useAuthWithMeta";
 import { Link } from "react-router";
 
 import StripeGradient from "./StripeGradient";
@@ -8,10 +8,10 @@ import StripeGradient from "./StripeGradient";
 import { ArrowUpRight, MoveRight } from "lucide-react";
 
 const ConnectStripeBanner = () => {
-  const { auth } = useAuth();
+  const { meta } = useAuthWithMeta();
 
   // If Stripe is already connected, do not show the banner
-  if (auth?.accountCapabilities?.stripe.connected) return null;
+  if (meta?.accountCapabilities?.stripe.connected) return null;
 
   return (
     <section

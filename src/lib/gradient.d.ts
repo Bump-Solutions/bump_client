@@ -26,6 +26,8 @@ export declare class Gradient {
   /** The runtime does not consume constructor arguments. */
   constructor(canvas?: HTMLCanvasElement | string, config?: GradientConfig);
 
+  conf: GradientConfig;
+
   /**
    * Initialize the gradient on a canvas.
    * Pass a CSS selector (e.g., "#stripe-canvas") or a canvas element.
@@ -37,6 +39,8 @@ export declare class Gradient {
 
   /** Pause animation. Safe to call when already paused. */
   pause(): void;
+
+  animate(timestamp: number): void;
 
   /** Attach internal listeners (resize/visibility). */
   connect(): void;
