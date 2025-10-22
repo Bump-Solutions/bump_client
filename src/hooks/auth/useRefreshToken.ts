@@ -15,10 +15,7 @@ export const useRefreshToken = (): (() => Promise<string>) => {
     });
 
     const authModel = fromRefreshResponseDTO(response.data.access_token);
-    setAuth((prev: AuthModel | null) => ({
-      ...prev,
-      ...authModel,
-    }));
+    setAuth((prev: AuthModel | null) => prev ? { ...prev, ...authModel } : authModel);
 
     return response.data.access_token;
   };
