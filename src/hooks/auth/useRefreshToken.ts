@@ -1,9 +1,10 @@
 import { API } from "../../utils/api";
 
-import axios from "axios";
-
+import { AuthModel } from "../../models/authModel";
 import { useAuth } from "./useAuth";
 import { fromRefreshResponseDTO } from "../../mappers/authMapper";
+
+import axios from "axios";
 
 export const useRefreshToken = (): (() => Promise<string>) => {
   const { setAuth } = useAuth();
@@ -14,7 +15,10 @@ export const useRefreshToken = (): (() => Promise<string>) => {
     });
 
     const authModel = fromRefreshResponseDTO(response.data.access_token);
-    setAuth(authModel);
+    setAuth((prev: AuthModel | null) => ({
+      ...prev,
+      ...authModel,
+    }));
 
     return response.data.access_token;
   };

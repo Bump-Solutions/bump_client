@@ -6,14 +6,17 @@ import { useAxiosPrivate } from "../auth/useAxiosPrivate";
 import { getProfileMeta } from "../../services/profileService";
 import { QUERY_KEY } from "../../utils/queryKeys";
 import { ApiError } from "../../types/api";
+import { useAuth } from "../auth/useAuth";
 
-export const useGetProfileMeta = (dependencies: any[] = []) => {
+export const useGetProfileMeta = () => {
+  const { auth } = useAuth();
   const axiosPrivate = useAxiosPrivate();
 
   return useQuery<ProfileMetaModel, ApiError>({
-    queryKey: [QUERY_KEY.getProfileMeta, ...dependencies],
+    queryKey: [QUERY_KEY.getProfileMeta],
     queryFn: ({ signal }) => getProfileMeta(signal, axiosPrivate),
-    refetchOnWindowFocus: false,
+    enabled: Boolean(auth?.accessToken),
+    refetchOnWindowFocus: true,
     staleTime: ENUM.GLOBALS.staleTime5,
   });
 };

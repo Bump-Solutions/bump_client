@@ -16,7 +16,27 @@ export interface ProfileModel {
   profilePictureHash: string;
 }
 
+export interface AccountCapabilities {
+  /** Stripe Connect állapotok (a backend számolja Stripe account alapján) */
+  stripe: {
+    connected: boolean; // van connected account ID
+  };
+
+  /** Saját platform-alkalmasságok */
+  profile: {
+    emailVerified: boolean;
+    phoneNumberVerified: boolean;
+    accountComplete: boolean;
+  };
+}
+
 export interface ProfileMetaModel {
+  email: string;
+  phoneNumber: string | null;
   profilePicture: string;
   unreadNotifications: number; // unread notifications count
+
+  address?: AddressModel; // Default address, if exists
+
+  accountCapabilities?: AccountCapabilities;
 }

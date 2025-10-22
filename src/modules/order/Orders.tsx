@@ -14,6 +14,7 @@ import Button from "../../components/Button";
 import OrdersHeader from "./OrdersHeader";
 import OrdersDataTable from "../../datatables/OrdersDataTable";
 import Empty from "../../components/Empty";
+import ConnectStripeBanner from "../stripe/ConnectStripeBanner";
 
 import { MessageCircleQuestion, PackageOpen, RotateCcw } from "lucide-react";
 
@@ -66,6 +67,8 @@ const Orders = () => {
 
   return (
     <section className='orders'>
+      <ConnectStripeBanner />
+
       {data && data.orders.length > 0 ? (
         <>
           <OrdersHeader />

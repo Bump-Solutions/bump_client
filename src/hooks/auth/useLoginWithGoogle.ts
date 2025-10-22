@@ -1,24 +1,29 @@
+import { ROUTES } from "../../routes/routes";
 import { ApiError } from "../../types/api";
+import { googleLogin } from "../../services/authService";
+
+import { useNavigate } from "react-router";
 import { useMutation } from "@tanstack/react-query";
 
-import { googleLogin } from "../../services/authService";
+import { useAuth } from "./useAuth";
 import { AuthModel } from "../../models/authModel";
 
-export const useLoginWithGoogle = (
-  onSuccess?: (resp: AuthModel, variables: string) => void,
-  onError?: (error: ApiError, variables: string) => void
-) => {
-  return useMutation<AuthModel, ApiError, string>({
-    mutationFn: (code: string) => googleLogin(code),
-    onSuccess: (resp, variables) => {
-      if (onSuccess) {
-        onSuccess(resp, variables);
-      }
+interface GoogleLoginArgs {
+  code: string;
+}
+
+export const useLoginWithGoogle = () => {
+  const navigate = useNavigate();
+
+  const { setAuth } = useAuth();
+
+  return useMutation<AuthModel, ApiError, GoogleLoginArgs>({
+    mutationFn: ({ code }) => googleLogin(code),
+    onSuccess: (authModel) => {
+      setAuth(authModel);
+      navigate(ROUTES.HOME, { replace: true });
     },
-    onError: (error, variables) => {
-      if (onError) {
-        onError(error, variables);
-      }
+    onError: (error) => {
       return Promise.reject(error);
     },
   });

@@ -6,6 +6,7 @@ import { displayUuid } from "../../utils/functions";
 
 import Spinner from "../../components/Spinner";
 import Back from "../../components/Back";
+import ConnectStripeBanner from "../stripe/ConnectStripeBanner";
 
 const Order = () => {
   const { order, isLoading } = useOrder();
@@ -17,7 +18,8 @@ const Order = () => {
 
   return (
     <section className='order'>
-      <Back text='Vissza a rendelésekhez' />
+      <Back text='Vissza a rendelésekhez' className='link mb-1' />
+      <ConnectStripeBanner />
       <div>{JSON.stringify(order, null, 2)}</div>
     </section>
   );

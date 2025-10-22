@@ -1,0 +1,184 @@
+@use "variables" as *;
+@use "palette" as *;
+@use "mixins" as *;
+
+// Contains styles for Stripe and payment related components
+
+#stripe-canvas {
+  --stripe-gradient-color-1: #a960ee;
+  --stripe-gradient-color-2: #ff333d;
+  --stripe-gradient-color-3: #90e0ff;
+  --stripe-gradient-color-4: #ffcb57;
+
+  width: 100%;
+  height: 100%;
+
+  /* Animated gradient background while canvas is loading */
+  background: linear-gradient(
+    135deg,
+    var(--stripe-gradient-color-1),
+    var(--stripe-gradient-color-3),
+    var(--stripe-gradient-color-2),
+    var(--stripe-gradient-color-4)
+  );
+
+  background-size: 400% 400%;
+  animation: gradient 30s ease infinite;
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.stripe-banner {
+  position: relative;
+  box-shadow: $box-shadow;
+  aspect-ratio: 21 / 9 !important;
+  width: 100%;
+  max-height: 22rem;
+  border-radius: $border-radius-2;
+  overflow: hidden;
+  margin-bottom: 2rem;
+
+  .gradient__wrapper {
+    position: relative;
+    overflow: hidden;
+    height: 100%;
+    width: 100%;
+
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  }
+
+  article {
+    position: absolute;
+    inset: 0;
+    padding: 2rem;
+    padding-left: 2.5rem;
+    display: flex;
+    flex-direction: column;
+
+    background: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0) 0%,
+      rgba(0, 0, 0, 0.1) 100%
+    );
+
+    h4 {
+      width: fit-content;
+      font-family: $font-display;
+      color: color(gray, 900);
+      opacity: 1;
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 800;
+
+      margin-bottom: 1rem;
+      z-index: 2;
+    }
+
+    p {
+      text-align: left;
+      font-size: $fs-16;
+      color: color(gray, 900);
+      opacity: 0.9;
+      font-weight: 700;
+      z-index: 2;
+      max-width: 75ch;
+      margin-bottom: 0.5rem;
+    }
+
+    .btngroup {
+      margin-top: auto;
+      align-self: flex-end;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      a.button {
+        width: fit-content;
+        margin: 0;
+      }
+    }
+
+    .more {
+      position: absolute;
+      top: 1.5rem;
+      right: 1rem;
+      display: inline-block;
+
+      .link {
+        font-size: $fs-14;
+        padding: 1rem;
+        font-weight: 600 !important;
+
+        &:hover {
+          text-decoration: underline;
+          color: color(gray, 700);
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: $max-width-700) {
+  .stripe-banner {
+    aspect-ratio: 16 / 9 !important;
+    max-height: fit-content;
+
+    article {
+      padding: 1.5rem 2rem;
+
+      h4 {
+        width: 100%;
+        text-align: left;
+      }
+
+      .more {
+        left: 1rem;
+        bottom: 1.5rem;
+        top: unset;
+        right: unset;
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: $media-query-md) {
+  .stripe-banner {
+    aspect-ratio: unset !important;
+    max-height: 23rem;
+  }
+}
+
+@media only screen and (max-width: 430px) {
+  .stripe-banner {
+    max-height: 34rem;
+
+    .btngroup {
+      margin-top: 3rem;
+      width: 100%;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .more {
+      margin-top: 0.5rem;
+      position: relative !important;
+      display: flex;
+      left: unset !important;
+      bottom: unset !important;
+      text-align: center;
+
+      a.link {
+        padding: 0.5rem 1rem;
+      }
+    }
+  }
+}
