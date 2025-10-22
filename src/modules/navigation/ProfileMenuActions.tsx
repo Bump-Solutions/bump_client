@@ -53,7 +53,7 @@ const ACTIONS = (auth: AuthModel): MenuAction[] => {
   ];
 };
 
-const DASHBOARD = (auth: AuthModel): MenuAction[] => {
+const DASHBOARD = (_auth: AuthModel): MenuAction[] => {
   return [
     {
       icon: <Package />,

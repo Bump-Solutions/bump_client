@@ -20,6 +20,7 @@ import ToggleButton from "../../../components/ToggleButton";
 import StateButton from "../../../components/StateButton";
 
 import { Upload } from "lucide-react";
+import { AuthModel } from "../../../models/authModel";
 
 const ProfilePictureSettings = () => {
   const navigate = useNavigate();

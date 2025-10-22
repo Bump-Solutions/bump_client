@@ -8,10 +8,10 @@ export function fromLoginResponseDTO(dto: LoginResponseDTO): AuthModel {
   return {
     accessToken: dto.access_token,
     roles: decoded.roles,
+
     user: {
       id: Number(decoded.user_id),
       username: decoded.username,
-      email: dto.email,
     },
   };
 }
@@ -22,10 +22,10 @@ export function fromGoogleResponseDTO(accessToken: string): AuthModel {
   return {
     accessToken,
     roles: decoded.roles,
+
     user: {
       id: Number(decoded.user_id),
       username: decoded.username,
-      email: "", // Google login typically does not return email
     },
   };
 }
@@ -36,10 +36,10 @@ export function fromRefreshResponseDTO(accessToken: string): AuthModel {
   return {
     accessToken,
     roles: decoded.roles,
+
     user: {
       id: Number(decoded.user_id),
       username: decoded.username,
-      email: decoded.email || "", // Email may not be present
     },
   };
 }

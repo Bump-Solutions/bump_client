@@ -1,0 +1,147 @@
+#stripe-canvas {
+  --stripe-gradient-color-1: #a960ee;
+  --stripe-gradient-color-2: #ff333d;
+  --stripe-gradient-color-3: #90e0ff;
+  --stripe-gradient-color-4: #ffcb57;
+  width: 100%;
+  height: 100%;
+  /* Animated gradient background while canvas is loading */
+  background: linear-gradient(135deg, var(--stripe-gradient-color-1), var(--stripe-gradient-color-3), var(--stripe-gradient-color-2), var(--stripe-gradient-color-4));
+  background-size: 400% 400%;
+  animation: gradient 30s ease infinite;
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+.stripe-banner {
+  position: relative;
+  box-shadow: 0 1px 3px rgba(25, 25, 25, 0.1);
+  aspect-ratio: 21/9 !important;
+  width: 100%;
+  max-height: 22rem;
+  border-radius: 2rem;
+  overflow: hidden;
+  margin-bottom: 2rem;
+}
+.stripe-banner .gradient__wrapper {
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+}
+.stripe-banner article {
+  position: absolute;
+  inset: 0;
+  padding: 2rem;
+  padding-left: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.1) 100%);
+}
+.stripe-banner article h4 {
+  width: -moz-fit-content;
+  width: fit-content;
+  font-family: "Bebas Neue";
+  color: #212529;
+  opacity: 1;
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 800;
+  margin-bottom: 1rem;
+  z-index: 2;
+}
+.stripe-banner article p {
+  text-align: left;
+  font-size: 1rem;
+  color: #212529;
+  opacity: 0.9;
+  font-weight: 700;
+  z-index: 2;
+  max-width: 75ch;
+  margin-bottom: 0.5rem;
+}
+.stripe-banner article .btngroup {
+  margin-top: auto;
+  align-self: flex-end;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.stripe-banner article .btngroup a.button {
+  width: -moz-fit-content;
+  width: fit-content;
+  margin: 0;
+}
+.stripe-banner article .more {
+  position: absolute;
+  top: 1.5rem;
+  right: 1rem;
+  display: inline-block;
+}
+.stripe-banner article .more .link {
+  font-size: 0.875rem;
+  padding: 1rem;
+  font-weight: 600 !important;
+}
+.stripe-banner article .more .link:hover {
+  text-decoration: underline;
+  color: #495057;
+}
+
+@media only screen and (max-width: 700px) {
+  .stripe-banner {
+    aspect-ratio: 16/9 !important;
+    max-height: -moz-fit-content;
+    max-height: fit-content;
+  }
+  .stripe-banner article {
+    padding: 1.5rem 2rem;
+  }
+  .stripe-banner article h4 {
+    width: 100%;
+    text-align: left;
+  }
+  .stripe-banner article .more {
+    left: 1rem;
+    bottom: 1.5rem;
+    top: unset;
+    right: unset;
+  }
+}
+@media only screen and (max-width: 768px) {
+  .stripe-banner {
+    aspect-ratio: unset !important;
+    max-height: 23rem;
+  }
+}
+@media only screen and (max-width: 430px) {
+  .stripe-banner {
+    max-height: 34rem;
+  }
+  .stripe-banner .btngroup {
+    margin-top: 3rem;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+  }
+  .stripe-banner .more {
+    margin-top: 0.5rem;
+    position: relative !important;
+    display: flex;
+    left: unset !important;
+    bottom: unset !important;
+    text-align: center;
+  }
+  .stripe-banner .more a.link {
+    padding: 0.5rem 1rem;
+  }
+}/*# sourceMappingURL=stripe.css.map */

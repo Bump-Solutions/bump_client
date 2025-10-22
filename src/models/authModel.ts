@@ -1,4 +1,3 @@
-import { UserModel } from "./userModel";
 import { Option } from "../types/form";
 
 export interface JwtPayload {
@@ -15,7 +14,11 @@ export interface JwtPayload {
 export interface AuthModel {
   accessToken: string;
   roles: Role[];
-  user: Partial<UserModel> | null;
+
+  user: {
+    id: number;
+    username: string;
+  };
 }
 
 export type Role = 4001 | 5002 | 6003 | 7004;

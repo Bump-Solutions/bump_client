@@ -12,12 +12,15 @@ export const useLogout = (): (() => Promise<void>) => {
     toast.promise(
       (async () => {
         await logout();
+
         setAuth(null);
+
         queryClient.clear();
       })(),
       {
         loading: "Kijelentkezés...",
         success: "Kijelentkeztél.",
+        error: "Hiba történt a kijelentkezés során.",
       }
     );
   };
