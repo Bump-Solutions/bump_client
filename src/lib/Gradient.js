@@ -596,12 +596,10 @@ class Gradient {
           }, 3e3));
       }),
       e(this, "pause", () => {
-        console.log("Gradient pause"), (this.conf.playing = false);
+        this.conf.playing = false;
       }),
       e(this, "play", () => {
-        console.log("Gradient play"),
-          requestAnimationFrame(this.animate),
-          (this.conf.playing = true);
+        requestAnimationFrame(this.animate), (this.conf.playing = true);
       }),
       e(this, "initGradient", (element) => {
         this.el = element;
