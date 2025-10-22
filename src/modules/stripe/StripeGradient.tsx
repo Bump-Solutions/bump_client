@@ -34,7 +34,7 @@ const StripeGradient = () => {
 
   // Ha változik a láthatóság, play/pause
   useEffect(() => {
-    const gradient: Gradient | null = gradientRef.current;
+    const gradient = gradientRef.current;
     if (!gradient) return;
 
     if (inView) {
