@@ -124,7 +124,7 @@
       pointer-events: none;
 
       .spinner {
-        color: color(gray, 700);
+        color: color(gray, 300);
       }
     }
 
@@ -160,7 +160,7 @@
     }
 
     &:disabled {
-      @include cbb(null, color(gray, 100), 1px solid transparent);
+      @include cbb(null, color(gray, 100), 1px solid color(gray, 300));
       pointer-events: none;
 
       .spinner {

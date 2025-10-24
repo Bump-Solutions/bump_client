@@ -52,8 +52,6 @@ export interface CartItemModel {
   hasDiscount: boolean;
   discountPercent?: DiscountPercent; // 1..100
   discountedPrice?: MoneyModel;
-
-  state?: CartItemState; // TODO
 }
 
 // --- Termékszint a kosárban --------------------------------------------------

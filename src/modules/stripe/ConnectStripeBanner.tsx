@@ -2,16 +2,30 @@ import "../../assets/css/stripe.css";
 import { ROUTES } from "../../routes/routes";
 import { useAuthWithMeta } from "../../hooks/auth/useAuthWithMeta";
 import { Link } from "react-router";
+import { useState, MouseEvent } from "react";
 
 import StripeGradient from "./StripeGradient";
+import Button from "../../components/Button";
 
 import { ArrowUpRight, MoveRight } from "lucide-react";
 
 const ConnectStripeBanner = () => {
   const { meta } = useAuthWithMeta();
+  const [loading, setLoading] = useState(false);
 
   // If Stripe is already connected, do not show the banner
   if (meta?.accountCapabilities?.stripe.connected) return null;
+
+  const handleConnect = (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+
+    setLoading(true);
+
+    setTimeout(() => {
+      window.open(ROUTES.HOME, "_blank");
+      setLoading(false);
+    }, 1000);
+  };
 
   return (
     <section
@@ -37,10 +51,13 @@ const ConnectStripeBanner = () => {
         </p>
 
         <div className='btngroup'>
-          <Link to={ROUTES.HOME} className='button primary'>
+          <Button
+            className='primary'
+            onClick={handleConnect}
+            loading={loading}
+            text=' Csatlakozás most'>
             <MoveRight />
-            Csatlakozás most
-          </Link>
+          </Button>
         </div>
 
         <div className='more'>

@@ -185,4 +185,12 @@
   width: 100%;
   max-width: 1100px;
   margin: 0 auto;
+}
+.order .order__header {
+  position: relative;
+}
+.order .order__header h1 {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid #dee2e6;
 }/*# sourceMappingURL=order.css.map */

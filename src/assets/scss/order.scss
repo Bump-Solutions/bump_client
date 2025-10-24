@@ -241,4 +241,14 @@
   width: 100%;
   max-width: $max-width-1100;
   margin: 0 auto;
+
+  .order__header {
+    position: relative;
+
+    h1 {
+      font-size: $fs-32;
+      margin-bottom: 2rem;
+      border-bottom: 1px solid color(gray, 300);
+    }
+  }
 }

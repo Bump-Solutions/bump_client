@@ -1,8 +1,4 @@
 @font-face {
-  font-family: "BiggerDisplay";
-  src: url("../fonts/BiggerDisplay.otf") format("truetype");
-}
-@font-face {
   font-family: "Bebas Neue";
   src: url("../fonts/bebas-neue/BebasNeue-Regular.ttf") format("truetype");
 }

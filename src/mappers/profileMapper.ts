@@ -1,9 +1,15 @@
 import {
+  AccountCapabilitesDTO,
   FetchedProfileDTO,
   FetchedProfileMetaDTO,
   UpdateProfileDTO,
 } from "../dtos/ProfileDTO";
-import { ProfileModel } from "../models/profileModel";
+import {
+  AccountCapabilities,
+  ProfileMetaModel,
+  ProfileModel,
+} from "../models/profileModel";
+import { fromFetchedAddressDTO } from "./addressMapper";
 
 /**
  * DTO → ProfileModelInterface átalakító függvény.
@@ -70,9 +76,33 @@ export function toUpdateProfileDTO(
   return dto;
 }
 
-export function fromFetchedProfileMetaDTO(dto: FetchedProfileMetaDTO) {
+export function fromAccountCapabilitiesDTO(
+  dto: AccountCapabilitesDTO
+): AccountCapabilities {
   return {
+    stripe: {
+      connected: dto.stripe.connected,
+    },
+
+    profile: {
+      emailVerified: dto.profile.email_verified,
+      phoneNumberVerified: dto.profile.phone_number_verified,
+      accountComplete: dto.profile.account_complete,
+    },
+  };
+}
+
+export function fromFetchedProfileMetaDTO(
+  dto: FetchedProfileMetaDTO
+): ProfileMetaModel {
+  return {
+    email: dto.email,
+    phoneNumber: dto.phone_number,
     profilePicture: dto.profile_picture,
     unreadNotifications: dto.unread_notifications,
+
+    address: dto.address ? fromFetchedAddressDTO(dto.address) : null,
+
+    accountCapabilities: fromAccountCapabilitiesDTO(dto.account_capabilities),
   };
 }

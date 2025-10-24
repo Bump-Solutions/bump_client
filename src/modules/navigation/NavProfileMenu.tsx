@@ -1,7 +1,5 @@
 import { ROUTES } from "../../routes/routes";
-import { useGetProfileMeta } from "../../hooks/profile/useGetProfileMeta";
 import { Link, NavLink, useNavigate } from "react-router";
-import { useAuth } from "../../hooks/auth/useAuth";
 import { toast } from "sonner";
 import { useCart } from "../../hooks/cart/useCart";
 
@@ -9,6 +7,7 @@ import Tooltip from "../../components/Tooltip";
 import Image from "../../components/Image";
 
 import { ArrowUpRight, Bell, ShoppingBag } from "lucide-react";
+import { useAuthWithMeta } from "../../hooks/auth/useAuthWithMeta";
 
 interface NavProfileMenuProps {
   toggleNotificationMenu: (bool: boolean) => void;
@@ -21,13 +20,13 @@ const NavProfileMenu = ({
 }: NavProfileMenuProps) => {
   const navigate = useNavigate();
 
-  const { auth } = useAuth();
+  const { username, meta, isError, error } = useAuthWithMeta();
   const { itemsCount } = useCart();
 
-  const { data: meta, isError, error } = useGetProfileMeta();
-
   if (isError) {
-    toast.error(error?.response?.data.message);
+    toast.error(
+      `Hiba a profil betöltése közben: ${error?.message || "Ismeretlen hiba"}`
+    );
   }
 
   return (
@@ -35,7 +34,7 @@ const NavProfileMenu = ({
       <div className='profile-menu__wrapper'>
         <div className='profile-menu__item '>
           <NavLink
-            to={ROUTES.PROFILE(auth?.user?.username!).SAVED}
+            to={ROUTES.PROFILE(username!).SAVED}
             className='link black fw-600'>
             Mentett
           </NavLink>
@@ -84,7 +83,7 @@ const NavProfileMenu = ({
             aria-label='Profil'>
             <Image
               src={meta?.profilePicture}
-              alt={auth?.user?.username?.slice(0, 2)}
+              alt={username?.slice(0, 2)}
               placeholderColor='#212529'
             />
           </button>
