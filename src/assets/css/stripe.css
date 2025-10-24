@@ -76,7 +76,7 @@
   align-items: center;
   justify-content: center;
 }
-.stripe-banner article .btngroup a.button {
+.stripe-banner article .btngroup .button.primary {
   width: -moz-fit-content;
   width: fit-content;
   margin: 0;

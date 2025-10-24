@@ -22,6 +22,7 @@ import {
   HandCoins,
   ChartNoAxesCombined,
 } from "lucide-react";
+import { useAuthWithMeta } from "../../hooks/auth/useAuthWithMeta";
 
 type MenuAction = {
   icon: JSX.Element;
@@ -30,7 +31,7 @@ type MenuAction = {
   class: string;
 };
 
-const ACTIONS = (auth: AuthModel): MenuAction[] => {
+const ACTIONS = (username: string): MenuAction[] => {
   return [
     {
       icon: <MessagesSquare />,
@@ -41,19 +42,19 @@ const ACTIONS = (auth: AuthModel): MenuAction[] => {
     {
       icon: <User />,
       label: "Bump profilom",
-      route: ROUTES.PROFILE(auth?.user?.username!).ROOT,
+      route: ROUTES.PROFILE(username).ROOT,
       class: "",
     },
     {
       icon: <Bookmark />,
       label: "Mentett",
-      route: ROUTES.PROFILE(auth?.user?.username!).SAVED,
+      route: ROUTES.PROFILE(username).SAVED,
       class: "show-sm-only",
     },
   ];
 };
 
-const DASHBOARD = (_auth: AuthModel): MenuAction[] => {
+const DASHBOARD = (_username: string): MenuAction[] => {
   return [
     {
       icon: <Package />,
@@ -83,7 +84,7 @@ interface ProfileMenuActionsProps {
 const ProfileMenuActions = ({ toggleProfileMenu }: ProfileMenuActionsProps) => {
   const ref = useRef<HTMLDivElement>(null);
 
-  const { auth } = useAuth();
+  const { username, meta, isLoading } = useAuthWithMeta();
   const logout = useLogout();
   const location = useLocation();
 
@@ -91,6 +92,8 @@ const ProfileMenuActions = ({ toggleProfileMenu }: ProfileMenuActionsProps) => {
     ref: ref,
     callback: () => toggleProfileMenu(false),
   });
+
+  if (isLoading) return null;
 
   return (
     <motion.div
@@ -115,14 +118,14 @@ const ProfileMenuActions = ({ toggleProfileMenu }: ProfileMenuActionsProps) => {
           <li className='px-0_5 pt-0_5'>
             <Link
               onClick={() => toggleProfileMenu(false)}
-              to={ROUTES.PROFILE(auth?.user?.username!).ROOT}
+              to={ROUTES.PROFILE(username!).ROOT}
               className='fs-16 truncate fw-600 link black'>
-              {auth?.user?.username}
+              {username}
             </Link>
           </li>
           <li>
             <div className='truncate fs-14 fc-gray-600 px-0_5'>
-              {auth?.user?.email}
+              {meta?.email}
             </div>
           </li>
         </ul>
@@ -140,7 +143,7 @@ const ProfileMenuActions = ({ toggleProfileMenu }: ProfileMenuActionsProps) => {
         </ul>
 
         <ul className='action-list'>
-          {ACTIONS(auth!).map((action, index) => (
+          {ACTIONS(username!).map((action, index) => (
             <li key={index} className={`action-list-item ${action.class}`}>
               <Link onClick={() => toggleProfileMenu(false)} to={action.route}>
                 {action.icon}
@@ -152,7 +155,7 @@ const ProfileMenuActions = ({ toggleProfileMenu }: ProfileMenuActionsProps) => {
 
         {/* Vezérlőpult */}
         <ul className='action-list'>
-          {DASHBOARD(auth!).map((action, index) => (
+          {DASHBOARD(username!).map((action, index) => (
             <li key={index} className={`action-list-item ${action.class}`}>
               <Link onClick={() => toggleProfileMenu(false)} to={action.route}>
                 {action.icon}

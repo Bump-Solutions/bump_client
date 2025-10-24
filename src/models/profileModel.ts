@@ -36,7 +36,7 @@ export interface ProfileMetaModel {
   profilePicture: string;
   unreadNotifications: number; // unread notifications count
 
-  address?: AddressModel; // Default address, if exists
+  address: AddressModel | null; // Default address, if exists
 
-  accountCapabilities?: AccountCapabilities;
+  accountCapabilities: AccountCapabilities;
 }

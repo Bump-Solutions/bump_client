@@ -1,3 +1,10 @@
+import {
+  OrderAction,
+  OrderPillVariant,
+  OrderState,
+  OrderUserRole,
+} from "../models/orderModel";
+
 export const GENDER_LABELS: Record<number, string> = {
   1: "Férfi",
   2: "Női",
@@ -22,42 +29,54 @@ export const CURRENCY_LABELS: Record<string, string> = {
   // ...
 };
 
-export const ORDER_ACTION_LABELS: Record<number, string> = {};
-
-export const ORDER_STATE_LABELS: Record<number, string> = {
-  0: "Elfogadásra vár",
-  1: "Vevőre vár",
-  2: "Hiba",
-  3: "Fizetésre vár",
-  4: "Fizetve",
-  5: "Úton",
-  6: "Átvehető",
-  7: "Visszaigazolás",
-  8: "Teljesítve",
-  9: "Törölve",
-  10: "Lejárt",
+// --- Action → label (HU) ---
+export const ORDER_ACTION_LABELS: Record<OrderAction, string> = {
+  [OrderAction.CONFIRM_ORDER]: "Rendelés elfogadása",
+  [OrderAction.INITIATE_CHECKOUT]: "Checkout indítása",
+  [OrderAction.GET_ORDER_PAYMENT_STATUS]: "Fizetési állapot lekérése",
+  [OrderAction.GET_SHIPMENT_DETAILS]: "Szállítási adatok",
+  [OrderAction.RATE_SELLER]: "Eladó értékelése",
+  [OrderAction.CANCEL_ORDER]: "Rendelés törlése",
 };
 
-export const ORDER_STATE_VARIANTS = (
-  isSeller: boolean
-): Record<number, "success" | "warning" | "critical" | "info" | "neutral"> => ({
-  0: isSeller ? "warning" : "info", // eladó jóváhagyás folyamatban
-  1: isSeller ? "info" : "warning", // vevőn a sor
-  2: "critical", // létrehozási hiba
-  3: isSeller ? "info" : "warning", // fizetés hiányzik
-  4: "success", // fizetve
-  5: "info", // úton
-  6: isSeller ? "info" : "warning", // átvételre vár
-  7: "info", // visszaigazolásra vár
-  8: "success", // teljesítve
-  9: "critical", // törölve
-  10: "neutral", // lejárt
-});
+// --- State → label (HU) ---
+export const ORDER_STATE_LABELS: Record<OrderState, string> = {
+  [OrderState.SELLER_CONFIRMATION]: "Elfogadásra vár",
+  [OrderState.WAITING_FOR_INITIATE_CHECKOUT]: "Vevőre vár (fizetés)",
+  [OrderState.WAITING_FOR_EXTERNAL_TASKS]: "Feldolgozás alatt",
+  [OrderState.CHECKOUT_SUCCESSFUL_NOT_PAID]: "Sikeres checkout – fizetésre vár",
+  [OrderState.PAID_WAITING_FOR_SHIPMENT]: "Fizetve – feladásra vár",
+  [OrderState.SHIPPED_WAITING_FOR_ARRIVAL]: "Úton",
+  [OrderState.ARRIVED_WAITING_FOR_PICKUP]: "Átvehető",
+  [OrderState.RECEIVED_WAITING_FOR_RESPONSE]: "Visszaigazolásra vár",
+  [OrderState.COMPLETED]: "Teljesítve",
+  [OrderState.CANCELLED]: "Törölve",
+  [OrderState.EXPIRED]: "Lejárt",
+  [OrderState.FAILED]: "Sikertelen",
+};
 
-export const ITEM_STATE_LABELS: Record<number, string> = {
-  0: "Elérhető",
-  1: "Archivált",
-  2: "Jelentett",
-  3: "Eladott",
-  4: "Rendelés alatt",
+// --- State → UI-variáns (pill/színezés) ---
+/**
+ * Role-függő state-variánsok.
+ * Seller/buyer szerint néhány állapot "te jössz" vs. "másik fél jön" eltérően jelzett.
+ */
+export const ORDER_STATE_VARIANTS = (
+  role: OrderUserRole
+): Record<OrderState, OrderPillVariant> => {
+  const isSeller = role === OrderUserRole.SELLER;
+
+  return {
+    [OrderState.SELLER_CONFIRMATION]: isSeller ? "warning" : "info",
+    [OrderState.WAITING_FOR_INITIATE_CHECKOUT]: isSeller ? "info" : "warning",
+    [OrderState.WAITING_FOR_EXTERNAL_TASKS]: "info",
+    [OrderState.CHECKOUT_SUCCESSFUL_NOT_PAID]: isSeller ? "info" : "warning",
+    [OrderState.PAID_WAITING_FOR_SHIPMENT]: "success",
+    [OrderState.SHIPPED_WAITING_FOR_ARRIVAL]: "info",
+    [OrderState.ARRIVED_WAITING_FOR_PICKUP]: isSeller ? "info" : "warning",
+    [OrderState.RECEIVED_WAITING_FOR_RESPONSE]: "info",
+    [OrderState.COMPLETED]: "success",
+    [OrderState.CANCELLED]: "critical",
+    [OrderState.EXPIRED]: "neutral",
+    [OrderState.FAILED]: "critical",
+  };
 };

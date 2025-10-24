@@ -1,6 +1,11 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { Link } from "react-router";
-import { OrderListModel, OrdersPageModel } from "../models/orderModel";
+import {
+  OrderListModel,
+  OrdersPageModel,
+  OrderState,
+  OrderUserRole,
+} from "../models/orderModel";
 import { ROUTES } from "../routes/routes";
 import { displayUuid } from "../utils/functions";
 import { isToday, MS, pad } from "../utils/time";
@@ -198,14 +203,16 @@ const OrdersDataTable = ({
       header: "Státusz",
       enableSorting: false,
       cell: ({ row, getValue }) => {
-        const state = Number(getValue<string>());
-        const isSeller = row.original.isSeller;
+        const state = Number(getValue<string>()) as OrderState;
+        const role: OrderUserRole = row.original.isSeller
+          ? OrderUserRole.SELLER
+          : OrderUserRole.BUYER;
 
-        return (
-          <span className={`badge ${ORDER_STATE_VARIANTS(isSeller)[state]}`}>
-            {ORDER_STATE_LABELS[state]}
-          </span>
-        );
+        const variantMap = ORDER_STATE_VARIANTS(role);
+        const variant = variantMap[state] ?? "neutral";
+        const label = ORDER_STATE_LABELS[state] ?? "Ismeretlen";
+
+        return <span className={`badge ${variant}`}>{label}</span>;
       },
     },
     {

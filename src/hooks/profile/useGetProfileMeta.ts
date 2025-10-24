@@ -16,7 +16,7 @@ export const useGetProfileMeta = () => {
     queryKey: [QUERY_KEY.getProfileMeta],
     queryFn: ({ signal }) => getProfileMeta(signal, axiosPrivate),
     enabled: Boolean(auth?.accessToken),
-    refetchOnWindowFocus: true,
+    refetchOnWindowFocus: false,
     staleTime: ENUM.GLOBALS.staleTime5,
   });
 };
