@@ -12,6 +12,7 @@ import { useDebounce } from "../../hooks/useDebounce";
 import { toast } from "sonner";
 
 import Input from "../../components/Input";
+import Password from "../../components/Password";
 
 interface AccountFormProps {
   email: string;
@@ -209,8 +210,7 @@ const AccountForm = forwardRef<AccountFormRef, AccountFormProps>(
           tabIndex={2}
         />
         <div className='field__wrapper'>
-          <Input
-            type='password'
+          <Password
             name='sn_password'
             value={password}
             label='Jelszó'
@@ -222,8 +222,7 @@ const AccountForm = forwardRef<AccountFormRef, AccountFormProps>(
             error={errors.password}
             tabIndex={3}
           />
-          <Input
-            type='password'
+          <Password
             name='sn_password_confirmation'
             value={passwordConfirmation}
             label='Jelszó újra'
