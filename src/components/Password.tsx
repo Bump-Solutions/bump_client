@@ -1,12 +1,10 @@
-import { ChangeEvent, InputHTMLAttributes, Ref } from "react";
-import { useToggle } from "../hooks/useToggle";
+import { Check, Eye, EyeOff } from "lucide-react";
+import { ChangeEvent, InputHTMLAttributes, Ref, useId } from "react";
+import { useToggle } from "react-use";
 
-import { Check } from "lucide-react";
-
-interface InputProps
-  extends Omit<InputHTMLAttributes<HTMLInputElement>, "onChange"> {
+interface PasswordProps
+  extends Omit<InputHTMLAttributes<HTMLInputElement>, "onChange" | "type"> {
   ref?: Ref<HTMLInputElement>;
-  type?: string;
   name: string;
   label: string;
   value: string;
@@ -25,11 +23,12 @@ interface InputProps
 
   className?: string;
   autoFocus?: boolean;
+
+  showToggle?: boolean;
 }
 
-const Input = ({
+const Password = ({
   ref,
-  type = "text",
   name,
   label,
   value,
@@ -48,9 +47,12 @@ const Input = ({
 
   className = "",
   autoFocus = false,
+  showToggle = true,
   ...props
-}: InputProps) => {
+}: PasswordProps) => {
   const [isFocused, toggleFocus] = useToggle(false);
+  const [isVisible, toggleVisible] = useToggle(false);
+  const uid = useId();
 
   const handleOnChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (disabled) return;
@@ -72,11 +74,14 @@ const Input = ({
     (success ? " success" : "") +
     (disabled ? " disabled" : "");
 
+  const inputType = isVisible ? "text" : "password";
+  const inputId = name || uid;
+
   return (
     <div className='input'>
       {description && <p className='input__desc'>{description}</p>}
 
-      <label htmlFor={name} className={labelClassName}>
+      <label htmlFor={inputId} className={labelClassName}>
         {label}
         {required && <span className='required'> *</span>}
       </label>
@@ -84,27 +89,47 @@ const Input = ({
       <div className='input__wrapper'>
         <input
           ref={ref}
-          type={type}
-          id={name}
+          type={inputType}
+          id={inputId}
           name={name}
           value={value}
           onChange={handleOnChange}
           onBlur={handleOnBlur}
-          onFocus={() => toggleFocus(true)}
+          onFocus={onFocus}
           className={`input__field ${inputClassName}`}
           placeholder={placeholder}
           autoFocus={autoFocus}
           disabled={disabled}
-          data-invalid={Boolean(error)}
-          aria-invalid={Boolean(error)}
-          aria-describedby={error ? `${name}-error` : undefined}
-          {...props}
         />
+
+        {showToggle &&
+          (isVisible ? (
+            <button
+              type='button'
+              className='input__svg' // ha buttonra külön stílus kell: addj .input__iconbtn-t
+              onClick={() => toggleVisible(false)}
+              aria-label='Jelszó elrejtése'
+              aria-pressed='true'
+              tabIndex={-1}>
+              <Eye />
+            </button>
+          ) : (
+            <button
+              type='button'
+              className='input__svg'
+              onClick={() => toggleVisible(true)}
+              aria-label='Jelszó megjelenítése'
+              aria-pressed='false'
+              tabIndex={-1}>
+              <EyeOff />
+            </button>
+          ))}
+
         {success && <Check strokeWidth={3} className='input__svg success' />}
       </div>
 
       {error && (
-        <em id={`${name}-error`} className='error-msg'>
+        <em id={`${inputId}-error`} className='error-msg'>
           {error}
         </em>
       )}
@@ -112,4 +137,4 @@ const Input = ({
   );
 };
 
-export default Input;
+export default Password;

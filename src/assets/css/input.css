@@ -379,6 +379,7 @@
   transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 .input .input__wrapper .input__svg {
+  all: unset;
   position: absolute;
   top: 50%;
   right: 1.5rem;

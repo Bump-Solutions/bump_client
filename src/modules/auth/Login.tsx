@@ -1,26 +1,16 @@
 import { ENUM } from "../../utils/enum";
 import { ROUTES } from "../../routes/routes";
-import { REGEX } from "../../utils/regex";
-import { Errors } from "../../types/form";
-import { toast } from "sonner";
 
 import { useTitle } from "react-use";
-import { FormEvent, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router";
 import { BooleanParam, useQueryParam } from "use-query-params";
-
-import { useLogin } from "../../hooks/auth/useLogin";
-import { useDebounce } from "../../hooks/useDebounce";
 
 import { motion } from "framer-motion";
 
 import SocialSignup from "./SocialSignup";
 import ForgotPassword from "./ForgotPassword";
-
-import Input from "../../components/Input";
-import StateButton from "../../components/StateButton";
-
-import { LogIn } from "lucide-react";
+import LoginForm from "./LoginForm";
 
 const Login = () => {
   useTitle(`Bejelentkezés - ${ENUM.BRAND.NAME}`);
@@ -31,87 +21,9 @@ const Login = () => {
   );
   const [initialLoad, setInitialLoad] = useState<boolean>(true);
 
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-
-  const [errors, setErrors] = useState<Errors>({});
-
-  const loginMutation = useLogin();
-
   useEffect(() => {
     setInitialLoad(false);
   }, []);
-
-  useDebounce(
-    () => {
-      if (email && !REGEX.EMAIL.test(email)) {
-        setErrors((prevErrors) => ({
-          ...prevErrors,
-          email: "Hibás e-mail cím formátum.",
-        }));
-      } else {
-        setErrors((prevErrors) => ({
-          ...prevErrors,
-          email: "",
-        }));
-      }
-    },
-    250,
-    [email]
-  );
-
-  useDebounce(
-    () => {
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        password: "",
-      }));
-    },
-    0,
-    [password]
-  );
-
-  const handleLogin = async (event: FormEvent<HTMLButtonElement>) => {
-    event.preventDefault();
-
-    const inputFields = {
-      email,
-      password,
-    };
-
-    const emptyInputs = (
-      Object.keys(inputFields) as Array<keyof typeof inputFields>
-    ).filter((key) => inputFields[key] === "");
-
-    if (emptyInputs.length > 0) {
-      emptyInputs.forEach((input) => {
-        setErrors((prevErrors) => ({
-          ...prevErrors,
-          [input]: "A mező kitöltése kötelező.",
-        }));
-      });
-
-      toast.error("Kérjük töltsd ki a csillaggal jelölt mezőket!");
-      return Promise.reject("Empty inputs");
-    }
-
-    if (Object.values(errors).some((error) => error)) {
-      toast.error("Kérjük javítsd a hibás mezőket!");
-      return Promise.reject("Invalid fields");
-    }
-
-    const loginPromise = loginMutation.mutateAsync({ email, password });
-
-    toast.promise(loginPromise, {
-      loading: "Bejelentkezés folyamatban...",
-      success: "Bejelentkeztél.",
-      error: (err) =>
-        (err?.response?.data?.message as string) ||
-        "Hiba a bejelentkezés során.",
-    });
-
-    return loginPromise;
-  };
 
   return (
     <>
@@ -131,52 +43,7 @@ const Login = () => {
             <h4>vagy</h4>
           </div>
 
-          <form>
-            <Input
-              type='email'
-              name='lg_email'
-              value={email}
-              label='E-Mail'
-              required
-              placeholder='minta@email.com'
-              autoFocus={true}
-              onChange={(value) => {
-                setEmail(value);
-              }}
-              error={errors.email}
-              success={!!email && !errors.email}
-              tabIndex={1}
-            />
-            <Input
-              type='password'
-              name='lg_password'
-              value={password}
-              label='Jelszó'
-              required
-              placeholder='Mintajelszo12345'
-              onChange={(value) => {
-                setPassword(value);
-              }}
-              error={errors.password}
-              tabIndex={2}
-            />
-
-            <p
-              onClick={() => setShowForgotPassword(true)}
-              className='link'
-              tabIndex={3}>
-              Elfelejtetted a jelszavadat?
-            </p>
-
-            <StateButton
-              type='submit'
-              text='Bejelentkezés'
-              className='primary'
-              onClick={handleLogin}
-              tabIndex={4}>
-              <LogIn />
-            </StateButton>
-          </form>
+          <LoginForm />
 
           <p className='mt-2 ta-center fs-18'>
             Még nincs fiókod?{" "}

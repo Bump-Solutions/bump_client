@@ -12,6 +12,7 @@
   "dependencies": {
     "@floating-ui/react": "^0.27.16",
     "@react-oauth/google": "^0.12.2",
+    "@tanstack/react-form": "^1.23.8",
     "@tanstack/react-query": "^5.90.5",
     "@tanstack/react-table": "^8.21.3",
     "@xstate/react": "^6.0.0",
