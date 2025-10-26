@@ -1,3 +1,210 @@
+.field {
+  margin: 0.5rem 0;
+}
+.field:has(.field__input input.focused) .field__label {
+  color: #0070e8;
+}
+.field:has(.field__input input.focused) .field__label span.required {
+  color: #cc0000;
+}
+.field:has(.field__input input:not(:placeholder-shown)) .field__label, .field:has(.field__input input:-webkit-autofill) .field__label {
+  color: #212529;
+}
+.field:has(.field__input input:not(:placeholder-shown)) .field__label span.required, .field:has(.field__input input:-webkit-autofill) .field__label span.required {
+  color: #cc0000;
+}
+.field:has(.field__input input.focused) .field__label {
+  color: #0070e8;
+}
+.field:has(.field__input input.error) .field__label {
+  color: #cc0000;
+}
+.field:has(.field__input input.error) .field__label span.required {
+  color: #cc0000;
+}
+.field .field__label {
+  font-size: 1.125rem;
+  color: #495057;
+  transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.field .field__label span.required {
+  color: #e88a8a;
+  transition: color 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.field .field__description {
+  margin-bottom: 0.5rem;
+  line-height: 1.4;
+  font-size: 0.875rem;
+  color: #495057;
+}
+.field .field__input {
+  position: relative;
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+}
+.field .field__input input,
+.field .field__input textarea {
+  font-family: "Nunito Sans", sans-serif;
+  height: 3.25rem;
+  padding: 0 3rem 0 1.25rem;
+  outline: none;
+  font-size: 1rem;
+  background-color: #f1f3f5 !important;
+  border: 1px solid transparent;
+  border-radius: 1rem;
+}
+.field .field__input input::-moz-placeholder, .field .field__input textarea::-moz-placeholder {
+  color: #868e96;
+  font-family: "Nunito Sans", sans-serif;
+}
+.field .field__input input::placeholder,
+.field .field__input textarea::placeholder {
+  color: #868e96;
+  font-family: "Nunito Sans", sans-serif;
+}
+.field .field__input input:disabled,
+.field .field__input textarea:disabled {
+  background-color: #e9ecef;
+  color: #868e96;
+  cursor: not-allowed;
+}
+.field .field__input input:focus,
+.field .field__input textarea:focus {
+  border: 2px solid #0070e8;
+  outline: 2px solid #e6f1fd;
+}
+.field .field__input input:focus ~ svg,
+.field .field__input textarea:focus ~ svg {
+  color: #495057;
+}
+.field .field__input input:not(:-moz-placeholder), .field .field__input textarea:not(:-moz-placeholder) {
+  border-color: transparent;
+  background-color: #f1f3f5;
+}
+.field .field__input input:invalid, .field .field__input input:not(:placeholder-shown),
+.field .field__input textarea:invalid,
+.field .field__input textarea:not(:placeholder-shown) {
+  border-color: transparent;
+  background-color: #f1f3f5;
+}
+.field .field__input input:not(:-moz-placeholder) ~ .input__svg, .field .field__input textarea:not(:-moz-placeholder) ~ .input__svg {
+  color: #212529;
+}
+.field .field__input input:invalid ~ .input__svg, .field .field__input input:not(:placeholder-shown) ~ .input__svg,
+.field .field__input textarea:invalid ~ .input__svg,
+.field .field__input textarea:not(:placeholder-shown) ~ .input__svg {
+  color: #212529;
+}
+.field .field__input input:not(:-moz-placeholder):focus, .field .field__input textarea:not(:-moz-placeholder):focus {
+  border: 2px solid #0070e8;
+  outline: 2px solid #e6f1fd;
+}
+.field .field__input input:invalid:focus, .field .field__input input:not(:placeholder-shown):focus,
+.field .field__input textarea:invalid:focus,
+.field .field__input textarea:not(:placeholder-shown):focus {
+  border: 2px solid #0070e8;
+  outline: 2px solid #e6f1fd;
+}
+.field .field__input input.error,
+.field .field__input textarea.error {
+  border: 2px solid #cc0000;
+  background-color: #fae6e6 !important;
+}
+.field .field__input input.error:focus,
+.field .field__input textarea.error:focus {
+  border: 2px solid #cc0000;
+  outline: 2px solid #fae6e6;
+}
+.field .field__input input:-webkit-autofill, .field .field__input input:-webkit-autofill:hover,
+.field .field__input textarea:-webkit-autofill,
+.field .field__input textarea:-webkit-autofill:hover {
+  -webkit-text-fill-color: #212529;
+  -webkit-box-shadow: 0 0 0px 1000px #f1f3f5 inset;
+  outline: none;
+  border: none;
+}
+.field .field__input input:-webkit-autofill.error, .field .field__input input:-webkit-autofill:hover.error,
+.field .field__input textarea:-webkit-autofill.error,
+.field .field__input textarea:-webkit-autofill:hover.error {
+  -webkit-box-shadow: 0 0 0px 1000px #fae6e6 inset;
+  border: 2px solid #cc0000;
+}
+.field .field__input input:-webkit-autofill:focus,
+.field .field__input textarea:-webkit-autofill:focus {
+  -webkit-text-fill-color: #212529;
+  -webkit-box-shadow: 0 0 0px 1000px #f1f3f5 inset;
+  outline: 2px solid #e6f1fd;
+  border: 2px solid #0070e8;
+}
+.field .field__input input:-webkit-autofill:focus.error,
+.field .field__input textarea:-webkit-autofill:focus.error {
+  -webkit-box-shadow: 0 0 0px 1000px #fae6e6 inset;
+  outline: 2px solid #fae6e6;
+  border: 2px solid #cc0000;
+}
+.field .field__input textarea {
+  height: auto;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  scrollbar-width: thin;
+  overflow: hidden;
+  overscroll-behavior: contain;
+}
+.field .field__input button {
+  all: unset;
+}
+.field .field__input svg {
+  position: absolute;
+  top: 50%;
+  right: 1.5rem;
+  transform: translateY(-50%);
+  width: 1.125rem;
+  height: 1.125rem;
+  cursor: pointer;
+  overflow: hidden;
+  z-index: 1;
+  background-color: transparent;
+  color: #495057;
+}
+.field .field__input svg.success {
+  color: #00b341 !important;
+}
+.field .field__error {
+  color: #cc0000 !important;
+  font-size: 0.9375rem;
+}
+
+.field__group {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr;
+}
+.field__group.columns-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+.field__group.columns-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.field__separator {
+  position: relative;
+  width: 100%;
+  height: 1.25rem;
+  font-size: 0.875rem;
+  margin-block: 0;
+}
+.field__separator hr {
+  border-top: 1px solid #ced4da;
+  border-bottom: none;
+  height: 0;
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  width: 100%;
+}
+
 .input {
   margin: 0.5rem 0;
 }
@@ -492,7 +699,7 @@
 }
 .input .error-msg {
   color: #cc0000 !important;
-  font-size: 1rem;
+  font-size: 0.9375rem;
 }
 
 .dropdown {
@@ -541,7 +748,7 @@
 }
 .dropdown .dropdown__container .error-msg {
   color: #cc0000 !important;
-  font-size: 1rem;
+  font-size: 0.9375rem;
 }
 .dropdown .dropdown__container .dropdown__input {
   border-radius: 1rem;
@@ -791,4 +998,11 @@ input[type=number] {
 .chip.selected {
   color: #212529;
   border: 1px #868e96 solid;
+}
+
+@media only screen and (max-width: 768px) {
+  .field__group {
+    grid-template-columns: 1fr !important;
+    gap: 0rem;
+  }
 }/*# sourceMappingURL=input.css.map */

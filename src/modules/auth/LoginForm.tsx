@@ -1,35 +1,28 @@
 import { ROUTES } from "../../routes/routes";
 import { Link } from "react-router";
 import { useLogin } from "../../hooks/auth/useLogin";
-import { useForm } from "@tanstack/react-form";
+import { useAppForm } from "../../hooks/form/hooks";
 import { toast } from "sonner";
-import { REGEX } from "../../utils/regex";
+import { loginSchema, LoginValues } from "../../schemas/loginSchema";
 
-import Input from "../../components/Input";
-import Password from "../../components/Password";
 import StateButton from "../../components/StateButton";
 
 import { LogIn } from "lucide-react";
 
+const defaultValues: LoginValues = {
+  email: "",
+  password: "",
+};
+
 const LoginForm = () => {
   const loginMutation = useLogin();
 
-  const form = useForm({
-    defaultValues: {
-      email: "",
-      password: "",
-    },
+  const form = useAppForm({
+    defaultValues,
 
     // Form szintű validáció (pl. kötelező mezők)
     validators: {
-      onSubmit: ({ value }) => {
-        const fields: Record<string, string | undefined> = {};
-
-        if (!value.email) fields.email = "A mező kitöltése kötelező.";
-        if (!value.password) fields.password = "A mező kitöltése kötelező.";
-
-        return { fields };
-      },
+      onSubmit: loginSchema,
     },
 
     onSubmit: async ({ value, formApi }) => {
@@ -65,61 +58,40 @@ const LoginForm = () => {
         e.stopPropagation();
       }}>
       {/* Email mező */}
-      <form.Field
+      <form.AppField
         name='email'
-        asyncDebounceMs={500}
-        validators={{
-          onChangeAsync: async ({ value }) => {
-            if (!REGEX.EMAIL.test(value)) return "Hibás e-mail cím formátum.";
-            return undefined;
-          },
-        }}>
+        validators={{ onChange: loginSchema.shape.email }}>
         {(field) => (
-          <Input
+          <field.Input
             type='email'
-            name='lg_email'
             label='E-Mail'
             required
             placeholder='minta@mail.com'
-            value={field.state.value}
-            onChange={field.handleChange}
-            onBlur={field.handleBlur}
-            error={field.state.meta.errors[0]}
-            success={Boolean(field.state.value) && field.state.meta.isValid}
-            autoFocus
             tabIndex={1}
           />
         )}
-      </form.Field>
+      </form.AppField>
 
       {/* Jelszó mező */}
-      <form.Field
+      <form.AppField
         name='password'
-        validators={{
-          onChange: ({ value }) =>
-            !value ? "Kérjük javítsd a hibás mezőket!" : undefined,
-        }}>
+        validators={{ onChange: loginSchema.shape.password }}>
         {(field) => (
-          <Password
-            name='lg_password'
+          <field.Password
             label='Jelszó'
             required
             placeholder='Mintajelszo12345'
-            value={field.state.value}
-            onChange={field.handleChange}
-            onBlur={field.handleBlur}
-            error={field.state.meta.errors[0]}
             tabIndex={2}
           />
         )}
-      </form.Field>
+      </form.AppField>
 
       <Link to={ROUTES.LOGIN} className='link' tabIndex={3}>
         Elfelejtetted a jelszavadat?
       </Link>
 
       <StateButton
-        type='submit'
+        type='button'
         onClick={form.handleSubmit}
         text='Bejelentkezés'
         className='primary'

@@ -9,7 +9,7 @@ interface Step<T> {
   ref: RefObject<T | null>;
 }
 
-interface StepRef {
+export interface StepRef {
   isValid: () => boolean;
 }
 

@@ -53,6 +53,6 @@ export function toSignupRequestDTO(model: SignupModel): SignupRequestDTO {
     first_name: model.firstName,
     last_name: model.lastName,
     phone_number: model.phoneNumber,
-    gender: model.gender ? model.gender.value : null,
+    gender: model.gender ? model.gender : null,
   };
 }

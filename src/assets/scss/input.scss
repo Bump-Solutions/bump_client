@@ -2,6 +2,226 @@
 @use "palette" as *;
 @use "mixins" as *;
 
+.field {
+  margin: 0.5rem 0;
+
+  // FÓKUSZ: ha az input fókuszban van
+  &:has(.field__input input.focused) {
+    .field__label {
+      color: color(blue, 500);
+
+      span.required {
+        color: color(red, 500);
+      }
+    }
+  }
+
+  // FILLED:  ha NEM placeholder-shown (=> van érték, vagy autofill)
+  &:has(.field__input input:not(:placeholder-shown)),
+  &:has(.field__input input:-webkit-autofill) {
+    .field__label {
+      color: $clr-font-headline;
+
+      span.required {
+        color: color(red, 500);
+      }
+    }
+  }
+
+  &:has(.field__input input.focused) {
+    .field__label {
+      color: color(blue, 500);
+    }
+  }
+
+  &:has(.field__input input.error) {
+    .field__label {
+      color: color(red, 500);
+
+      span.required {
+        color: color(red, 500);
+      }
+    }
+  }
+
+  .field__label {
+    font-size: $fs-18;
+    color: color(gray, 700);
+    transition: all 0.2s $animation-cubic;
+
+    span.required {
+      color: color(red, 200);
+      transition: color 0.2s $animation-cubic;
+    }
+  }
+
+  .field__description {
+    margin-bottom: 0.5rem;
+    line-height: 1.4;
+    font-size: $fs-14;
+    color: color(gray, 700);
+  }
+
+  .field__input {
+    position: relative;
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+
+    input,
+    textarea {
+      font-family: $font-primary;
+      height: $input-height;
+      padding: 0 3rem 0 1.25rem;
+      outline: none;
+      font-size: $fs-16;
+      background-color: color(gray, 100) !important;
+      border: 1px solid transparent;
+      border-radius: $border-radius-1;
+
+      &::placeholder {
+        color: color(gray, 600);
+        font-family: $font-primary;
+      }
+
+      &:disabled {
+        background-color: color(gray, 200);
+        color: color(gray, 600);
+        cursor: not-allowed;
+      }
+
+      &:focus {
+        border: 2px solid color(blue, 500);
+        outline: 2px solid color(blue, 50);
+
+        & ~ svg {
+          color: color(gray, 700);
+        }
+      }
+
+      &:invalid,
+      &:not(:placeholder-shown) {
+        border-color: transparent;
+        background-color: color(gray, 100);
+
+        & ~ .input__svg {
+          color: $clr-font-headline;
+        }
+
+        &:focus {
+          border: 2px solid color(blue, 500);
+          outline: 2px solid color(blue, 50);
+        }
+      }
+
+      &.error {
+        border: 2px solid color(red, 500);
+        background-color: color(red, 50) !important;
+
+        &:focus {
+          border: 2px solid color(red, 500);
+          outline: 2px solid color(red, 50);
+        }
+      }
+
+      &:-webkit-autofill,
+      &:-webkit-autofill:hover {
+        -webkit-text-fill-color: $clr-font-headline;
+        -webkit-box-shadow: 0 0 0px 1000px color(gray, 100) inset;
+        outline: none;
+        border: none;
+
+        &.error {
+          -webkit-box-shadow: 0 0 0px 1000px color(red, 50) inset;
+          border: 2px solid color(red, 500);
+        }
+      }
+
+      &:-webkit-autofill:focus {
+        -webkit-text-fill-color: $clr-font-headline;
+        -webkit-box-shadow: 0 0 0px 1000px color(gray, 100) inset;
+        outline: 2px solid color(blue, 50);
+        border: 2px solid color(blue, 500);
+
+        &.error {
+          -webkit-box-shadow: 0 0 0px 1000px color(red, 50) inset;
+          outline: 2px solid color(red, 50);
+          border: 2px solid color(red, 500);
+        }
+      }
+    }
+
+    textarea {
+      height: auto;
+      padding-top: 1rem;
+      padding-bottom: 1rem;
+      scrollbar-width: thin;
+      overflow: hidden;
+      overscroll-behavior: contain;
+    }
+
+    button {
+      all: unset;
+    }
+
+    svg {
+      position: absolute;
+      top: 50%;
+      right: 1.5rem;
+      transform: translateY(-50%);
+      width: $fs-18;
+      height: $fs-18;
+      cursor: pointer;
+      overflow: hidden;
+      z-index: 1;
+      background-color: transparent;
+      color: color(gray, 700);
+
+      &.success {
+        color: color(green, 500) !important;
+      }
+    }
+  }
+
+  .field__error {
+    color: color(red, 500) !important;
+    font-size: $fs-15;
+  }
+}
+
+.field__group {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr; // alapértelmezett egy oszlop
+
+  &.columns-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  &.columns-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.field__separator {
+  position: relative;
+  width: 100%;
+  height: 1.25rem;
+  font-size: $fs-14;
+  margin-block: 0;
+
+  hr {
+    border-top: 1px solid color(gray, 400);
+    border-bottom: none;
+    height: 0;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    width: 100%;
+  }
+}
+
 .input {
   margin: 0.5rem 0;
 
@@ -543,7 +763,7 @@
 
   .error-msg {
     color: color(red, 500) !important;
-    font-size: $fs-16;
+    font-size: $fs-15;
   }
 }
 
@@ -603,7 +823,7 @@
 
     .error-msg {
       color: color(red, 500) !important;
-      font-size: $fs-16;
+      font-size: $fs-15;
     }
 
     .dropdown__input {
@@ -896,5 +1116,12 @@ input[type="number"] {
   &.selected {
     color: color(gray, 900);
     border: 1px color(gray, 600) solid;
+  }
+}
+
+@media only screen and (max-width: $media-query-md) {
+  .field__group {
+    grid-template-columns: 1fr !important;
+    gap: 0rem;
   }
 }

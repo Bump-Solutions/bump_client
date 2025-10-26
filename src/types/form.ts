@@ -1,9 +1,3 @@
-export interface Option<T = string | number> {
-  label: string;
-  value: T;
-  description?: string;
-}
-
 export interface Errors {
   [key: string]: string;
 }

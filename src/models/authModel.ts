@@ -1,5 +1,3 @@
-import { Option } from "../types/form";
-
 export interface JwtPayload {
   user_id: string;
   username: string;
@@ -32,5 +30,5 @@ export interface SignupModel {
   firstName: string;
   lastName: string;
   phoneNumber: string;
-  gender: Option<number> | null;
+  gender: number | null;
 }

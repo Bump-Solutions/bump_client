@@ -1,223 +1,86 @@
 import "../../assets/css/multistepform.css";
-
-import { Errors } from "../../types/form";
 import { SignupModel } from "../../models/authModel";
-import { FormEvent, useRef, useState, Fragment } from "react";
 import { toast } from "sonner";
-
-import { useMultiStepForm } from "../../hooks/useMultiStepForm";
-import { ContactRound, User } from "lucide-react";
-import { useSignup } from "../../hooks/auth/useSignup";
+import { useStore } from "@tanstack/react-form";
+import { signupFormOptions } from "../../utils/formOptions";
 import { useLogin } from "../../hooks/auth/useLogin";
+import { useSignup } from "../../hooks/auth/useSignup";
+import { useAppForm } from "../../hooks/form/hooks";
 
-import { Check, MoveLeft, MoveRight, ClipboardPen } from "lucide-react";
+import SignupFormHeader from "./SignupFormHeader";
+import AccountStep from "./AccountStep";
+import PersonalStep from "./PersonalStep";
 
-import Button from "../../components/Button";
-import StateButton from "../../components/StateButton";
-import AccountForm from "./AccountForm";
-import PersonalForm from "./PersonalForm";
+export const ACCOUNT_FIELDS = [
+  "account.email",
+  "account.username",
+  "account.password",
+  "account.passwordConfirmation",
+] as const;
 
-const INITIAL_DATA: SignupModel = {
-  email: "",
-  username: "",
-  password: "",
-  passwordConfirmation: "",
-  firstName: "",
-  lastName: "",
-  phoneNumber: "",
-  gender: null,
-};
+export const PERSONAL_FIELDS = [
+  "personal.firstName",
+  "personal.lastName",
+  "personal.phoneNumber",
+  "personal.gender",
+] as const;
 
+// https://stackblitz.com/edit/tanstack-form-yjtaf2ug?file=src%2Ffeatures%2Ftree-house%2Fpage.tsx&preset=node
 const SignupForm = () => {
-  const accountRef = useRef<{ isValid: () => boolean }>(null);
-  const personalRef = useRef<{ isValid: () => boolean }>(null);
-
-  const [data, setData] = useState<SignupModel>(INITIAL_DATA);
-  const [errors, setErrors] = useState<Errors>({});
-
-  const updateData = (fields: Partial<SignupModel>) => {
-    setData((prev) => ({
-      ...prev,
-      ...fields,
-    }));
-  };
-
-  const { steps, currentStepIndex, isFirstStep, isLastStep, next, prev, goTo } =
-    useMultiStepForm([
-      {
-        label: "Fiók információ",
-        svg: <User />,
-        ref: accountRef,
-        component: (
-          <AccountForm
-            ref={accountRef}
-            {...data}
-            updateData={updateData}
-            errors={errors}
-            setErrors={setErrors}
-          />
-        ),
-      },
-      {
-        label: "Személyes adatok",
-        svg: <ContactRound />,
-        ref: personalRef,
-        component: (
-          <PersonalForm
-            ref={personalRef}
-            {...data}
-            updateData={updateData}
-            errors={errors}
-            setErrors={setErrors}
-          />
-        ),
-      },
-    ]);
-
-  const clearErrors = () => {
-    if (errors) {
-      Object.keys(errors).forEach((key) => {
-        if (errors[key] !== "") {
-          setErrors((prevErrors) => ({
-            ...prevErrors,
-            [key]: "",
-          }));
-          setData((prevData) => ({
-            ...prevData,
-            [key]: "",
-          }));
-        }
-      });
-    }
-  };
-
   const loginMutation = useLogin();
-  const signupMutation = useSignup(
-    (response) => {
-      // console.log(response);
+  const signupMutation = useSignup();
 
-      loginMutation.mutateAsync({ email: data.email, password: data.password });
-      setData(INITIAL_DATA);
-      // navigate(ROUTES.LOGIN);
-    },
-    (error) => {
-      if (typeof error?.response?.data.message === "object") {
-        Object.entries(
-          error.response!.data.message as Record<string, string[]>
-        ).forEach(([field, messages]: [string, string[]]) => {
-          setErrors((prev) => ({
-            ...prev,
-            [field]: messages[0],
-          }));
+  const form = useAppForm({
+    ...signupFormOptions,
+    onSubmit: async ({ value, formApi }) => {
+      const data: SignupModel = {
+        email: value.account.email,
+        username: value.account.username,
+        password: value.account.password,
+        passwordConfirmation: value.account.passwordConfirmation,
+        firstName: value.personal.firstName,
+        lastName: value.personal.lastName,
+        phoneNumber: value.personal.phoneNumber,
+        gender: value.personal.gender ?? null,
+      };
+
+      const signupPromise = signupMutation.mutateAsync(data);
+
+      toast.promise(signupPromise, {
+        loading: "Regisztráció folyamatban...",
+        success: "Sikeres regisztráció. Bejelentkezés...",
+        error: (err) => "Hiba a regisztráció során.",
+      });
+
+      await signupPromise.then(() => {
+        loginMutation.mutateAsync({
+          email: data.email,
+          password: data.password,
         });
-      }
+      });
 
-      if (
-        error?.response?.data.message.email ||
-        error?.response?.data.message.username
-      ) {
-        goTo(0);
-      }
-    }
-  );
+      formApi.reset();
+    },
 
-  const handleSignup = async (event: FormEvent<HTMLButtonElement>) => {
-    event.preventDefault();
+    onSubmitInvalid: async ({ value, formApi }) => {
+      throw new Error("Invalid form submission");
+    },
+  });
 
-    // Personal ref can be only valid id the account ref is already valid
-    const isValid = personalRef.current?.isValid();
-    if (!isValid) {
-      return Promise.reject("Invalid fields");
-    }
-
-    const formattedData = {
-      ...data,
-      gender: data.gender ?? null,
-    };
-
-    const signupPromise = signupMutation.mutateAsync(formattedData);
-
-    toast.promise(signupPromise, {
-      loading: "Regisztráció folyamatban...",
-      success: "Sikeres regisztráció. Bejelentkezés...",
-      error: "Kérjük javítsd a hibás mezőket!",
-    });
-
-    return signupPromise;
-  };
+  const section = useStore(form.store, (state) => state.values.section);
 
   return (
-    <form className='multi-step-form'>
-      <div className='form__header'>
-        {steps.map((step, index) => (
-          <Fragment key={index}>
-            <div
-              className={
-                index < currentStepIndex
-                  ? "form__step valid"
-                  : index === currentStepIndex
-                  ? "form__step active"
-                  : "form__step"
-              }
-              onClick={() => {
-                clearErrors();
-                goTo(index);
-              }}>
-              {index < currentStepIndex ? (
-                <h3>
-                  <Check strokeWidth={3} />
-                </h3>
-              ) : (
-                <h3>{step.svg}</h3>
-              )}
-              <h4>{step.label}</h4>
-            </div>
-            <span
-              className={
-                index < steps.length - 1 ? "form__divider" : ""
-              }></span>
-          </Fragment>
-        ))}
-      </div>
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+      }}
+      className='multi-step-form'>
+      <SignupFormHeader form={form} />
 
       <div className='form__body'>
-        <div>{steps[currentStepIndex].component}</div>
-
-        <div className='form__buttons'>
-          {!isFirstStep && (
-            <Button
-              type='button'
-              text='Vissza'
-              className='tertiary'
-              onClick={() => {
-                clearErrors();
-                prev();
-              }}
-              tabIndex={5}>
-              <MoveLeft />
-            </Button>
-          )}
-
-          {!isLastStep ? (
-            <Button
-              type='button'
-              text='Következő'
-              className='tertiary icon--reverse'
-              onClick={(e) => next(e)}
-              tabIndex={6}>
-              <MoveRight />
-            </Button>
-          ) : (
-            <StateButton
-              type='submit'
-              text='Regisztráció'
-              className='primary'
-              onClick={handleSignup}
-              tabIndex={6}>
-              <ClipboardPen />
-            </StateButton>
-          )}
-        </div>
+        {section === "account" && <AccountStep form={form} />}
+        {section === "personal" && <PersonalStep form={form} />}
       </div>
     </form>
   );

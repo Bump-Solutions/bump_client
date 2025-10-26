@@ -8,29 +8,39 @@ import { Check } from "lucide-react";
 
 interface PhoneProps
   extends Omit<InputHTMLAttributes<HTMLInputElement>, "onChange"> {
-  label: string;
+  name: string;
+  value: string;
+
   required?: boolean;
   placeholder?: string;
-  error?: string;
+
   success?: boolean;
+  isInvalid?: boolean;
   disabled?: boolean;
-  value: string;
-  name: string;
+
   onChange: (value: string) => void;
+  onBlur?: () => void;
+  onFocus?: () => void;
+
   className?: string;
   autoFocus?: boolean;
 }
 
 const Phone = ({
-  label,
-  required = false,
-  placeholder,
-  error,
-  success,
-  disabled = false,
-  value,
   name,
+  value,
+
+  required = false,
+  placeholder = " ",
+
+  success = false,
+  isInvalid = false,
+  disabled = false,
+
   onChange,
+  onBlur,
+  onFocus,
+
   className = "",
   autoFocus = false,
   ...props
@@ -49,40 +59,40 @@ const Phone = ({
     onChange(formattedValue);
   };
 
+  const handleOnBlur = () => {
+    toggleFocus(false);
+    if (onBlur) onBlur();
+  };
+
+  const handleOnFocus = () => {
+    toggleFocus(true);
+    if (onFocus) onFocus();
+  };
+
   const inputClassName =
     (className ? className : "") +
-    (error ? " error" : "") +
+    (isFocused ? " focused" : "") +
+    (isInvalid ? " error" : "") +
     (success ? " success" : "") +
     (disabled ? " disabled" : "");
 
   return (
-    <div className='input'>
-      <label
-        htmlFor={name}
-        className={`${isFocused ? "focused" : ""} ${
-          value !== "" ? "filled" : ""
-        } ${error ? "error" : ""}`}>
-        {label}
-        {required && <span className='required'> *</span>}
-      </label>
-      <div className='input__wrapper'>
-        <input
-          type='tel'
-          value={value}
-          onChange={handleOnChange}
-          id={name}
-          name={name}
-          className={`input__field ${inputClassName}`}
-          placeholder={placeholder || " "}
-          autoFocus={autoFocus}
-          disabled={disabled}
-          onFocus={() => toggleFocus(true)}
-          onBlur={() => toggleFocus(false)}
-          {...props}
-        />
-        {success && <Check strokeWidth={3} className='input__svg success' />}
-      </div>
-      {error && <p className='error-msg'>{error}</p>}
+    <div className='field__input'>
+      <input
+        type='tel'
+        id={name}
+        name={name}
+        value={value}
+        onChange={handleOnChange}
+        onFocus={handleOnFocus}
+        onBlur={handleOnBlur}
+        className={inputClassName}
+        placeholder={placeholder}
+        autoFocus={autoFocus}
+        disabled={disabled}
+        {...props}
+      />
+      {success && <Check strokeWidth={3} className='input__svg success' />}
     </div>
   );
 };

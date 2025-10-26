@@ -8,15 +8,13 @@ interface InputProps
   ref?: Ref<HTMLInputElement>;
   type?: string;
   name: string;
-  label: string;
   value: string;
 
   required?: boolean;
   placeholder?: string;
-  description?: string;
 
-  error?: string;
   success?: boolean;
+  isInvalid?: boolean;
   disabled?: boolean;
 
   onChange: (value: string) => void;
@@ -31,15 +29,13 @@ const Input = ({
   ref,
   type = "text",
   name,
-  label,
   value,
 
   required = false,
   placeholder = " ",
-  description,
 
-  error,
-  success,
+  success = false,
+  isInvalid = false,
   disabled = false,
 
   onChange,
@@ -62,52 +58,38 @@ const Input = ({
     if (onBlur) onBlur();
   };
 
-  const labelClassName = `${isFocused ? "focused" : ""} ${
-    value !== "" ? "filled" : ""
-  } ${error ? "error" : ""}`;
+  const handleOnFocus = () => {
+    toggleFocus(true);
+    if (onFocus) onFocus();
+  };
 
   const inputClassName =
     (className ? className : "") +
-    (error ? " error" : "") +
+    (isFocused ? " focused" : "") +
+    (isInvalid ? " error" : "") +
     (success ? " success" : "") +
     (disabled ? " disabled" : "");
 
   return (
-    <div className='input'>
-      {description && <p className='input__desc'>{description}</p>}
-
-      <label htmlFor={name} className={labelClassName}>
-        {label}
-        {required && <span className='required'> *</span>}
-      </label>
-
-      <div className='input__wrapper'>
-        <input
-          ref={ref}
-          type={type}
-          id={name}
-          name={name}
-          value={value}
-          onChange={handleOnChange}
-          onBlur={handleOnBlur}
-          onFocus={() => toggleFocus(true)}
-          className={`input__field ${inputClassName}`}
-          placeholder={placeholder}
-          autoFocus={autoFocus}
-          disabled={disabled}
-          data-invalid={Boolean(error)}
-          aria-invalid={Boolean(error)}
-          aria-describedby={error ? `${name}-error` : undefined}
-          {...props}
-        />
-        {success && <Check strokeWidth={3} className='input__svg success' />}
-      </div>
-
-      {error && (
-        <em id={`${name}-error`} className='error-msg'>
-          {error}
-        </em>
-      )}
+    <div className='field__input'>
+      <input
+        ref={ref}
+        type={type}
+        id={name}
+        name={name}
+        value={value}
+        onChange={handleOnChange}
+        onBlur={handleOnBlur}
+        onFocus={handleOnFocus}
+        className={inputClassName}
+        placeholder={placeholder}
+        autoFocus={autoFocus}
+        disabled={disabled}
+        data-invalid={isInvalid}
+        aria-invalid={isInvalid}
+        {...props}
+      />
+      {success && <Check strokeWidth={3} className='input__svg success' />}
     </div>
   );
 };
