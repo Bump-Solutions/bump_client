@@ -1,16 +1,17 @@
-import { useDropzone, Accept } from "react-dropzone";
+import { Accept, useDropzone } from "react-dropzone";
 
 import { CloudUpload } from "lucide-react";
+import { MouseEvent } from "react";
 
 interface DropzoneProps {
   onDrop: (acceptedFiles: File[]) => void;
+  onDropRejected?: (fileRejections: any[]) => void;
+  onFileDialogCancel?: () => void;
   accept?: Accept;
   multiple?: boolean;
   maxFiles: number;
   maxSize?: number;
-  onDropRejected?: (fileRejections: any[]) => void;
-  onFileDialogCancel?: () => void;
-  error?: string;
+  isInvalid?: boolean;
 }
 
 const Dropzone = ({
@@ -21,7 +22,7 @@ const Dropzone = ({
   maxSize,
   onDropRejected,
   onFileDialogCancel,
-  error,
+  isInvalid,
 }: DropzoneProps) => {
   const { getRootProps, getInputProps, isDragActive, acceptedFiles } =
     useDropzone({
@@ -34,6 +35,13 @@ const Dropzone = ({
       onFileDialogCancel,
     });
 
+  const inputProps = getInputProps({
+    onClick: (e: MouseEvent<HTMLInputElement>) => {
+      // Trigger change event even if the same file is selected
+      (e.target as HTMLInputElement).value = "";
+    },
+  });
+
   const files = acceptedFiles.map((file) => (
     <li key={file.name}>
       {file.name} - {(file.size / 1024 / 1024).toFixed(2)} MB
@@ -44,9 +52,9 @@ const Dropzone = ({
     <div
       {...getRootProps()}
       className={`dropzone ${isDragActive ? "active" : ""} ${
-        error ? "error" : ""
+        isInvalid ? "error" : ""
       }`}>
-      <input {...getInputProps()} />
+      <input {...inputProps} />
       <CloudUpload />
       {files.length > 0 ? (
         <ul>{files}</ul>
@@ -60,7 +68,6 @@ const Dropzone = ({
           kiválasztásához.
         </p>
       )}
-      {error && <p className='error-msg'>{error}</p>}
     </div>
   );
 };

@@ -1,23 +1,22 @@
-import { ROUTES } from "../../../routes/routes";
-
-import { usePersonalSettings } from "../../../hooks/settings/usePersonalSettings";
 import { useNavigate } from "react-router";
 import { toast } from "sonner";
+import { useAppForm } from "../../../hooks/form/hooks";
+import { usePersonalSettings } from "../../../hooks/settings/usePersonalSettings";
+import { ROUTES } from "../../../routes/routes";
 import {
   profileInfoSchema,
   ProfileInfoValues,
 } from "../../../schemas/profileSchema";
-import { useAppForm } from "../../../hooks/form/hooks";
 
-import { useMounted } from "../../../hooks/useMounted";
-import { useLogout } from "../../../hooks/auth/useLogout";
 import { useAuth } from "../../../hooks/auth/useAuth";
+import { useLogout } from "../../../hooks/auth/useLogout";
 import { useUpdateProfile } from "../../../hooks/profile/useUpdateProfile";
+import { useMounted } from "../../../hooks/useMounted";
 
-import Spinner from "../../../components/Spinner";
-import FieldGroup from "../../../components/form/FieldGroup";
-import StateButton from "../../../components/StateButton";
 import Back from "../../../components/Back";
+import FieldGroup from "../../../components/form/FieldGroup";
+import Spinner from "../../../components/Spinner";
+import StateButton from "../../../components/StateButton";
 
 import { Download } from "lucide-react";
 

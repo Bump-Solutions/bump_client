@@ -6,6 +6,7 @@ import FormPhone from "../../components/form/FormPhone";
 import FormSelect from "../../components/form/FormSelect";
 import FormTextArea from "../../components/form/FormTextArea";
 import FormToggleButton from "../../components/form/FormToggleButton";
+import FormDropzone from "../../components/form/FormDropzone";
 
 const { fieldContext, formContext, useFieldContext, useFormContext } =
   createFormHookContexts();
@@ -15,6 +16,7 @@ const { useAppForm, withForm } = createFormHook({
   formContext,
   fieldComponents: {
     Input: FormInput,
+    Dropzone: FormDropzone,
     Password: FormPassword,
     Phone: FormPhone,
     Select: FormSelect,

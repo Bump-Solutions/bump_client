@@ -1,26 +1,26 @@
-import { ENUM } from "../utils/enum";
 import { JSX, lazy, LazyExoticComponent, Suspense } from "react";
 import { Outlet, Route } from "react-router";
+import { ENUM } from "../utils/enum";
 
 import CartProvider from "../context/CartProvider";
 
 import Fallback from "../components/Fallback";
 
-import RequireAuth from "../modules/auth/RequireAuth";
-import PersistLogin from "../modules/auth/PersistLogin";
 import ProfileProvider from "../context/ProfileProvider";
 import SellProvider from "../context/SellProvider";
+import PersistLogin from "../modules/auth/PersistLogin";
+import RequireAuth from "../modules/auth/RequireAuth";
 
-import Main from "../modules/home/Main";
 import Home from "../modules/home/Home";
+import Main from "../modules/home/Main";
 
-import Sell from "../modules/sell/Sell";
+import Messages from "../modules/chat/Messages";
 import Follow from "../modules/follow/Follow";
 import Followers from "../modules/follow/Followers";
 import Followings from "../modules/follow/Followings";
-import Search from "../modules/search/Search";
 import Report from "../modules/report/Report";
-import Messages from "../modules/chat/Messages";
+import Search from "../modules/search/Search";
+import Sell from "../modules/sell/Sell";
 
 const Authentication = lazy(() => import("../modules/auth/Authentication"));
 const Login = lazy(() => import("../modules/auth/Login"));

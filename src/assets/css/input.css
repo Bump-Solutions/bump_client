@@ -1005,7 +1005,7 @@
   border: 1px dashed #495057;
   border-radius: 1rem;
   padding: 4rem 2rem;
-  margin: 0.5rem 0;
+  margin: 0;
   text-align: center;
   cursor: pointer;
   display: flex;
@@ -1027,10 +1027,13 @@
   border: 2px solid #cc0000;
   background-color: #fae6e6;
 }
-.dropzone.error:hover {
+.dropzone.error.active, .dropzone.error:hover {
   outline: 2px solid #efb0b0;
 }
-.dropzone.error:hover svg {
+.dropzone.error.active p, .dropzone.error:hover p {
+  color: #cc0000;
+}
+.dropzone.error.active svg, .dropzone.error:hover svg {
   color: #adb5bd;
 }
 .dropzone svg {

@@ -1,12 +1,12 @@
-import { createContext, ReactNode, useCallback, useEffect } from "react";
-import { useMarkNotificationAsRead } from "../hooks/notifications/useMarkNotificationAsRead";
-import { ApiResponse } from "../types/api";
-import { useAuth } from "../hooks/auth/useAuth";
-import { API } from "../utils/api";
 import { useQueryClient } from "@tanstack/react-query";
+import { createContext, ReactNode, useCallback, useEffect } from "react";
 import useWebSocket from "react-use-websocket";
-import { fromNotificationDTO } from "../mappers/notificationMapper";
 import { FetchedNotificationDTO } from "../dtos/NotificationDTO";
+import { useAuth } from "../hooks/auth/useAuth";
+import { useMarkNotificationAsRead } from "../hooks/notifications/useMarkNotificationAsRead";
+import { fromNotificationDTO } from "../mappers/notificationMapper";
+import { ApiResponse } from "../types/api";
+import { API } from "../utils/api";
 import { QUERY_KEY } from "../utils/queryKeys";
 
 const TYPES = [1, 2] as const;
@@ -77,7 +77,7 @@ const NotificationsProvider = ({ children }: NotificationsProviderProps) => {
     });
     /* 
     queryClient.setQueryData(
-      [QUERY_KEY.getProfileMeta, auth?.user?.profilePicture],
+      [QUERY_KEY.getProfileMeta],
       (prev: any) => {
         if (!prev) return prev;
 
