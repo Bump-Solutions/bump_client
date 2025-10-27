@@ -80,7 +80,9 @@ const AddressSettings = () => {
   } = useListAddresses();
 
   if (isError) {
-    toast.error(error?.response?.data.message);
+    toast.error(
+      error?.response?.data.message || "Hiba a címek betöltése közben."
+    );
   }
 
   useEffect(() => {

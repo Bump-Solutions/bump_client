@@ -20,18 +20,17 @@ import ToggleButton from "../../../components/ToggleButton";
 import StateButton from "../../../components/StateButton";
 
 import { Upload } from "lucide-react";
-import { AuthModel } from "../../../models/authModel";
 
 const ProfilePictureSettings = () => {
-  const navigate = useNavigate();
+  const { auth, setAuth } = useAuth();
   const { setData } = usePersonalSettings();
 
   const [images, setImages] = useState<FileUpload[]>([]);
   const [colorPreview, setColorPreview] = useState<string | null>(null);
   const [changeBackground, setChangeBackground] = useState<boolean>(false);
 
+  const navigate = useNavigate();
   const isMounted = useMounted();
-  const { auth, setAuth } = useAuth();
 
   const onDrop = (acceptedFiles: File[]) => {
     setImages([]);
@@ -101,7 +100,7 @@ const ProfilePictureSettings = () => {
 
     setTimeout(() => {
       if (isMounted()) {
-        navigate(ROUTES.SETTINGS.ROOT);
+        navigate(ROUTES.SETTINGS.ROOT, { replace: true });
       }
     }, 500);
   });
@@ -187,11 +186,14 @@ const ProfilePictureSettings = () => {
             </div>
           )}
 
-          <ToggleButton
-            label='Profil háttérszín beállítása a kép alapján'
-            value={changeBackground}
-            onChange={setChangeBackground}
-          />
+          <div className='field'>
+            <ToggleButton
+              name='changeBackground'
+              label='Profil háttérszín beállítása a kép alapján'
+              value={changeBackground}
+              onChange={setChangeBackground}
+            />
+          </div>
 
           <StateButton
             className='primary'

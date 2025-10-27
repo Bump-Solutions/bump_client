@@ -167,8 +167,112 @@
   background-color: transparent;
   color: #495057;
 }
+.field .field__input svg.top {
+  top: 1rem;
+  transform: translateY(0);
+}
 .field .field__input svg.success {
   color: #00b341 !important;
+}
+.field .field__input .toggle {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  padding-left: 1.25rem;
+  background-color: #f1f3f5;
+  border: 1px solid transparent;
+  border-radius: 1rem;
+  cursor: pointer;
+  height: 3.25rem;
+  overflow: hidden;
+}
+.field .field__input .toggle label {
+  position: relative;
+  flex: 1;
+  top: 0;
+  left: 0;
+  color: #495057;
+  pointer-events: none;
+  min-width: -moz-fit-content;
+  min-width: fit-content;
+  transform: none;
+  -o-user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+.field .field__input .toggle:hover {
+  border: 1px solid #0070e8;
+  outline: 1px solid #0070e8;
+}
+.field .field__input .toggle:hover label {
+  color: #343a40;
+}
+.field .field__input .toggle.toggled:hover {
+  border: 1px solid #0070e8;
+  outline: 1px solid #0070e8;
+}
+.field .field__input .toggle.toggled label {
+  color: #212529;
+}
+.field .field__input .toggle.toggled .required {
+  color: #cc0000;
+}
+.field .field__input .toggle.toggled .toggle-indicator {
+  background-color: #00b341;
+  border: none;
+}
+.field .field__input .toggle.toggled .toggle-indicator svg {
+  color: #00b341;
+}
+.field .field__input .toggle.toggled .toggle-indicator.blue {
+  background-color: #0070e8;
+}
+.field .field__input .toggle.toggled .toggle-indicator.blue svg {
+  color: #0070e8;
+}
+.field .field__input .toggle.toggled .toggle-indicator.black {
+  background-color: #212529;
+}
+.field .field__input .toggle.toggled .toggle-indicator.black svg {
+  color: #212529;
+}
+.field .field__input .toggle.toggled .toggle-indicator .toggle-indicator--inner {
+  left: 1.5rem;
+}
+.field .field__input .toggle.error {
+  border: 2px solid #cc0000;
+  background-color: #fae6e6;
+}
+.field .field__input .toggle.error label {
+  color: #cc0000;
+}
+.field .field__input .toggle .toggle-indicator {
+  position: relative;
+  min-width: 3rem;
+  height: 1.75rem;
+  border-radius: 2rem;
+  border: 1px solid #ced4da;
+  background-color: #dee2e6;
+  transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.field .field__input .toggle .toggle-indicator .toggle-indicator--inner {
+  position: absolute;
+  top: 50%;
+  left: 0.25rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  transform: translateY(-50%);
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 50%;
+  background-color: #fff;
+  transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 .field .field__error {
   color: #cc0000 !important;
@@ -178,13 +282,13 @@
 .field__group {
   display: grid;
   gap: 1rem;
-  grid-template-columns: 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
 }
 .field__group.columns-2 {
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 .field__group.columns-3 {
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .field__separator {

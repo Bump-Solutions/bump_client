@@ -56,6 +56,7 @@ const ForgotPassword = ({ setShowForgotPassword }: ForgotPasswordProps) => {
           számjegyű kód megadásával beállíthatod az új jelszavadat.
         </p>
         <form onSubmit={(e) => e.preventDefault()}>
+          {/*}
           <Input
             type='email'
             value={email}
@@ -76,6 +77,7 @@ const ForgotPassword = ({ setShowForgotPassword }: ForgotPasswordProps) => {
             onClick={handleForgotPassword}>
             <Send />
           </StateButton>
+          */}
         </form>
       </div>
     </motion.div>

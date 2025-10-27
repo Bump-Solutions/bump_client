@@ -55,12 +55,12 @@ const Input = ({
 
   const handleOnBlur = () => {
     toggleFocus(false);
-    if (onBlur) onBlur();
+    onBlur?.();
   };
 
   const handleOnFocus = () => {
     toggleFocus(true);
-    if (onFocus) onFocus();
+    onFocus?.();
   };
 
   const inputClassName =
@@ -84,6 +84,7 @@ const Input = ({
         className={inputClassName}
         placeholder={placeholder}
         autoFocus={autoFocus}
+        required={required}
         disabled={disabled}
         data-invalid={isInvalid}
         aria-invalid={isInvalid}

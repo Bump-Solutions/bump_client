@@ -6,7 +6,7 @@ import FieldDescription from "./FieldDescription";
 import FieldError from "./FieldError";
 
 export type FormControlProps = {
-  label: string;
+  label?: string;
   description?: string;
   required?: boolean;
 };
@@ -30,9 +30,11 @@ const FormBase = ({
 
   const labelElement = (
     <>
-      <FieldLabel htmlFor={field.name} required={required}>
-        {label}
-      </FieldLabel>
+      {label && (
+        <FieldLabel htmlFor={field.name} required={required}>
+          {label}
+        </FieldLabel>
+      )}
       {description && <FieldDescription>{description}</FieldDescription>}
     </>
   );
