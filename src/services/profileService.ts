@@ -1,19 +1,19 @@
-import { API } from "../utils/api";
-import { ApiResponse } from "../types/api";
 import { AxiosInstance } from "axios";
-import { getImageDominantColorAndPalette } from "../utils/functions";
-import { ColorData } from "../modules/profile/ProfileBanner";
-import { ProfileMetaModel, ProfileModel } from "../models/profileModel";
-import {
-  fromFetchedProfileDTO,
-  fromFetchedProfileMetaDTO,
-  toUpdateProfileDTO,
-} from "../mappers/profileMapper";
 import {
   FetchedProfileDTO,
   FetchedProfileMetaDTO,
   UpdateProfileDTO,
 } from "../dtos/ProfileDTO";
+import {
+  fromFetchedProfileDTO,
+  fromFetchedProfileMetaDTO,
+  toUpdateProfileDTO,
+} from "../mappers/profileMapper";
+import { ProfileMetaModel, ProfileModel } from "../models/profileModel";
+import { ColorData } from "../modules/profile/ProfileBanner";
+import { ApiResponse } from "../types/api";
+import { API } from "../utils/api";
+import { getImageDominantColorAndPalette } from "../utils/colors";
 
 export const getProfile = async (
   signal: AbortSignal,
