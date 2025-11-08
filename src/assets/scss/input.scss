@@ -6,7 +6,7 @@
   margin: 0.5rem 0;
 
   // FÓKUSZ: ha az input fókuszban van
-  &:has(.field__input input.focused) {
+  &:has(.field__input input.focused, .dropdown__input.focused) {
     .field__label {
       color: color(blue, 500);
 
@@ -28,13 +28,7 @@
     }
   }
 
-  &:has(.field__input input.focused) {
-    .field__label {
-      color: color(blue, 500);
-    }
-  }
-
-  &:has(.field__input input.error) {
+  &:has(.field__input input.error, .dropdown__input.error) {
     .field__label {
       color: color(red, 500);
 
@@ -884,63 +878,14 @@
 }
 
 .dropdown {
-  margin: 0.5rem 0;
+  margin: 0;
   width: 100%;
-
-  label {
-    font-size: $fs-18;
-    color: color(gray, 700);
-    transition: all 0.2s $animation-cubic;
-    padding: 0 0.125rem;
-
-    .required {
-      color: color(red, 200);
-      transition: color 0.2s $animation-cubic;
-    }
-
-    &.focused {
-      color: color(blue, 500);
-
-      .required {
-        color: color(red, 500);
-      }
-    }
-
-    &.filled {
-      color: $clr-font-headline;
-
-      &.focused {
-        color: color(blue, 500);
-      }
-
-      &.error {
-        color: color(red, 500);
-      }
-
-      .required {
-        color: color(red, 500);
-      }
-    }
-
-    &.error {
-      color: color(red, 500);
-
-      .required {
-        color: color(red, 500);
-      }
-    }
-  }
 
   .dropdown__container {
     position: relative;
     cursor: pointer;
     min-height: $input-height;
     height: auto;
-
-    .error-msg {
-      color: color(red, 500) !important;
-      font-size: $fs-15;
-    }
 
     .dropdown__input {
       border-radius: $border-radius-1;

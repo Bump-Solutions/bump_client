@@ -1,7 +1,7 @@
 import { ROUTES } from "../../routes/routes";
 
+import { Navigate, Outlet, useLocation } from "react-router";
 import { useAuth } from "../../hooks/auth/useAuth";
-import { useLocation, Navigate, Outlet } from "react-router";
 
 interface RequireAuthProps {
   allowedRoles: number[];
@@ -11,7 +11,7 @@ const RequireAuth = ({ allowedRoles }: RequireAuthProps) => {
   const { auth } = useAuth();
   const location = useLocation();
 
-  const hasAccess = auth?.roles?.some((role) => allowedRoles.includes(role));
+  const hasAccess = auth?.role && allowedRoles.includes(auth.role);
 
   // Has access to the route
   if (hasAccess) {

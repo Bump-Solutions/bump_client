@@ -1,10 +1,10 @@
 .field {
   margin: 0.5rem 0;
 }
-.field:has(.field__input input.focused) .field__label {
+.field:has(.field__input input.focused, .dropdown__input.focused) .field__label {
   color: #0070e8;
 }
-.field:has(.field__input input.focused) .field__label span.required {
+.field:has(.field__input input.focused, .dropdown__input.focused) .field__label span.required {
   color: #cc0000;
 }
 .field:has(.field__input input:not(:placeholder-shown)) .field__label, .field:has(.field__input input:-webkit-autofill) .field__label {
@@ -13,13 +13,10 @@
 .field:has(.field__input input:not(:placeholder-shown)) .field__label span.required, .field:has(.field__input input:-webkit-autofill) .field__label span.required {
   color: #cc0000;
 }
-.field:has(.field__input input.focused) .field__label {
-  color: #0070e8;
-}
-.field:has(.field__input input.error) .field__label {
+.field:has(.field__input input.error, .dropdown__input.error) .field__label {
   color: #cc0000;
 }
-.field:has(.field__input input.error) .field__label span.required {
+.field:has(.field__input input.error, .dropdown__input.error) .field__label span.required {
   color: #cc0000;
 }
 .field .field__label {
@@ -807,52 +804,14 @@
 }
 
 .dropdown {
-  margin: 0.5rem 0;
+  margin: 0;
   width: 100%;
-}
-.dropdown label {
-  font-size: 1.125rem;
-  color: #495057;
-  transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  padding: 0 0.125rem;
-}
-.dropdown label .required {
-  color: #e88a8a;
-  transition: color 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-.dropdown label.focused {
-  color: #0070e8;
-}
-.dropdown label.focused .required {
-  color: #cc0000;
-}
-.dropdown label.filled {
-  color: #212529;
-}
-.dropdown label.filled.focused {
-  color: #0070e8;
-}
-.dropdown label.filled.error {
-  color: #cc0000;
-}
-.dropdown label.filled .required {
-  color: #cc0000;
-}
-.dropdown label.error {
-  color: #cc0000;
-}
-.dropdown label.error .required {
-  color: #cc0000;
 }
 .dropdown .dropdown__container {
   position: relative;
   cursor: pointer;
   min-height: 3.25rem;
   height: auto;
-}
-.dropdown .dropdown__container .error-msg {
-  color: #cc0000 !important;
-  font-size: 0.9375rem;
 }
 .dropdown .dropdown__container .dropdown__input {
   border-radius: 1rem;

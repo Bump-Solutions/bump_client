@@ -8,7 +8,7 @@ export const useAuthWithMeta = () => {
   return {
     id: auth?.user.id,
     username: auth?.user.username,
-    roles: auth?.roles,
+    role: auth?.role,
 
     meta: metaQuery.data,
     isLoading: metaQuery.isLoading,

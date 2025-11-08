@@ -7,7 +7,7 @@ export function fromLoginResponseDTO(dto: LoginResponseDTO): AuthModel {
 
   return {
     accessToken: dto.access_token,
-    roles: decoded.roles,
+    role: decoded.account_role,
 
     user: {
       id: Number(decoded.user_id),
@@ -21,7 +21,7 @@ export function fromGoogleResponseDTO(accessToken: string): AuthModel {
 
   return {
     accessToken,
-    roles: decoded.roles,
+    role: decoded.account_role,
 
     user: {
       id: Number(decoded.user_id),
@@ -35,7 +35,7 @@ export function fromRefreshResponseDTO(accessToken: string): AuthModel {
 
   return {
     accessToken,
-    roles: decoded.roles,
+    role: decoded.account_role,
 
     user: {
       id: Number(decoded.user_id),

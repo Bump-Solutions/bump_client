@@ -1,6 +1,6 @@
 import { useFieldContext } from "../../hooks/form/hooks";
-import FormBase, { FormControlProps } from "./FormBase";
 import Select, { Option } from "../Select";
+import FormBase, { FormControlProps } from "./FormBase";
 
 type BaseProps<T = string | number> = FormControlProps & {
   options: Option<T>[];
@@ -24,6 +24,8 @@ type FormSelectProps<T = string | number> =
 const FormSelect = <T extends string | number>(props: FormSelectProps<T>) => {
   const field = useFieldContext<T | T[] | null>();
 
+  const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
+
   const onChangeSingle = (next: T | null) => {
     field.handleChange(next);
   };
@@ -44,6 +46,7 @@ const FormSelect = <T extends string | number>(props: FormSelectProps<T>) => {
           isSearchable={props.isSearchable}
           value={field.state.value as T[]}
           onChange={onChangeMulti}
+          isInvalid={isInvalid}
           tabIndex={props.tabIndex}
         />
       ) : (
@@ -56,6 +59,7 @@ const FormSelect = <T extends string | number>(props: FormSelectProps<T>) => {
           isSearchable={props.isSearchable}
           value={field.state.value as T | null}
           onChange={onChangeSingle}
+          isInvalid={isInvalid}
           tabIndex={props.tabIndex}
         />
       )}

@@ -19,7 +19,7 @@ export interface ColorData {
   palette: string[];
 }
 
-const DEFAULT_COLOR = "#868e96";
+const DEFAULT_COLOR = "#cbd3deff;";
 const DEFAULT_PALETTE = [
   "#212529",
   "#343a40",

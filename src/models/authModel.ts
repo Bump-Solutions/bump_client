@@ -1,7 +1,7 @@
 export interface JwtPayload {
   user_id: string;
   username: string;
-  roles: Role[];
+  account_role: Role;
   email?: string;
 }
 
@@ -11,7 +11,7 @@ export interface JwtPayload {
  */
 export interface AuthModel {
   accessToken: string;
-  roles: Role[];
+  role: Role;
 
   user: {
     id: number;
