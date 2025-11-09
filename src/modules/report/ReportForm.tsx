@@ -1,76 +1,20 @@
-import { ReportType } from "../../types/report";
-import { Option, Errors } from "../../types/form";
-import { FormEvent, useState } from "react";
-import { useReport } from "../../hooks/report/useReport";
-import { toast } from "sonner";
+import { MouseEvent } from "react";
 import { useNavigate } from "react-router";
-import { useDebounce } from "../../hooks/useDebounce";
+import { toast } from "sonner";
+import { useAppForm } from "../../hooks/form/hooks";
+import { useReport } from "../../hooks/report/useReport";
 import { useMounted } from "../../hooks/useMounted";
+import { reportSchema, ReportValues } from "../../schemas/reportSchema";
+import { ReportType } from "../../types/report";
 
-import Input from "../../components/Input";
-import Select from "../../components/Select";
-import TextArea from "../../components/TextArea";
 import Button from "../../components/Button";
 import StateButton from "../../components/StateButton";
 
 import { Flag } from "lucide-react";
 
-interface ReportFormProps {
-  type: ReportType;
+type ReportFormProps = {
   id: string | undefined;
-}
-
-interface Field {
-  name: string;
-  label: string;
-  type: string;
-  placeholder: string;
-  required?: boolean;
-  options?: Option[];
-}
-
-const FIELDS: Record<ReportType, Field[]> = {
-  product: [
-    {
-      name: "rprt_reason",
-      label: "Jelentés oka",
-      type: "select",
-      placeholder: "Válassz az alábbiak közül...",
-      options: [
-        {
-          value: 0,
-          label: "Hamis termék",
-          description:
-            "Nem eredeti, márkajelzés vagy csomagolás alapján hamisítvány gyanús.",
-        },
-        {
-          value: 1,
-          label: "Csalás",
-          description:
-            "A hirdetés gyanús vagy félrevezető, az eladó viselkedése nem tűnik megbízhatónak.",
-        },
-        {
-          value: 2,
-          label: "Tiltott tartalom",
-          description: "A termék nem felel meg a platform szabályainak.",
-        },
-        {
-          value: 3,
-          label: "Egyéb",
-          description: "Nem szerepel a listában – részletezd lentebb.",
-        },
-      ],
-      required: true,
-    },
-    {
-      name: "rprt_description",
-      label: "Részletes leírás",
-      type: "textarea",
-      placeholder: "Írd le részletesen, miért jelented ezt a terméket.",
-      required: false,
-    },
-  ],
-  user: [],
+  type: ReportType;
 };
 
 const TITLES: Record<ReportType, string> = {
@@ -89,32 +33,73 @@ const LABELS: Record<ReportType, string> = {
   user: "felhasználó",
 };
 
-const INITIAL_DATA: Record<string, any> = {
-  rprt_reason: null,
-  rprt_description: "",
+const LABELS_ACCUSATIVE: Record<ReportType, string> = {
+  product: "terméket",
+  user: "felhasználót",
 };
 
-const ReportForm = ({ type, id }: ReportFormProps) => {
+type ReasonOption = {
+  value: number;
+  label: string;
+  description?: string;
+};
+
+const REASON_OPTIONS: Record<ReportType, ReasonOption[]> = {
+  product: [
+    {
+      value: 0,
+      label: "Hamis termék",
+      description:
+        "Nem eredeti, márkajelzés vagy csomagolás alapján hamisítvány gyanús.",
+    },
+    {
+      value: 1,
+      label: "Csalás",
+      description:
+        "A hirdetés gyanús vagy félrevezető, az eladó viselkedése nem tűnik megbízhatónak.",
+    },
+    {
+      value: 2,
+      label: "Tiltott tartalom",
+      description: "A termék nem felel meg a platform szabályainak.",
+    },
+    {
+      value: 3,
+      label: "Egyéb",
+      description: "Nem szerepel a listában – részletezd lentebb.",
+    },
+  ],
+  user: [
+    {
+      value: 0,
+      label: "Hamis adatok / profil",
+    },
+    {
+      value: 1,
+      label: "Csalás vagy félrevezető tevékenység",
+    },
+    {
+      value: 2,
+      label: "Zaklatás vagy nem megfelelő kommunikáció",
+    },
+    {
+      value: 3,
+      label: "Egyéb",
+      description: "Nem szerepel a listában – részletezd lentebb.",
+    },
+  ],
+};
+
+const defaultValues: ReportValues = {
+  reason: null,
+  description: "",
+};
+
+const ReportForm = ({ id, type }: ReportFormProps) => {
   const navigate = useNavigate();
-
-  const fields = FIELDS[type];
-  const [formData, setFormData] = useState<Record<string, any>>(INITIAL_DATA);
-
-  const [errors, setErrors] = useState<Errors>({});
   const isMounted = useMounted();
 
-  fields.forEach((field) => {
-    useDebounce(
-      () => {
-        setErrors((prevErrors) => ({
-          ...prevErrors,
-          [field.name]: "",
-        }));
-      },
-      0,
-      [formData[field.name]]
-    );
-  });
+  const numericId = id ? Number(id) : NaN;
 
   const reportMutation = useReport((resp, variables) => {
     setTimeout(() => {
@@ -124,124 +109,104 @@ const ReportForm = ({ type, id }: ReportFormProps) => {
     }, 1000);
   });
 
-  const handleChange = (name: string, value: any) => {
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
+  const form = useAppForm({
+    defaultValues,
 
-  const handleFormSubmit = (e: FormEvent) => {
+    validators: {
+      onSubmit: reportSchema,
+    },
+
+    onSubmit: async ({ value, formApi }) => {
+      if (!numericId || Number.isNaN(numericId)) {
+        toast.error("Hiányzó vagy érvénytelen azonosító.");
+        throw new Error("Invalid id");
+      }
+
+      const parsed = reportSchema.parse(value);
+
+      const payload = {
+        id: numericId,
+        type,
+        reason: parsed.reason!,
+        description: parsed.description?.trim() || undefined,
+      };
+
+      const reportPromise = reportMutation.mutateAsync(payload);
+
+      toast.promise(reportPromise, {
+        loading: "Jelentés folyamatban...",
+        success: "Jelentés elküldve.",
+        error: (err) =>
+          (err?.response?.data?.message as string) ||
+          `Hiba a ${LABELS[type]} jelentése közben.`,
+      });
+
+      await reportPromise;
+
+      formApi.reset();
+    },
+
+    onSubmitInvalid: async ({ value }) => {
+      throw new Error("Invalid form submission");
+    },
+  });
+
+  const handleSubmit = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
-    const inputFields = fields.reduce((acc, field) => {
-      if (field.required) {
-        acc[field.name] = formData[field.name] || "";
-      }
-      return acc;
-    }, {} as Record<string, string>);
-
-    const emptyInputs = Object.keys(inputFields).filter((key) => {
-      const value = inputFields[key];
-
-      if (typeof value === "string") {
-        return value.trim() === "";
-      }
-
-      if (typeof value === "object" && value !== null) {
-        return Object.keys(value).length === 0;
-      }
-
-      return !value; // ha undefined/null
-    });
-
-    if (emptyInputs.length > 0) {
-      emptyInputs.forEach((input) => {
-        setErrors((prevErrors) => ({
-          ...prevErrors,
-          [input]: "A mező kitöltése kötelező.",
-        }));
-      });
-      toast.error("Kérjük töltsd ki a csillaggal jelölt mezőket!");
-      return Promise.reject("Empty inputs");
-    }
-
-    if (Object.values(errors).some((x) => x !== "")) {
+    await form.handleSubmit();
+    if (!form.store.state.isValid) {
       toast.error("Kérjük javítsd a hibás mezőket!");
-      return Promise.reject("Invalid fields");
+      throw new Error("Invalid form submission");
     }
-
-    const reportPromise = reportMutation.mutateAsync({
-      type,
-      id: parseInt(id!),
-      reason: formData.rprt_reason.value,
-      description: formData.rprt_description,
-    });
-
-    toast.promise(reportPromise, {
-      loading: "Jelentés folyamatban...",
-      success: "Jelentés elküldve.",
-      error: (err) =>
-        (err?.response?.data?.message as string) ||
-        `Hiba a ${LABELS[type]} jelentése közben.`,
-    });
-
-    return reportPromise;
   };
+
+  const reasonOptions = REASON_OPTIONS[type];
 
   return (
     <>
       <h1 className='modal__title'>🚩 {TITLES[type]}</h1>
+
       <div className='modal__content'>
         <p>{DESCRIPTIONS[type]}</p>
 
-        <form className='pt-1'>
-          {fields.map((field) => {
-            switch (field.type) {
-              case "text":
-                return (
-                  <Input
-                    key={field.name}
-                    type={field.type}
-                    label={field.label}
-                    name={field.name}
-                    placeholder={field.placeholder}
-                    required={field.required}
-                    value={formData[field.name] || ""}
-                    onChange={(val) => handleChange(field.name, val)}
-                    error={errors[field.name]}
-                  />
-                );
-              case "select":
-                return (
-                  <Select
-                    key={field.name}
-                    label={field.label}
-                    name={field.name}
-                    placeholder={field.placeholder}
-                    options={field.options || []}
-                    required={field.required}
-                    value={formData[field.name] || ""}
-                    onChange={(val) => handleChange(field.name, val)}
-                    error={errors[field.name]}
-                  />
-                );
-              case "textarea":
-                return (
-                  <TextArea
-                    key={field.name}
-                    label={field.label}
-                    name={field.name}
-                    placeholder={field.placeholder}
-                    required={field.required}
-                    value={formData[field.name] || ""}
-                    onChange={(val) => handleChange(field.name, val)}
-                    rows={5}
-                    maxLength={500}
-                    error={errors[field.name]}
-                  />
-                );
-              default:
-                return null;
-            }
-          })}
+        <form
+          className='pt-1'
+          onSubmit={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+          }}>
+          {/* Jelentés oka */}
+          <form.AppField
+            name='reason'
+            validators={{
+              onChange: reportSchema.shape.reason,
+            }}>
+            {(field) => (
+              <field.Select
+                label='Jelentés oka'
+                required
+                placeholder='Válassz az alábbiak közül...'
+                options={reasonOptions}
+              />
+            )}
+          </form.AppField>
+
+          {/* Részletes leírás */}
+          <form.AppField
+            name='description'
+            validators={{
+              onChange: reportSchema.shape.description,
+            }}>
+            {(field) => (
+              <field.TextArea
+                label='Részletes leírás'
+                placeholder={`Írd le részletesen, miért jelented ezt a ${LABELS_ACCUSATIVE[type]}.`}
+                rows={5}
+                maxLength={500}
+              />
+            )}
+          </form.AppField>
         </form>
       </div>
 
@@ -255,7 +220,8 @@ const ReportForm = ({ type, id }: ReportFormProps) => {
         <StateButton
           className='secondary red'
           text='Jelentés'
-          onClick={handleFormSubmit}>
+          onClick={handleSubmit}
+          disabled={reportMutation.isPending}>
           <Flag />
         </StateButton>
       </div>

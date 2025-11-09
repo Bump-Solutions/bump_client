@@ -1,4 +1,5 @@
 import {
+  ChangeEvent,
   TextareaHTMLAttributes,
   useCallback,
   useLayoutEffect,
@@ -10,34 +11,53 @@ import { Check } from "lucide-react";
 
 interface TextAreaProps
   extends Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, "onChange"> {
-  label: string;
-  description?: string;
-  error?: string;
-  success?: boolean;
-  disabled?: boolean;
-  value: string;
   name: string;
+  value: string;
+
+  required?: boolean;
+  placeholder?: string;
+
+  success?: boolean;
+  isInvalid?: boolean;
+  disabled?: boolean;
+
+  description?: string;
+
   onChange: (value: string) => void;
-  autoAdjustHeight?: boolean;
+  onBlur?: () => void;
+  onFocus?: () => void;
+
+  rows?: number;
   maxLength?: number;
+  autoAdjustHeight?: boolean;
+
+  className?: string;
+  autoFocus?: boolean;
 }
 
 const TextArea = ({
-  label,
-  description,
-  placeholder,
-  required = false,
-  error,
-  success,
-  disabled,
-  value,
   name,
+  value,
+
+  required = false,
+  placeholder = " ",
+
+  success = false,
+  isInvalid = false,
+  disabled = false,
+
+  description = "",
+
   onChange,
-  autoAdjustHeight = false,
+  onBlur,
+  onFocus,
+
+  rows,
   maxLength,
+  autoAdjustHeight = false,
+
   className,
   autoFocus,
-  rows,
   ...props
 }: TextAreaProps) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -55,44 +75,53 @@ const TextArea = ({
     adjustHeight();
   }, [value, adjustHeight]);
 
-  const handleOnChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const handleOnChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     if (maxLength && event.target.value.length > maxLength) return;
     onChange(event.target.value);
   };
 
-  const textareaClassName = `${className} ${error ? "error" : ""} ${
-    success ? "success" : ""
-  } ${disabled ? "disabled" : ""}`;
+  const handleOnBlur = () => {
+    setIsFocused(false);
+    onBlur?.();
+  };
+
+  const handleOnFocus = () => {
+    setIsFocused(true);
+    onFocus?.();
+  };
+
+  const textareaClassName =
+    (className ? className : "") +
+    (isFocused ? " focused" : "") +
+    (isInvalid ? " error" : "") +
+    (success ? " success" : "") +
+    (disabled ? " disabled" : "");
 
   return (
-    <div className='input'>
-      <label
-        className={`${isFocused ? "focused" : ""} ${
-          value !== "" ? "filled" : ""
-        } ${error ? "error" : ""}`}
-        htmlFor={name}>
-        {label}
-        {required && <span className='required'> *</span>}
-      </label>
-      <div className='input__wrapper'>
+    <>
+      <div className='field__input'>
         <textarea
           ref={textareaRef}
-          value={value}
-          onChange={handleOnChange}
           id={name}
           name={name}
-          placeholder={placeholder || " "}
-          className={`input__field textarea ${textareaClassName}`}
-          autoFocus={autoFocus}
+          value={value}
+          onChange={handleOnChange}
+          onFocus={handleOnFocus}
+          onBlur={handleOnBlur}
+          placeholder={placeholder}
+          required={required}
+          disabled={disabled}
           rows={rows}
-          onFocus={() => setIsFocused(true)}
-          onBlur={() => setIsFocused(false)}
           maxLength={maxLength}
-          {...props}
+          className={textareaClassName}
+          autoFocus={autoFocus}
           spellCheck={false}
+          {...props}
         />
 
-        {success && <Check strokeWidth={3} className='input__svg success' />}
+        {success && (
+          <Check strokeWidth={3} className='input__svg top success' />
+        )}
       </div>
       <div
         style={{
@@ -100,14 +129,15 @@ const TextArea = ({
           justifyContent: "space-between",
           alignItems: "center",
         }}>
-        {error && <p className='error-msg'>{error}</p>}
         {maxLength && (
-          <p className='ta-right fc-gray-600 px-0' style={{ flex: 1 }}>
+          <p
+            className='ta-right fc-gray-600 px-0'
+            style={{ flex: 1, lineHeight: 1.6 }}>
             {value.length} / {maxLength}
           </p>
         )}
       </div>
-    </div>
+    </>
   );
 };
 

@@ -1,51 +1,61 @@
 import { HTMLAttributes } from "react";
 
 interface ToggleButtonProps
-  extends Omit<HTMLAttributes<HTMLDivElement>, "onChange"> {
-  className?: string;
+  extends Omit<HTMLAttributes<HTMLButtonElement>, "onChange"> {
+  name: string;
   label?: string;
-  color?: string;
   value: boolean | undefined;
+
+  className?: string;
+  color?: string;
+
   onChange: (value: boolean) => void;
-  error?: string;
+
+  isInvalid?: boolean;
   required?: boolean;
 }
 
 const ToggleButton = ({
-  className,
+  name,
   label,
   color,
   value,
   onChange,
-  error,
   required,
+
+  isInvalid = false,
+
+  className,
+  tabIndex,
   ...props
 }: ToggleButtonProps) => {
-  const inputClassName = `${className} ${value ? "toggled" : ""} ${
-    error ? "error" : ""
-  }`;
-
   const handleOnChange = () => {
     onChange(!value);
   };
 
+  const inputClassName =
+    "toggle" +
+    (className ? ` ${className}` : "") +
+    (value ? " toggled" : "") +
+    (isInvalid ? " error" : "");
+
   return (
-    <div className='input'>
-      <div className='input__wrapper'>
-        <div
-          className={`toggle ${inputClassName}`}
-          onClick={handleOnChange}
-          {...props}>
-          <label>
-            {label}
-            {required && <span className='required'> *</span>}
-          </label>
-          <span className={`toggle-indicator ${color || ""}`}>
-            <span className='toggle-indicator--inner'></span>
-          </span>
-        </div>
-      </div>
-      {error && <p className='error-msg'>{error}</p>}
+    <div className='field__input'>
+      <button
+        type='button'
+        name={name}
+        className={inputClassName}
+        onClick={handleOnChange}
+        tabIndex={tabIndex}
+        {...props}>
+        <label>
+          {label}
+          {required && <span className='required'> *</span>}
+        </label>
+        <span className={`toggle-indicator ${color || ""}`}>
+          <span className='toggle-indicator--inner'></span>
+        </span>
+      </button>
     </div>
   );
 };

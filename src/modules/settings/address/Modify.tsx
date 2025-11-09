@@ -1,105 +1,84 @@
-import { REGEX } from "../../../utils/regex";
+import { addressSchema, AddressValues } from "../../../schemas/addressSchema";
+import { useAppForm } from "../../../hooks/form/hooks";
 import { AddressModel } from "../../../models/addressModel";
-import { Errors } from "../../../types/form";
-import { FormEvent, useState } from "react";
+
+import { MouseEvent } from "react";
 import { toast } from "sonner";
-import { useDebounce } from "../../../hooks/useDebounce";
 import { useModifyAddress } from "../../../hooks/address/useModifyAddress";
 import { useMounted } from "../../../hooks/useMounted";
 
+import FieldGroup from "../../../components/form/FieldGroup";
 import Button from "../../../components/Button";
 import StateButton from "../../../components/StateButton";
-import Input from "../../../components/Input";
-import ToggleButton from "../../../components/ToggleButton";
 
 import { Pencil } from "lucide-react";
 
-interface ModifyProps {
+type ModifyProps = {
   address: AddressModel;
   addresses: AddressModel[];
   close: () => void;
-}
+};
 
 const Modify = ({ address, addresses, close }: ModifyProps) => {
   const isMounted = useMounted();
 
-  const [newAddress, setNewAddress] = useState<AddressModel>({ ...address });
+  const defaultValues: AddressValues = {
+    name: address.name,
+    country: address.country,
+    city: address.city,
+    zip: String(address.zip),
+    street: address.street || "",
+    default: Boolean(address.default),
+  };
 
-  const [errors, setErrors] = useState<Errors>({});
+  const form = useAppForm({
+    defaultValues,
 
-  useDebounce(
-    () => {
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        name: "",
-      }));
+    validators: {
+      onChange: addressSchema,
+
+      onSubmitAsync: async ({ value }) => {
+        // Név egyediség
+        const taken = addresses
+          .filter((a) => a.id !== address.id)
+          .some(
+            (a) =>
+              a.name.trim().toLowerCase() === value.name.trim().toLowerCase()
+          );
+
+        if (taken) {
+          return {
+            fields: {
+              name: "Ez a név már használatban van.",
+            },
+          };
+        }
+
+        return null;
+      },
     },
-    250,
-    [newAddress.name]
-  );
 
-  useDebounce(
-    () => {
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        country: "",
-      }));
-    },
-    250,
-    [newAddress.country]
-  );
+    onSubmit: async ({ value, formApi }) => {
+      const modifyPromise = modifyAddressMutation.mutateAsync({
+        id: address.id!,
+        ...value,
+      });
 
-  useDebounce(
-    () => {
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        city: "",
-      }));
-    },
-    250,
-    [newAddress.city]
-  );
+      toast.promise(modifyPromise, {
+        loading: "Cím módosítása folyamatban...",
+        success: `A(z) "${value.name}" cím módosítva.`,
+        error: (err) => "Hiba a cím módosítása során.",
+      });
 
-  useDebounce(
-    () => {
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        street: "",
-      }));
-    },
-    250,
-    [newAddress.street]
-  );
+      await modifyPromise;
 
-  useDebounce(
-    () => {
-      // Validate zip
-      if (newAddress.zip && !REGEX.ZIP.test(newAddress.zip)) {
-        setErrors((prevErrors) => ({
-          ...prevErrors,
-          zip: "Az irányítószámnak 4 számjegyből kell állnia.",
-        }));
-      } else {
-        setErrors((prevErrors) => ({
-          ...prevErrors,
-          zip: "",
-        }));
-      }
+      // formApi.reset();
     },
-    0,
-    [newAddress.zip]
-  );
 
-  useDebounce(
-    () => {
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        default: "",
-      }));
+    onSubmitInvalid: async ({ value, formApi }) => {
+      throw new Error("Invalid form submission");
     },
-    0,
-    [newAddress.default]
-  );
+  });
 
   const modifyAddressMutation = useModifyAddress(
     () => {
@@ -108,7 +87,8 @@ const Modify = ({ address, addresses, close }: ModifyProps) => {
           close();
         }
       }, 500);
-    },
+    }
+    /*
     (error) => {
       if (typeof error?.response?.data.message === "object") {
         Object.entries(
@@ -121,75 +101,17 @@ const Modify = ({ address, addresses, close }: ModifyProps) => {
         });
       }
     }
+    */
   );
 
-  const handleFormSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
-    if (!address) return;
-
-    const inputFields = {
-      name: newAddress.name,
-      country: newAddress.country,
-      city: newAddress.city,
-      zip: newAddress.zip,
-    };
-
-    const emptyInputs = (
-      Object.keys(inputFields) as Array<keyof typeof inputFields>
-    ).filter((key) => inputFields[key] === "");
-
-    if (emptyInputs.length > 0) {
-      emptyInputs.forEach((input) => {
-        setErrors((prevErrors) => ({
-          ...prevErrors,
-          [input]: "A mező kitöltése kötelező.",
-        }));
-      });
-
-      toast.error("Kérjük töltsd ki a csillaggal jelölt mezőket!");
-      return Promise.reject("Empty inputs");
-    }
-
-    if (newAddress.zip && !REGEX.ZIP.test(newAddress.zip)) {
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        zip: "Az irányítószámnak 4 számjegyből kell állnia.",
-      }));
-      return Promise.reject("Invalid zip");
-    }
-
-    // If the name is already in use and it's not the same address
-    if (
-      addresses.some(
-        (adr) =>
-          adr.name.toLowerCase() === newAddress.name.toLowerCase() &&
-          adr.id !== newAddress.id
-      )
-    ) {
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        name: "Ez a név már használatban van.",
-      }));
-      return Promise.reject("Name already in use");
-    }
-
-    if (Object.values(errors).some((x) => x !== "")) {
+    await form.handleSubmit();
+    if (!form.store.state.isValid) {
       toast.error("Kérjük javítsd a hibás mezőket!");
-      return Promise.reject("Invalid fields");
+      throw new Error("Invalid form submission");
     }
-
-    const modifyPromise = modifyAddressMutation.mutateAsync(newAddress);
-
-    toast.promise(modifyPromise, {
-      loading: "Cím módosítása folyamatban...",
-      success: `A(z) "${newAddress.name}" cím módosítva.`,
-      error: (err) =>
-        (err?.response?.data?.message as string) ||
-        "Hiba a cím módosítása során.",
-    });
-
-    return modifyPromise;
   };
 
   return (
@@ -198,84 +120,108 @@ const Modify = ({ address, addresses, close }: ModifyProps) => {
         ✏️ A(z)&nbsp;<span className='fc-blue-500'>"{address.name}"</span>
         &nbsp;cím szerkesztése
       </h1>
+
       <div className='modal__content'>
-        <form>
-          <Input
-            type='text'
-            name='mod_name'
-            value={newAddress.name}
-            label='Név'
-            placeholder={address.name}
-            required
-            onChange={(value) => {
-              setNewAddress((prev) => ({ ...prev, name: value }));
-            }}
-            autoFocus
-            error={errors.name}
-            success={!!newAddress.name && !errors.name}
-          />
-          <Input
-            type='text'
-            name='mod_country'
-            value={newAddress.country}
-            label='Ország'
-            placeholder={address.country}
-            required
-            onChange={(value) => {
-              setNewAddress((prev) => ({ ...prev, country: value }));
-            }}
-            error={errors.country}
-            success={!!newAddress.country && !errors.country}
-          />
-          <div className='field__wrapper'>
-            <Input
-              type='text'
-              name='mod_city'
-              value={newAddress.city}
-              label='Város'
-              placeholder={address.city}
-              required
-              onChange={(value) => {
-                setNewAddress((prev) => ({ ...prev, city: value }));
-              }}
-              error={errors.city}
-              success={!!newAddress.city && !errors.city}
-            />
-            <Input
-              type='text'
-              name='mod_zip'
-              value={newAddress.zip}
-              label='Irányítószám'
-              placeholder={address.zip}
-              required
-              onChange={(value) => {
-                setNewAddress((prev) => ({ ...prev, zip: value }));
-              }}
-              error={errors.zip}
-              success={!!newAddress.zip && !errors.zip}
-            />
-          </div>
-          <Input
-            type='text'
-            name='mod_street'
-            value={newAddress.street}
-            label='Utca, házszám'
-            placeholder={address.street || "pl. Kossuth Lajos utca 1."}
-            onChange={(value) => {
-              setNewAddress((prev) => ({ ...prev, street: value }));
-            }}
-            error={errors.street}
-            success={!!newAddress.street && !errors.street}
-          />
-          <ToggleButton
-            label='Alapértelmezett cím'
-            className='mt-1'
-            value={newAddress.default}
-            onChange={(value) => {
-              setNewAddress((prevState) => ({ ...prevState, default: value }));
-            }}
-            error={errors.default}
-          />
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+          }}>
+          <form.AppField
+            name='name'
+            validators={{
+              onChange: addressSchema.shape.name,
+              onBlur: ({ value }) => {
+                const taken = addresses
+                  .filter((a) => a.id !== address.id)
+                  .some(
+                    (a) =>
+                      a.name.trim().toLowerCase() === value.trim().toLowerCase()
+                  );
+
+                return taken ? "Ez a név már használatban van." : undefined;
+              },
+            }}>
+            {(field) => (
+              <field.Input
+                type='text'
+                label='Név'
+                required
+                placeholder='pl. Otthoni cím'
+                autoFocus
+                tabIndex={1}
+              />
+            )}
+          </form.AppField>
+
+          <form.AppField
+            name='country'
+            validators={{ onChange: addressSchema.shape.country }}>
+            {(field) => (
+              <field.Input
+                type='text'
+                label='Ország'
+                required
+                placeholder='pl. Magyarország'
+                tabIndex={2}
+              />
+            )}
+          </form.AppField>
+
+          <FieldGroup columns={2}>
+            <form.AppField
+              name='city'
+              validators={{ onChange: addressSchema.shape.city }}>
+              {(field) => (
+                <field.Input
+                  type='text'
+                  label='Város'
+                  required
+                  placeholder='pl. Budapest'
+                  tabIndex={3}
+                />
+              )}
+            </form.AppField>
+
+            <form.AppField
+              name='zip'
+              validators={{ onChange: addressSchema.shape.zip }}>
+              {(field) => (
+                <field.Input
+                  type='text'
+                  label='Irányítószám'
+                  required
+                  placeholder='pl. 1111'
+                  tabIndex={4}
+                />
+              )}
+            </form.AppField>
+          </FieldGroup>
+
+          <form.AppField
+            name='street'
+            validators={{ onChange: addressSchema.shape.street }}>
+            {(field) => (
+              <field.Input
+                type='text'
+                label='Utca, házszám'
+                placeholder='pl. Kossuth Lajos utca 1.'
+                tabIndex={5}
+              />
+            )}
+          </form.AppField>
+
+          <form.AppField
+            name='default'
+            validators={{ onChange: addressSchema.shape.default }}>
+            {(field) => (
+              <field.ToggleButton
+                text='Alapértelmezett cím'
+                tabIndex={6}
+                className='mt-1'
+              />
+            )}
+          </form.AppField>
         </form>
       </div>
 
@@ -285,11 +231,13 @@ const Modify = ({ address, addresses, close }: ModifyProps) => {
           text='Mégsem'
           disabled={modifyAddressMutation.isPending}
           onClick={() => close()}
+          tabIndex={7}
         />
         <StateButton
           className='primary'
           text='Módosítás'
-          onClick={handleFormSubmit}>
+          onClick={handleSubmit}
+          tabIndex={8}>
           <Pencil />
         </StateButton>
       </div>

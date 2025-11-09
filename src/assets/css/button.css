@@ -118,15 +118,15 @@
   border: 1px solid #495057;
 }
 .button.primary.error {
-  color: #f8f9fa;
-  background-color: #cc0000;
-  border: 1px solid #ba0000;
+  color: #f8f9fa !important;
+  background-color: #cc0000 !important;
+  border: 1px solid #ba0000 !important;
   pointer-events: none;
 }
 .button.primary.success {
-  color: #f8f9fa;
-  background-color: #00b341;
-  border: 1px solid #00a33b;
+  color: #f8f9fa !important;
+  background-color: #00b341 !important;
+  border: 1px solid #00a33b !important;
   pointer-events: none;
 }
 .button.secondary {
@@ -187,21 +187,21 @@
   border: 1px solid #e88a8a;
 }
 .button.secondary.error {
-  color: #f8f9fa;
-  background-color: #cc0000;
-  border: 1px solid #ba0000;
+  color: #f8f9fa !important;
+  background-color: #cc0000 !important;
+  border: 1px solid #ba0000 !important;
   pointer-events: none;
 }
 .button.secondary.success {
-  color: #f8f9fa;
-  background-color: #00b341;
-  border: 1px solid #00a33b;
+  color: #f8f9fa !important;
+  background-color: #00b341 !important;
+  border: 1px solid #00a33b !important;
   pointer-events: none;
 }
 .button.secondary.loading {
-  color: #adb5bd;
-  background-color: #f8f9fa;
-  border: 1px solid transparent;
+  color: #adb5bd !important;
+  background-color: #f8f9fa !important;
+  border: 1px solid transparent !important;
   pointer-events: none;
 }
 .button.secondary.icon--reverse {

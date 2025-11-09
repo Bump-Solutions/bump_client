@@ -10,7 +10,8 @@ export enum OrderAction {
   INITIATE_CHECKOUT = 1,
   GET_ORDER_PAYMENT_STATUS = 2,
   GET_SHIPMENT_DETAILS = 3,
-  RATE_SELLER = 4,
+  SUBMIT_SELLER_RATING = 4,
+  SUBMIT_BUYER_RATING = 5,
   CANCEL_ORDER = 10,
 }
 
@@ -106,7 +107,7 @@ const SELLER_ACTIONS: Readonly<Record<OrderState, readonly OrderAction[]>> = {
   [OrderState.SHIPPED_WAITING_FOR_ARRIVAL]: [],
   [OrderState.ARRIVED_WAITING_FOR_PICKUP]: [],
   [OrderState.RECEIVED_WAITING_FOR_RESPONSE]: [],
-  [OrderState.COMPLETED]: [],
+  [OrderState.COMPLETED]: [OrderAction.SUBMIT_BUYER_RATING],
   [OrderState.CANCELLED]: [],
   [OrderState.EXPIRED]: [],
   [OrderState.FAILED]: [],
@@ -127,7 +128,9 @@ const BUYER_ACTIONS: Readonly<Record<OrderState, readonly OrderAction[]>> = {
   [OrderState.PAID_WAITING_FOR_SHIPMENT]: [],
   [OrderState.SHIPPED_WAITING_FOR_ARRIVAL]: [],
   [OrderState.ARRIVED_WAITING_FOR_PICKUP]: [],
-  [OrderState.RECEIVED_WAITING_FOR_RESPONSE]: [OrderAction.RATE_SELLER],
+  [OrderState.RECEIVED_WAITING_FOR_RESPONSE]: [
+    OrderAction.SUBMIT_SELLER_RATING,
+  ],
   [OrderState.COMPLETED]: [],
   [OrderState.CANCELLED]: [],
   [OrderState.EXPIRED]: [],

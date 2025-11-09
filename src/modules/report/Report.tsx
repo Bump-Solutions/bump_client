@@ -1,14 +1,14 @@
-import { ROUTES } from "../../routes/routes";
-import { ENUM } from "../../utils/enum";
-import { useNavigate, useParams } from "react-router";
-import { ReportType } from "../../types/report";
-import { useMediaQuery } from "react-responsive";
-import { useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { useEffect } from "react";
+import { useMediaQuery } from "react-responsive";
+import { useNavigate, useParams } from "react-router";
+import { ROUTES } from "../../routes/routes";
+import { ReportType } from "../../types/report";
+import { ENUM } from "../../utils/enum";
 
-import ReportForm from "./ReportForm";
-import Drawer from "../../components/Drawer";
 import Button from "../../components/Button";
+import Drawer from "../../components/Drawer";
+import ReportForm from "./ReportForm";
 
 import { X } from "lucide-react";
 
@@ -39,7 +39,7 @@ const Report = () => {
     <AnimatePresence mode='wait'>
       {isMobile ? (
         <Drawer className='report' close={() => navigate(-1)}>
-          <ReportForm type={type} id={id} />
+          <ReportForm id={id} type={type} />
         </Drawer>
       ) : (
         <motion.section
@@ -56,7 +56,7 @@ const Report = () => {
               <X />
             </Button>
 
-            <ReportForm type={type} id={id} />
+            <ReportForm id={id} type={type} />
           </motion.div>
         </motion.section>
       )}

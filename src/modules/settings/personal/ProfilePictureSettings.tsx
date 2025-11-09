@@ -1,146 +1,136 @@
-import { API } from "../../../utils/api";
-import { ROUTES } from "../../../routes/routes";
-import { FileUpload } from "../../../types/form";
-import cuid from "cuid";
-import { FormEvent, useState } from "react";
-import { usePersonalSettings } from "../../../hooks/settings/usePersonalSettings";
-import { useUploadProfilePicture } from "../../../hooks/profile/useUploadProfilePicture";
-import { useNavigate, Link } from "react-router";
-import { useMounted } from "../../../hooks/useMounted";
-import { useAuth } from "../../../hooks/auth/useAuth";
+import { useStore } from "@tanstack/react-form";
+import { MouseEvent, useEffect, useMemo, useState } from "react";
+import { Link, useNavigate } from "react-router";
 import { toast } from "sonner";
+import { useAuth } from "../../../hooks/auth/useAuth";
+import { useAppForm } from "../../../hooks/form/hooks";
+import { useUploadProfilePicture } from "../../../hooks/profile/useUploadProfilePicture";
+import { usePersonalSettings } from "../../../hooks/settings/usePersonalSettings";
+import { useMounted } from "../../../hooks/useMounted";
+import { ROUTES } from "../../../routes/routes";
+import {
+  profilePictureSchema,
+  ProfilePictureValues,
+} from "../../../schemas/profileSchema";
 import {
   getImageDominantColor,
   getImageDominantColorAndPalette,
-} from "../../../utils/functions";
+} from "../../../utils/colors";
 
 import Back from "../../../components/Back";
-import Dropzone from "../../../components/Dropzone";
-import ToggleButton from "../../../components/ToggleButton";
 import StateButton from "../../../components/StateButton";
 
 import { Upload } from "lucide-react";
-import { AuthModel } from "../../../models/authModel";
+
+const defaultValues: ProfilePictureValues = {
+  image: undefined as unknown as File,
+  changeBackground: false,
+};
 
 const ProfilePictureSettings = () => {
-  const navigate = useNavigate();
+  const { auth } = useAuth();
   const { setData } = usePersonalSettings();
 
-  const [images, setImages] = useState<FileUpload[]>([]);
   const [colorPreview, setColorPreview] = useState<string | null>(null);
-  const [changeBackground, setChangeBackground] = useState<boolean>(false);
 
+  const navigate = useNavigate();
   const isMounted = useMounted();
-  const { auth, setAuth } = useAuth();
 
-  const onDrop = (acceptedFiles: File[]) => {
-    setImages([]);
-
-    acceptedFiles.forEach((file) => {
-      const reader = new FileReader();
-
-      reader.onload = (e) => {
-        if (e.target?.result) {
-          setImages((prevState) => [
-            ...prevState,
-            {
-              id: cuid(),
-              file,
-              dataUrl: e?.target?.result as string,
-              name: file.name,
-              size: file.size,
-              type: file.type,
-            },
-          ]);
-        }
-
-        getImageDominantColor(URL.createObjectURL(file))
-          .then((color) => {
-            setColorPreview(color);
-          })
-          .catch((error) => {
-            toast.error("Hiba történt a kép feldolgozása során.");
-          });
-      };
-
-      reader.readAsDataURL(file);
-    });
-  };
-
-  const onDropRejected = (fileRejections: { errors: { code: string }[] }[]) => {
-    const errorCode = fileRejections[0]?.errors[0]?.code;
-    switch (errorCode) {
-      case "file-too-large":
-        toast.error("A fájl mérete túl nagy. A megengedett méret 1MB.");
-        break;
-      case "file-invalid-type":
-        toast.error("Hibás fájl formátum.");
-        break;
-      default:
-        toast.error("Hiba történt a fájl feltöltése során.");
-        break;
-    }
-  };
-
-  const onFileDialogCancel = () => {
-    setImages([]);
-  };
-
-  const uploadProfilePictureMutation = useUploadProfilePicture((response) => {
-    setData({
-      profilePicture: response.data.message,
-    });
-
-    setAuth((prev: any) => ({
-      ...prev,
-      user: {
-        ...prev.user,
-        profilePicture: response.data.message,
-      },
-    }));
+  const uploadMutation = useUploadProfilePicture((response) => {
+    // Kontextus
+    setData({ profilePicture: response.data.message });
 
     setTimeout(() => {
       if (isMounted()) {
-        navigate(ROUTES.SETTINGS.ROOT);
+        navigate(ROUTES.SETTINGS.ROOT, { replace: true });
       }
     }, 500);
   });
 
-  const handleFormSubmit = async (e: FormEvent) => {
-    e.preventDefault();
+  const form = useAppForm({
+    defaultValues,
 
-    if (images.length === 0) {
-      toast.warning("Először tölts fel egy képet a módosításhoz.");
-      return Promise.reject("No image uploaded");
-    }
+    validators: { onSubmit: profilePictureSchema },
 
-    const uploadPromise = (async () => {
-      const { dominantColor, palette } = await getImageDominantColorAndPalette(
-        URL.createObjectURL(images[0].file),
-        12
-      );
-      const paletteString = palette.join(";");
+    onSubmit: async ({ value, formApi }) => {
+      const file = value.image;
+      const url = URL.createObjectURL(file);
 
-      const data: Record<string, any> = {
-        profile_picture: images[0].file,
-        profile_picture_color_palette: paletteString,
-      };
+      try {
+        // Előfeldolgozás: domináns szín + paletta
+        const { dominantColor, palette } =
+          await getImageDominantColorAndPalette(url, 12);
+        const paletteString = palette.join(";");
 
-      if (changeBackground) {
-        data.profile_background_color = dominantColor;
+        const data: Record<string, any> = {
+          profile_picture: file,
+          profile_picture_color_palette: paletteString,
+        };
+
+        if (value.changeBackground) {
+          data.profile_background_color = dominantColor;
+        }
+
+        const uploadPromise = uploadMutation.mutateAsync(data);
+
+        toast.promise(uploadPromise, {
+          loading: "Kép feltöltése folyamatban...",
+          success: "Profilképed frissült.",
+          error: "Hiba történt a kép feldolgozása közben.",
+        });
+
+        await uploadPromise;
+      } finally {
+        URL.revokeObjectURL(url);
       }
 
-      await uploadProfilePictureMutation.mutateAsync(data);
+      formApi.reset();
+    },
+
+    onSubmitInvalid: async ({ value, formApi }) => {
+      toast.warning("Először tölts fel egy képet a módosításhoz.");
+      throw new Error("Invalid form submission");
+    },
+  });
+
+  const handleSubmit = async (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+
+    await form.handleSubmit();
+    if (!form.store.state.isValid) {
+      throw new Error("Invalid form submission");
+    }
+  };
+
+  // Egyszerű preview a mezőértékből (a FormDropzone beállítja a File-t)
+  const file = useStore(form.store, (state) => state.values.image);
+  const previewUrl = useMemo(
+    () => (file ? URL.createObjectURL(file) : null),
+    [file]
+  );
+
+  // Domináns szín számítás *előnézetkor* is (nem csak submitkor)
+  useEffect(() => {
+    if (!previewUrl) {
+      setColorPreview(null);
+      return;
+    }
+
+    let cancelled = false;
+    (async () => {
+      try {
+        const dominantColor = await getImageDominantColor(previewUrl);
+        if (!cancelled) {
+          setColorPreview(dominantColor);
+        }
+      } catch (error) {}
     })();
 
-    toast.promise(uploadPromise, {
-      loading: "Kép feltöltése folyamatban...",
-      success: "Profilképed frissült.",
-      error: "Hiba történt a kép feldolgozása közben.",
-    });
-
-    return uploadPromise;
-  };
+    return () => {
+      cancelled = true;
+      URL.revokeObjectURL(previewUrl);
+    };
+  }, [previewUrl]);
 
   return (
     <div className='page__wrapper'>
@@ -152,16 +142,27 @@ const ProfilePictureSettings = () => {
           Maximum 1 darab képet tölthetsz fel, amely nem lehet nagyobb mint 1MB.
         </p>
 
-        <form>
-          <Dropzone
-            accept={{ "image/*": [".png", ".jpg", ".jpeg"] }}
-            multiple={false}
-            maxFiles={1}
-            maxSize={1048576}
-            onDrop={onDrop}
-            onDropRejected={onDropRejected}
-            onFileDialogCancel={onFileDialogCancel}
-          />
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+          }}>
+          {/* Fájlmező */}
+          <form.AppField
+            name='image'
+            validators={{
+              onChange: profilePictureSchema.shape.image,
+            }}>
+            {(field) => (
+              <field.Dropzone
+                accept={{ "image/*": [".png", ".jpg", ".jpeg", ".webp"] }}
+                multiple={false}
+                maxFiles={1}
+                maxSize={1 * 1024 * 1024}
+                required
+              />
+            )}
+          </form.AppField>
           <p className='page__desc mb-2'>
             Amikor új profilképet állítasz be, automatikusan kiválasztunk egy
             színt, amit háttérként használhatsz a profilodon. Ezt a színt
@@ -174,29 +175,35 @@ const ProfilePictureSettings = () => {
             oldalon.
           </p>
 
-          {images.length > 0 && (
+          {/* Előnézet + domináns szín jelző */}
+          {previewUrl && (
             <div className='img-prev'>
-              <img
-                src={API.MEDIA_URL + images[0].dataUrl}
-                alt={images[0].name}
-              />
+              <img src={previewUrl} alt={file.name} />
               <div
                 className='color-prev'
-                style={{ backgroundColor: colorPreview! }}
+                style={{ backgroundColor: colorPreview ?? "transparent" }}
+                aria-label={colorPreview ?? "no-color"}
+                title={colorPreview ?? ""}
               />
             </div>
           )}
 
-          <ToggleButton
-            label='Profil háttérszín beállítása a kép alapján'
-            value={changeBackground}
-            onChange={setChangeBackground}
-          />
+          {/* Háttérszín beállítás flag */}
+          <form.AppField
+            name='changeBackground'
+            validators={{
+              onChange: profilePictureSchema.shape.changeBackground,
+            }}>
+            {(field) => (
+              <field.ToggleButton text='Profil háttérszín beállítása a kép alapján' />
+            )}
+          </form.AppField>
 
           <StateButton
+            type='submit'
             className='primary'
             text='Kép módosítása'
-            onClick={handleFormSubmit}>
+            onClick={handleSubmit}>
             <Upload />
           </StateButton>
         </form>

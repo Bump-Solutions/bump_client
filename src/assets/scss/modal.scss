@@ -146,8 +146,8 @@
 
     .close {
       position: fixed;
-      top: 1rem;
-      right: 1rem;
+      top: 1.25rem;
+      right: 1.5rem;
       border-radius: $border-radius-50;
       padding: 0.5rem;
       height: auto;
@@ -181,7 +181,7 @@
       display: inline-block;
       font-size: 1.25rem;
       padding: 0 1.5rem;
-      margin-right: 1.5rem;
+      margin-right: 2rem;
       color: $clr-font-headline;
 
       span {

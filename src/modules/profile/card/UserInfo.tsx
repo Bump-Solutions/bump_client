@@ -1,7 +1,6 @@
-import { ROUTES } from "../../../routes/routes";
 import { Link, useLocation } from "react-router";
 import { useProfile } from "../../../hooks/profile/useProfile";
-import { useState, useEffect } from "react";
+import { ROUTES } from "../../../routes/routes";
 
 interface Stat {
   label: string;
@@ -13,22 +12,20 @@ const UserInfo = () => {
   const location = useLocation();
   const { user, isOwnProfile } = useProfile();
 
-  const [stats, setStats] = useState<Stat[]>([]);
-
-  useEffect(() => {
-    setStats([
-      {
-        label: "Követők",
-        value: user?.followersCount || null,
-        href: ROUTES.PROFILE(user?.username!).FOLLOWERS,
-      },
-      {
-        label: "Követések",
-        value: user?.followingsCount || null,
-        href: ROUTES.PROFILE(user?.username!).FOLLOWINGS,
-      },
-    ]);
-  }, [user]);
+  const stats: Stat[] = user?.username
+    ? [
+        {
+          label: "Követők",
+          value: user?.followersCount ?? null, // 0 is rendben marad
+          href: ROUTES.PROFILE(user.username).FOLLOWERS,
+        },
+        {
+          label: "Követések",
+          value: user?.followingsCount ?? null,
+          href: ROUTES.PROFILE(user.username).FOLLOWINGS,
+        },
+      ]
+    : [];
 
   return (
     <div className='user__info__wrapper'>

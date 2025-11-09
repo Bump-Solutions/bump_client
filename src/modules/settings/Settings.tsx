@@ -1,12 +1,12 @@
-import "../../assets/css/settings.css";
-import { ENUM } from "../../utils/enum";
+import { useMediaQuery } from "react-responsive";
 import { Outlet, useLocation } from "react-router";
 import { useTitle } from "react-use";
-import { useMediaQuery } from "react-responsive";
+import "../../assets/css/settings.css";
+import { ENUM } from "../../utils/enum";
 
+import Back from "../../components/Back";
 import BasicSettingsProvider from "../../context/PersonalSettingsProvider";
 import SettingsNav from "./SettingsNav";
-import Back from "../../components/Back";
 
 const Settings = () => {
   useTitle(`Beállítások - ${ENUM.BRAND.NAME}`);
