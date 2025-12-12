@@ -1,4 +1,4 @@
-import { accountSchema, personalSchema } from "../schemas/signupSchema";
+import { z } from "zod";
 
 export async function touchAndValidateFields(
   form: any,
@@ -14,24 +14,28 @@ export async function touchAndValidateFields(
   }
 }
 
-export async function canGoNext(form: any) {
-  const section = form.store.state.values.section as "account" | "personal";
-  const schema = section === "account" ? accountSchema : personalSchema;
-
+export async function canGoNext(form: any, schema: z.ZodType<any>) {
   const errors = await form.parseValuesWithSchemaAsync(schema);
   if (errors) {
+    form.setErrorMap(errors);
+
     return { isValid: false, errors };
   }
 
+  form.setErrorMap({});
   return { isValid: true, errors: null };
 }
 
-export function resetErroredFields(form: any, paths: readonly string[]) {
-  paths.forEach((p) => {
-    const meta = form.getFieldMeta(p as any);
-    const hasError =
-      !!meta?.errors &&
-      (Array.isArray(meta.errors) ? meta.errors.length > 0 : true);
-    if (hasError) form.resetField(p as any);
+function hasError(meta: any) {
+  return (
+    !!meta?.errors &&
+    (Array.isArray(meta.errors) ? meta.errors.length > 0 : true)
+  );
+}
+
+export function resetErroredFields(form: any, fields: readonly string[]) {
+  fields.forEach((f) => {
+    const meta = form.getFieldMeta(f as any);
+    if (hasError(meta)) form.resetField(f as any);
   });
 }

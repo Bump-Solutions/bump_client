@@ -1,182 +1,168 @@
-import { forwardRef, useImperativeHandle } from "react";
-import { useSell } from "../../../hooks/product/useSell";
-import { useDebounce } from "../../../hooks/useDebounce";
-import { toast } from "sonner";
+import { z } from "zod";
+import { withForm } from "../../../hooks/form/hooks";
+import { SELL_STEPS, sellDetailsSchema } from "../../../schemas/sellSchema";
+import { sellFormOptions } from "../../../utils/formOptions";
 
-import Input from "../../../components/Input";
-import TextArea from "../../../components/TextArea";
+import Button from "../../../components/Button";
+import BrandChips from "../chips/BrandChips";
+import ColorwayChips from "../chips/ColorwayChips";
+import ModelChips from "../chips/ModelChips";
 
-import BrandChips from "./BrandChips";
-import ModelChips from "./ModelChips";
-import ColorwayChips from "./ColorwayChips";
+import { MoveRight } from "lucide-react";
 
-interface DetailsStepRef {
-  isValid: () => boolean;
-}
+type DetailsStepProps = {
+  currentStepIndex: number;
+  next: (schema: z.ZodType<any>) => void;
+  prev: () => void;
+};
 
-const DetailsStep = forwardRef<DetailsStepRef>(({}, ref) => {
-  const { data, updateData, errors, setErrors } = useSell();
+const DetailsStep = withForm({
+  ...sellFormOptions,
+  props: {} as DetailsStepProps,
+  render: function Render({ form, currentStepIndex, next, prev }) {
+    const isCatalog = form.getFieldValue("select.isCatalog");
 
-  useImperativeHandle(ref, () => ({ isValid }));
+    return (
+      <>
+        <div className='modal__content'>
+          <div className='step step-2'>
+            <div
+              className={`details__wrapper ${
+                isCatalog ? "catalog" : "custom"
+              }`}>
+              {/* Cím */}
+              <form.AppField
+                name='details.title'
+                validators={{
+                  onChange: sellDetailsSchema.shape.details.shape.title,
+                }}>
+                {(field) => (
+                  <field.Input
+                    type='text'
+                    label='Cím'
+                    required
+                    placeholder='pl. Nike Air Force 1 Triple White'
+                    autoFocus
+                    tabIndex={0}
+                  />
+                )}
+              </form.AppField>
 
-  const isValid = () => {
-    const inputFields = {
-      title: data.title,
-      brand: data.product.brand,
-      model: data.product.model,
-      colorway: data.product.colorWay,
-    };
+              {/* Leírás */}
+              <form.AppField
+                name='details.description'
+                validators={{
+                  onChange: sellDetailsSchema.shape.details.shape.description,
+                }}>
+                {(field) => (
+                  <field.TextArea
+                    label='Leírás'
+                    placeholder='pl. Eladó Nike Force 1, 42-es méretben, jó állapotban.'
+                    tabIndex={1}
+                    maxLength={500}
+                    rows={4}
+                  />
+                )}
+              </form.AppField>
 
-    const emptyInputs = Object.keys(inputFields).filter(
-      (key) => !inputFields[key as keyof typeof inputFields]
+              {isCatalog ? (
+                <>
+                  {/* Márka */}
+                  <BrandChips form={form} />
+                  {/* Modell */}
+                  <ModelChips form={form} />
+                  {/* Színállás */}
+                  <ColorwayChips form={form} />
+                </>
+              ) : (
+                <>
+                  {/* Márka */}
+                  <form.AppField
+                    name='details.product.brand'
+                    validators={{
+                      onChange:
+                        sellDetailsSchema.shape.details.shape.product.shape
+                          .brand,
+                    }}>
+                    {(field) => (
+                      <field.Input
+                        type='text'
+                        label='Márka'
+                        required
+                        placeholder='pl. Nike'
+                        tabIndex={2}
+                      />
+                    )}
+                  </form.AppField>
+
+                  {/* Modell */}
+                  <form.AppField
+                    name='details.product.model'
+                    validators={{
+                      onChange:
+                        sellDetailsSchema.shape.details.shape.product.shape
+                          .model,
+                    }}>
+                    {(field) => (
+                      <field.Input
+                        type='text'
+                        label='Modell'
+                        required
+                        placeholder='pl. Air Force 1'
+                        tabIndex={3}
+                      />
+                    )}
+                  </form.AppField>
+
+                  {/* Színállás */}
+                  <form.AppField
+                    name='details.product.colorWay'
+                    validators={{
+                      onChange:
+                        sellDetailsSchema.shape.details.shape.product.shape
+                          .colorWay,
+                    }}>
+                    {(field) => (
+                      <field.Input
+                        type='text'
+                        label='Színállás'
+                        required
+                        placeholder='pl. Triple White'
+                        tabIndex={4}
+                      />
+                    )}
+                  </form.AppField>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+
+        <div className='modal__actions'>
+          <span className='fs-16 fc-gray-600 truncate'>
+            {currentStepIndex + 1} / {SELL_STEPS.length}
+          </span>
+
+          <div className='d-flex gap-2 a-center'>
+            <Button
+              type='button'
+              text='Vissza'
+              className='tertiary'
+              onClick={prev}
+            />
+
+            <Button
+              type='button'
+              text='Folytatás'
+              className={`tertiary icon--reverse `}
+              onClick={() => next(sellDetailsSchema)}>
+              <MoveRight />
+            </Button>
+          </div>
+        </div>
+      </>
     );
-
-    if (emptyInputs.length > 0) {
-      emptyInputs.forEach((key) => {
-        setErrors((prev) => ({
-          ...prev,
-          [key]: "A mező kitöltése kötelező.",
-        }));
-      });
-
-      toast.error("Kérjük töltsd ki a csillaggal jelölt mezőket!");
-      return false;
-    }
-
-    if (Object.values(errors).some((x) => x !== "")) {
-      toast.error("Kérjük javítsd a hibás mezőket!");
-      return false;
-    }
-
-    return true;
-  };
-
-  useDebounce(
-    () => {
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        title: "",
-      }));
-    },
-    0,
-    [data.title]
-  );
-
-  useDebounce(
-    () => {
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        brand: "",
-      }));
-    },
-    0,
-    [data.product.brand]
-  );
-
-  useDebounce(
-    () => {
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        model: "",
-      }));
-    },
-    0,
-    [data.product.model]
-  );
-
-  useDebounce(
-    () => {
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        colorway: "",
-      }));
-    },
-    0,
-    [data.product.colorWay]
-  );
-
-  return (
-    <div
-      className={`details__wrapper ${
-        data.product.isCatalog ? "catalog" : "custom"
-      }`}>
-      <Input
-        type='text'
-        name='pr_title'
-        value={data.title}
-        placeholder='pl. Nike Air Force 1 Triple White'
-        label='Cím'
-        required
-        onChange={(value) => {
-          updateData({ title: value });
-        }}
-        error={errors.title}
-        success={!!data.title && !errors.title}
-        autoFocus
-      />
-      <TextArea
-        name='pr_description'
-        value={data.description}
-        label='Leírás'
-        placeholder='pl. Eladó Nike Force 1, 42-es méretben, jó állapotban.'
-        onChange={(value) => {
-          updateData({ description: value });
-        }}
-        maxLength={500}
-        rows={4}
-      />
-
-      {data.product.isCatalog ? (
-        <>
-          <BrandChips />
-          <ModelChips />
-          <ColorwayChips />
-        </>
-      ) : (
-        <>
-          <Input
-            type='text'
-            name='pr_brand'
-            value={data.product?.brand || ""}
-            placeholder='pl. Nike'
-            label='Márka'
-            required
-            onChange={(value) =>
-              updateData({ product: { ...data.product, brand: value } })
-            }
-            error={errors.brand}
-            success={!!data.product.brand && !errors.brand}
-          />
-          <Input
-            type='text'
-            name='pr_model'
-            value={data.product?.model || ""}
-            placeholder='pl. Air Force 1'
-            label='Modell'
-            required
-            onChange={(value) =>
-              updateData({ product: { ...data.product, model: value } })
-            }
-            error={errors.model}
-            success={!!data.product.model && !errors.model}
-          />
-          <Input
-            type='text'
-            name='pr_colorway'
-            value={data.product.colorWay || ""}
-            placeholder='pl. Triple White'
-            label='Színállás'
-            required
-            onChange={(value) =>
-              updateData({ product: { ...data.product, colorWay: value } })
-            }
-            error={errors.colorWay}
-            success={!!data.product?.colorWay && !errors.colorWay}
-          />
-        </>
-      )}
-    </div>
-  );
+  },
 });
 
 export default DetailsStep;

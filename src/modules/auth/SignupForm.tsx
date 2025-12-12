@@ -1,29 +1,30 @@
-import "../../assets/css/multistepform.css";
-import { SignupModel } from "../../models/authModel";
-import { toast } from "sonner";
 import { useStore } from "@tanstack/react-form";
-import { signupFormOptions } from "../../utils/formOptions";
+import { toast } from "sonner";
+import "../../assets/css/multistepform.css";
 import { useLogin } from "../../hooks/auth/useLogin";
 import { useSignup } from "../../hooks/auth/useSignup";
 import { useAppForm } from "../../hooks/form/hooks";
+import { SignupModel } from "../../models/authModel";
+import { signupFormOptions } from "../../utils/formOptions";
 
-import SignupFormHeader from "./SignupFormHeader";
 import AccountStep from "./AccountStep";
 import PersonalStep from "./PersonalStep";
+import SignupFormHeader from "./SignupFormHeader";
 
-export const ACCOUNT_FIELDS = [
-  "account.email",
-  "account.username",
-  "account.password",
-  "account.passwordConfirmation",
-] as const;
-
-export const PERSONAL_FIELDS = [
-  "personal.firstName",
-  "personal.lastName",
-  "personal.phoneNumber",
-  "personal.gender",
-] as const;
+export const SIGNUP_FIELDS = {
+  account: [
+    "account.email",
+    "account.username",
+    "account.password",
+    "account.passwordConfirmation",
+  ],
+  personal: [
+    "personal.firstName",
+    "personal.lastName",
+    "personal.phoneNumber",
+    "personal.gender",
+  ],
+};
 
 // https://stackblitz.com/edit/tanstack-form-yjtaf2ug?file=src%2Ffeatures%2Ftree-house%2Fpage.tsx&preset=node
 const SignupForm = () => {
@@ -67,7 +68,7 @@ const SignupForm = () => {
     },
   });
 
-  const section = useStore(form.store, (state) => state.values.section);
+  const step = useStore(form.store, (state) => state.values.step);
 
   return (
     <form
@@ -79,8 +80,8 @@ const SignupForm = () => {
       <SignupFormHeader form={form} />
 
       <div className='form__body'>
-        {section === "account" && <AccountStep form={form} />}
-        {section === "personal" && <PersonalStep form={form} />}
+        {step === "account" && <AccountStep form={form} />}
+        {step === "personal" && <PersonalStep form={form} />}
       </div>
     </form>
   );

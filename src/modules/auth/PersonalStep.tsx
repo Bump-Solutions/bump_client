@@ -1,15 +1,15 @@
-import { ENUM } from "../../utils/enum";
 import { MouseEvent } from "react";
 import { toast } from "sonner";
 import { withForm } from "../../hooks/form/hooks";
 import { personalSchema } from "../../schemas/signupSchema";
-import { signupFormOptions } from "../../utils/formOptions";
-import { PERSONAL_FIELDS } from "./SignupForm";
+import { ENUM } from "../../utils/enum";
 import { resetErroredFields } from "../../utils/form";
+import { signupFormOptions } from "../../utils/formOptions";
+import { SIGNUP_FIELDS } from "./SignupForm";
 
+import Button from "../../components/Button";
 import FieldGroup from "../../components/form/FieldGroup";
 import StateButton from "../../components/StateButton";
-import Button from "../../components/Button";
 
 import { ClipboardPen, MoveLeft } from "lucide-react";
 
@@ -17,8 +17,8 @@ const PersonalStep = withForm({
   ...signupFormOptions,
   render: function Render({ form }) {
     const handlePrev = () => {
-      resetErroredFields(form, PERSONAL_FIELDS);
-      form.setFieldValue("section", "account");
+      resetErroredFields(form, SIGNUP_FIELDS.personal);
+      form.setFieldValue("step", "account");
     };
 
     const handleSubmit = async (e: MouseEvent<HTMLButtonElement>) => {

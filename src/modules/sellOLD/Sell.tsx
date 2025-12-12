@@ -1,14 +1,15 @@
-import { useNavigate } from "react-router";
 import "../../assets/css/sell.css";
 import { ENUM } from "../../utils/enum";
 
-import { AnimatePresence, motion } from "framer-motion";
 import { useEffect } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { useMediaQuery } from "react-responsive";
+import { useNavigate } from "react-router";
 import { useTitle } from "react-use";
 
-import Button from "../../components/Button";
 import Drawer from "../../components/Drawer";
+import Button from "../../components/Button";
+
 import SellForm from "./SellForm";
 
 import { X } from "lucide-react";

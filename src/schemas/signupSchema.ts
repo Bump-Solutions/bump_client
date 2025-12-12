@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { REGEX } from "../utils/regex";
 import { ENUM } from "../utils/enum";
+import { REGEX } from "../utils/regex";
 
 const GENDER_VALUES = ENUM.AUTH.GENDER_OPTIONS.map(
   (option) => option.value
@@ -85,7 +85,7 @@ export const personalSchema = z.object({
 });
 
 export const signupSchema = z.object({
-  section: z.enum(["account", "personal"]),
+  step: z.enum(["account", "personal"]),
   ...accountSchema.shape,
   ...personalSchema.shape,
 });

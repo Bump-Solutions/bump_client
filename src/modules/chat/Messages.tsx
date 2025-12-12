@@ -1,21 +1,18 @@
+import { useQueryClient } from "@tanstack/react-query";
+import { useEffect, useMemo } from "react";
+import { useOutletContext } from "react-router";
+import useWebSocket from "react-use-websocket";
+import { useAuth } from "../../hooks/auth/useAuth";
+import { ChatGroupModel, InboxModel } from "../../models/chatModel";
 import { API } from "../../utils/api";
 import { QUERY_KEY } from "../../utils/queryKeys";
-import { useOutletContext } from "react-router";
-import { useAuth } from "../../hooks/auth/useAuth";
-import { useEffect, useMemo } from "react";
-import { useQueryClient } from "@tanstack/react-query";
-import {
-  ChatGroupModel,
-  InboxModel,
-  MessageModel,
-} from "../../models/chatModel";
-import useWebSocket from "react-use-websocket";
 
-import MessagesHeader from "./MessagesHeader";
-import MessagesContent from "./MessagesContent";
-import MessagesFooter from "./MessagesFooter";
 import { MessageDTO } from "../../dtos/ChatDTO";
 import { fromMessageDTO } from "../../mappers/chatMapper";
+
+import MessagesContent from "./MessagesContent";
+import MessagesFooter from "./MessagesFooter";
+import MessagesHeader from "./MessagesHeader";
 
 interface OutletContextType {
   chat: string;

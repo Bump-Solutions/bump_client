@@ -6,7 +6,11 @@
   margin: 0.5rem 0;
 
   // FÓKUSZ: ha az input fókuszban van
-  &:has(.field__input input.focused, .dropdown__input.focused) {
+  &:has(
+      .field__input input.focused,
+      .field__input textarea.focused,
+      .dropdown__input.focused
+    ) {
     .field__label {
       color: color(blue, 500);
 
@@ -18,7 +22,9 @@
 
   // FILLED:  ha NEM placeholder-shown (=> van érték, vagy autofill)
   &:has(.field__input input:not(:placeholder-shown)),
-  &:has(.field__input input:-webkit-autofill) {
+  &:has(.field__input textarea:not(:placeholder-shown)),
+  &:has(.field__input input:-webkit-autofill),
+  &:has(.field__input textarea:-webkit-autofill) {
     .field__label {
       color: $clr-font-headline;
 

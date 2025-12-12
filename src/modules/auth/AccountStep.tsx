@@ -1,19 +1,22 @@
-import { withForm } from "../../hooks/form/hooks";
 import { useStore } from "@tanstack/react-form";
-import { accountSchema } from "../../schemas/signupSchema";
-import { signupFormOptions } from "../../utils/formOptions";
-import { canGoNext, touchAndValidateFields } from "../../utils/form";
 import { toast } from "sonner";
-import { ACCOUNT_FIELDS, PERSONAL_FIELDS } from "./SignupForm";
+import { withForm } from "../../hooks/form/hooks";
+import { accountSchema, personalSchema } from "../../schemas/signupSchema";
+import { canGoNext, touchAndValidateFields } from "../../utils/form";
+import { signupFormOptions } from "../../utils/formOptions";
+import { SIGNUP_FIELDS } from "./SignupForm";
 
-import FieldGroup from "../../components/form/FieldGroup";
 import Button from "../../components/Button";
+import FieldGroup from "../../components/form/FieldGroup";
 
 import { MoveRight } from "lucide-react";
 
 const AccountStep = withForm({
   ...signupFormOptions,
   render: function Render({ form }) {
+    const step = useStore(form.store, (state) => state.values.step);
+    const schema = step === "account" ? accountSchema : personalSchema;
+
     const isBusy = useStore(
       form.store,
       (state) =>
@@ -23,15 +26,16 @@ const AccountStep = withForm({
     const handleNext = async () => {
       if (isBusy) return;
 
-      const { isValid } = await canGoNext(form);
+      const { isValid } = await canGoNext(form, schema);
 
       if (isValid) {
-        form.setFieldValue("section", "personal");
+        form.setFieldValue("step", "personal");
         return;
       }
 
-      const section = form.store.state.values.section as "account" | "personal";
-      const fields = section === "account" ? ACCOUNT_FIELDS : PERSONAL_FIELDS;
+      const step = form.store.state.values.step;
+      const fields =
+        step === "account" ? SIGNUP_FIELDS.account : SIGNUP_FIELDS.personal;
 
       await touchAndValidateFields(form, fields);
 

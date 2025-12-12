@@ -1,12 +1,14 @@
 import { createFormHook, createFormHookContexts } from "@tanstack/react-form";
 
+import FormDropzone from "../../components/form/FormDropzone";
 import FormInput from "../../components/form/FormInput";
 import FormPassword from "../../components/form/FormPassword";
 import FormPhone from "../../components/form/FormPhone";
 import FormSelect from "../../components/form/FormSelect";
 import FormTextArea from "../../components/form/FormTextArea";
 import FormToggleButton from "../../components/form/FormToggleButton";
-import FormDropzone from "../../components/form/FormDropzone";
+
+export type AppFormApi = ReturnType<typeof useAppForm>;
 
 const { fieldContext, formContext, useFieldContext, useFormContext } =
   createFormHookContexts();
@@ -26,4 +28,4 @@ const { useAppForm, withForm } = createFormHook({
   formComponents: {},
 });
 
-export { useAppForm, withForm, useFieldContext, useFormContext };
+export { useAppForm, useFieldContext, useFormContext, withForm };

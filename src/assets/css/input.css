@@ -1,16 +1,20 @@
 .field {
   margin: 0.5rem 0;
 }
-.field:has(.field__input input.focused, .dropdown__input.focused) .field__label {
+.field:has(.field__input input.focused,
+.field__input textarea.focused,
+.dropdown__input.focused) .field__label {
   color: #0070e8;
 }
-.field:has(.field__input input.focused, .dropdown__input.focused) .field__label span.required {
+.field:has(.field__input input.focused,
+.field__input textarea.focused,
+.dropdown__input.focused) .field__label span.required {
   color: #cc0000;
 }
-.field:has(.field__input input:not(:placeholder-shown)) .field__label, .field:has(.field__input input:-webkit-autofill) .field__label {
+.field:has(.field__input input:not(:placeholder-shown)) .field__label, .field:has(.field__input textarea:not(:placeholder-shown)) .field__label, .field:has(.field__input input:-webkit-autofill) .field__label, .field:has(.field__input textarea:-webkit-autofill) .field__label {
   color: #212529;
 }
-.field:has(.field__input input:not(:placeholder-shown)) .field__label span.required, .field:has(.field__input input:-webkit-autofill) .field__label span.required {
+.field:has(.field__input input:not(:placeholder-shown)) .field__label span.required, .field:has(.field__input textarea:not(:placeholder-shown)) .field__label span.required, .field:has(.field__input input:-webkit-autofill) .field__label span.required, .field:has(.field__input textarea:-webkit-autofill) .field__label span.required {
   color: #cc0000;
 }
 .field:has(.field__input input.error, .dropdown__input.error) .field__label {

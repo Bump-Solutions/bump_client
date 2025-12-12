@@ -116,14 +116,14 @@ export function toCreateProductDTO(
       brand: model.product.brand,
       model: model.product.model,
       color_way: model.product.colorWay,
-      category: 2,
+      category: 0,
       colors: "#fff",
     },
 
     items: model.items.map((item) => ({
-      condition: item.condition?.value!,
-      gender: item.gender?.value!,
-      size: item.size?.value!,
+      condition: item.condition!,
+      gender: item.gender!,
+      size: item.size!,
       price: item.price!,
       state: 0, // 0 - available
     })),

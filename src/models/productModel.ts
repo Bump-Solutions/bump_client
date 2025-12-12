@@ -1,4 +1,4 @@
-import { FileUpload, Option } from "../types/form";
+import { FileUpload } from "../types/form";
 
 export interface InventoryModel {
   products: ProductListModel[];
@@ -123,9 +123,9 @@ export interface CreateProductModel {
 
   // 3rd step - items
   items: {
-    condition: Option<number> | null; // Condition of the item, null if not set
-    gender: Option<number> | null;
-    size: Option<number> | null;
+    condition: number | null; // Condition of the item, null if not set
+    gender: number | null;
+    size: number | null;
     price: number | null;
   }[];
 

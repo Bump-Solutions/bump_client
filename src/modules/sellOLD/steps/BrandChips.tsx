@@ -1,11 +1,11 @@
 import { Fragment, useEffect, useState } from "react";
-import { useSell } from "../../../hooks/product/useSell";
 import { useListAvailableBrands } from "../../../hooks/product/useListAvailableBrands";
+import { useSell } from "../../../hooks/product/useSell";
 import { useToggle } from "../../../hooks/useToggle";
 import { BrandModel, BrandsPageModel } from "../../../models/productModel";
 
-import Spinner from "../../../components/Spinner";
 import Chip from "../../../components/Chip";
+import Spinner from "../../../components/Spinner";
 import SearchChip from "./SearchChip";
 
 import { X } from "lucide-react";

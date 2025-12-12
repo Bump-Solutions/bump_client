@@ -1,39 +1,61 @@
-import { forwardRef, useImperativeHandle } from "react";
-import { toast } from "sonner";
-import { useSell } from "../../../hooks/product/useSell";
+import { z } from "zod";
+import { withForm } from "../../../hooks/form/hooks";
+import { SELL_STEPS, sellItemsSchema } from "../../../schemas/sellSchema";
+import { sellFormOptions } from "../../../utils/formOptions";
 
-import ItemForm from "./ItemForm";
-import ItemsList from "./ItemsList";
+import Button from "../../../components/Button";
 
-interface ItemsStepRef {
-  isValid: () => boolean;
-}
+import { MoveRight } from "lucide-react";
+import ItemForm from "../components/ItemForm";
+import ItemsList from "../components/ItemsList";
 
-const ItemsStep = forwardRef<ItemsStepRef>(({}, ref) => {
-  const { data, setErrors } = useSell();
+type ItemsStepProps = {
+  currentStepIndex: number;
+  next: (schema: z.ZodType<any>) => void;
+  prev: () => void;
+};
 
-  useImperativeHandle(ref, () => ({ isValid }));
+const ItemsStep = withForm({
+  ...sellFormOptions,
+  props: {} as ItemsStepProps,
+  render: function Render({ form, currentStepIndex, next, prev }) {
+    return (
+      <>
+        <div className='modal__content'>
+          <div className='step step-3'>
+            <div className='items__wrapper'>
+              <ItemForm form={form} />
+              <div className='divider' />
+              <ItemsList form={form} />
+            </div>
+          </div>
+        </div>
 
-  const isValid = () => {
-    if (data.items.length === 0) {
-      setErrors((prev) => ({
-        ...prev,
-        items: "A mező kitöltése kötelező.",
-      }));
-      toast.error("Kérjük adj hozzá legalább egy tételt!");
-      return false;
-    }
+        <div className='modal__actions'>
+          <span className='fs-16 fc-gray-600 truncate'>
+            {currentStepIndex + 1} / {SELL_STEPS.length}
+          </span>
 
-    return true;
-  };
+          <div className='d-flex gap-2 a-center'>
+            <Button
+              type='button'
+              text='Vissza'
+              className='tertiary'
+              onClick={prev}
+            />
 
-  return (
-    <div className='items__wrapper'>
-      <ItemForm />
-      <div className='divider' />
-      <ItemsList />
-    </div>
-  );
+            <Button
+              type='button'
+              text='Folytatás'
+              className={`tertiary icon--reverse `}
+              onClick={() => next(sellItemsSchema)}>
+              <MoveRight />
+            </Button>
+          </div>
+        </div>
+      </>
+    );
+  },
 });
 
 export default ItemsStep;
