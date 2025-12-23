@@ -1014,6 +1014,82 @@
   color: #cc0000 !important;
 }
 
+.stepper__wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: -moz-fit-content;
+  width: fit-content;
+  height: 3.25rem;
+  border-radius: 1rem;
+  background-color: #f1f3f5;
+  border: 1px solid transparent;
+  overflow: hidden;
+}
+.stepper__wrapper.disabled {
+  background-color: #e9ecef;
+  color: #868e96;
+  cursor: not-allowed;
+}
+.stepper__wrapper.disabled .stepper__btn {
+  cursor: not-allowed !important;
+  color: #868e96 !important;
+}
+.stepper__wrapper.disabled input {
+  cursor: not-allowed !important;
+  color: #868e96 !important;
+}
+.stepper__wrapper.disabled:hover {
+  border: 1px solid transparent;
+  outline: none !important;
+}
+.stepper__wrapper:hover {
+  border: 1px solid #0070e8;
+  outline: 1px solid #0070e8;
+}
+.stepper__wrapper .stepper__btn {
+  all: unset;
+  position: relative;
+  box-sizing: border-box;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  aspect-ratio: 1/1;
+  color: #495057;
+  transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.stepper__wrapper .stepper__btn svg {
+  width: 1.125rem;
+  height: 1.125rem;
+}
+.stepper__wrapper .stepper__btn:active {
+  background-color: #e9ecef;
+}
+.stepper__wrapper input {
+  all: unset;
+  box-sizing: border-box;
+  position: relative;
+  height: 3.25rem;
+  aspect-ratio: 1/1;
+  -moz-appearance: textfield;
+  -webkit-appearance: textfield;
+          appearance: textfield;
+  text-align: center;
+  font-size: 1rem;
+  background-color: transparent;
+}
+.stepper__wrapper.focused:hover {
+  border: 1px solid #0070e8;
+  outline: 1px solid #0070e8;
+}
+.stepper__wrapper.focused .stepper__btn {
+  color: #212529;
+}
+
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {

@@ -87,7 +87,7 @@ const Stepper = ({
   };
 
   return (
-    <div className='input flex-none'>
+    <div className='field_input flex-none'>
       {description && <p className='input__desc'>{description}</p>}
       <div
         className={`stepper__wrapper ${isFocused ? "focused" : ""} ${

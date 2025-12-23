@@ -46,7 +46,7 @@ export const API = {
   AUTH: {
     REFRESH: u("auth/token/refresh"),
     LOGIN: u("auth/token/authenticate"),
-    GOOGLE_AUTH: u("social_auth/google_auth"),
+    GOOGLE_AUTH: u("auth/google_auth"),
     REGISTER: u("auth/registration"),
     LOGOUT: u("auth/token/logout"),
   },

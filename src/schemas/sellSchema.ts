@@ -33,7 +33,14 @@ export const SELL_FIELDS: Record<SellStep, readonly string[]> = {
     "details.product.model",
     "details.product.colorWay",
   ],
-  items: ["items.items"],
+  items: [
+    "items.draft.gender",
+    "items.draft.size",
+    "items.draft.condition",
+    "items.draft.price",
+    "items.draft.count",
+    "items.items",
+  ],
   upload: ["upload.images"],
 };
 
@@ -85,8 +92,17 @@ export const itemSchema = z.object({
 });
 export type SellItem = z.infer<typeof itemSchema>;
 
+export const itemDraftSchema = z.object({
+  gender: z.number().nullable(),
+  size: z.number().nullable(),
+  condition: z.number().nullable(),
+  price: z.number().nullable(),
+  count: z.number().min(1).max(20),
+});
+
 export const sellItemsSchema = z.object({
   items: z.object({
+    draft: itemDraftSchema.optional(),
     items: z.array(itemSchema).min(1, "Legalább egy eladó tételt adj meg."),
   }),
 });
@@ -130,3 +146,9 @@ export const sellSchema = z.object({
 });
 
 export type SellValues = z.infer<typeof sellSchema>;
+
+export type SellValuesWithDraft = SellValues & {
+  items: SellValues["items"] & {
+    draft: z.infer<typeof itemDraftSchema>;
+  };
+};

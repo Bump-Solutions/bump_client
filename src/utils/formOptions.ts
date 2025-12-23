@@ -1,5 +1,6 @@
 import { formOptions } from "@tanstack/react-form";
 import {
+  itemDraftSchema,
   sellDetailsSchema,
   sellItemsSchema,
   sellSchema,
@@ -67,6 +68,13 @@ const sellDefaultValues: SellValues = {
     },
   },
   items: {
+    draft: itemDraftSchema.parse({
+      gender: null,
+      size: null,
+      condition: null,
+      price: null,
+      count: 1,
+    }),
     items: [],
   },
   upload: {

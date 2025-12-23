@@ -13,10 +13,10 @@ import {
 import { sellFormOptions } from "../../utils/formOptions";
 
 import DetailsStep from "./steps/DetailsStep";
+import ItemsStep from "./steps/ItemsStep";
 import SelectStep from "./steps/SelectStep";
 
 import { ArrowUpRight } from "lucide-react";
-import ItemsStep from "./steps/ItemsStep";
 
 const LABELS: Record<SellStep, string | JSX.Element> = {
   select: "Már nem használod? Itt az ideje eladni! 💸",
