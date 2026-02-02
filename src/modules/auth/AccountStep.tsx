@@ -2,14 +2,14 @@ import { useStore } from "@tanstack/react-form";
 import { toast } from "sonner";
 import { withForm } from "../../hooks/form/hooks";
 import { accountSchema, personalSchema } from "../../schemas/signupSchema";
-import { canGoNext, touchAndValidateFields } from "../../utils/form";
+import { validateStep } from "../../utils/form";
 import { signupFormOptions } from "../../utils/formOptions";
-import { SIGNUP_FIELDS } from "./SignupForm";
 
 import Button from "../../components/Button";
 import FieldGroup from "../../components/form/FieldGroup";
 
 import { MoveRight } from "lucide-react";
+import { SIGNUP_FIELDS } from "./SignupForm";
 
 const AccountStep = withForm({
   ...signupFormOptions,
@@ -20,26 +20,28 @@ const AccountStep = withForm({
     const isBusy = useStore(
       form.store,
       (state) =>
-        state.isValidating || state.isFormValidating || state.isFieldsValidating
+        state.isValidating ||
+        state.isFormValidating ||
+        state.isFieldsValidating,
     );
 
     const handleNext = async () => {
       if (isBusy) return;
 
-      const { isValid } = await canGoNext(form, schema);
-
-      if (isValid) {
-        form.setFieldValue("step", "personal");
-        return;
-      }
-
-      const step = form.store.state.values.step;
       const fields =
         step === "account" ? SIGNUP_FIELDS.account : SIGNUP_FIELDS.personal;
 
-      await touchAndValidateFields(form, fields);
+      const { isValid } = await validateStep(form, fields, {
+        schema,
+        cause: "submit",
+      });
 
-      toast.error("Kérjük javítsd a hibás mezőket!");
+      if (!isValid) {
+        toast.error("Kérjük javítsd a hibás mezőket!");
+        return;
+      }
+
+      form.setFieldValue("step", "personal");
     };
 
     return (
@@ -103,7 +105,7 @@ const AccountStep = withForm({
                 onChangeListenTo: ["account.password"],
                 onChange: ({ value, fieldApi }) => {
                   const password = fieldApi.form.getFieldValue(
-                    "account.password"
+                    "account.password",
                   ) as string;
 
                   if (!value) return "A mező kitöltése kötelező.";

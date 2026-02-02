@@ -1,5 +1,3 @@
-import { FileUpload } from "../types/form";
-
 export interface InventoryModel {
   products: ProductListModel[];
   next: number | null; // The next page number, or null if there are no more pages
@@ -130,7 +128,7 @@ export interface CreateProductModel {
   }[];
 
   // 4th step - images
-  images: FileUpload[];
+  images: File[];
 }
 
 export interface Badge {

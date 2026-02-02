@@ -11,21 +11,24 @@ import Spinner from "../../../components/Spinner";
 import SearchChip from "./SearchChip";
 
 import { X } from "lucide-react";
+import { sellDetailsSchema } from "../../../schemas/sellSchema";
 
 const BrandChips = withForm({
   ...sellFormOptions,
   render: function Render({ form }) {
     const isCatalog = useStore(
       form.store,
-      (state) => state.values.select.isCatalog as boolean
+      (state) => state.values.select.isCatalog as boolean,
     );
+
     const selectedBrand = useStore(
       form.store,
-      (state) => state.values.details.product.brand as string
+      (state) => state.values.details.product.brand as string,
     );
+
     const brandError = useStore(form.store, (state) => {
       const meta = state.fieldMeta["details.product.brand"];
-      if (!meta) return undefined;
+      if (!meta || !meta.isTouched || meta.isValid) return undefined;
 
       const errorMap = meta.errorMap ?? {};
       const fromSubmit = errorMap.onSubmit ?? [];
@@ -78,7 +81,7 @@ const BrandChips = withForm({
                 ...firstPage,
                 products: [{ brand: selectedBrand }, ...firstPage.products],
               },
-            ]
+            ],
       );
     }, [resp, showAll, selectedBrand]);
 
@@ -102,11 +105,7 @@ const BrandChips = withForm({
         form.setFieldValue("details.product.colorWay", "");
         form.setFieldValue("details.product.id", null);
 
-        form.setFieldMeta("details.product.brand", (prev: any) => ({
-          ...prev,
-          errorMap: {},
-          errors: undefined,
-        }));
+        form.resetField("details.product.brand");
 
         return;
       }
@@ -119,12 +118,20 @@ const BrandChips = withForm({
       form.setFieldMeta("details.product.brand", (prev: any) => ({
         ...prev,
         errorMap: {},
-        errors: undefined,
+        errors: [],
       }));
     };
 
     return (
       <div className='my-0_5'>
+        <form.AppField
+          name='details.product.brand'
+          validators={{
+            onChange: sellDetailsSchema.shape.details.shape.product.shape.brand,
+          }}>
+          {() => null}
+        </form.AppField>
+
         <label className='fs-18'>
           Márka{" "}
           <span

@@ -3,11 +3,7 @@ import { Fragment } from "react/jsx-runtime";
 import { toast } from "sonner";
 import { withForm } from "../../hooks/form/hooks";
 import { accountSchema, personalSchema } from "../../schemas/signupSchema";
-import {
-  canGoNext,
-  resetErroredFields,
-  touchAndValidateFields,
-} from "../../utils/form";
+import { resetErroredFields, validateStep } from "../../utils/form";
 import { signupFormOptions } from "../../utils/formOptions";
 import { SIGNUP_FIELDS } from "./SignupForm";
 
@@ -25,7 +21,7 @@ const STEPS = [
 }>;
 
 const stepIndexById: Record<StepId, number> = Object.fromEntries(
-  STEPS.map((s, i) => [s.id, i])
+  STEPS.map((s, i) => [s.id, i]),
 ) as Record<StepId, number>;
 
 const SignupFormHeader = withForm({
@@ -51,17 +47,17 @@ const SignupFormHeader = withForm({
         return;
       }
 
-      const { isValid } = await canGoNext(form, schema);
+      const { isValid } = await validateStep(form, fields, {
+        schema,
+        cause: "submit",
+      });
 
-      // ELŐRE: csak ha a current step valid
-      if (isValid) {
-        form.setFieldValue("step", targetId);
+      if (!isValid) {
+        toast.error("Kérjük javítsd a hibás mezőket!");
         return;
       }
 
-      await touchAndValidateFields(form, fields);
-
-      toast.error("Kérjük javítsd a hibás mezőket!");
+      form.setFieldValue("step", targetId);
     };
 
     return (

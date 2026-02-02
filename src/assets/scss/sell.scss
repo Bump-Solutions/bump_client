@@ -308,6 +308,7 @@
             }
 
             &.step-4 {
+              position: relative;
               width: $max-width-800;
 
               .upload__wrapper {
@@ -316,12 +317,17 @@
                 gap: 1.5rem;
 
                 .dropzone__wrapper {
+                  position: relative;
                   flex: 1;
 
-                  .dropzone {
-                    position: sticky;
+                  .field {
+                    position: sticky !important;
                     margin: 0;
                     top: 1rem;
+
+                    .dropzone {
+                      margin: 0;
+                    }
                   }
                 }
 
@@ -354,6 +360,10 @@
                         img {
                           border: 2px solid color(blue, 500);
                         }
+                      }
+
+                      &:active {
+                        cursor: grabbing;
                       }
 
                       &::before {

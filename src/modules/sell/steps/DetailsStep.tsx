@@ -1,3 +1,4 @@
+import { useStore } from "@tanstack/react-form";
 import { z } from "zod";
 import { withForm } from "../../../hooks/form/hooks";
 import { SELL_STEPS, sellDetailsSchema } from "../../../schemas/sellSchema";
@@ -20,7 +21,10 @@ const DetailsStep = withForm({
   ...sellFormOptions,
   props: {} as DetailsStepProps,
   render: function Render({ form, currentStepIndex, next, prev }) {
-    const isCatalog = form.getFieldValue("select.isCatalog");
+    const isCatalog = useStore(
+      form.store,
+      (state) => state.values.select.isCatalog,
+    );
 
     return (
       <>

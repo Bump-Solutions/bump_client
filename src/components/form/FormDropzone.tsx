@@ -25,22 +25,45 @@ const FormDropzone = ({
   const onDrop = (accepted: File[]) => {
     if (!accepted.length) return;
 
-    const next = multiple ? accepted : accepted[0];
+    let next: File | File[];
+
+    if (multiple) {
+      next = accepted.slice(0, maxFiles);
+    } else {
+      next = accepted[0];
+    }
+
     field.setValue(next);
+    field.setMeta((meta) => ({
+      ...meta,
+      errors: [],
+      errorMap: {},
+    }));
     field.handleBlur();
   };
 
   const onDropRejected = (rejections: { errors: { code: string }[] }[]) => {
     const code = rejections[0]?.errors[0]?.code;
+    console.log(code);
 
-    let message = "Hiba történt a fájl feltöltése során.";
+    let message = "";
 
     switch (code) {
       case "file-too-large":
-        message = "A fájl mérete túl nagy. A megengedett méret 1MB.";
+        message = `A fájl mérete túl nagy. ${maxSize && `A megengedett méret ${maxSize / (1024 * 1024)} MB.`}`;
         break;
       case "file-invalid-type":
-        message = "Hibás fájl formátum. Megengedett: PNG/JPG/JPEG/WebP.";
+        message = `Hibás fájl formátum. Megengedett: ${Object.values(
+          accept || {},
+        )
+          .flat()
+          .join(", ")}`;
+        break;
+      case "too-many-files":
+        message = `Túl sok fájl. Maximum ${maxFiles} fájl tölthető fel egyszerre.`;
+        break;
+      default:
+        message = "Hiba történt a fájl(ok) feltöltése során.";
         break;
     }
 

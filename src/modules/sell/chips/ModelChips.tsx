@@ -11,25 +11,26 @@ import Spinner from "../../../components/Spinner";
 import SearchChip from "./SearchChip";
 
 import { X } from "lucide-react";
+import { sellDetailsSchema } from "../../../schemas/sellSchema";
 
 const ModelChips = withForm({
   ...sellFormOptions,
   render: function Render({ form }) {
     const isCatalog = useStore(
       form.store,
-      (state) => state.values.select.isCatalog as boolean
+      (state) => state.values.select.isCatalog as boolean,
     );
     const selectedBrand = useStore(
       form.store,
-      (state) => state.values.details.product.brand as string
+      (state) => state.values.details.product.brand as string,
     );
     const selectedModel = useStore(
       form.store,
-      (state) => state.values.details.product.model as string
+      (state) => state.values.details.product.model as string,
     );
     const modelError = useStore(form.store, (state) => {
       const meta = state.fieldMeta["details.product.model"];
-      if (!meta) return undefined;
+      if (!meta || !meta.isTouched || meta.isValid) return undefined;
 
       const errorMap = meta.errorMap ?? {};
       const fromSubmit = errorMap.onSubmit ?? [];
@@ -89,7 +90,7 @@ const ModelChips = withForm({
                 ...firstPage,
                 products: [{ model: selectedModel }, ...firstPage.products],
               },
-            ]
+            ],
       );
     }, [resp, showAll, selectedModel]);
 
@@ -113,11 +114,7 @@ const ModelChips = withForm({
         form.setFieldValue("details.product.colorWay", "");
         form.setFieldValue("details.product.id", null);
 
-        form.setFieldMeta("details.product.model", (prev: any) => ({
-          ...prev,
-          errorMap: {},
-          errors: undefined,
-        }));
+        form.resetField("details.product.model");
 
         return;
       }
@@ -130,12 +127,20 @@ const ModelChips = withForm({
       form.setFieldMeta("details.product.model", (prev: any) => ({
         ...prev,
         errorMap: {},
-        errors: undefined,
+        errors: [],
       }));
     };
 
     return (
       <div className='my-0_5'>
+        <form.AppField
+          name='details.product.model'
+          validators={{
+            onChange: sellDetailsSchema.shape.details.shape.product.shape.model,
+          }}>
+          {() => null}
+        </form.AppField>
+
         <label className='fs-18'>
           Modell{" "}
           <span

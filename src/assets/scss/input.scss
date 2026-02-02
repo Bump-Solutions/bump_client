@@ -296,6 +296,102 @@
         }
       }
     }
+
+    .currency__wrapper {
+      position: relative;
+      display: flex;
+      width: 100%;
+      flex-direction: column;
+
+      .suffix {
+        position: absolute;
+        top: 50%;
+        right: 1.5rem;
+        transform: translateY(-50%);
+        font-size: $fs-16;
+        color: color(gray, 700);
+      }
+
+      .input__field {
+        height: $input-height;
+        padding: 0 4rem 0 1.25rem;
+        outline: none;
+        font-size: $fs-16;
+        background-color: color(gray, 100) !important;
+        border: 1px solid color(gray, 900);
+        border-radius: $border-radius-1;
+
+        &:disabled {
+          background-color: color(gray, 200);
+          color: color(gray, 600);
+          cursor: not-allowed;
+        }
+
+        &:focus {
+          border: 2px solid color(blue, 500);
+          background-color: $clr-white;
+
+          & ~ .input__svg {
+            color: color(gray, 700);
+          }
+        }
+
+        &::placeholder {
+          color: color(gray, 600);
+        }
+
+        &:invalid,
+        &:not(:placeholder-shown) {
+          border-color: transparent;
+          background-color: color(gray, 100);
+
+          & ~ .input__svg {
+            color: $clr-font-headline;
+          }
+
+          &:focus {
+            border: 2px solid color(blue, 500);
+            outline: 2px solid color(blue, 50);
+          }
+        }
+
+        &.error {
+          border: 2px solid color(red, 500);
+          background-color: color(red, 50) !important;
+
+          &:focus {
+            border: 2px solid color(red, 500);
+            outline: 2px solid color(red, 50);
+          }
+        }
+
+        &:-webkit-autofill,
+        &:-webkit-autofill:hover {
+          -webkit-text-fill-color: $clr-font-headline;
+          -webkit-box-shadow: 0 0 0px 1000px color(gray, 100) inset;
+          outline: none;
+          border: none;
+
+          &.error {
+            -webkit-box-shadow: 0 0 0px 1000px color(red, 50) inset;
+            border: 2px solid color(red, 500);
+          }
+        }
+
+        &:-webkit-autofill:focus {
+          -webkit-text-fill-color: $clr-font-headline;
+          -webkit-box-shadow: 0 0 0px 1000px color(gray, 100) inset;
+          outline: 2px solid color(blue, 50);
+          border: 2px solid color(blue, 500);
+
+          &.error {
+            -webkit-box-shadow: 0 0 0px 1000px color(red, 50) inset;
+            outline: 2px solid color(red, 50);
+            border: 2px solid color(red, 500);
+          }
+        }
+      }
+    }
   }
 
   .field__error {
@@ -547,102 +643,6 @@
 
       .stepper__btn {
         color: color(gray, 900);
-      }
-    }
-  }
-
-  .currency__wrapper {
-    position: relative;
-    display: flex;
-    width: 100%;
-    flex-direction: column;
-
-    .suffix {
-      position: absolute;
-      top: 50%;
-      right: 1.5rem;
-      transform: translateY(-50%);
-      font-size: $fs-16;
-      color: color(gray, 700);
-    }
-
-    .input__field {
-      height: $input-height;
-      padding: 0 4rem 0 1.25rem;
-      outline: none;
-      font-size: $fs-16;
-      background-color: color(gray, 100) !important;
-      border: 1px solid color(gray, 900);
-      border-radius: $border-radius-1;
-
-      &:disabled {
-        background-color: color(gray, 200);
-        color: color(gray, 600);
-        cursor: not-allowed;
-      }
-
-      &:focus {
-        border: 2px solid color(blue, 500);
-        background-color: $clr-white;
-
-        & ~ .input__svg {
-          color: color(gray, 700);
-        }
-      }
-
-      &::placeholder {
-        color: color(gray, 600);
-      }
-
-      &:invalid,
-      &:not(:placeholder-shown) {
-        border-color: transparent;
-        background-color: color(gray, 100);
-
-        & ~ .input__svg {
-          color: $clr-font-headline;
-        }
-
-        &:focus {
-          border: 2px solid color(blue, 500);
-          outline: 2px solid color(blue, 50);
-        }
-      }
-
-      &.error {
-        border: 2px solid color(red, 500);
-        background-color: color(red, 50) !important;
-
-        &:focus {
-          border: 2px solid color(red, 500);
-          outline: 2px solid color(red, 50);
-        }
-      }
-
-      &:-webkit-autofill,
-      &:-webkit-autofill:hover {
-        -webkit-text-fill-color: $clr-font-headline;
-        -webkit-box-shadow: 0 0 0px 1000px color(gray, 100) inset;
-        outline: none;
-        border: none;
-
-        &.error {
-          -webkit-box-shadow: 0 0 0px 1000px color(red, 50) inset;
-          border: 2px solid color(red, 500);
-        }
-      }
-
-      &:-webkit-autofill:focus {
-        -webkit-text-fill-color: $clr-font-headline;
-        -webkit-box-shadow: 0 0 0px 1000px color(gray, 100) inset;
-        outline: 2px solid color(blue, 50);
-        border: 2px solid color(blue, 500);
-
-        &.error {
-          -webkit-box-shadow: 0 0 0px 1000px color(red, 50) inset;
-          outline: 2px solid color(red, 50);
-          border: 2px solid color(red, 500);
-        }
       }
     }
   }

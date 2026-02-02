@@ -1,3 +1,4 @@
+import { useStore } from "@tanstack/react-form";
 import { CirclePlus } from "lucide-react";
 import { toast } from "sonner";
 import Button from "../../../components/Button";
@@ -18,12 +19,16 @@ const DEFAULT_DRAFT = {
 const ItemForm = withForm({
   ...sellFormOptions,
   render: function Render({ form }) {
-    const draft = form.getFieldValue("items.draft") ?? DEFAULT_DRAFT;
-    const items = form.getFieldValue("items.items") ?? [];
-
-    const count = draft.count;
+    const items =
+      (useStore(
+        form.store,
+        (state) => state.values.items.items,
+      ) as SellItem[]) ?? [];
 
     const handleAddItem = () => {
+      const draft = form.getFieldValue("items.draft") ?? DEFAULT_DRAFT;
+      const count = draft.count;
+
       // Candidate objektum validációhoz
       const candidate = {
         gender: draft.gender ?? null,
@@ -33,29 +38,34 @@ const ItemForm = withForm({
       };
 
       const result = itemSchema.safeParse(candidate);
-
       if (!result.success) {
         result.error.issues.forEach((issue) => {
           const fieldName = issue.path[0] as keyof typeof draft;
+
           form.setFieldMeta(`items.draft.${fieldName}`, (prev) => ({
             ...prev,
-            errors: [issue.message],
             isTouched: true,
           }));
+
+          form.validateField(`items.draft.${fieldName}`, "change");
         });
 
         toast.error("Kérjük javítsd a hibás mezőket!");
         return;
       }
 
-      // Ha valid, akkor kész SellItem
-      const validItem = result.data as SellItem;
-
-      // Új tételek létrehozása a count alapján
-      const newItems = Array.from({ length: count }, () => validItem);
+      const validItem = result.data as SellItem; // Ha valid, akkor kész SellItem
+      const newItems = Array.from({ length: count }, () => validItem); // Új tételek létrehozása a count alapján
 
       // Frissíti a tömböt
       form.setFieldValue("items.items", [...items, ...newItems]);
+
+      // Reset
+      form.resetField("items.draft.gender");
+      form.resetField("items.draft.size");
+      form.resetField("items.draft.condition");
+      form.resetField("items.draft.price");
+      form.resetField("items.draft.count");
 
       // Visszaállítja a draftot
       form.setFieldValue("items.draft", DEFAULT_DRAFT);
@@ -104,6 +114,19 @@ const ItemForm = withForm({
         </form.AppField>
 
         {/* --- Ár mező --- */}
+        <form.AppField
+          name='items.draft.price'
+          validators={{ onChange: itemSchema.shape.price }}>
+          {(field) => (
+            <field.Currency
+              label='Ár'
+              required
+              maxValue={99_999_999}
+              suffix='HUF'
+              placeholder='52 999'
+            />
+          )}
+        </form.AppField>
 
         <FieldGroup columns={2} className='mt-0_5'>
           {/* --- Darabszám mező  --- */}
@@ -115,7 +138,8 @@ const ItemForm = withForm({
           <Button
             type='button'
             text='Hozzáadás'
-            className='primary br-1 flex-1'>
+            className='primary br-1 flex-1'
+            onClick={handleAddItem}>
             <CirclePlus />
           </Button>
         </FieldGroup>

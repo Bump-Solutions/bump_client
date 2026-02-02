@@ -1,22 +1,24 @@
 import { useStore } from "@tanstack/react-form";
-import { JSX } from "react";
-import { Link } from "react-router";
+import { JSX, MouseEvent } from "react";
+import { Link, useNavigate } from "react-router";
 import { toast } from "sonner";
 import { z } from "zod";
 import { useAppForm } from "../../hooks/form/hooks";
 import { SELL_FIELDS, SELL_STEPS, SellStep } from "../../schemas/sellSchema";
-import {
-  canGoNext,
-  resetErroredFields,
-  touchAndValidateFields,
-} from "../../utils/form";
+import { resetErroredFields, validateStep } from "../../utils/form";
 import { sellFormOptions } from "../../utils/formOptions";
 
 import DetailsStep from "./steps/DetailsStep";
 import ItemsStep from "./steps/ItemsStep";
 import SelectStep from "./steps/SelectStep";
+import UploadStep from "./steps/UploadStep";
 
 import { ArrowUpRight } from "lucide-react";
+import { useAuth } from "../../hooks/auth/useAuth";
+import { useUploadProduct } from "../../hooks/product/useUploadProduct";
+import { useMounted } from "../../hooks/useMounted";
+import { CreateProductModel } from "../../models/productModel";
+import { ROUTES } from "../../routes/routes";
 
 const LABELS: Record<SellStep, string | JSX.Element> = {
   select: "Már nem használod? Itt az ideje eladni! 💸",
@@ -69,16 +71,71 @@ const DESCRIPTIONS: Record<SellStep, JSX.Element> = {
       </Link>
       járhat.
       <br />
-      Minimum 3, maximum 10 képet tölthetsz fel, amelyek egyenként legfeljebb
-      1MB méretűek lehetnek.
+      Minimum 3, maximum 10 képet tölthetsz fel, amelyek egyenként legfeljebb 5
+      MB méretűek lehetnek.
     </>
   ),
 };
 
 const SellForm = () => {
+  const { auth } = useAuth();
+  const navigate = useNavigate();
+  const isMounted = useMounted();
+
+  const uploadMutation = useUploadProduct((resp, variables) => {
+    setTimeout(() => {
+      if (isMounted()) {
+        navigate(-1);
+      }
+    }, 1000);
+  });
+
   const form = useAppForm({
     ...sellFormOptions,
-    onSubmit: async ({ value, formApi }) => {},
+    onSubmit: async ({ value, formApi }) => {
+      const data: CreateProductModel = {
+        title: value.details.title,
+        description: value.details.description || "",
+
+        product: {
+          isCatalog: value.select.isCatalog,
+          id: value.details.product.id,
+          brand: value.details.product.brand,
+          model: value.details.product.model,
+          colorWay: value.details.product.colorWay,
+        },
+
+        items: value.items.items.map((item) => ({
+          condition: item.condition,
+          gender: item.gender,
+          size: item.size,
+          price: item.price,
+        })),
+
+        images: value.upload.images.map((file) => file),
+      };
+
+      const uploadPromise = uploadMutation.mutateAsync({
+        newProduct: data,
+      });
+
+      toast.promise(uploadPromise, {
+        loading: "Létrehozás folyamatban...",
+        success: (resp) => (
+          <span>
+            Termék létrehozva. Megtekintheted{" "}
+            <Link
+              className='link fc-green-600 underline fw-700'
+              to={ROUTES.PROFILE(auth?.user?.username!).PRODUCTS}>
+              itt.
+            </Link>
+          </span>
+        ),
+        error: (err) => "Hiba a termék létrehozása során.",
+      });
+
+      return uploadPromise;
+    },
 
     onSubmitInvalid: async ({ value, formApi }) => {
       throw new Error("Invalid form submission");
@@ -88,7 +145,7 @@ const SellForm = () => {
   const isBusy = useStore(
     form.store,
     (state) =>
-      state.isValidating || state.isFormValidating || state.isFieldsValidating
+      state.isValidating || state.isFormValidating || state.isFieldsValidating,
   );
 
   const step = useStore(form.store, (state) => state.values.step as SellStep);
@@ -102,25 +159,52 @@ const SellForm = () => {
     if (isLast) return;
     if (isBusy) return;
 
-    const { isValid } = await canGoNext(form, schema);
-    if (isValid) {
-      setStep(SELL_STEPS[currentIndex + 1]);
+    const fields = SELL_FIELDS[step];
+
+    const { isValid } = await validateStep(form, fields, {
+      schema,
+      cause: "submit",
+    });
+
+    // If invalid, mark touched and show errors
+    if (!isValid) {
+      toast.error("Kérjük javítsd a hibás mezőket!");
       return;
     }
 
-    const fields = SELL_FIELDS[step];
-    await touchAndValidateFields(form, fields);
-
-    toast.error("Kérjük javítsd a hibás mezőket!");
+    setStep(SELL_STEPS[currentIndex + 1]);
   };
 
   const prev = () => {
     if (isFirst) return;
 
-    const fields = SELL_FIELDS[step];
+    let fields = SELL_FIELDS[step];
+
+    if (step === "items") {
+      fields = [
+        ...fields,
+        "items.draft.gender",
+        "items.draft.size",
+        "items.draft.condition",
+        "items.draft.price",
+        "items.draft.count",
+      ];
+    }
+
     resetErroredFields(form, fields);
 
     setStep(SELL_STEPS[currentIndex - 1]);
+  };
+
+  const handleSubmit = async (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    await form.handleSubmit();
+    if (!form.store.state.isValid) {
+      toast.error("Kérjük javítsd a hibás mezőket!");
+      throw new Error("Invalid form submission");
+    }
   };
 
   return (
@@ -138,6 +222,7 @@ const SellForm = () => {
         {step === "select" && (
           <SelectStep form={form} currentStepIndex={currentIndex} next={next} />
         )}
+
         {step === "details" && (
           <DetailsStep
             form={form}
@@ -146,12 +231,22 @@ const SellForm = () => {
             prev={prev}
           />
         )}
+
         {step === "items" && (
           <ItemsStep
             form={form}
             currentStepIndex={currentIndex}
             next={next}
             prev={prev}
+          />
+        )}
+
+        {step === "upload" && (
+          <UploadStep
+            form={form}
+            currentStepIndex={currentIndex}
+            prev={prev}
+            handleSubmit={handleSubmit}
           />
         )}
       </form>

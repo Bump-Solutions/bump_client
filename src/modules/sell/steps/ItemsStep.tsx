@@ -4,10 +4,10 @@ import { SELL_STEPS, sellItemsSchema } from "../../../schemas/sellSchema";
 import { sellFormOptions } from "../../../utils/formOptions";
 
 import Button from "../../../components/Button";
-
-import { MoveRight } from "lucide-react";
 import ItemForm from "../components/ItemForm";
 import ItemsList from "../components/ItemsList";
+
+import { MoveRight } from "lucide-react";
 
 type ItemsStepProps = {
   currentStepIndex: number;

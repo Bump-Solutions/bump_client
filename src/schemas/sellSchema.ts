@@ -2,22 +2,17 @@ import { z } from "zod";
 import { ENUM } from "../utils/enum";
 
 const GENDER_VALUES = ENUM.PRODUCT.GENDER_OPTIONS.map(
-  (option) => option.value
+  (option) => option.value,
 ) as readonly number[];
 const SIZE_VALUES = ENUM.PRODUCT.SIZE_OPTIONS.map(
-  (option) => option.value
+  (option) => option.value,
 ) as readonly number[];
 const CONDITION_VALUES = ENUM.PRODUCT.CONDITION_OPTIONS.map(
-  (option) => option.value
+  (option) => option.value,
 ) as readonly number[];
 
-const MAX_SIZE = 1 * 1024 * 1024; // 1MB
-const ACCEPTED = [
-  "image/png",
-  "image/jpeg",
-  "image/jpg",
-  "image/webp",
-] as const;
+const MAX_SIZE = 5 * 1024 * 1024; // 5MB
+const ACCEPTED = ["image/png", "image/jpeg", "image/jpg"] as const;
 
 // --- STEP SÉMÁK ---
 export const SELL_STEPS = ["select", "details", "items", "upload"] as const;
@@ -33,14 +28,7 @@ export const SELL_FIELDS: Record<SellStep, readonly string[]> = {
     "details.product.model",
     "details.product.colorWay",
   ],
-  items: [
-    "items.draft.gender",
-    "items.draft.size",
-    "items.draft.condition",
-    "items.draft.price",
-    "items.draft.count",
-    "items.items",
-  ],
+  items: ["items.items"],
   upload: ["upload.images"],
 };
 
@@ -121,16 +109,16 @@ export const sellUploadSchema = z.object({
             if (!ACCEPTED.includes(file.type as any)) {
               ctx.addIssue({
                 code: "custom",
-                message: "Csak PNG/JPG/JPEG/WebP.",
+                message: `Érvénytelen fájltípus. Csak a következők engedélyezettek: ${ACCEPTED.join(", ")}.`,
               });
             }
             if (file.size > MAX_SIZE) {
               ctx.addIssue({
                 code: "custom",
-                message: "A fájl mérete túl nagy. A megengedett méret 1MB.",
+                message: `A fájl mérete túl nagy. A megengedett méret ${MAX_SIZE / (1024 * 1024)} MB.`,
               });
             }
-          })
+          }),
       )
       .min(3, "Legalább 3 képet tölts fel.")
       .max(10, "Legfeljebb 10 képet tölthetsz fel."),
@@ -146,9 +134,3 @@ export const sellSchema = z.object({
 });
 
 export type SellValues = z.infer<typeof sellSchema>;
-
-export type SellValuesWithDraft = SellValues & {
-  items: SellValues["items"] & {
-    draft: z.infer<typeof itemDraftSchema>;
-  };
-};

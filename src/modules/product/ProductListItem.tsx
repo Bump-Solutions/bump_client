@@ -1,23 +1,23 @@
-import { ROUTES } from "../../routes/routes";
 import { AnimatePresence } from "framer-motion";
-import { ProductListModel } from "../../models/productModel";
-import { useProfile } from "../../hooks/profile/useProfile";
-import { useLikeProduct } from "../../hooks/product/useLikeProduct";
-import { useUnlikeProduct } from "../../hooks/product/useUnlikeProduct";
-import { useSaveProduct } from "../../hooks/product/useSaveProduct";
-import { useUnsaveProduct } from "../../hooks/product/useUnsaveProduct";
-import { useToggle } from "../../hooks/useToggle";
 import { useLongPress } from "react-use";
 import { toast } from "sonner";
+import { useLikeProduct } from "../../hooks/product/useLikeProduct";
+import { useSaveProduct } from "../../hooks/product/useSaveProduct";
+import { useUnlikeProduct } from "../../hooks/product/useUnlikeProduct";
+import { useUnsaveProduct } from "../../hooks/product/useUnsaveProduct";
+import { useProfile } from "../../hooks/profile/useProfile";
+import { useToggle } from "../../hooks/useToggle";
+import { ProductListModel } from "../../models/productModel";
+import { ROUTES } from "../../routes/routes";
 import { buildListPriceLabels } from "../../utils/pricing";
 
 import { MouseEvent, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
 
-import Carousel from "./Carousel";
 import Badges from "../../components/Badges";
-import ProductContextMenu from "./ProductContextMenu";
+import Carousel from "./Carousel";
 import Delete from "./Delete";
+import ProductContextMenu from "./ProductContextMenu";
 
 import {
   Bookmark,

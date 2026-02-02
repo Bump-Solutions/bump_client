@@ -1,5 +1,5 @@
+import { ImgHTMLAttributes, MouseEvent, useState } from "react";
 import { API } from "../utils/api";
-import { ImgHTMLAttributes, useState, MouseEvent } from "react";
 
 interface ImageProps extends ImgHTMLAttributes<HTMLImageElement> {
   src: string | undefined;
@@ -21,7 +21,7 @@ const Image = ({
   ...props
 }: ImageProps) => {
   const [status, setStatus] = useState<"loading" | "loaded" | "error">(
-    "loading"
+    "loading",
   );
 
   // Ha teljesen sikeres a kép, akkor legyen átlátszó; egyébként (loading vagy error) placeholder-szín

@@ -241,6 +241,7 @@
   color: #cc0000;
 }
 .modal__wrapper .modal.sell form .modal__content .step.step-4 {
+  position: relative;
   width: 800px;
 }
 .modal__wrapper .modal.sell form .modal__content .step.step-4 .upload__wrapper {
@@ -249,12 +250,16 @@
   gap: 1.5rem;
 }
 .modal__wrapper .modal.sell form .modal__content .step.step-4 .upload__wrapper .dropzone__wrapper {
+  position: relative;
   flex: 1;
 }
-.modal__wrapper .modal.sell form .modal__content .step.step-4 .upload__wrapper .dropzone__wrapper .dropzone {
-  position: sticky;
+.modal__wrapper .modal.sell form .modal__content .step.step-4 .upload__wrapper .dropzone__wrapper .field {
+  position: sticky !important;
   margin: 0;
   top: 1rem;
+}
+.modal__wrapper .modal.sell form .modal__content .step.step-4 .upload__wrapper .dropzone__wrapper .field .dropzone {
+  margin: 0;
 }
 .modal__wrapper .modal.sell form .modal__content .step.step-4 .upload__wrapper .images__wrapper {
   flex: 1;
@@ -279,6 +284,9 @@
 }
 .modal__wrapper .modal.sell form .modal__content .step.step-4 .upload__wrapper .images__wrapper .images__grid .image:hover img {
   border: 2px solid #0070e8;
+}
+.modal__wrapper .modal.sell form .modal__content .step.step-4 .upload__wrapper .images__wrapper .images__grid .image:active {
+  cursor: grabbing;
 }
 .modal__wrapper .modal.sell form .modal__content .step.step-4 .upload__wrapper .images__wrapper .images__grid .image::before {
   content: "";

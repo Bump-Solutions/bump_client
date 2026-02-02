@@ -20,7 +20,7 @@ export function fromListProductDTO(dto: ListProductDTO): ProductListModel {
     id: dto.id,
     title: dto.title,
     description: dto.description,
-    images: dto.images.map((image) => image.src),
+    images: dto.images,
     category: dto.category,
     condition: dto.condition,
     size: dto.size,
@@ -43,7 +43,7 @@ export function fromFetchedProductDTO(dto: FetchedProductDTO): ProductModel {
     id: dto.id,
     title: dto.title,
     description: dto.description,
-    images: dto.images.map((image) => image.src),
+    images: dto.images.map((img) => img.src),
 
     product: {
       id: dto.product.id,
@@ -104,7 +104,7 @@ export function fromColorwayDTO(dto: ColorwayDTO): ColorwayModel {
 }
 
 export function toCreateProductDTO(
-  model: CreateProductModel
+  model: CreateProductModel,
 ): CreateProductDTO {
   return {
     title: model.title,
@@ -131,7 +131,7 @@ export function toCreateProductDTO(
     county: 1, // TODO: Replace with actual county ID
 
     images: model.images.map((image) => ({
-      file: image.file,
+      file: image,
     })),
   };
 }

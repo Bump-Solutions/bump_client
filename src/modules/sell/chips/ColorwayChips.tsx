@@ -12,6 +12,7 @@ import { sellFormOptions } from "../../../utils/formOptions";
 import { X } from "lucide-react";
 import Chip from "../../../components/Chip";
 import Spinner from "../../../components/Spinner";
+import { sellDetailsSchema } from "../../../schemas/sellSchema";
 import SearchChip from "./SearchChip";
 
 const ColorwayChips = withForm({
@@ -19,23 +20,23 @@ const ColorwayChips = withForm({
   render: function Render({ form }) {
     const isCatalog = useStore(
       form.store,
-      (state) => state.values.select.isCatalog as boolean
+      (state) => state.values.select.isCatalog as boolean,
     );
     const selectedBrand = useStore(
       form.store,
-      (state) => state.values.details.product.brand as string
+      (state) => state.values.details.product.brand as string,
     );
     const selectedModel = useStore(
       form.store,
-      (state) => state.values.details.product.model as string
+      (state) => state.values.details.product.model as string,
     );
     const selectedColorway = useStore(
       form.store,
-      (state) => state.values.details.product.colorWay as string
+      (state) => state.values.details.product.colorWay as string,
     );
     const colorwayError = useStore(form.store, (state) => {
       const meta = state.fieldMeta["details.product.colorWay"];
-      if (!meta) return undefined;
+      if (!meta || !meta.isTouched || meta.isValid) return undefined;
 
       const errorMap = meta.errorMap ?? {};
       const fromSubmit = errorMap.onSubmit ?? [];
@@ -83,7 +84,7 @@ const ColorwayChips = withForm({
       if (
         !selectedColorway ||
         firstPage.products.some(
-          (c: ColorwayModel) => c.colorWay === selectedColorway
+          (c: ColorwayModel) => c.colorWay === selectedColorway,
         )
       ) {
         setPages(showAll ? resp.pages : [firstPage]);
@@ -101,7 +102,7 @@ const ColorwayChips = withForm({
                   ...firstPage.products,
                 ],
               },
-            ]
+            ],
       );
     }, [resp, showAll, selectedColorway]);
 
@@ -132,11 +133,7 @@ const ColorwayChips = withForm({
         form.setFieldValue("details.product.colorWay", "");
         form.setFieldValue("details.product.id", null);
 
-        form.setFieldMeta("details.product.colorWay", (prev: any) => ({
-          ...prev,
-          errorMap: {},
-          errors: undefined,
-        }));
+        form.resetField("details.product.colorWay");
 
         return;
       }
@@ -149,12 +146,21 @@ const ColorwayChips = withForm({
       form.setFieldMeta("details.product.colorWay", (prev: any) => ({
         ...prev,
         errorMap: {},
-        errors: undefined,
+        errors: [],
       }));
     };
 
     return (
       <div className='my-0_5'>
+        <form.AppField
+          name='details.product.colorWay'
+          validators={{
+            onChange:
+              sellDetailsSchema.shape.details.shape.product.shape.colorWay,
+          }}>
+          {() => null}
+        </form.AppField>
+
         <label className='fs-18'>
           Színállás{" "}
           <span
