@@ -1,17 +1,17 @@
-import { ROUTES } from "../../routes/routes";
-import { Link } from "react-router";
 import { Dispatch, SetStateAction, useEffect } from "react";
-import { useSearch } from "../../hooks/search/useSearch";
 import { useInView } from "react-intersection-observer";
+import { Link } from "react-router";
+import { useSearch } from "../../hooks/search/useSearch";
 import {
   ProductSearchModel,
   SearchPageModel,
   UserSearchModel,
 } from "../../models/searchModel";
+import { ROUTES } from "../../routes/routes";
 
+import Button from "../../components/Button";
 import Image from "../../components/Image";
 import Spinner from "../../components/Spinner";
-import Button from "../../components/Button";
 
 import { Footprints, Search, User } from "lucide-react";
 
@@ -34,7 +34,7 @@ const Results = ({ searchKey, setSearchKey }: ResultsProps) => {
     data,
   } = useSearch([], {
     searchKey,
-    delay: 250,
+    delay: 400,
   });
 
   const pages: SearchPageModel<UserSearchModel | ProductSearchModel>[] =

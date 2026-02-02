@@ -12,7 +12,7 @@ export interface ListProductDTO {
   id: number;
   title: string;
   description: string;
-  images: { src: string }[];
+  images: string[];
   category: string;
   condition: string;
   size?: string; // Single item

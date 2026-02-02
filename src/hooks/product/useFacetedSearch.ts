@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
-import { useProduct } from "./useProduct";
 import { ProductModel } from "../../models/productModel";
+import { useProduct } from "./useProduct";
 
 export interface FacetProps {
   quantity: number;
@@ -31,7 +31,7 @@ export const useFacetedSearch = (): FacetProps | null => {
   if (!product) return null;
 
   const items = product.items || [];
-  console.log("Product items:", items);
+
   const available = useMemo(() => items.filter((i) => i.state === 0), [items]); // 0 - available
   if (available.length === 0) return null;
 
@@ -58,7 +58,7 @@ export const useFacetedSearch = (): FacetProps | null => {
     if (gender === null || size === null) return [];
 
     const filtered = available.filter(
-      (i) => i.gender === gender && Number(i.size) === size
+      (i) => i.gender === gender && Number(i.size) === size,
     );
     const unique = new Set(filtered.map((i) => i.condition));
 
@@ -82,7 +82,7 @@ export const useFacetedSearch = (): FacetProps | null => {
           (i) =>
             i.gender === gender &&
             Number(i.size) === size &&
-            i.condition === condition
+            i.condition === condition,
         )
         .sort((a, b) => a.id - b.id);
 

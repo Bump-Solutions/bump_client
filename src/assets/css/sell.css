@@ -21,22 +21,22 @@
   padding: 0 1.5rem;
   max-width: 800px;
 }
-.modal__wrapper .modal.sell .modal__content form {
+.modal__wrapper .modal.sell form .modal__content .step {
   height: 100%;
   display: flex;
   flex-direction: column;
 }
-.modal__wrapper .modal.sell .modal__content form.step-1 {
+.modal__wrapper .modal.sell form .modal__content .step.step-1 {
   width: 500px;
 }
-.modal__wrapper .modal.sell .modal__content form.step-1 .options__wrapper {
+.modal__wrapper .modal.sell form .modal__content .step.step-1 .options__wrapper {
   display: grid;
   grid-template-columns: 1;
   grid-template-rows: repeat(2, 1fr);
   gap: 1rem;
   margin-block: 1rem;
 }
-.modal__wrapper .modal.sell .modal__content form.step-1 .options__wrapper .option {
+.modal__wrapper .modal.sell form .modal__content .step.step-1 .options__wrapper .option {
   display: flex;
   align-items: stretch;
   border-radius: 1rem;
@@ -44,25 +44,25 @@
   overflow: hidden;
   transition: border 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
-.modal__wrapper .modal.sell .modal__content form.step-1 .options__wrapper .option:hover {
+.modal__wrapper .modal.sell form .modal__content .step.step-1 .options__wrapper .option:hover {
   cursor: pointer;
   border: 1px solid #212529;
 }
-.modal__wrapper .modal.sell .modal__content form.step-1 .options__wrapper .option.selected {
+.modal__wrapper .modal.sell form .modal__content .step.step-1 .options__wrapper .option.selected {
   border: 1px solid #212529;
   outline: 1px solid #212529;
 }
-.modal__wrapper .modal.sell .modal__content form.step-1 .options__wrapper .option.selected .option__col--radio div::after {
+.modal__wrapper .modal.sell form .modal__content .step.step-1 .options__wrapper .option.selected .option__col--radio div::after {
   opacity: 1;
 }
-.modal__wrapper .modal.sell .modal__content form.step-1 .options__wrapper .option.selected .option__col--img svg {
+.modal__wrapper .modal.sell form .modal__content .step.step-1 .options__wrapper .option.selected .option__col--img svg {
   color: #212529 !important;
 }
-.modal__wrapper .modal.sell .modal__content form.step-1 .options__wrapper .option .option__col--radio {
+.modal__wrapper .modal.sell form .modal__content .step.step-1 .options__wrapper .option .option__col--radio {
   padding: 1.5rem;
   padding-right: 0.75rem;
 }
-.modal__wrapper .modal.sell .modal__content form.step-1 .options__wrapper .option .option__col--radio div {
+.modal__wrapper .modal.sell form .modal__content .step.step-1 .options__wrapper .option .option__col--radio div {
   position: relative;
   display: flex;
   justify-content: center;
@@ -72,7 +72,7 @@
   border-radius: 50%;
   border: 2px solid #212529;
 }
-.modal__wrapper .modal.sell .modal__content form.step-1 .options__wrapper .option .option__col--radio div::after {
+.modal__wrapper .modal.sell form .modal__content .step.step-1 .options__wrapper .option .option__col--radio div::after {
   content: "";
   position: absolute;
   height: 0.625rem;
@@ -82,16 +82,16 @@
   opacity: 0;
   transition: opacity 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
-.modal__wrapper .modal.sell .modal__content form.step-1 .options__wrapper .option .option__col--text {
+.modal__wrapper .modal.sell form .modal__content .step.step-1 .options__wrapper .option .option__col--text {
   flex: 1;
   padding: 1.5rem 0.75rem;
   display: flex;
   flex-direction: column;
 }
-.modal__wrapper .modal.sell .modal__content form.step-1 .options__wrapper .option .option__col--text h5 {
+.modal__wrapper .modal.sell form .modal__content .step.step-1 .options__wrapper .option .option__col--text h5 {
   text-transform: uppercase;
 }
-.modal__wrapper .modal.sell .modal__content form.step-1 .options__wrapper .option .option__col--img {
+.modal__wrapper .modal.sell form .modal__content .step.step-1 .options__wrapper .option .option__col--img {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -102,31 +102,31 @@
   border-radius: 0.5rem;
   overflow: hidden;
 }
-.modal__wrapper .modal.sell .modal__content form.step-1 .options__wrapper .option .option__col--img svg {
+.modal__wrapper .modal.sell form .modal__content .step.step-1 .options__wrapper .option .option__col--img svg {
   transition: color 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
-.modal__wrapper .modal.sell .modal__content form.step-2 {
+.modal__wrapper .modal.sell form .modal__content .step.step-2 {
   width: 600px;
 }
-.modal__wrapper .modal.sell .modal__content form.step-2 .details__wrapper {
+.modal__wrapper .modal.sell form .modal__content .step.step-2 .details__wrapper {
   margin-block: 0.5rem;
 }
-.modal__wrapper .modal.sell .modal__content form.step-2 .details__wrapper.catalog {
+.modal__wrapper .modal.sell form .modal__content .step.step-2 .details__wrapper.catalog {
   display: flex;
   flex-direction: column;
 }
-.modal__wrapper .modal.sell .modal__content form.step-2 .details__wrapper.catalog .chips__wrapper {
+.modal__wrapper .modal.sell form .modal__content .step.step-2 .details__wrapper.catalog .chips__wrapper {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
   margin-block: 0.5rem;
 }
-.modal__wrapper .modal.sell .modal__content form.step-2 .details__wrapper.catalog .chips__wrapper .chip.selected {
+.modal__wrapper .modal.sell form .modal__content .step.step-2 .details__wrapper.catalog .chips__wrapper .chip.selected {
   border: none;
   background-color: #212529;
   color: #fff;
 }
-.modal__wrapper .modal.sell .modal__content form.step-2 .details__wrapper.catalog .chips__wrapper .search-box {
+.modal__wrapper .modal.sell form .modal__content .step.step-2 .details__wrapper.catalog .chips__wrapper .search-box {
   position: relative;
   display: flex;
   align-items: center;
@@ -140,60 +140,60 @@
   padding: 0.375rem 1rem;
   cursor: text;
 }
-.modal__wrapper .modal.sell .modal__content form.step-2 .details__wrapper.catalog .chips__wrapper .search-box svg {
+.modal__wrapper .modal.sell form .modal__content .step.step-2 .details__wrapper.catalog .chips__wrapper .search-box svg {
   height: 1.25rem;
   width: 1.25rem;
   color: #212529;
   flex-shrink: 0;
 }
-.modal__wrapper .modal.sell .modal__content form.step-2 .details__wrapper.catalog .chips__wrapper .search-box input {
+.modal__wrapper .modal.sell form .modal__content .step.step-2 .details__wrapper.catalog .chips__wrapper .search-box input {
   all: unset;
   position: relative;
   width: 100%;
   font-size: 1rem;
 }
-.modal__wrapper .modal.sell .modal__content form.step-2 .details__wrapper.catalog .chips__wrapper .search-box:focus-within {
+.modal__wrapper .modal.sell form .modal__content .step.step-2 .details__wrapper.catalog .chips__wrapper .search-box:focus-within {
   border: 2px solid #0070e8;
 }
-.modal__wrapper .modal.sell .modal__content form.step-2 .details__wrapper.catalog .chips__wrapper .search-box:focus-within input {
+.modal__wrapper .modal.sell form .modal__content .step.step-2 .details__wrapper.catalog .chips__wrapper .search-box:focus-within input {
   border: none !important;
 }
-.modal__wrapper .modal.sell .modal__content form.step-2 .details__wrapper.custom {
+.modal__wrapper .modal.sell form .modal__content .step.step-2 .details__wrapper.custom {
   display: flex;
   flex-direction: column;
 }
-.modal__wrapper .modal.sell .modal__content form.step-3 {
+.modal__wrapper .modal.sell form .modal__content .step.step-3 {
   width: 900px;
 }
-.modal__wrapper .modal.sell .modal__content form.step-3 .items__wrapper {
+.modal__wrapper .modal.sell form .modal__content .step.step-3 .items__wrapper {
   margin-block: 1rem;
   display: flex;
   align-items: stretch;
   justify-content: space-between;
   gap: 1.5rem;
 }
-.modal__wrapper .modal.sell .modal__content form.step-3 .items__wrapper .divider {
+.modal__wrapper .modal.sell form .modal__content .step.step-3 .items__wrapper .divider {
   width: 1px;
   background-color: #e9ecef;
   margin-bottom: 0.5rem;
 }
-.modal__wrapper .modal.sell .modal__content form.step-3 .items__wrapper .item__column {
-  flex: 1;
+.modal__wrapper .modal.sell form .modal__content .step.step-3 .items__wrapper .item__column {
+  flex: 1 1 40%;
   display: flex;
   flex-direction: column;
 }
-.modal__wrapper .modal.sell .modal__content form.step-3 .items__wrapper .item__column .field__wrapper {
+.modal__wrapper .modal.sell form .modal__content .step.step-3 .items__wrapper .item__column .field__wrapper {
   flex-direction: row !important;
 }
-.modal__wrapper .modal.sell .modal__content form.step-3 .items__wrapper .item__column:last-child {
+.modal__wrapper .modal.sell form .modal__content .step.step-3 .items__wrapper .item__column:last-child {
   flex: 1 1 60%;
   margin-bottom: 0.5rem;
 }
-.modal__wrapper .modal.sell .modal__content form.step-3 .items__wrapper .item__column:last-child table {
+.modal__wrapper .modal.sell form .modal__content .step.step-3 .items__wrapper .item__column:last-child table {
   width: 100%;
   border-collapse: collapse;
 }
-.modal__wrapper .modal.sell .modal__content form.step-3 .items__wrapper .item__column:last-child table thead tr th {
+.modal__wrapper .modal.sell form .modal__content .step.step-3 .items__wrapper .item__column:last-child table thead tr th {
   padding: 0.5rem;
   text-align: left;
   font-size: 0.875rem;
@@ -201,10 +201,10 @@
   color: #868e96;
   border-bottom: 1px solid #e9ecef;
 }
-.modal__wrapper .modal.sell .modal__content form.step-3 .items__wrapper .item__column:last-child table tbody tr:nth-child(odd) {
+.modal__wrapper .modal.sell form .modal__content .step.step-3 .items__wrapper .item__column:last-child table tbody tr:nth-child(odd) {
   background-color: #f8f9fa;
 }
-.modal__wrapper .modal.sell .modal__content form.step-3 .items__wrapper .item__column:last-child table tbody tr td {
+.modal__wrapper .modal.sell form .modal__content .step.step-3 .items__wrapper .item__column:last-child table tbody tr td {
   height: 3.25rem;
   padding: 0.5rem;
   font-size: 1rem;
@@ -212,12 +212,12 @@
   color: #343a40;
   border-bottom: 1px solid #e9ecef;
 }
-.modal__wrapper .modal.sell .modal__content form.step-3 .items__wrapper .item__column:last-child table tbody tr td:last-child {
+.modal__wrapper .modal.sell form .modal__content .step.step-3 .items__wrapper .item__column:last-child table tbody tr td:last-child {
   width: 4rem;
   text-align: center;
   position: relative;
 }
-.modal__wrapper .modal.sell .modal__content form.step-3 .items__wrapper .item__column:last-child table tbody tr td:last-child svg {
+.modal__wrapper .modal.sell form .modal__content .step.step-3 .items__wrapper .item__column:last-child table tbody tr td:last-child svg {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -227,65 +227,73 @@
   color: #868e96;
   transition: color 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
-.modal__wrapper .modal.sell .modal__content form.step-3 .items__wrapper .item__column:last-child table tbody tr td.empty {
+.modal__wrapper .modal.sell form .modal__content .step.step-3 .items__wrapper .item__column:last-child table tbody tr td.empty {
   text-align: center;
   padding: 1.5rem;
   font-size: 1rem;
   font-weight: bold;
   color: #868e96;
 }
-.modal__wrapper .modal.sell .modal__content form.step-3 .items__wrapper .item__column:last-child table tbody tr td.item__action {
+.modal__wrapper .modal.sell form .modal__content .step.step-3 .items__wrapper .item__column:last-child table tbody tr td.item__action {
   cursor: pointer;
 }
-.modal__wrapper .modal.sell .modal__content form.step-3 .items__wrapper .item__column:last-child table tbody tr td.item__action:hover svg {
+.modal__wrapper .modal.sell form .modal__content .step.step-3 .items__wrapper .item__column:last-child table tbody tr td.item__action:hover svg {
   color: #cc0000;
 }
-.modal__wrapper .modal.sell .modal__content form.step-4 {
+.modal__wrapper .modal.sell form .modal__content .step.step-4 {
+  position: relative;
   width: 800px;
 }
-.modal__wrapper .modal.sell .modal__content form.step-4 .upload__wrapper {
+.modal__wrapper .modal.sell form .modal__content .step.step-4 .upload__wrapper {
   margin-block: 1rem;
   display: flex;
   gap: 1.5rem;
 }
-.modal__wrapper .modal.sell .modal__content form.step-4 .upload__wrapper .dropzone__wrapper {
+.modal__wrapper .modal.sell form .modal__content .step.step-4 .upload__wrapper .dropzone__wrapper {
+  position: relative;
   flex: 1;
 }
-.modal__wrapper .modal.sell .modal__content form.step-4 .upload__wrapper .dropzone__wrapper .dropzone {
-  position: sticky;
+.modal__wrapper .modal.sell form .modal__content .step.step-4 .upload__wrapper .dropzone__wrapper .field {
+  position: sticky !important;
   margin: 0;
   top: 1rem;
 }
-.modal__wrapper .modal.sell .modal__content form.step-4 .upload__wrapper .images__wrapper {
+.modal__wrapper .modal.sell form .modal__content .step.step-4 .upload__wrapper .dropzone__wrapper .field .dropzone {
+  margin: 0;
+}
+.modal__wrapper .modal.sell form .modal__content .step.step-4 .upload__wrapper .images__wrapper {
   flex: 1;
   position: relative;
 }
-.modal__wrapper .modal.sell .modal__content form.step-4 .upload__wrapper .images__wrapper .no-image {
+.modal__wrapper .modal.sell form .modal__content .step.step-4 .upload__wrapper .images__wrapper .no-image {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   text-align: center;
 }
-.modal__wrapper .modal.sell .modal__content form.step-4 .upload__wrapper .images__wrapper .images__grid {
+.modal__wrapper .modal.sell form .modal__content .step.step-4 .upload__wrapper .images__wrapper .images__grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
   grid-template-rows: 1fr;
   gap: 1rem;
 }
-.modal__wrapper .modal.sell .modal__content form.step-4 .upload__wrapper .images__wrapper .images__grid .image {
+.modal__wrapper .modal.sell form .modal__content .step.step-4 .upload__wrapper .images__wrapper .images__grid .image {
   position: relative;
   cursor: pointer;
 }
-.modal__wrapper .modal.sell .modal__content form.step-4 .upload__wrapper .images__wrapper .images__grid .image:hover img {
+.modal__wrapper .modal.sell form .modal__content .step.step-4 .upload__wrapper .images__wrapper .images__grid .image:hover img {
   border: 2px solid #0070e8;
 }
-.modal__wrapper .modal.sell .modal__content form.step-4 .upload__wrapper .images__wrapper .images__grid .image::before {
+.modal__wrapper .modal.sell form .modal__content .step.step-4 .upload__wrapper .images__wrapper .images__grid .image:active {
+  cursor: grabbing;
+}
+.modal__wrapper .modal.sell form .modal__content .step.step-4 .upload__wrapper .images__wrapper .images__grid .image::before {
   content: "";
   display: block;
   padding-top: 100%;
 }
-.modal__wrapper .modal.sell .modal__content form.step-4 .upload__wrapper .images__wrapper .images__grid .image .delete {
+.modal__wrapper .modal.sell form .modal__content .step.step-4 .upload__wrapper .images__wrapper .images__grid .image .delete {
   position: absolute;
   top: 0.5rem;
   right: 0.5rem;
@@ -296,12 +304,12 @@
   background-color: #fff;
   z-index: 1;
 }
-.modal__wrapper .modal.sell .modal__content form.step-4 .upload__wrapper .images__wrapper .images__grid .image .delete svg {
+.modal__wrapper .modal.sell form .modal__content .step.step-4 .upload__wrapper .images__wrapper .images__grid .image .delete svg {
   margin-bottom: 0;
   height: 1.125rem;
   width: 1.125rem;
 }
-.modal__wrapper .modal.sell .modal__content form.step-4 .upload__wrapper .images__wrapper .images__grid .image img {
+.modal__wrapper .modal.sell form .modal__content .step.step-4 .upload__wrapper .images__wrapper .images__grid .image img {
   position: absolute;
   top: 0;
   left: 0;
@@ -338,19 +346,19 @@
   margin: 0 auto;
   max-width: 576px;
 }
-.drawer__wrapper .drawer.sell .drawer__content .modal__content form {
+.drawer__wrapper .drawer.sell .drawer__content form .modal__content .step {
   height: 100%;
   display: flex;
   flex-direction: column;
 }
-.drawer__wrapper .drawer.sell .drawer__content .modal__content form.step-1 .options__wrapper {
+.drawer__wrapper .drawer.sell .drawer__content form .modal__content .step.step-1 .options__wrapper {
   display: grid;
   grid-template-columns: 1;
   grid-template-rows: repeat(2, 1fr);
   gap: 1rem;
   margin-block: 1rem;
 }
-.drawer__wrapper .drawer.sell .drawer__content .modal__content form.step-1 .options__wrapper .option {
+.drawer__wrapper .drawer.sell .drawer__content form .modal__content .step.step-1 .options__wrapper .option {
   display: flex;
   align-items: stretch;
   border-radius: 1rem;
@@ -358,25 +366,25 @@
   overflow: hidden;
   transition: border 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
-.drawer__wrapper .drawer.sell .drawer__content .modal__content form.step-1 .options__wrapper .option:hover {
+.drawer__wrapper .drawer.sell .drawer__content form .modal__content .step.step-1 .options__wrapper .option:hover {
   cursor: pointer;
   border: 1px solid #212529;
 }
-.drawer__wrapper .drawer.sell .drawer__content .modal__content form.step-1 .options__wrapper .option.selected {
+.drawer__wrapper .drawer.sell .drawer__content form .modal__content .step.step-1 .options__wrapper .option.selected {
   border: 1px solid #212529;
   outline: 1px solid #212529;
 }
-.drawer__wrapper .drawer.sell .drawer__content .modal__content form.step-1 .options__wrapper .option.selected .option__col--radio div::after {
+.drawer__wrapper .drawer.sell .drawer__content form .modal__content .step.step-1 .options__wrapper .option.selected .option__col--radio div::after {
   opacity: 1;
 }
-.drawer__wrapper .drawer.sell .drawer__content .modal__content form.step-1 .options__wrapper .option.selected .option__col--img svg {
+.drawer__wrapper .drawer.sell .drawer__content form .modal__content .step.step-1 .options__wrapper .option.selected .option__col--img svg {
   color: #212529 !important;
 }
-.drawer__wrapper .drawer.sell .drawer__content .modal__content form.step-1 .options__wrapper .option .option__col--radio {
+.drawer__wrapper .drawer.sell .drawer__content form .modal__content .step.step-1 .options__wrapper .option .option__col--radio {
   padding: 1.5rem;
   padding-right: 0.75rem;
 }
-.drawer__wrapper .drawer.sell .drawer__content .modal__content form.step-1 .options__wrapper .option .option__col--radio div {
+.drawer__wrapper .drawer.sell .drawer__content form .modal__content .step.step-1 .options__wrapper .option .option__col--radio div {
   position: relative;
   display: flex;
   justify-content: center;
@@ -386,7 +394,7 @@
   border-radius: 50%;
   border: 2px solid #212529;
 }
-.drawer__wrapper .drawer.sell .drawer__content .modal__content form.step-1 .options__wrapper .option .option__col--radio div::after {
+.drawer__wrapper .drawer.sell .drawer__content form .modal__content .step.step-1 .options__wrapper .option .option__col--radio div::after {
   content: "";
   position: absolute;
   height: 75%;
@@ -397,16 +405,16 @@
   opacity: 0;
   transition: opacity 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
-.drawer__wrapper .drawer.sell .drawer__content .modal__content form.step-1 .options__wrapper .option .option__col--text {
+.drawer__wrapper .drawer.sell .drawer__content form .modal__content .step.step-1 .options__wrapper .option .option__col--text {
   flex: 1;
   padding: 1.5rem 0.75rem;
   display: flex;
   flex-direction: column;
 }
-.drawer__wrapper .drawer.sell .drawer__content .modal__content form.step-1 .options__wrapper .option .option__col--text h5 {
+.drawer__wrapper .drawer.sell .drawer__content form .modal__content .step.step-1 .options__wrapper .option .option__col--text h5 {
   text-transform: uppercase;
 }
-.drawer__wrapper .drawer.sell .drawer__content .modal__content form.step-1 .options__wrapper .option .option__col--img {
+.drawer__wrapper .drawer.sell .drawer__content form .modal__content .step.step-1 .options__wrapper .option .option__col--img {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -417,28 +425,28 @@
   border-radius: 0.5rem;
   overflow: hidden;
 }
-.drawer__wrapper .drawer.sell .drawer__content .modal__content form.step-1 .options__wrapper .option .option__col--img svg {
+.drawer__wrapper .drawer.sell .drawer__content form .modal__content .step.step-1 .options__wrapper .option .option__col--img svg {
   transition: color 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
-.drawer__wrapper .drawer.sell .drawer__content .modal__content form.step-2 .details__wrapper {
+.drawer__wrapper .drawer.sell .drawer__content form .modal__content .step.step-2 .details__wrapper {
   margin-block: 0.5rem;
 }
-.drawer__wrapper .drawer.sell .drawer__content .modal__content form.step-2 .details__wrapper.catalog {
+.drawer__wrapper .drawer.sell .drawer__content form .modal__content .step.step-2 .details__wrapper.catalog {
   display: flex;
   flex-direction: column;
 }
-.drawer__wrapper .drawer.sell .drawer__content .modal__content form.step-2 .details__wrapper.catalog .chips__wrapper {
+.drawer__wrapper .drawer.sell .drawer__content form .modal__content .step.step-2 .details__wrapper.catalog .chips__wrapper {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
   margin-block: 0.5rem;
 }
-.drawer__wrapper .drawer.sell .drawer__content .modal__content form.step-2 .details__wrapper.catalog .chips__wrapper .chip.selected {
+.drawer__wrapper .drawer.sell .drawer__content form .modal__content .step.step-2 .details__wrapper.catalog .chips__wrapper .chip.selected {
   border: none;
   background-color: #212529;
   color: #fff;
 }
-.drawer__wrapper .drawer.sell .drawer__content .modal__content form.step-2 .details__wrapper.catalog .chips__wrapper .search-box {
+.drawer__wrapper .drawer.sell .drawer__content form .modal__content .step.step-2 .details__wrapper.catalog .chips__wrapper .search-box {
   position: relative;
   display: flex;
   align-items: center;
@@ -452,56 +460,56 @@
   padding: 0.375rem 1rem;
   cursor: text;
 }
-.drawer__wrapper .drawer.sell .drawer__content .modal__content form.step-2 .details__wrapper.catalog .chips__wrapper .search-box svg {
+.drawer__wrapper .drawer.sell .drawer__content form .modal__content .step.step-2 .details__wrapper.catalog .chips__wrapper .search-box svg {
   height: 1.25rem;
   width: 1.25rem;
   color: #868e96;
   flex-shrink: 0;
 }
-.drawer__wrapper .drawer.sell .drawer__content .modal__content form.step-2 .details__wrapper.catalog .chips__wrapper .search-box input {
+.drawer__wrapper .drawer.sell .drawer__content form .modal__content .step.step-2 .details__wrapper.catalog .chips__wrapper .search-box input {
   all: unset;
   position: relative;
   width: 100%;
   font-size: 1rem;
   transition: border 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
-.drawer__wrapper .drawer.sell .drawer__content .modal__content form.step-2 .details__wrapper.catalog .chips__wrapper .search-box:focus-within {
+.drawer__wrapper .drawer.sell .drawer__content form .modal__content .step.step-2 .details__wrapper.catalog .chips__wrapper .search-box:focus-within {
   border: 2px solid #0070e8;
 }
-.drawer__wrapper .drawer.sell .drawer__content .modal__content form.step-2 .details__wrapper.catalog .chips__wrapper .search-box:focus-within input {
+.drawer__wrapper .drawer.sell .drawer__content form .modal__content .step.step-2 .details__wrapper.catalog .chips__wrapper .search-box:focus-within input {
   border: none !important;
 }
-.drawer__wrapper .drawer.sell .drawer__content .modal__content form.step-2 .details__wrapper.custom {
+.drawer__wrapper .drawer.sell .drawer__content form .modal__content .step.step-2 .details__wrapper.custom {
   display: flex;
   flex-direction: column;
 }
-.drawer__wrapper .drawer.sell .drawer__content .modal__content form.step-3 .items__wrapper {
+.drawer__wrapper .drawer.sell .drawer__content form .modal__content .step.step-3 .items__wrapper {
   margin-block: 1rem;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
 }
-.drawer__wrapper .drawer.sell .drawer__content .modal__content form.step-3 .items__wrapper .divider {
+.drawer__wrapper .drawer.sell .drawer__content form .modal__content .step.step-3 .items__wrapper .divider {
   width: 100%;
   height: 1px;
   background-color: #e9ecef;
   margin-bottom: 0.5rem;
 }
-.drawer__wrapper .drawer.sell .drawer__content .modal__content form.step-3 .items__wrapper .item__column {
+.drawer__wrapper .drawer.sell .drawer__content form .modal__content .step.step-3 .items__wrapper .item__column {
   display: flex;
   flex-direction: column;
 }
-.drawer__wrapper .drawer.sell .drawer__content .modal__content form.step-3 .items__wrapper .item__column .field__wrapper {
+.drawer__wrapper .drawer.sell .drawer__content form .modal__content .step.step-3 .items__wrapper .item__column .field__wrapper {
   flex-direction: row !important;
 }
-.drawer__wrapper .drawer.sell .drawer__content .modal__content form.step-3 .items__wrapper .item__column:last-child {
+.drawer__wrapper .drawer.sell .drawer__content form .modal__content .step.step-3 .items__wrapper .item__column:last-child {
   margin-bottom: 0.5rem;
 }
-.drawer__wrapper .drawer.sell .drawer__content .modal__content form.step-3 .items__wrapper .item__column:last-child table {
+.drawer__wrapper .drawer.sell .drawer__content form .modal__content .step.step-3 .items__wrapper .item__column:last-child table {
   width: 100%;
   border-collapse: collapse;
 }
-.drawer__wrapper .drawer.sell .drawer__content .modal__content form.step-3 .items__wrapper .item__column:last-child table thead tr th {
+.drawer__wrapper .drawer.sell .drawer__content form .modal__content .step.step-3 .items__wrapper .item__column:last-child table thead tr th {
   padding: 0.5rem;
   text-align: left;
   font-size: 0.875rem;
@@ -509,10 +517,10 @@
   color: #868e96;
   border-bottom: 1px solid #e9ecef;
 }
-.drawer__wrapper .drawer.sell .drawer__content .modal__content form.step-3 .items__wrapper .item__column:last-child table tbody tr:nth-child(odd) {
+.drawer__wrapper .drawer.sell .drawer__content form .modal__content .step.step-3 .items__wrapper .item__column:last-child table tbody tr:nth-child(odd) {
   background-color: #f8f9fa;
 }
-.drawer__wrapper .drawer.sell .drawer__content .modal__content form.step-3 .items__wrapper .item__column:last-child table tbody tr td {
+.drawer__wrapper .drawer.sell .drawer__content form .modal__content .step.step-3 .items__wrapper .item__column:last-child table tbody tr td {
   height: 3.25rem;
   padding: 0.5rem;
   font-size: 1rem;
@@ -520,12 +528,12 @@
   color: #343a40;
   border-bottom: 1px solid #e9ecef;
 }
-.drawer__wrapper .drawer.sell .drawer__content .modal__content form.step-3 .items__wrapper .item__column:last-child table tbody tr td:last-child {
+.drawer__wrapper .drawer.sell .drawer__content form .modal__content .step.step-3 .items__wrapper .item__column:last-child table tbody tr td:last-child {
   width: 4rem;
   text-align: center;
   position: relative;
 }
-.drawer__wrapper .drawer.sell .drawer__content .modal__content form.step-3 .items__wrapper .item__column:last-child table tbody tr td:last-child svg {
+.drawer__wrapper .drawer.sell .drawer__content form .modal__content .step.step-3 .items__wrapper .item__column:last-child table tbody tr td:last-child svg {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -535,58 +543,58 @@
   color: #868e96;
   transition: color 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
-.drawer__wrapper .drawer.sell .drawer__content .modal__content form.step-3 .items__wrapper .item__column:last-child table tbody tr td.empty {
+.drawer__wrapper .drawer.sell .drawer__content form .modal__content .step.step-3 .items__wrapper .item__column:last-child table tbody tr td.empty {
   text-align: center;
   padding: 1.5rem;
   font-size: 1rem;
   font-weight: bold;
   color: #868e96;
 }
-.drawer__wrapper .drawer.sell .drawer__content .modal__content form.step-3 .items__wrapper .item__column:last-child table tbody tr td.item__action {
+.drawer__wrapper .drawer.sell .drawer__content form .modal__content .step.step-3 .items__wrapper .item__column:last-child table tbody tr td.item__action {
   cursor: pointer;
 }
-.drawer__wrapper .drawer.sell .drawer__content .modal__content form.step-3 .items__wrapper .item__column:last-child table tbody tr td.item__action:hover svg {
+.drawer__wrapper .drawer.sell .drawer__content form .modal__content .step.step-3 .items__wrapper .item__column:last-child table tbody tr td.item__action:hover svg {
   color: #cc0000;
 }
-.drawer__wrapper .drawer.sell .drawer__content .modal__content form.step-4 .upload__wrapper {
+.drawer__wrapper .drawer.sell .drawer__content form .modal__content .step.step-4 .upload__wrapper {
   margin-block: 1rem;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
 }
-.drawer__wrapper .drawer.sell .drawer__content .modal__content form.step-4 .upload__wrapper .dropzone__wrapper {
+.drawer__wrapper .drawer.sell .drawer__content form .modal__content .step.step-4 .upload__wrapper .dropzone__wrapper {
   flex: 1;
 }
-.drawer__wrapper .drawer.sell .drawer__content .modal__content form.step-4 .upload__wrapper .dropzone__wrapper .dropzone {
+.drawer__wrapper .drawer.sell .drawer__content form .modal__content .step.step-4 .upload__wrapper .dropzone__wrapper .dropzone {
   margin: 0;
 }
-.drawer__wrapper .drawer.sell .drawer__content .modal__content form.step-4 .upload__wrapper .images__wrapper {
+.drawer__wrapper .drawer.sell .drawer__content form .modal__content .step.step-4 .upload__wrapper .images__wrapper {
   flex: 1;
   position: relative;
   gap: 2rem;
 }
-.drawer__wrapper .drawer.sell .drawer__content .modal__content form.step-4 .upload__wrapper .images__wrapper .no-image {
+.drawer__wrapper .drawer.sell .drawer__content form .modal__content .step.step-4 .upload__wrapper .images__wrapper .no-image {
   text-align: center;
 }
-.drawer__wrapper .drawer.sell .drawer__content .modal__content form.step-4 .upload__wrapper .images__wrapper .images__grid {
+.drawer__wrapper .drawer.sell .drawer__content form .modal__content .step.step-4 .upload__wrapper .images__wrapper .images__grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
   grid-template-rows: 1fr;
   gap: 1rem;
 }
-.drawer__wrapper .drawer.sell .drawer__content .modal__content form.step-4 .upload__wrapper .images__wrapper .images__grid .image {
+.drawer__wrapper .drawer.sell .drawer__content form .modal__content .step.step-4 .upload__wrapper .images__wrapper .images__grid .image {
   position: relative;
   cursor: pointer;
 }
-.drawer__wrapper .drawer.sell .drawer__content .modal__content form.step-4 .upload__wrapper .images__wrapper .images__grid .image:hover img {
+.drawer__wrapper .drawer.sell .drawer__content form .modal__content .step.step-4 .upload__wrapper .images__wrapper .images__grid .image:hover img {
   border: 2px solid #0070e8;
 }
-.drawer__wrapper .drawer.sell .drawer__content .modal__content form.step-4 .upload__wrapper .images__wrapper .images__grid .image::before {
+.drawer__wrapper .drawer.sell .drawer__content form .modal__content .step.step-4 .upload__wrapper .images__wrapper .images__grid .image::before {
   content: "";
   display: block;
   padding-top: 100%;
 }
-.drawer__wrapper .drawer.sell .drawer__content .modal__content form.step-4 .upload__wrapper .images__wrapper .images__grid .image .delete {
+.drawer__wrapper .drawer.sell .drawer__content form .modal__content .step.step-4 .upload__wrapper .images__wrapper .images__grid .image .delete {
   position: absolute;
   top: 0.5rem;
   right: 0.5rem;
@@ -597,12 +605,12 @@
   background-color: #fff;
   z-index: 1;
 }
-.drawer__wrapper .drawer.sell .drawer__content .modal__content form.step-4 .upload__wrapper .images__wrapper .images__grid .image .delete svg {
+.drawer__wrapper .drawer.sell .drawer__content form .modal__content .step.step-4 .upload__wrapper .images__wrapper .images__grid .image .delete svg {
   margin-bottom: 0;
   height: 1.125rem;
   width: 1.125rem;
 }
-.drawer__wrapper .drawer.sell .drawer__content .modal__content form.step-4 .upload__wrapper .images__wrapper .images__grid .image img {
+.drawer__wrapper .drawer.sell .drawer__content form .modal__content .step.step-4 .upload__wrapper .images__wrapper .images__grid .image img {
   position: absolute;
   top: 0;
   left: 0;
@@ -626,7 +634,7 @@
 }
 
 @media only screen and (max-width: 375px) {
-  .drawer__wrapper .drawer.sell .drawer__content .modal__content form.step-1 .options__wrapper .option .option__col--img {
+  .drawer__wrapper .drawer.sell .drawer__content form .modal__content .step.step-1 .options__wrapper .option .option__col--img {
     display: none;
   }
 }/*# sourceMappingURL=sell.css.map */

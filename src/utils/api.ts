@@ -46,7 +46,7 @@ export const API = {
   AUTH: {
     REFRESH: u("auth/token/refresh"),
     LOGIN: u("auth/token/authenticate"),
-    GOOGLE_AUTH: u("social_auth/google_auth"),
+    GOOGLE_AUTH: u("auth/google_auth"),
     REGISTER: u("auth/registration"),
     LOGOUT: u("auth/token/logout"),
   },
@@ -211,11 +211,11 @@ export const API = {
 
   SEARCH: {
     PRODUCTS: (size: number, page: number, searchKey: string) =>
-      q(u("search/products/"), { page_size: size, page, q: searchKey }),
+      q(u("product/search"), { page_size: size, page, q: searchKey }),
     USERS: (size: number, page: number, searchKey: string) =>
-      q(u("search/users/"), { page_size: size, page, q: searchKey }),
-    LIST_HISTORY: u("search/list_search_history"),
-    DELETE_HISTORY: (id: number) => u("search/delete_search_history", id),
+      q(u("user/search"), { page_size: size, page, q: searchKey }),
+    LIST_HISTORY: u("user/search/list_search_history"),
+    DELETE_HISTORY: (id: number) => u("user/search/delete_search_history", id),
   },
 
   ADDRESS: {

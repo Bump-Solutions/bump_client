@@ -1,7 +1,6 @@
-import { API } from "../../utils/api";
-import { useState, MouseEvent } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowLeft, ArrowRight } from "lucide-react";
+import { MouseEvent, useState } from "react";
 
 interface CarouselProps {
   images: string[];
@@ -61,11 +60,7 @@ const Carousel = ({ images }: CarouselProps) => {
           animate={{ x: `-${currentIndex * 100}%` }}
           transition={{ duration: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}>
           {images.map((src, index) => (
-            <img
-              key={index}
-              src={API.MEDIA_URL + src}
-              alt={`Termék kép ${index + 1}`}
-            />
+            <img key={index} src={src} alt={`Termék kép ${index + 1}`} />
           ))}
         </motion.div>
       </AnimatePresence>

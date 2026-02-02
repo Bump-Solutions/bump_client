@@ -1,78 +1,143 @@
-import { API } from "../../../utils/api";
-import { forwardRef, useImperativeHandle } from "react";
-import { toast } from "sonner";
-import { useSell } from "../../../hooks/product/useSell";
-import { Reorder } from "framer-motion";
+import {
+  closestCenter,
+  DndContext,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+import {
+  arrayMove,
+  rectSortingStrategy,
+  SortableContext,
+} from "@dnd-kit/sortable";
+import { useStore } from "@tanstack/react-form";
+import { Tag } from "lucide-react";
+import { MouseEvent, useEffect, useMemo } from "react";
+import { withForm } from "../../../hooks/form/hooks";
+import { SELL_STEPS } from "../../../schemas/sellSchema";
+import { sellFormOptions } from "../../../utils/formOptions";
 
-import UploadDropzone from "./UploadDropzone";
 import Button from "../../../components/Button";
+import StateButton from "../../../components/StateButton";
+import SortableImage from "../components/SortableImage";
+import UploadDropzone from "../components/UploadDropzone";
 
-import { Trash } from "lucide-react";
+type UploadStepProps = {
+  currentStepIndex: number;
+  prev: () => void;
+  handleSubmit: (e: MouseEvent<HTMLButtonElement>) => Promise<void>;
+};
 
-interface UploadStepRef {
-  isValid: () => boolean;
-}
+const UploadStep = withForm({
+  ...sellFormOptions,
+  props: {} as UploadStepProps,
+  render: function Render({ form, currentStepIndex, prev, handleSubmit }) {
+    const images = useStore(form.store, (state) => state.values.upload.images);
 
-const UploadStep = forwardRef<UploadStepRef>(({}, ref) => {
-  const { data, updateData, setErrors } = useSell();
+    const sensors = useSensors(
+      useSensor(PointerSensor, {
+        activationConstraint: { distance: 6 },
+      }),
+    );
 
-  useImperativeHandle(ref, () => ({ isValid }));
-
-  const isValid = () => {
-    if (data.images.length < 3) {
-      setErrors((prev) => ({
-        ...prev,
-        images: "Legalább 3 képet fel kell töltened.",
+    const previews = useMemo(() => {
+      return images.map((image: File) => ({
+        file: image,
+        url: URL.createObjectURL(image),
       }));
+    }, [images]);
 
-      toast.error("Kérjük javítsd a hibás mezőket!");
-      return false;
-    }
+    useEffect(() => {
+      return () => {
+        // Revoke the object URLs to avoid memory leaks
+        previews.forEach(({ url }) => URL.revokeObjectURL(url));
+      };
+    }, [previews]);
 
-    return true;
-  };
+    const handleDragEnd = (event: any) => {
+      const { active, over } = event;
 
-  const removeImage = (id: string) => {
-    updateData({
-      images: data.images.filter((image) => image.id !== id),
-    });
-  };
+      if (!over || active.id === over.id) return;
 
-  const onReorder = (newOrder: any) => {
-    updateData({ images: newOrder });
-  };
+      const oldIndex = images.findIndex((img: File) => img.name === active.id);
+      const newIndex = images.findIndex((img: File) => img.name === over.id);
 
-  return (
-    <div className='upload__wrapper'>
-      <UploadDropzone />
-      <article className='images__wrapper'>
-        {data.images.length === 0 && (
-          <p className='p-0 no-image'>A kiválasztott képek itt jelennek meg.</p>
-        )}
+      form.setFieldValue(
+        "upload.images",
+        arrayMove(images, oldIndex, newIndex),
+      );
+    };
 
-        <Reorder.Group
-          values={data.images}
-          onReorder={onReorder}
-          layoutScroll
-          className='images__grid'>
-          {data.images.map((image) => (
-            <Reorder.Item key={image.id} value={image} drag className='image'>
-              <Button
-                className='secondary delete'
-                onClick={() => removeImage(image.id)}>
-                <Trash />
-              </Button>
-              <img
-                src={API.MEDIA_URL + image.dataUrl}
-                alt={image.name}
-                draggable={false}
-              />
-            </Reorder.Item>
-          ))}
-        </Reorder.Group>
-      </article>
-    </div>
-  );
+    const removeImage = (name: string) => {
+      form.setFieldValue(
+        "upload.images",
+        images.filter((img: File) => img.name !== name),
+      );
+    };
+
+    return (
+      <>
+        <div className='modal__content'>
+          <div className='step step-4'>
+            <div className='upload__wrapper'>
+              <UploadDropzone form={form} />
+
+              <div className='images__wrapper'>
+                {images.length === 0 && (
+                  <p className='p-0 no-image'>
+                    A kiválasztott képek itt jelennek meg.
+                  </p>
+                )}
+
+                <DndContext
+                  sensors={sensors}
+                  collisionDetection={closestCenter}
+                  onDragEnd={handleDragEnd}>
+                  <SortableContext
+                    items={images.map((image) => image.name)}
+                    strategy={rectSortingStrategy}>
+                    <div className='images__grid'>
+                      {previews.map(({ file, url }) => (
+                        <SortableImage
+                          key={file.name}
+                          id={file.name}
+                          url={url}
+                          onRemove={() => removeImage(file.name)}
+                        />
+                      ))}
+                    </div>
+                  </SortableContext>
+                </DndContext>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className='modal__actions'>
+          <span className='fs-16 fc-gray-600 truncate'>
+            {currentStepIndex + 1} / {SELL_STEPS.length}
+          </span>
+
+          <div className='d-flex gap-2 a-center'>
+            <Button
+              type='button'
+              text='Vissza'
+              className='tertiary'
+              onClick={prev}
+            />
+
+            <StateButton
+              type='button'
+              text='Eladás'
+              className='primary mt-0 mb-0'
+              onClick={handleSubmit}>
+              <Tag />
+            </StateButton>
+          </div>
+        </div>
+      </>
+    );
+  },
 });
 
 export default UploadStep;

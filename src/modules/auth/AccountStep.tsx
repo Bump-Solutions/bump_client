@@ -1,41 +1,47 @@
-import { withForm } from "../../hooks/form/hooks";
 import { useStore } from "@tanstack/react-form";
-import { accountSchema } from "../../schemas/signupSchema";
-import { signupFormOptions } from "../../utils/formOptions";
-import { canGoNext, touchAndValidateFields } from "../../utils/form";
 import { toast } from "sonner";
-import { ACCOUNT_FIELDS, PERSONAL_FIELDS } from "./SignupForm";
+import { withForm } from "../../hooks/form/hooks";
+import { accountSchema, personalSchema } from "../../schemas/signupSchema";
+import { validateStep } from "../../utils/form";
+import { signupFormOptions } from "../../utils/formOptions";
 
-import FieldGroup from "../../components/form/FieldGroup";
 import Button from "../../components/Button";
+import FieldGroup from "../../components/form/FieldGroup";
 
 import { MoveRight } from "lucide-react";
+import { SIGNUP_FIELDS } from "./SignupForm";
 
 const AccountStep = withForm({
   ...signupFormOptions,
   render: function Render({ form }) {
+    const step = useStore(form.store, (state) => state.values.step);
+    const schema = step === "account" ? accountSchema : personalSchema;
+
     const isBusy = useStore(
       form.store,
       (state) =>
-        state.isValidating || state.isFormValidating || state.isFieldsValidating
+        state.isValidating ||
+        state.isFormValidating ||
+        state.isFieldsValidating,
     );
 
     const handleNext = async () => {
       if (isBusy) return;
 
-      const { isValid } = await canGoNext(form);
+      const fields =
+        step === "account" ? SIGNUP_FIELDS.account : SIGNUP_FIELDS.personal;
 
-      if (isValid) {
-        form.setFieldValue("section", "personal");
+      const { isValid } = await validateStep(form, fields, {
+        schema,
+        cause: "submit",
+      });
+
+      if (!isValid) {
+        toast.error("Kérjük javítsd a hibás mezőket!");
         return;
       }
 
-      const section = form.store.state.values.section as "account" | "personal";
-      const fields = section === "account" ? ACCOUNT_FIELDS : PERSONAL_FIELDS;
-
-      await touchAndValidateFields(form, fields);
-
-      toast.error("Kérjük javítsd a hibás mezőket!");
+      form.setFieldValue("step", "personal");
     };
 
     return (
@@ -99,7 +105,7 @@ const AccountStep = withForm({
                 onChangeListenTo: ["account.password"],
                 onChange: ({ value, fieldApi }) => {
                   const password = fieldApi.form.getFieldValue(
-                    "account.password"
+                    "account.password",
                   ) as string;
 
                   if (!value) return "A mező kitöltése kötelező.";

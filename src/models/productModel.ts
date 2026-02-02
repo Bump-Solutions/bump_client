@@ -1,5 +1,3 @@
-import { FileUpload, Option } from "../types/form";
-
 export interface InventoryModel {
   products: ProductListModel[];
   next: number | null; // The next page number, or null if there are no more pages
@@ -123,14 +121,14 @@ export interface CreateProductModel {
 
   // 3rd step - items
   items: {
-    condition: Option<number> | null; // Condition of the item, null if not set
-    gender: Option<number> | null;
-    size: Option<number> | null;
+    condition: number | null; // Condition of the item, null if not set
+    gender: number | null;
+    size: number | null;
     price: number | null;
   }[];
 
   // 4th step - images
-  images: FileUpload[];
+  images: File[];
 }
 
 export interface Badge {

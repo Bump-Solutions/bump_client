@@ -35,7 +35,8 @@ export const ORDER_ACTION_LABELS: Record<OrderAction, string> = {
   [OrderAction.INITIATE_CHECKOUT]: "Checkout indítása",
   [OrderAction.GET_ORDER_PAYMENT_STATUS]: "Fizetési állapot lekérése",
   [OrderAction.GET_SHIPMENT_DETAILS]: "Szállítási adatok",
-  [OrderAction.RATE_SELLER]: "Eladó értékelése",
+  [OrderAction.SUBMIT_BUYER_RATING]: "Vevő értékelése",
+  [OrderAction.SUBMIT_SELLER_RATING]: "Eladó értékelése",
   [OrderAction.CANCEL_ORDER]: "Rendelés törlése",
 };
 

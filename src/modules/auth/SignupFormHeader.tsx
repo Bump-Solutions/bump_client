@@ -1,63 +1,63 @@
-import { ACCOUNT_FIELDS, PERSONAL_FIELDS } from "./SignupForm";
-import {
-  canGoNext,
-  resetErroredFields,
-  touchAndValidateFields,
-} from "../../utils/form";
-import { withForm } from "../../hooks/form/hooks";
-import { signupFormOptions } from "../../utils/formOptions";
 import { useStore } from "@tanstack/react-form";
 import { Fragment } from "react/jsx-runtime";
 import { toast } from "sonner";
+import { withForm } from "../../hooks/form/hooks";
+import { accountSchema, personalSchema } from "../../schemas/signupSchema";
+import { resetErroredFields, validateStep } from "../../utils/form";
+import { signupFormOptions } from "../../utils/formOptions";
+import { SIGNUP_FIELDS } from "./SignupForm";
 
 import { Check, ContactRound, User } from "lucide-react";
 
-type SectionId = "account" | "personal";
+type StepId = "account" | "personal";
 
 const STEPS = [
   { id: "account", label: "Fiók információ", svg: <User /> },
   { id: "personal", label: "Személyes információ", svg: <ContactRound /> },
 ] as const satisfies ReadonlyArray<{
-  id: SectionId;
+  id: StepId;
   label: string;
   svg: React.ReactNode;
 }>;
 
-const stepIndexById: Record<SectionId, number> = Object.fromEntries(
-  STEPS.map((s, i) => [s.id, i])
-) as Record<SectionId, number>;
+const stepIndexById: Record<StepId, number> = Object.fromEntries(
+  STEPS.map((s, i) => [s.id, i]),
+) as Record<StepId, number>;
 
 const SignupFormHeader = withForm({
   ...signupFormOptions,
   render: function Render({ form }) {
-    const section = useStore(form.store, (state) => state.values.section);
-    const currentStepIndex = stepIndexById[section];
+    const step = useStore(form.store, (state) => state.values.step);
+    const schema = step === "account" ? accountSchema : personalSchema;
+    const fields =
+      step === "account" ? SIGNUP_FIELDS.account : SIGNUP_FIELDS.personal;
 
-    const handleClickStep = async (targetId: SectionId) => {
+    const currentStepIndex = stepIndexById[step];
+
+    const handleClickStep = async (targetId: StepId) => {
       const targetIndex = stepIndexById[targetId];
 
       // VISSZA: mindig engedjük
       if (targetIndex <= currentStepIndex) {
         const toClear =
-          section === "personal" ? PERSONAL_FIELDS : ACCOUNT_FIELDS;
+          step === "personal" ? SIGNUP_FIELDS.personal : SIGNUP_FIELDS.account;
         resetErroredFields(form, toClear);
 
-        form.setFieldValue("section", targetId);
+        form.setFieldValue("step", targetId);
         return;
       }
 
-      const { isValid } = await canGoNext(form);
+      const { isValid } = await validateStep(form, fields, {
+        schema,
+        cause: "submit",
+      });
 
-      // ELŐRE: csak ha a current step valid
-      if (isValid) {
-        form.setFieldValue("section", targetId);
+      if (!isValid) {
+        toast.error("Kérjük javítsd a hibás mezőket!");
         return;
       }
 
-      const fields = section === "account" ? ACCOUNT_FIELDS : PERSONAL_FIELDS;
-      await touchAndValidateFields(form, fields);
-
-      toast.error("Kérjük javítsd a hibás mezőket!");
+      form.setFieldValue("step", targetId);
     };
 
     return (

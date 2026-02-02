@@ -1,15 +1,4 @@
-import { API } from "../utils/api";
-import { ApiResponse } from "../types/api";
 import { AxiosInstance } from "axios";
-import { UserModel } from "../models/userModel";
-import {
-  BrandsPageModel,
-  ColorwaysPageModel,
-  CreateProductModel,
-  InventoryModel,
-  ModelsPageModel,
-  ProductModel,
-} from "../models/productModel";
 import {
   BrandsPageDTO,
   ColorwaysPageDTO,
@@ -25,13 +14,24 @@ import {
   fromModelDTO,
   toCreateProductDTO,
 } from "../mappers/productMapper";
+import {
+  BrandsPageModel,
+  ColorwaysPageModel,
+  CreateProductModel,
+  InventoryModel,
+  ModelsPageModel,
+  ProductModel,
+} from "../models/productModel";
+import { UserModel } from "../models/userModel";
+import { ApiResponse } from "../types/api";
+import { API } from "../utils/api";
 
 export const listAvailableBrands = async (
   signal: AbortSignal,
   axiosPrivate: AxiosInstance,
   size: number,
   page: number,
-  searchKey: string
+  searchKey: string,
 ): Promise<BrandsPageModel> => {
   const response: ApiResponse = await axiosPrivate.get<{
     message: BrandsPageDTO;
@@ -55,7 +55,7 @@ export const listAvailableModels = async (
   brand: string,
   size: number,
   page: number,
-  searchKey: string
+  searchKey: string,
 ): Promise<ModelsPageModel> => {
   const response: ApiResponse = await axiosPrivate.get<{
     message: ModelsPageDTO;
@@ -82,13 +82,13 @@ export const listAvailableColorways = async (
   model: string,
   size: number,
   page: number,
-  searchKey: string
+  searchKey: string,
 ): Promise<ColorwaysPageModel> => {
   const response: ApiResponse = await axiosPrivate.get<{
     message: ColorwaysPageDTO;
   }>(
     API.PRODUCT.LIST_AVAILABLE_COLORWAYS(brand, model, size, page, searchKey),
-    { signal }
+    { signal },
   );
 
   const data: ColorwaysPageDTO = response.data.message;
@@ -105,7 +105,7 @@ export const listAvailableColorways = async (
 
 export const uploadProduct = async (
   axiosPrivate: AxiosInstance,
-  newProduct: CreateProductModel
+  newProduct: CreateProductModel,
 ): Promise<ApiResponse> => {
   const dto = toCreateProductDTO(newProduct);
   const { images, ...payload } = dto;
@@ -129,7 +129,7 @@ export const listProducts = async (
   axiosPrivate: AxiosInstance,
   uid: UserModel["id"],
   size: number,
-  page: number
+  page: number,
 ): Promise<InventoryModel> => {
   if (!uid) throw new Error("Missing required parameter: uid");
 
@@ -153,7 +153,7 @@ export const listSavedProducts = async (
   signal: AbortSignal,
   axiosPrivate: AxiosInstance,
   size: number,
-  page: number
+  page: number,
 ): Promise<InventoryModel> => {
   const response: ApiResponse = await axiosPrivate.get<{
     message: InventoryDTO;
@@ -174,7 +174,7 @@ export const listSavedProducts = async (
 export const getProduct = async (
   signal: AbortSignal,
   axiosPrivate: AxiosInstance,
-  pid: number
+  pid: number,
 ): Promise<ProductModel> => {
   if (!pid) throw new Error("Missing required parameter: pid");
 
@@ -187,7 +187,7 @@ export const getProduct = async (
 
 export const deleteProduct = async (
   axiosPrivate: AxiosInstance,
-  pid: number
+  pid: number,
 ): Promise<ApiResponse> => {
   if (!pid) throw new Error("Missing required parameter: pid");
 
@@ -196,7 +196,7 @@ export const deleteProduct = async (
 
 export const likeProduct = async (
   axiosPrivate: AxiosInstance,
-  pid: number
+  pid: number,
 ): Promise<ApiResponse> => {
   if (!pid) throw new Error("Missing required parameter: pid");
 
@@ -207,7 +207,7 @@ export const likeProduct = async (
 
 export const unlikeProduct = async (
   axiosPrivate: AxiosInstance,
-  pid: number
+  pid: number,
 ): Promise<ApiResponse> => {
   if (!pid) throw new Error("Missing required parameter: pid");
 
@@ -218,7 +218,7 @@ export const unlikeProduct = async (
 
 export const saveProduct = async (
   axiosPrivate: AxiosInstance,
-  pid: number
+  pid: number,
 ): Promise<ApiResponse> => {
   if (!pid) throw new Error("Missing required parameter: pid");
 
@@ -229,7 +229,7 @@ export const saveProduct = async (
 
 export const unsaveProduct = async (
   axiosPrivate: AxiosInstance,
-  pid: number
+  pid: number,
 ): Promise<ApiResponse> => {
   if (!pid) throw new Error("Missing required parameter: pid");
 

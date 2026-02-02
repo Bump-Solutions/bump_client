@@ -3,57 +3,68 @@ import { useToggle } from "../hooks/useToggle";
 
 interface CurrencyProps
   extends Omit<InputHTMLAttributes<HTMLInputElement>, "onChange" | "value"> {
-  label: string;
   value: number | null;
-  name?: string;
-  currency?: string;
+  name: string;
+
   onChange: (value: number) => void;
-  onCurrencyChange?: (currency: string) => void;
+  onBlur?: () => void;
+  onFocus?: () => void;
+
+  currency?: string;
   currencies?: string[];
+  onCurrencyChange?: (currency: string) => void;
+
   allowNegative?: boolean;
+  maxValue?: number;
+
   suffix?: string;
   decimalSeparator?: "." | ",";
   thousandSeparator?: "." | "," | " ";
   decimalScale?: number;
-  maxValue?: number;
-  error?: string;
+
   required?: boolean;
-  disabled?: boolean;
   placeholder?: string;
+
+  success?: boolean;
+  isInvalid?: boolean;
+  disabled?: boolean;
+
   className?: string;
   autoFocus?: boolean;
-  description?: string;
 }
 
 const Currency = ({
-  label,
   value,
   name,
-  currency,
+
   onChange,
-  onCurrencyChange,
+  onBlur,
+  onFocus,
+
+  currency,
   currencies,
+  onCurrencyChange,
+
   allowNegative = false,
+  maxValue,
+
   suffix = "",
   decimalSeparator = ".",
   thousandSeparator = " ",
   decimalScale = 0,
-  maxValue,
-  error,
+
   required = false,
-  disabled = false,
   placeholder,
+
+  success = false,
+  isInvalid = false,
+  disabled = false,
+
   className = "",
   autoFocus = false,
-  description,
   ...props
 }: CurrencyProps) => {
   const [isFocused, toggleFocus] = useToggle(false);
-
-  const inputClassName =
-    (className ? className : "") +
-    (error ? " error" : "") +
-    (disabled ? " disabled" : "");
 
   const formatNumber = (num: number | null) => {
     if (num === null || num === 0) return "";
@@ -86,17 +97,26 @@ const Currency = ({
 
     onChange(scaledValue);
   };
+
+  const handleOnBlur = () => {
+    toggleFocus(false);
+    onBlur?.();
+  };
+
+  const handleOnFocus = () => {
+    toggleFocus(true);
+    onFocus?.();
+  };
+
+  const inputClassName =
+    (className ? className : "") +
+    (isFocused ? " focused" : "") +
+    (isInvalid ? " error" : "") +
+    (success ? " success" : "") +
+    (disabled ? " disabled" : "");
+
   return (
-    <div className='input'>
-      {description && <p className='input__desc'>{description}</p>}
-      <label
-        htmlFor={name}
-        className={`${isFocused ? "focused" : ""} ${
-          value !== null ? "filled" : ""
-        } ${error ? "error" : ""}`}>
-        {label}
-        {required && <span className='required'> *</span>}
-      </label>
+    <div className='field__input'>
       <div className='currency__wrapper'>
         <input
           type='text'
@@ -104,16 +124,17 @@ const Currency = ({
           id={name}
           name={name}
           onChange={handleInputChange}
+          onBlur={handleOnBlur}
+          onFocus={handleOnFocus}
           className={`input__field ${inputClassName}`}
           placeholder={placeholder || " "}
           autoFocus={autoFocus}
-          onFocus={() => toggleFocus(true)}
-          onBlur={() => toggleFocus(false)}
+          data-invalid={isInvalid}
+          aria-invalid={isInvalid}
           {...props}
         />
         {suffix && <span className='suffix'>{suffix}</span>}
       </div>
-      {error && <p className='error-msg'>{error}</p>}
     </div>
   );
 };
