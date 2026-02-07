@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef } from "react";
-import { Gradient } from "../../lib/gradient";
 import { useInView } from "react-intersection-observer";
+import { Gradient } from "../../lib/gradient";
 
 const StripeGradient = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -15,7 +15,7 @@ const StripeGradient = () => {
       canvasRef.current = node;
       inViewRef(node);
     },
-    [inViewRef]
+    [inViewRef],
   );
 
   useEffect(() => {
