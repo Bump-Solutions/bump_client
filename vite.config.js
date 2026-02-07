@@ -1,5 +1,5 @@
-import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import { defineConfig } from "vite";
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -18,7 +18,7 @@ export default defineConfig({
     proxy: {
       "/api": {
         // target: "http://localhost:8100",
-        target: "http://185.221.21.17:8100",
+        target: "https://api.bumpmarket.hu",
         changeOrigin: true,
         secure: false,
       },

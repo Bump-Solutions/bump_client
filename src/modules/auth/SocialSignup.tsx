@@ -1,11 +1,11 @@
 import { useGoogleLogin } from "@react-oauth/google";
-import { useLoginWithGoogle } from "../../hooks/auth/useLoginWithGoogle";
 import { toast } from "sonner";
+import { useLoginWithGoogle } from "../../hooks/auth/useLoginWithGoogle";
 
 import Button from "../../components/Button";
 
-import { ImFacebook } from "react-icons/im";
 import { FcGoogle } from "react-icons/fc";
+import { ImFacebook } from "react-icons/im";
 
 const SocialSignup = () => {
   const googleLoginMutation = useLoginWithGoogle();
@@ -25,8 +25,8 @@ const SocialSignup = () => {
       return loginPromise;
     },
     flow: "auth-code",
-    ux_mode: "popup", // popup / redirect
-    redirect_uri: `localhost:3000`,
+    ux_mode: "redirect", // popup / redirect
+    redirect_uri: `https://bumpmarket.hu`,
     onError: (error) => {
       // console.log(error);
       toast.error("Hiba történt a Google-lal való bejelentkezés során.");
