@@ -54,7 +54,7 @@ export declare class Gradient {
   /** Update the active color palette at runtime (if supported by your build). */
   setColors?(
     colors: Array<number | RGB | RGBA>,
-    sectionColors?: Array<number | RGB | RGBA>
+    sectionColors?: Array<number | RGB | RGBA>,
   ): void;
 
   /** Enable/disable animation programmatically (if supported by your build). */
