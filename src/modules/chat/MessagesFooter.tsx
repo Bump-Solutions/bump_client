@@ -1,16 +1,16 @@
-import { MessageType, MessageTypeOptions } from "../../models/chatModel";
 import {
+  KeyboardEvent,
   useCallback,
   useEffect,
   useLayoutEffect,
   useRef,
   useState,
-  KeyboardEvent,
 } from "react";
-import { useToggle } from "../../hooks/useToggle";
 import { toast } from "sonner";
-import { useClickOutside } from "../../hooks/useClickOutside";
 import { useUploadChatImages } from "../../hooks/chat/useUploadChatImages";
+import { useClickOutside } from "../../hooks/useClickOutside";
+import { useToggle } from "../../hooks/useToggle";
+import { MessageType, MessageTypeOptions } from "../../models/chatModel";
 import { FileUpload } from "../../types/form";
 
 import Button from "../../components/Button";
@@ -65,8 +65,6 @@ const MessagesFooter = ({ chat, onSend }: MessagesFooterProps) => {
   const handleSend = async () => {
     if (isLoading) return; // Prevent sending if already loading
 
-    toggleLoading(true);
-
     const text = message.trim();
     const hasText = text.length > 0;
     const hasImages = images.length > 0;
@@ -75,6 +73,7 @@ const MessagesFooter = ({ chat, onSend }: MessagesFooterProps) => {
 
     let imageUrls: string = "";
 
+    toggleLoading(true);
     try {
       if (hasImages) {
         const { data } = await uploadChatImagesMutation.mutateAsync({
