@@ -26,7 +26,7 @@ const SocialSignup = () => {
     },
     flow: "auth-code",
     ux_mode: "redirect", // popup / redirect
-    redirect_uri: `https://bumpmarket.hu`,
+    redirect_uri: `https://bumpmarket.hu`, // localhost:3000
     onError: (error) => {
       // console.log(error);
       toast.error("Hiba történt a Google-lal való bejelentkezés során.");

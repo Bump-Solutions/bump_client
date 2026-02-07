@@ -1,29 +1,30 @@
+import "./assets/css/button.css";
+import "./assets/css/dtable.css";
+import "./assets/css/empty.css";
+import "./assets/css/image.css";
 import "./assets/css/index.css";
 import "./assets/css/input.css";
-import "./assets/css/button.css";
+import "./assets/css/modal.css";
 import "./assets/css/toast.css";
 import "./assets/css/tooltip.css";
-import "./assets/css/modal.css";
-import "./assets/css/dtable.css";
-import "./assets/css/image.css";
-import "./assets/css/empty.css";
 
-import { createRoot } from "react-dom/client";
-import { BrowserRouter as Router, Routes, Route } from "react-router";
 import { createPortal } from "react-dom";
+import { createRoot } from "react-dom/client";
+import { Route, BrowserRouter as Router, Routes } from "react-router";
 
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
+import { Toaster } from "sonner";
 import { QueryParamProvider } from "use-query-params";
 import { ReactRouter6Adapter } from "use-query-params/adapters/react-router-6";
-import { Toaster } from "sonner";
 
 import App from "./App";
 
 import AuthProvider from "./context/AuthProvider";
-import NotificationsProvider from "./context/NotificationsProvider";
 import NavbarThemeProvider from "./context/NavbarThemeProvider";
+import NotificationsProvider from "./context/NotificationsProvider";
+import ThemeProvider from "./context/ThemeProvider";
 
 import {
   CircleCheck,
@@ -32,7 +33,6 @@ import {
   OctagonX,
   TriangleAlert,
 } from "lucide-react";
-import ThemeProvider from "./context/ThemeProvider";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -83,7 +83,7 @@ createRoot(root).render(
                       visibleToasts={5}
                       duration={5000}
                     />,
-                    document.body
+                    document.body,
                   )}
 
                   <Routes>
@@ -96,5 +96,5 @@ createRoot(root).render(
         </Router>
       </GoogleOAuthProvider>
     </QueryClientProvider>
-  </ThemeProvider>
+  </ThemeProvider>,
 );
