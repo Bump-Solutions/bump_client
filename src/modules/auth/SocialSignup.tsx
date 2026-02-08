@@ -1,6 +1,5 @@
 import { useGoogleLogin } from "@react-oauth/google";
 import { toast } from "sonner";
-import { useLoginWithGoogle } from "../../hooks/auth/useLoginWithGoogle";
 
 import Button from "../../components/Button";
 
@@ -8,9 +7,8 @@ import { FcGoogle } from "react-icons/fc";
 import { ImFacebook } from "react-icons/im";
 
 const SocialSignup = () => {
-  const googleLoginMutation = useLoginWithGoogle();
-
   const handleGoogleLogin = useGoogleLogin({
+    /*
     onSuccess: ({ code }) => {
       const loginPromise = googleLoginMutation.mutateAsync({ code });
 
@@ -24,9 +22,10 @@ const SocialSignup = () => {
 
       return loginPromise;
     },
+    */
     flow: "auth-code",
     ux_mode: "redirect", // popup / redirect
-    redirect_uri: `https://bumpmarket.hu`, // localhost:3000
+    redirect_uri: "http://localhost:3000/auth/google/callback", //`https://bumpmarket.hu/auth/google/callback`, // http://localhost:3000/auth/google/callback
     onError: (error) => {
       // console.log(error);
       toast.error("Hiba történt a Google-lal való bejelentkezés során.");
@@ -43,10 +42,8 @@ const SocialSignup = () => {
         text='folytatás Google-lal'
         className='secondary'
         onClick={() => {
-          if (googleLoginMutation.isPending) return;
           handleGoogleLogin();
         }}
-        loading={googleLoginMutation.isPending}
         tabIndex={0}>
         <FcGoogle style={{ color: "#db4437" }} />
       </Button>

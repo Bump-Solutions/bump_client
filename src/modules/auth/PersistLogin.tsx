@@ -1,8 +1,8 @@
+import { useEffect, useState } from "react";
 import { Outlet } from "react-router";
-import { useState, useEffect } from "react";
 
-import { useAuth } from "../../hooks/auth/useAuth";
 import { toast } from "sonner";
+import { useAuth } from "../../hooks/auth/useAuth";
 import { useRefreshToken } from "../../hooks/auth/useRefreshToken";
 
 import Spinner from "../../components/Spinner";
@@ -21,7 +21,7 @@ const PersistLogin = () => {
         console.error(error);
         toast.error(
           (error?.response?.data.message as string) ||
-            "Szerverhiba. Próbáld újra később."
+            "Szerverhiba. Próbáld újra később.",
         );
       } finally {
         setLoading(false);

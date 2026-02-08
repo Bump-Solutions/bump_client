@@ -57,7 +57,7 @@
   width: 1.25rem;
 }
 .drawer__wrapper .drawer .drawer__content .modal__title svg.icon--primary {
-  color: #1612d3;
+  color: #e60022;
 }
 .drawer__wrapper .drawer .drawer__content .modal__title svg.icon--red {
   color: #cc0000;
@@ -167,7 +167,7 @@
   width: 1.25rem;
 }
 .modal__wrapper .modal .modal__title svg.icon--primary {
-  color: #1612d3;
+  color: #e60022;
 }
 .modal__wrapper .modal .modal__title svg.icon--red {
   color: #cc0000;

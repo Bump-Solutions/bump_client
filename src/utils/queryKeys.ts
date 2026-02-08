@@ -43,4 +43,7 @@ export const QUERY_KEY = {
 
   // ADDRESS
   listAddresses: "listAddresses",
+
+  // STRIPE
+  stripeConnect: "stripeConnect",
 };
