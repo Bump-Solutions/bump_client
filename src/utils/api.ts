@@ -63,7 +63,7 @@ export const API = {
       uid: number,
       size: number,
       page: number,
-      searchKey: string
+      searchKey: string,
     ) =>
       q(u("user/list_followers", uid), {
         page_size: size,
@@ -74,7 +74,7 @@ export const API = {
       uid: number,
       size: number,
       page: number,
-      searchKey: string
+      searchKey: string,
     ) =>
       q(u("user/list_followings", uid), {
         page_size: size,
@@ -116,7 +116,7 @@ export const API = {
       brand: string,
       size: number,
       page: number,
-      searchKey: string
+      searchKey: string,
     ) =>
       q(u("product/list_available_models", brand), {
         page_size: size,
@@ -128,7 +128,7 @@ export const API = {
       model: string,
       size: number,
       page: number,
-      searchKey: string
+      searchKey: string,
     ) =>
       q(u("product/list_available_colorways", brand, model), {
         page_size: size,
@@ -223,5 +223,9 @@ export const API = {
     ADD_ADDRESS: u("user/add_address"),
     UPDATE_ADDRESS: (id: number) => u("user/update_address", id),
     DELETE_ADDRESS: (id: number) => u("user/delete_address", id),
+  },
+
+  STRIPE: {
+    CONNECT: u("user/stripe/stripe_connect"),
   },
 };

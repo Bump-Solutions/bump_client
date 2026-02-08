@@ -25,6 +25,7 @@ import Sell from "../modules/sell/Sell";
 const Authentication = lazy(() => import("../modules/auth/Authentication"));
 const Login = lazy(() => import("../modules/auth/Login"));
 const Signup = lazy(() => import("../modules/auth/Signup"));
+const GoogleCallback = lazy(() => import("../modules/auth/GoogleCallback"));
 
 const Profile = lazy(() => import("../modules/profile/Profile"));
 const Products = lazy(() => import("../modules/product/Products"));
@@ -33,7 +34,7 @@ const ProductLayout = lazy(() => import("../modules/product/ProductLayout"));
 const Product = lazy(() => import("../modules/product/Product"));
 
 const Notifications = lazy(
-  () => import("../modules/notifications/Notifications")
+  () => import("../modules/notifications/Notifications"),
 );
 
 const Cart = lazy(() => import("../modules/cart/Cart"));
@@ -48,19 +49,19 @@ const Error = lazy(() => import("../modules/error/Error"));
 
 const Settings = lazy(() => import("../modules/settings/Settings"));
 const PersonalSettings = lazy(
-  () => import("../modules/settings/personal/PersonalSettings")
+  () => import("../modules/settings/personal/PersonalSettings"),
 );
 const ProfilePictureSettings = lazy(
-  () => import("../modules/settings/personal/ProfilePictureSettings")
+  () => import("../modules/settings/personal/ProfilePictureSettings"),
 );
 const ProfileInfoSettings = lazy(
-  () => import("../modules/settings/personal/ProfileInfoSettings")
+  () => import("../modules/settings/personal/ProfileInfoSettings"),
 );
 const AddressSettings = lazy(
-  () => import("../modules/settings/address/AddressSettings")
+  () => import("../modules/settings/address/AddressSettings"),
 );
 const ChangePassword = lazy(
-  () => import("../modules/settings/password/ChangePassword")
+  () => import("../modules/settings/password/ChangePassword"),
 );
 
 const withSuspense = (Component: LazyExoticComponent<any>) => {
@@ -73,7 +74,7 @@ const withSuspense = (Component: LazyExoticComponent<any>) => {
 
 const withSuspenseProps = <T extends object>(
   Component: LazyExoticComponent<(props: T) => JSX.Element>,
-  props: T
+  props: T,
 ) => {
   return (
     <Suspense fallback={<Fallback />}>
@@ -90,6 +91,8 @@ export const publicRoutes = () => {
         <Route index element={<Login />} />
         <Route path='signup' element={<Signup />} />
       </Route>
+
+      <Route path='/auth/google/callback' element={<GoogleCallback />} />
     </>
   );
 };
